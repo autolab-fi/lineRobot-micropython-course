@@ -123,7 +123,7 @@ def draw_trajectory(image, points, color, width, restore):
         prev_point = point
 
 
-def draw(robot, image, td: dict):
+def sandbox(robot, image, td: dict):
     """Drawing trajectory at lesson Drawing"""
 
     # init result dictionary

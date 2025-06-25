@@ -61,25 +61,25 @@ for i in range(20):
 import machine
 import time
 
-# Initialize LED pins (adjust pin numbers if needed)
+# Initialize LED pins
 led_left = machine.Pin(15, machine.Pin.OUT)
 led_right = machine.Pin(2, machine.Pin.OUT)
 
 # Blink both LEDs
-for i in range(10):
+for i in range(20):
     led_left.on()
     led_right.on()
-    time.sleep(0.2)
+    time.sleep(1)
     led_left.off()
     led_right.off()
-    time.sleep(0.2)
+    time.sleep(1)
 ```
 
 ## Useful Links
 
-* Source file for the `lineRobot` library – *\[link here]*
-* Source file for the TCS34725 library – *\[link here]*
-* Source file for the line sensor library – *\[link here]*
+* Source file for the `lineRobot` library – *\[link]*
+* Source file for the TCS34725 library – *\[link]*
+* Source file for the line sensor library – *\[link]*
 
 ## Conclusion
 

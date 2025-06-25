@@ -11,7 +11,7 @@ def delta_points(point_0, point_1):
 target_points = {
     'test_drive': [(35, 50), (30, 0)],
     'license_to_drive': [(35, 50), (30, 0)],
-    'draw': [(50, 50), (30, 0)]
+    'sandbox': [(50, 50), (30, 0)]
 }
 
 # The dictionary specifies the disabled movement functions of the library. This is necessary to prevent cheating.  
@@ -21,7 +21,7 @@ target_points = {
 block_library_functions = {
     'test_drive': False,
     'license_to_drive': False,
-    'draw': False,
+    'sandbox': False,
 }
 
 # function to get value from dictionary block_library_functions

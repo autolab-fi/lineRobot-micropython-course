@@ -55,6 +55,22 @@ for i in range(20):
     sleep(0.5)
 ```
 
+### Color Sensor
+
+```python
+import machine
+from tcs3472 import tcs3472
+import time
+
+bus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))
+tcs = tcs3472(bus)
+
+for i in range(20):
+   print("Light:", tcs.light())
+   print("RGB:", tcs.rgb())
+   time.sleep(1)
+```
+
 ### Controlling LEDs
 
 ```python

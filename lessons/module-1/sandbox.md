@@ -93,9 +93,9 @@ for i in range(20):
 
 ## Useful Links
 
-* Source file for the `lineRobot` library – *\[link]*
-* Source file for the TCS34725 library – *\[link]*
-* Source file for the line sensor library – *\[link]*
+* Source file for the `lineRobot` library – *[link](https://github.com/autolab-fi/micropython-lineRobot-firmware/blob/master/ports/esp32/docs/lineRobot.md)*
+* Source file for the TCS34725 library – *[link](https://github.com/autolab-fi/micropython-lineRobot-firmware/blob/master/ports/esp32/docs/color_sensor.md)*
+* Source file for the line sensor library – *[link](https://github.com/autolab-fi/micropython-lineRobot-firmware/blob/master/ports/esp32/docs/line_sensor.md)*
 
 ## Conclusion
 

@@ -45,9 +45,21 @@ To set the operating mode of a pin in MicroPython, create a **machine.Pin** obje
 
 To set a high or low logical voltage level, use the **on()** or **off()** methods of the Pin object. For example, **led.on()** sets the pin to a high voltage level, and **led.off()** sets it to a low voltage level.
 
+**Example:**
+
+```python
+led_left = machine.Pin(15, machine.Pin.OUT); led_left.on()
+```
+
+### Example: Declaring and Using a Pin in MicroPython
+
+```python
+led_left = machine.Pin(15, machine.Pin.OUT); led_left.on()
+```
+
 ## Assignment
 
-Write a program that turns on two LEDs on the robot. The LEDs are connected to pins 15 and 2 and defined in the code as **led_left** and **led_right**. Use these predefined pin names in your program.
+Write a program that turns on two LEDs on the robot. The LEDs are connected to pins 15 and 2 and you should define in the code as **led_left** and **led_right**.
 
 ## Hint
 

@@ -30,10 +30,6 @@ Write a program for the robot to follow the route represented in the image.
 
 You can refresh your memory of the library functions by revisiting the previous lessons.
 
-## Hint
-
-Try pressing Reset button before starting the assignment, it will put robot in favorable position.
-
 ## Conclusion
 
 You are awesome! You've gained insight into the concept of a program and its executor. In the next lesson, you'll learn how to control the robot's speed.

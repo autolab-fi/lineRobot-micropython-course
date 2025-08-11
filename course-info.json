@@ -1,11 +1,11 @@
 {
-    "fullCourseName":"full name of the course",
-    "shortCourseName":"CourseName", 
-    "shortDescription":"It is short description. It should be up to 160 characters.",
-    "fullDescription":"it is full description. It should be about 500 characters.",
-    "imageSmall":"https://github.com/autolab-fi/course-template/blob/main/images/course-info/image_640_360.jpg?raw=true",
-    "imageBig":"https://github.com/autolab-fi/course-template/blob/main/images/course-info/image_1920_1080.jpg?raw=true",
-    "workload":"0 hours",
-    "requirements":"Knowledge prerequisites for students before starting the course.",
+    "fullCourseName":"Line-following robot controlled by an ESP32 board Micropython",
+    "shortCourseName":"LineRobot-Micropython", 
+    "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensor data, and navigate along the track using a PID regulator.",
+    "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensor data, and navigate along the track using a PID regulator......",
+    "imageSmall":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_640_360.jpg?raw=true",
+    "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_1920_1080.jpg?raw=true",
+    "workload":"64 hours",
+    "requirements":"No previous programming or robotics knowledge is required.",
     "programmingLanguage": "python"
 }

@@ -1,17 +1,218 @@
 [
-    {
-        "name":"Introduction to the Course",
-        "description": "Getting familiar with the platform.",
+  {
+    "name": "Introduction to the Robot",
+    "description": "Getting familiar with the platform and learning how to control the robot.",
+    "sn": 0,
+    "str_id": "module_0",
+    "lessons": [
+      {
+        "str_id": "sandbox",
+        "name": "Sandbox",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/sandbox.md",
         "sn": 0,
-        "str_id":"module_0",
-        "lessons":[
-            {
-                "str_id": "lesson_0",
-                "name": "Lesson example",
-                "url": "https://raw.githubusercontent.com/autolab-fi/course-template/main/lessons/module-1/lesson_example.md",
-                "sn": 0,
-                "description": "Example of the lesson."
-            }
-        ]
-    }
+        "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
+        "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
+      },
+      {
+        "str_id": "test_drive",
+        "name": "Test drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/test_drive.md",
+        "sn": 1,
+        "description": "Some introductory words on moving the robot forward using a library.",
+        "template": "# Paste code here"
+      },
+      {
+        "str_id": "license_to_drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/license_to_drive.md",
+        "sn": 2,
+        "name": "License to drive",
+        "description": "Writing a simple program independently, similar to the previous lesson.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Controlling Robot Movement",
+    "description": "Demonstrating the robot's capabilities.",
+    "sn": 1,
+    "str_id": "module_1",
+    "lessons": [
+      {
+        "str_id": "short_distance_race",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/short_distance_race.md",
+        "sn": 3,
+        "name": "Short distance race",
+        "description": "Using library functions to move a specific distance, both forward and backward.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "maneuvering",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/maneuvering.md",
+        "sn": 4,
+        "name": "Maneuvering",
+        "description": "Turning right and left in place. Task: Read data from a file and write it to another.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "long_distance_race",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/long_distance_race.md",
+        "sn": 5,
+        "name": "Fruit Ninja",
+        "description": "Writing a program with a sequence of commands to move along a trajectory depicted in the diagram.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Controlling LEDs",
+    "description": "Basic arduino functions of working with GPIO using LEDs as examples.",
+    "sn": 2,
+    "str_id": "module_2",
+    "lessons": [
+      {
+        "str_id": "headlights",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/headlights.md",
+        "sn": 6,
+        "name": "Headlights",
+        "description": "Understanding how LEDs work. Task: Turning on LEDs.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "alarm",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/alarm.md",
+        "sn": 7,
+        "name": "Robot's alarm",
+        "description": "More about the digitalWrite() and pinMode() functions. Task: Blinking LEDs.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Controlling Motors",
+    "description": "Studying robot kinematics. Writing functions. What are DC motors.",
+    "sn": 3,
+    "str_id": "module_3",
+    "lessons": [
+      {
+        "str_id": "differential_drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/differential_drive.md",
+        "sn": 8,
+        "name": "Differential drive",
+        "description": "An introduction to the robot's kinematics. Task: Experiment with functions for moving the robot forward.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "move_function",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/move_function.md",
+        "sn": 9,
+        "name": "Movement Function",
+        "description": "Writing functions in Arduino. Task: Write a function to rotate the robot.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "electric_motor",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/electric_motor.md",
+        "sn": 10,
+        "name": "Electric Motor",
+        "description": "Basic principles of DC motors. Task: Move to a specific point on the map using only functions for controlling motors.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Encoders",
+    "description": "Explore the use of encoders in robotics, covering their purpose, types, and practical applications for movement control!",
+    "sn": 4,
+    "str_id": "module_4",
+    "lessons": [
+      {
+        "str_id": "encoders",
+        "name": "Encoder",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/encoders_en.md",
+        "sn": 11,
+        "description": "This lesson introduces encoders as sensors for measuring wheel rotation and and provides practical exercise to read encoder values.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Line Sensor Introduction",
+    "description": "Understanding how IR line sensors work and detecting black lines using the Octoliner sensor array.",
+    "sn": 5,
+    "str_id": "module_6",
+    "lessons": [
+      {
+        "str_id": "line_senosor_intro",
+        "name": "Line Sensor and Black Line Detection",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/line_senosor_intro.md",
+        "sn": 12,
+        "description": "This lesson focuses on understanding how an Octoliner sensor detects black lines using IR sensors and implementing black line detection.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Programming Fundamentals",
+    "description": "Essential programming concepts including variables, conditional statements, loops, and arrays for robot control.",
+    "sn": 6,
+    "str_id": "module_7",
+    "lessons": [
+      {
+        "str_id": "variables_conditionals",
+        "name": "Introduction to Variables and Conditional Statements",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/Introduction%20to%20Variables%20and%20Conditional%20Statements.md",
+        "sn": 13,
+        "description": "Learn how to declare and use variables in programming, and apply conditional logic using if, else if, and else statements.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "loops_conditional_logic",
+        "name": "Loops and Conditional Logic",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/Loops%20and%20Conditional%20Logic.md",
+        "sn": 14,
+        "description": "Learn how to repeat actions using for and while loops combined with conditional statements.",
+        "template":"# Write code here"
+      },
+      {
+        "str_id": "arrays_data_processing",
+        "name": "Arrays and Processing Data with Loops",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/Arrays%20and%20Processing%20Data%20with%20Loops.md",
+        "sn": 15,
+        "description": "Understand how to use arrays to store and analyze sensor data with systematic data collection.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Advanced Line Following",
+    "description": "Advanced line following techniques including relay, P, PI, and PID controllers for smooth and accurate robot movement.",
+    "sn": 7,
+    "str_id": "module_8",
+    "lessons": [
+      {
+        "str_id": "basic_line_follower",
+        "name": "Relay, P, and PI Controllers",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/basic_line_follower.md",
+        "sn": 16,
+        "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
+        "template":"# Write code here"
+      },
+      {
+        "str_id": "p_pi_controllers",
+        "name": "P and PI Controllers",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/P%20and%20PI.md",
+        "sn": 17,
+        "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "pid_controller",
+        "name": "PID Controller",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/PID.md",
+        "sn": 18,
+        "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
+        "template": "# Write code here"
+      }
+    ]
+  }
 ]

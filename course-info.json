@@ -4,7 +4,7 @@
     "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator.",
     "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",
     "imageSmall":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_640_360.jpg?raw=true",
-    "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_1920_1080.jpg?raw=true",
+    "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/hamk-mobile-1920-1080.png?raw=true",
     "workload":"64 hours",
     "requirements":"No previous programming or robotics knowledge is required.",
     "programmingLanguage": "python"

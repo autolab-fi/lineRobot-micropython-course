@@ -1,5 +1,5 @@
 {
-    "fullCourseName":"Mobile robot controlled by an ESP32 board on Micropython",
+    "fullCourseName":"Mobile robot controlled by an ESP32 board on Micropython @ HAMK",
     "shortCourseName":"Mobile robot on Micropython @ HAMK", 
     "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors, read sensors, navigate along the track using a PID regulator.",
     "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",

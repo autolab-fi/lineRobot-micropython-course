@@ -1,8 +1,8 @@
 {
     "fullCourseName":"Mobile robot controlled by an ESP32 board on Micropython",
     "shortCourseName":"Mobile robot on Micropython @ HAMK", 
-    "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensor data, and navigate along the track using a PID regulator.",
-    "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensor data, and navigate along the track using a PID regulator......",
+    "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator.",
+    "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",
     "imageSmall":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_640_360.jpg?raw=true",
     "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/image_1920_1080.jpg?raw=true",
     "workload":"64 hours",

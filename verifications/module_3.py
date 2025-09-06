@@ -32,7 +32,7 @@ def get_target_points(task):
 
 
 
-def movement_function(robot, image, td: dict):
+def move_function(robot, image, td: dict):
     """Test: Robot must turn 180 degrees."""
     # overlay robot info on image
     image = robot.draw_info(image)

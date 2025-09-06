@@ -102,7 +102,7 @@
         "template": "# Write code here"
       },
       {
-        "str_id": "movement_function",
+        "str_id": "move_function",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/move_function.md",
         "sn": 9,
         "name": "Movement Function",

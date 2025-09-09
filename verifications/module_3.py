@@ -98,7 +98,7 @@ def electric_motor(robot, image, td: dict):
         
         try:
             basepath = os.path.abspath(os.path.dirname(__file__))
-            filepath = os.path.join(basepath, 'auto_tests', 'images', 'flag_finish.jpg')
+            filepath = os.path.join(basepath, 'images', 'flag_finish.jpg')
               
             flag = cv2.imread(filepath)
             

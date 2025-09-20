@@ -45,7 +45,7 @@ def line_sensor_intro(robot, image, td):
     msg = robot.get_msg()
     if msg is not None:
         text = f"Message received: {msg}"
-        pattern = r'Sensor value:\s*(\d+)'
+        pattern = r'^\s*(\d+)\s*$'
         import re
         match = re.search(pattern, msg)
         if match:

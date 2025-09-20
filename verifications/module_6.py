@@ -44,11 +44,13 @@ def line_sensor_intro(robot, image, td):
 
     msg = robot.get_msg()
     if msg is not None:
+        text = f"Message received: {msg}"
+        pattern = r'Sensor value:\s*(\d+)'
         import re
-        numbers = re.findall(r'-?\d+', str(msg))
-        for num_str in numbers:
+        match = re.search(pattern, message)
+        if match:
             if len(td["data"]["values"]) < 2:
-                td["data"]["values"].append(int(num_str))
+                td["data"]["values"].append(int(match.group(1)))
 
     cv2.putText(image, f"Values: {td['data']['values']}", (20, 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)

@@ -47,7 +47,7 @@ def line_sensor_intro(robot, image, td):
         text = f"Message received: {msg}"
         pattern = r'Sensor value:\s*(\d+)'
         import re
-        match = re.search(pattern, message)
+        match = re.search(pattern, msg)
         if match:
             if len(td["data"]["values"]) < 2:
                 td["data"]["values"].append(int(match.group(1)))

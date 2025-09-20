@@ -5,7 +5,7 @@ import os
 import numpy as np
 
 target_points = {
-    'line_sensor_intro': [(35, 50), (0,-200)],
+    'line_sensor_intro': [(30, 50), (0,200)],
 
 }
 
@@ -45,12 +45,17 @@ def line_sensor_intro(robot, image, td):
     msg = robot.get_msg()
     if msg is not None:
         text = f"Message received: {msg}"
-        pattern = r'^\s*(\d+)\s*$'
+        # message processing. Message format should be: [20, 30, 40, ..., 40]
+        # then calculate average of the array. First readed message average should be more 100 and of the second less 100
+        pattern = r'\[([\d\s,]+)\]'
         import re
         match = re.search(pattern, msg)
         if match:
             if len(td["data"]["values"]) < 2:
-                td["data"]["values"].append(int(match.group(1)))
+                numbers_str = match.group(1)
+                numbers = [int(num) for num in re.findall(r'\d+', numbers_str)]
+                average = sum(numbers) / len(numbers) if numbers else 0
+                td["data"]["values"].append(average)
 
     cv2.putText(image, f"Values: {td['data']['values']}", (20, 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
@@ -58,7 +63,7 @@ def line_sensor_intro(robot, image, td):
     if len(td["data"]["values"]) == 2 or td["end_time"] - time.time() < 1:
         if len(td["data"]["values"]) == 2:
             first, second = td["data"]["values"]
-            if first > 200 and second < 200:
+            if first > 100 and second < 100:
                 result["success"] = True
                 result["description"] = "Conditions met."
                 result["score"] = 100

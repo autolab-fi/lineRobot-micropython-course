@@ -54,7 +54,7 @@ The Octoliner sensor array consists of 8 sensors, each providing an analog value
 
 The Octoliner sensor consists of 7 independent IR sensors, each capable of detecting IR reflection. In this section, we will read values from the sensor and determine whether a black line is detected. The process involves initializing the sensor, reading data from all 7 sensors, comparing these readings to a predefined threshold, and finally displaying the results. The program will run continuously in a loop, checking the sensor values and determining whether a black line is present.
 
-The following example code initializes the Octoliner sensor, sets its sensitivity, and reads values from a single sensor. The data obtained can then be used to decide whether the sensor detects a black or white surface.
+The following example code initializes the Octoliner sensor, sets its sensitivity, and reads values from a single sensor and all sensors. The data obtained can then be used to decide whether the sensor detects a black or white surface.
 
 ```cpp
 import machine
@@ -72,8 +72,13 @@ octoliner.begin(i2c)
 octoliner.set_sensitivity(245)  # Adjust sensitivity if needed
 
 while True:
-    value1 = octoliner.analog_read(1)
-    print("Sensor 1 value:",value1)
+    # Read data from the only one sensor
+    value1 = octoliner.analog_read(0)
+    print("Sensor 0 value:",value1)
+    time.sleep(0.5)
+    # Read data from the all sensors
+    values = octoliner.analog_read_all()
+    print("All sensor values:",values)
     time.sleep(0.5)
 ```
 
@@ -85,9 +90,9 @@ This code is a starting point and can be expanded to process all sensor readings
 
 Your task for this assignment is to write code that performs the following steps:
 
-1. Read the value from sensor 5 of the Octoliner array and print to console.
-2. Move the robot forward by 35 cm.
-3. Read the value from sensor 5 again and print to console.
+1. Read all the values from the Octoliner and print to console.
+2. Move the robot forward by 25 cm.
+3. Read all the values from the Octoliner sensors again and print to console.
 
 This will help you observe how the sensor reading changes before and after the robot moves. Use this logic to understand sensor behavior and experiment with different sensitivity levels if
 

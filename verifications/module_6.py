@@ -44,7 +44,6 @@ def line_sensor_intro(robot, image, td):
 
     msg = robot.get_msg()
     if msg is not None:
-        text = f"Message received: {msg}"
         # message processing. Message format should be: [20, 30, 40, ..., 40]
         # then calculate average of the array. First readed message average should be more 100 and of the second less 100
         pattern = r'\[([\d\s,]+)\]'
@@ -78,5 +77,7 @@ def line_sensor_intro(robot, image, td):
             result["description"] = "Assignment failed."
             result["score"] = 0
             text = "Assignment failed."
-
+    if msg is not None:
+        text = f"Message received: {msg}"
+        
     return image, td, text, result

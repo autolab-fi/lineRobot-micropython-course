@@ -66,6 +66,9 @@ def checkpoint_verification(robot, image, td, checkpoint_positions, verification
         "score": 100
     }
     text = "Follow the line through all checkpoints"
+    msg = robot.get_msg()
+    if msg is not None:
+        text = f"Message received: {msg}"
 
     image = robot.draw_info(image)
 

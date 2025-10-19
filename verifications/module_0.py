@@ -137,7 +137,7 @@ def sandbox(robot, image, td: dict):
     # init testData
     if not td:
         td = {
-            "end_time": time.time() + 20,
+            "end_time": time.time() + 60,
             'trajectory': []
         }
     image = robot.draw_info(image)

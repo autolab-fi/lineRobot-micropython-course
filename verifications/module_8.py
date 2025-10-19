@@ -47,12 +47,6 @@ def checkpoint_verification(robot, image, td, checkpoint_positions, verification
     and places one checkpoint per cell as close as possible to the cell center on the black line.
     Skips cells where no line is detected. Grid lines are NOT drawn.
     """
-    import cv2
-    import numpy as np
-    import time
-    import random
-    import os
-
     # --- CROP SETTINGS: Adjust these values to select your paper area ---
     top = 120
     bottom = 800

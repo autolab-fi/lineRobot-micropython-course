@@ -154,42 +154,6 @@ def checkpoint_verification_grid(robot, image, td, cell_indices, verification_ti
             print(f"Error loading checkpoint image: {e}")
 
     checkpoint_positions = td["data"]["checkpoints"]
-
-    # Draw grid lines temporarily (for first 3 seconds)
-    if td["data"].get("show_grid", False):
-        elapsed = time.time() - td["data"].get("grid_start_time", 0)
-        if elapsed < 3.0:  # Show grid for 3 seconds
-            roi_h = bottom - top
-            roi_w = right - left
-            num_rows = 3
-            num_cols = 4
-            cell_h = roi_h // num_rows
-            cell_w = roi_w // num_cols
-            
-            # Draw vertical lines
-            for col in range(1, num_cols):
-                x = left + col * cell_w
-                cv2.line(image, (x, top), (x, bottom), (0, 255, 255), 2)
-            
-            # Draw horizontal lines
-            for row in range(1, num_rows):
-                y = top + row * cell_h
-                cv2.line(image, (left, y), (right, y), (0, 255, 255), 2)
-            
-            # Draw ROI boundary
-            cv2.rectangle(image, (left, top), (right, bottom), (255, 0, 0), 3)
-            
-            # Label cells
-            for row in range(num_rows):
-                for col in range(num_cols):
-                    cell_index = row * num_cols + col
-                    y_center = top + row * cell_h + cell_h // 2
-                    x_center = left + col * cell_w + cell_w // 2
-                    cv2.putText(image, str(cell_index + 1), (x_center - 10, y_center), 
-                               cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 255), 3)
-        else:
-            td["data"]["show_grid"] = False  # Stop showing grid after 3 seconds
-
     # Place checkpoint markers (cones) on all uncompleted checkpoints
     for i, (y, x) in enumerate(checkpoint_positions):
         if not td["data"]["reached_checkpoints"][i]:

@@ -114,8 +114,8 @@ def headlights(robot, image, td: dict):
     return image, td, text, result
 
 
-def alarm(robot, image, td: dict):
-    """lesson 7: Alarm ."""
+def task_test(robot, image, td: dict):
+    """lesson 7: Alarm - Detects LED blinking with 1-second intervals."""
 
     result = {
         "success": True,
@@ -134,15 +134,15 @@ def alarm(robot, image, td: dict):
                 "changed": 0,
                 "last_state": None,
                 "state_start_time": None,
-                "durations": []
+                "durations": [],
+                "state_buffer": []  # Buffer to smooth state changes
             }
         }
 
         basepath = os.path.abspath(os.path.dirname(__file__))
 
-        temp_on = cv2.imread(os.path.join(basepath, "images", "headlight-on.jpg"))
-        temp_off = cv2.imread(os.path.join(basepath, "images", "headlight-off.jpg"))
-
+        temp_on = cv2.imread(os.path.join(basepath,"auto_tests", "images", "headlight-on.jpg"))
+        temp_off = cv2.imread(os.path.join(basepath, "auto_tests","images", "headlight-off.jpg"))
 
         temp_on = cv2.resize(temp_on, (temp_on.shape[1] // 3, temp_on.shape[0] // 3))
         temp_off = cv2.resize(temp_off, (temp_off.shape[1] // 3, temp_off.shape[0] // 3))
@@ -156,6 +156,8 @@ def alarm(robot, image, td: dict):
     percentage_white = 0
     td["data"]["count_frames"] += 1
     image = robot.draw_info(image)
+
+    current_state = False  # Default to OFF
 
     if robot:
         lower_white = np.array([215, 215, 215])
@@ -177,63 +179,78 @@ def alarm(robot, image, td: dict):
 
             cropped_image = image[crop_y:crop_y + crop_height, crop_x:crop_x + crop_width]
 
-            blurred = cv2.GaussianBlur(cropped_image, (5, 5), 0)
+            # Create mask for detecting white pixels
+            mask = cv2.inRange(cropped_image, lower_white, upper_white)
 
-            mask = cv2.inRange(blurred, lower_white, upper_white)
+            # Calculate white pixel percentage (same method as headlights function)
+            total_pixels = cropped_image.shape[0] * cropped_image.shape[1]
+            white_pixels = cv2.countNonZero(mask)
+            percentage_white = (white_pixels / total_pixels) * 100
 
-            kernel = np.ones((3, 3), np.uint8)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-
+            # Draw contours for visualization
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-            valid_contours = [contour for contour in contours if cv2.contourArea(contour) > 500]
-
             contour_image = cropped_image.copy()
-            cv2.drawContours(contour_image, valid_contours, -1, (0, 255, 0), 2)
-
+            cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)
             image[crop_y:crop_y + crop_height, crop_x:crop_x + crop_width] = contour_image
 
-            current_state = len(valid_contours) > 0
+            # Use the same threshold as headlights function
+            current_state = percentage_white > 2
 
-            if current_state:
+            # Add to buffer for smoothing (use last 3 frames)
+            td["data"]["state_buffer"].append(current_state)
+            if len(td["data"]["state_buffer"]) > 3:
+                td["data"]["state_buffer"].pop(0)
+
+            # Determine smoothed state (majority vote)
+            if len(td["data"]["state_buffer"]) >= 2:
+                smoothed_state = sum(td["data"]["state_buffer"]) > len(td["data"]["state_buffer"]) / 2
+            else:
+                smoothed_state = current_state
+
+            # Display current state
+            if smoothed_state:
                 text = "Headlights ON"
                 td["data"]["headlight_frames"] += 1
                 cv2.copyTo(td["data"]["turn-on"], td["data"]["turn-on-mask"],
-                   image[30:30 + td["data"]["turn-on"].shape[0], 1080:1080 + td["data"]["turn-on"].shape[1]])
+                          image[30:30 + td["data"]["turn-on"].shape[0], 1080:1080 + td["data"]["turn-on"].shape[1]])
             else:
                 text = "Headlights OFF"
                 cv2.copyTo(td["data"]["turn-off"], td["data"]["turn-off-mask"],
-                   image[30:30 + td["data"]["turn-off"].shape[0], 1080:1080 + td["data"]["turn-off"].shape[1]])
+                          image[30:30 + td["data"]["turn-off"].shape[0], 1080:1080 + td["data"]["turn-off"].shape[1]])
 
+            # Initialize state tracking
             if td["data"]["last_state"] is None:
-                td["data"]["last_state"] = current_state
+                td["data"]["last_state"] = smoothed_state
                 td["data"]["state_start_time"] = time.time()
 
-            elif current_state != td["data"]["last_state"]:
+            # Detect state change
+            elif smoothed_state != td["data"]["last_state"]:
                 duration = time.time() - td["data"]["state_start_time"]
                 td["data"]["durations"].append(duration)
 
-                td["data"]["last_state"] = current_state
+                td["data"]["last_state"] = smoothed_state
                 td["data"]["state_start_time"] = time.time()
                 td["data"]["changed"] += 1
 
+    # Check for task completion
     if td["end_time"] - time.time() < 0.5:
+        # Add final duration
         if td["data"]["state_start_time"]:
             final_duration = time.time() - td["data"]["state_start_time"]
             td["data"]["durations"].append(final_duration)
 
+        # Check if durations are within acceptable range (0.75 to 1.25 seconds)
         valid_durations = [0.75 <= d <= 1.25 for d in td["data"]["durations"]]
-
         valid_ratio = sum(valid_durations) / len(td["data"]["durations"]) if td["data"]["durations"] else 0
 
+        # Require at least 13 state changes (7 full blink cycles) and 80% valid timing
         if len(td["data"]["durations"]) >= 13 and valid_ratio >= 0.8:
             result["success"] = True
-            result["description"] = "Success! The robot blinked the headlights correctly with 1-second intervals."
+            result["description"] = f"Success! The robot blinked correctly"
             result["score"] = 100
         else:
             result["success"] = False
-            result["description"] = "The robot failed the task. Inconsistent LED timing detected."
+            result["description"] = f"Failed. Please Try Again"
             result["score"] = 0
 
     return image, td, text, result

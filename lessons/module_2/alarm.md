@@ -30,7 +30,7 @@ An LED has two contacts - anode and cathode. The anode is the longer one and it 
 
 You already know how to turn on an LED using the **on()** function. In this lesson, let's write a more advanced program. We'll not only turn on the LEDs on the robot but also turn them off by sending a low logic signal to the pin. To make the LEDs blink, you need to create pauses between switching signals on the LED pins so that the microcontroller doesn't execute them instantly. The easiest way to pause a program is with the function **time.sleep()**.
 
-The **time.sleep(seconds)** function pauses the program before executing the next command. This function takes a number as an argument, which represents the duration of the pause in milliseconds.
+The **time.sleep(seconds)** function pauses the program before executing the next command. This function takes a number as an argument, which represents the duration of the pause seconds.
 
 Example:
 
@@ -52,7 +52,7 @@ When this program runs, the robot will move forward 20 centimeters, pause for 3 
 
 Write a program for the robot to turn on the LEDs for 1 second, then turn them off for 1 second, and repeat this indefinitely.
 
-Remember, the LEDs are connected to pins defined in the code as **left_led** and **right_led** which are connected to pins 15 and 2.
+Remember, the LEDs are connected to pins are connected to pins 15 and 2.
 
 ## Conclusion
 

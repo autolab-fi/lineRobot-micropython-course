@@ -139,7 +139,7 @@
     "name": "Line Sensor Introduction",
     "description": "Understanding how IR line sensors work and detecting black lines using the Octoliner sensor array.",
     "sn": 5,
-    "str_id": "module_6",
+    "str_id": "module_5",
     "lessons": [
       {
         "str_id": "line_sensor_intro",
@@ -155,7 +155,7 @@
     "name": "Programming Fundamentals",
     "description": "Essential programming concepts including variables, conditional statements, loops, and arrays for robot control.",
     "sn": 6,
-    "str_id": "module_7",
+    "str_id": "module_6",
     "lessons": [
       {
         "str_id": "introduction_to_variables_and_conditional_statements",
@@ -187,7 +187,7 @@
     "name": "Advanced Line Following",
     "description": "Advanced line following techniques including relay, P, PI, and PID controllers for smooth and accurate robot movement.",
     "sn": 7,
-    "str_id": "module_8",
+    "str_id": "module_7",
     "lessons": [
       {
         "str_id": "basic_line_follower",

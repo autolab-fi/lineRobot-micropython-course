@@ -108,20 +108,9 @@ octoliner.begin(i2c)
 octoliner.set_sensitivity(245)
 
 while True:
-    # Read values from all sensors (0 - 7)
-    sensor_values = [octoliner.analog_read(i) for i in range(8)]
-
-    # YOUR CODE HERE:
-    # Add if-elif-else statements to determine which sensor(s) detect the line
-    # Remember: Values greater than 200 indicate the sensor is on the line
-    # Print appropriate messages
-    found = False
-    for idx, value in enumerate(sensor_values):
-        if value > 200:
-            print(f"SENSOR {idx} ON LINE")
-            found = True
-    if not found:
-        print("NO SENSORS ARE ON THE LINE")
+    value_1=octoliner.analog_read(0)
+    if value_1>200:
+        print("SENSOR 1 ON LINE")
     time.sleep(0.1)
 ```
 

@@ -35,36 +35,29 @@ def get_target_points(task):
     return target_points.get(task, [])
 
 
-def _init_td(td, duration, extra_data=None):
-    if not td:
-        td = {
-            "end_time": time.time() + duration,
-            "data": {
-                "messages": [],
-                **(extra_data or {}),
-            },
-        }
-    return td
-
-
-def _finalise_or_wait(td, text_wait="Listening for messages..."):
-    if time.time() > td["end_time"]:
-        return True, "Verification time ended."
-    return False, text_wait
-
-
 def hello_mqtt_variables(robot, image, td):
     result = {
         "success": False,
         "description": "Awaiting STATUS message...",
         "score": 0,
     }
+    text = "Listening for STATUS message..."
     image = robot.draw_info(image)
-    td = _init_td(td, 10, {"validated": False, "error": "No STATUS message received yet."})
+
+    if not td:
+        td = {
+            "end_time": time.time() + 10,
+            "data": {
+                "validated": False,
+                "error": "No STATUS message received yet.",
+                "messages": [],
+            },
+        }
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
+        text = f"Received: {msg}"
         if msg.startswith("STATUS:"):
             payload = msg[len("STATUS:") :]
             parts = payload.split(";")
@@ -98,31 +91,25 @@ def hello_mqtt_variables(robot, image, td):
                         else:
                             td["data"]["validated"] = True
                             td["data"]["error"] = ""
-                            result.update({
-                                "success": True,
-                                "description": "STATUS message validated successfully!",
-                                "score": 100,
-                            })
-                            return image, td, "Verification successful!", result
             else:
                 td["data"]["error"] = "STATUS message must contain four fields separated by semicolons."
         else:
             td["data"]["error"] = "Message must start with 'STATUS:'."
 
-    finished, wait_text = _finalise_or_wait(td)
-    if finished:
-        if td["data"].get("validated"):
-            result.update({
-                "success": True,
-                "description": "STATUS message validated successfully!",
-                "score": 100,
-            })
-            return image, td, "Verification successful!", result
+    if td["data"]["validated"]:
+        result.update({
+            "success": True,
+            "description": "STATUS message validated successfully!",
+            "score": 100,
+        })
+        text = "Verification successful!"
+    elif time.time() > td["end_time"]:
         result["description"] = td["data"].get("error", "No valid STATUS message received.")
-        return image, td, "Verification failed.", result
+        text = "Verification failed."
+    else:
+        result["description"] = td["data"].get("error", result["description"])
 
-    result["description"] = td["data"].get("error", result["description"])
-    return image, td, wait_text, result
+    return image, td, text, result
 
 
 def mission_time_report(robot, image, td):
@@ -131,12 +118,23 @@ def mission_time_report(robot, image, td):
         "description": "Awaiting mission report...",
         "score": 0,
     }
+    text = "Listening for mission report..."
     image = robot.draw_info(image)
-    td = _init_td(td, 10, {"validated": False, "error": "No mission report received yet."})
+
+    if not td:
+        td = {
+            "end_time": time.time() + 10,
+            "data": {
+                "validated": False,
+                "error": "No mission report received yet.",
+                "messages": [],
+            },
+        }
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
+        text = f"Received: {msg}"
         if msg.startswith("MISSION:"):
             payload = msg[len("MISSION:") :]
             parts = payload.split(";")
@@ -169,32 +167,27 @@ def mission_time_report(robot, image, td):
                         if abs(time_value - expected_time) <= 0.05:
                             td["data"]["validated"] = True
                             td["data"]["error"] = ""
-                            result.update({
-                                "success": True,
-                                "description": "Mission report validated successfully!",
-                                "score": 100,
-                            })
-                            return image, td, "Verification successful!", result
-                        td["data"]["error"] = "Computed time is outside the allowed tolerance."
+                        else:
+                            td["data"]["error"] = "Computed time is outside the allowed tolerance."
             else:
                 td["data"]["error"] = "Mission report must contain three fields."
         else:
             td["data"]["error"] = "Message must start with 'MISSION:'."
 
-    finished, wait_text = _finalise_or_wait(td)
-    if finished:
-        if td["data"].get("validated"):
-            result.update({
-                "success": True,
-                "description": "Mission report validated successfully!",
-                "score": 100,
-            })
-            return image, td, "Verification successful!", result
+    if td["data"]["validated"]:
+        result.update({
+            "success": True,
+            "description": "Mission report validated successfully!",
+            "score": 100,
+        })
+        text = "Verification successful!"
+    elif time.time() > td["end_time"]:
         result["description"] = td["data"].get("error", "No valid mission report received.")
-        return image, td, "Verification failed.", result
+        text = "Verification failed."
+    else:
+        result["description"] = td["data"].get("error", result["description"])
 
-    result["description"] = td["data"].get("error", result["description"])
-    return image, td, wait_text, result
+    return image, td, text, result
 
 
 def sensor_log_summary(robot, image, td):
@@ -203,22 +196,26 @@ def sensor_log_summary(robot, image, td):
         "description": "Awaiting LOG messages...",
         "score": 0,
     }
+    text = "Listening for sensor log messages..."
     image = robot.draw_info(image)
-    td = _init_td(
-        td,
-        12,
-        {
-            "count": None,
-            "values": None,
-            "average": None,
-            "validated": False,
-            "error": "Waiting for LOG:COUNT, LOG:VALUES, and LOG:AVERAGE messages.",
-        },
-    )
+
+    if not td:
+        td = {
+            "end_time": time.time() + 12,
+            "data": {
+                "count": None,
+                "values": None,
+                "average": None,
+                "validated": False,
+                "error": "Waiting for LOG:COUNT, LOG:VALUES, and LOG:AVERAGE messages.",
+                "messages": [],
+            },
+        }
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
+        text = f"Received: {msg}"
         if msg.startswith("LOG:COUNT="):
             try:
                 td["data"]["count"] = int(msg.split("=", 1)[1])
@@ -252,28 +249,23 @@ def sensor_log_summary(robot, image, td):
                 if abs(average - td["data"]["average"]) <= 0.05:
                     td["data"]["validated"] = True
                     td["data"]["error"] = ""
-                    result.update({
-                        "success": True,
-                        "description": "Sensor log summary validated successfully!",
-                        "score": 100,
-                    })
-                    return image, td, "Verification successful!", result
-                td["data"]["error"] = "Reported average does not match the values provided."
+                else:
+                    td["data"]["error"] = "Reported average does not match the values provided."
 
-    finished, wait_text = _finalise_or_wait(td)
-    if finished:
-        if td["data"].get("validated"):
-            result.update({
-                "success": True,
-                "description": "Sensor log summary validated successfully!",
-                "score": 100,
-            })
-            return image, td, "Verification successful!", result
+    if td["data"]["validated"]:
+        result.update({
+            "success": True,
+            "description": "Sensor log summary validated successfully!",
+            "score": 100,
+        })
+        text = "Verification successful!"
+    elif time.time() > td["end_time"]:
         result["description"] = td["data"].get("error", "Sensor log messages were incomplete.")
-        return image, td, "Verification failed.", result
+        text = "Verification failed."
+    else:
+        result["description"] = td["data"].get("error", result["description"])
 
-    result["description"] = td["data"].get("error", result["description"])
-    return image, td, wait_text, result
+    return image, td, text, result
 
 
 def list_operations_check(robot, image, td):
@@ -282,21 +274,25 @@ def list_operations_check(robot, image, td):
         "description": "Awaiting LIST messages...",
         "score": 0,
     }
+    text = "Listening for list messages..."
     image = robot.draw_info(image)
-    td = _init_td(
-        td,
-        12,
-        {
-            "items": None,
-            "length": None,
-            "validated": False,
-            "error": "Waiting for LIST:items and LIST:length messages.",
-        },
-    )
+
+    if not td:
+        td = {
+            "end_time": time.time() + 12,
+            "data": {
+                "items": None,
+                "length": None,
+                "validated": False,
+                "error": "Waiting for LIST:items and LIST:length messages.",
+                "messages": [],
+            },
+        }
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
+        text = f"Received: {msg}"
         if msg.startswith("LIST:items="):
             payload = msg.split("=", 1)[1].strip()
             try:
@@ -323,28 +319,23 @@ def list_operations_check(robot, image, td):
             if len(td["data"]["items"]) == td["data"]["length"]:
                 td["data"]["validated"] = True
                 td["data"]["error"] = ""
-                result.update({
-                    "success": True,
-                    "description": "List operations validated successfully!",
-                    "score": 100,
-                })
-                return image, td, "Verification successful!", result
-            td["data"]["error"] = "LIST:length does not match the number of items provided."
+            else:
+                td["data"]["error"] = "LIST:length does not match the number of items provided."
 
-    finished, wait_text = _finalise_or_wait(td)
-    if finished:
-        if td["data"].get("validated"):
-            result.update({
-                "success": True,
-                "description": "List operations validated successfully!",
-                "score": 100,
-            })
-            return image, td, "Verification successful!", result
+    if td["data"]["validated"]:
+        result.update({
+            "success": True,
+            "description": "List operations validated successfully!",
+            "score": 100,
+        })
+        text = "Verification successful!"
+    elif time.time() > td["end_time"]:
         result["description"] = td["data"].get("error", "List messages were incomplete.")
-        return image, td, "Verification failed.", result
+        text = "Verification failed."
+    else:
+        result["description"] = td["data"].get("error", result["description"])
 
-    result["description"] = td["data"].get("error", result["description"])
-    return image, td, wait_text, result
+    return image, td, text, result
 
 
 def introduction_to_variables_and_conditional_statements(robot, image, td):

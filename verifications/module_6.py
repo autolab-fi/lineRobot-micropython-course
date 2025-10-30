@@ -2,7 +2,7 @@ import ast
 import cv2
 import time
 import re
-
+import ast
 
 target_points = {
     'hello_mqtt_variables': [(30, 50), (0, -200)],
@@ -37,7 +37,7 @@ def get_target_points(task):
 
 def hello_mqtt_variables(robot, image, td):
     result = {
-        "success": False,
+        "success": True,  # Changed to True to keep running
         "description": "Awaiting STATUS message...",
         "score": 0,
     }
@@ -52,6 +52,8 @@ def hello_mqtt_variables(robot, image, td):
                 "error": "No STATUS message received yet.",
                 "messages": [],
             },
+            "finished": False,
+            "finish_time": None,
         }
 
     msg = robot.get_msg()
@@ -96,25 +98,54 @@ def hello_mqtt_variables(robot, image, td):
         else:
             td["data"]["error"] = "Message must start with 'STATUS:'."
 
-    if td["data"]["validated"]:
-        result.update({
-            "success": True,
-            "description": "STATUS message validated successfully!",
-            "score": 100,
-        })
-        text = "Verification successful!"
-    elif time.time() > td["end_time"]:
-        result["description"] = td["data"].get("error", "No valid STATUS message received.")
-        text = "Verification failed."
+    # Display current status on screen
+    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
+                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
+                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    
+    if td["data"]["error"]:
+        cv2.putText(image, f"Error: {td['data']['error']}", 
+                    (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+    # Only mark as finished once
+    if not td.get("finished", False):
+        if td["data"]["validated"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result.update({
+                "success": True,
+                "description": "STATUS message validated successfully!",
+                "score": 100,
+            })
+            text = "Verification successful!"
+        elif time.time() > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result["success"] = False
+            result["description"] = td["data"].get("error", "No valid STATUS message received.")
+            text = "Verification failed."
+        else:
+            # Keep running
+            result["success"] = True
+            result["description"] = td["data"].get("error", result["description"])
     else:
-        result["description"] = td["data"].get("error", result["description"])
+        # Show result for 3 seconds before ending
+        if time.time() - td["finish_time"] >= 3:
+            # Actually end by setting success to final state
+            if td["data"]["validated"]:
+                result["success"] = True
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["score"] = 0
 
     return image, td, text, result
 
 
 def mission_time_report(robot, image, td):
     result = {
-        "success": False,
+        "success": True,  # Changed to True to keep running
         "description": "Awaiting mission report...",
         "score": 0,
     }
@@ -129,6 +160,8 @@ def mission_time_report(robot, image, td):
                 "error": "No mission report received yet.",
                 "messages": [],
             },
+            "finished": False,
+            "finish_time": None,
         }
 
     msg = robot.get_msg()
@@ -174,25 +207,54 @@ def mission_time_report(robot, image, td):
         else:
             td["data"]["error"] = "Message must start with 'MISSION:'."
 
-    if td["data"]["validated"]:
-        result.update({
-            "success": True,
-            "description": "Mission report validated successfully!",
-            "score": 100,
-        })
-        text = "Verification successful!"
-    elif time.time() > td["end_time"]:
-        result["description"] = td["data"].get("error", "No valid mission report received.")
-        text = "Verification failed."
+    # Display current status on screen
+    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
+                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
+                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    
+    if td["data"]["error"]:
+        cv2.putText(image, f"Error: {td['data']['error']}", 
+                    (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+    # Only mark as finished once
+    if not td.get("finished", False):
+        if td["data"]["validated"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result.update({
+                "success": True,
+                "description": "Mission report validated successfully!",
+                "score": 100,
+            })
+            text = "Verification successful!"
+        elif time.time() > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result["success"] = False
+            result["description"] = td["data"].get("error", "No valid mission report received.")
+            text = "Verification failed."
+        else:
+            # Keep running
+            result["success"] = True
+            result["description"] = td["data"].get("error", result["description"])
     else:
-        result["description"] = td["data"].get("error", result["description"])
+        # Show result for 3 seconds before ending
+        if time.time() - td["finish_time"] >= 3:
+            # Actually end by setting success to final state
+            if td["data"]["validated"]:
+                result["success"] = True
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["score"] = 0
 
     return image, td, text, result
 
 
 def sensor_log_summary(robot, image, td):
     result = {
-        "success": False,
+        "success": True,  # Changed to True to keep running
         "description": "Awaiting LOG messages...",
         "score": 0,
     }
@@ -210,6 +272,8 @@ def sensor_log_summary(robot, image, td):
                 "error": "Waiting for LOG:COUNT, LOG:VALUES, and LOG:AVERAGE messages.",
                 "messages": [],
             },
+            "finished": False,
+            "finish_time": None,
         }
 
     msg = robot.get_msg()
@@ -252,25 +316,68 @@ def sensor_log_summary(robot, image, td):
                 else:
                     td["data"]["error"] = "Reported average does not match the values provided."
 
-    if td["data"]["validated"]:
-        result.update({
-            "success": True,
-            "description": "Sensor log summary validated successfully!",
-            "score": 100,
-        })
-        text = "Verification successful!"
-    elif time.time() > td["end_time"]:
-        result["description"] = td["data"].get("error", "Sensor log messages were incomplete.")
-        text = "Verification failed."
+    # Display current status on screen
+    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
+                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
+                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    
+    # Show received data status
+    status_y = 120
+    if td["data"]["count"] is not None:
+        cv2.putText(image, f"COUNT: {td['data']['count']}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+    if td["data"]["values"] is not None:
+        cv2.putText(image, f"VALUES: {len(td['data']['values'])} received", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+    if td["data"]["average"] is not None:
+        cv2.putText(image, f"AVERAGE: {td['data']['average']}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+    
+    if td["data"]["error"] and not td["data"]["validated"]:
+        cv2.putText(image, f"Error: {td['data']['error']}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+    # Only mark as finished once
+    if not td.get("finished", False):
+        if td["data"]["validated"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result.update({
+                "success": True,
+                "description": "Sensor log summary validated successfully!",
+                "score": 100,
+            })
+            text = "Verification successful!"
+        elif time.time() > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result["success"] = False
+            result["description"] = td["data"].get("error", "Sensor log messages were incomplete.")
+            text = "Verification failed."
+        else:
+            # Keep running
+            result["success"] = True
+            result["description"] = td["data"].get("error", result["description"])
     else:
-        result["description"] = td["data"].get("error", result["description"])
+        # Show result for 3 seconds before ending
+        if time.time() - td["finish_time"] >= 3:
+            # Actually end by setting success to final state
+            if td["data"]["validated"]:
+                result["success"] = True
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["score"] = 0
 
     return image, td, text, result
 
-
 def list_operations_check(robot, image, td):
     result = {
-        "success": False,
+        "success": True,  # Changed to True to keep running
         "description": "Awaiting LIST messages...",
         "score": 0,
     }
@@ -287,6 +394,8 @@ def list_operations_check(robot, image, td):
                 "error": "Waiting for LIST:items and LIST:length messages.",
                 "messages": [],
             },
+            "finished": False,
+            "finish_time": None,
         }
 
     msg = robot.get_msg()
@@ -322,18 +431,69 @@ def list_operations_check(robot, image, td):
             else:
                 td["data"]["error"] = "LIST:length does not match the number of items provided."
 
-    if td["data"]["validated"]:
-        result.update({
-            "success": True,
-            "description": "List operations validated successfully!",
-            "score": 100,
-        })
-        text = "Verification successful!"
-    elif time.time() > td["end_time"]:
-        result["description"] = td["data"].get("error", "List messages were incomplete.")
-        text = "Verification failed."
+    # Display current status on screen
+    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
+                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
+                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    
+    # Show received data status
+    status_y = 120
+    if td["data"]["items"] is not None:
+        item_preview = str(td["data"]["items"])[:50] + "..." if len(str(td["data"]["items"])) > 50 else str(td["data"]["items"])
+        cv2.putText(image, f"ITEMS: {item_preview}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+        # Show item count and types
+        types_in_list = {type(item).__name__ for item in td["data"]["items"]}
+        cv2.putText(image, f"Types: {', '.join(types_in_list)}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+    
+    if td["data"]["length"] is not None:
+        cv2.putText(image, f"LENGTH: {td['data']['length']}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
+    
+    if td["data"]["error"] and not td["data"]["validated"]:
+        # Word wrap error message if too long
+        error_msg = td["data"]["error"]
+        if len(error_msg) > 60:
+            error_msg = error_msg[:60] + "..."
+        cv2.putText(image, f"Error: {error_msg}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
+    # Only mark as finished once
+    if not td.get("finished", False):
+        if td["data"]["validated"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result.update({
+                "success": True,
+                "description": "List operations validated successfully!",
+                "score": 100,
+            })
+            text = "Verification successful!"
+        elif time.time() > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result["success"] = False
+            result["description"] = td["data"].get("error", "List messages were incomplete.")
+            text = "Verification failed."
+        else:
+            # Keep running
+            result["success"] = True
+            result["description"] = td["data"].get("error", result["description"])
     else:
-        result["description"] = td["data"].get("error", result["description"])
+        # Show result for 3 seconds before ending
+        if time.time() - td["finish_time"] >= 3:
+            # Actually end by setting success to final state
+            if td["data"]["validated"]:
+                result["success"] = True
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["score"] = 0
 
     return image, td, text, result
 

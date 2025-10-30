@@ -185,7 +185,7 @@
         "str_id": "hello_mqtt_variables",
         "name": "MQTT Greeting of Variables",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/MQTT%20Greeting%20of%20Variables.md",
-        "sn": 19,
+        "sn": 16,
         "description": "Declare variables of different types and broadcast them in a single MQTT status line.",
         "template": "# Write code here"
       },
@@ -193,7 +193,7 @@
         "str_id": "mission_time_report",
         "name": "Telemetry: Calculating Time",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Telemetry%20Calculating%20Time.md",
-        "sn": 20,
+        "sn": 17,
         "description": "Compute mission travel time from distance and speed and format it as telemetry.",
         "template": "# Write code here"
       },
@@ -201,7 +201,7 @@
         "str_id": "sensor_log_summary",
         "name": "Sensor Log: List and Aggregates",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Sensor%20Log%20List%20and%20Aggregates.md",
-        "sn": 21,
+        "sn": 18,
         "description": "Summarise a list of sensor readings by reporting the count, values, and average.",
         "template": "# Write code here"
       },
@@ -209,7 +209,7 @@
         "str_id": "list_operations_check",
         "name": "Working with Lists: Adding, Removing, and Measuring",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Working%20with%20Lists%20Adding%20Removing%20and%20Measuring.md",
-        "sn": 22,
+        "sn": 19,
         "description": "Manipulate a mixed-type list and report its contents and length via MQTT.",
         "template": "# Write code here"
       }
@@ -225,7 +225,7 @@
         "str_id": "basic_line_follower",
         "name": "Relay, P, and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
-        "sn": 16,
+        "sn": 20,
         "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
         "template": "# Write code here"
       },
@@ -233,7 +233,7 @@
         "str_id": "pi",
         "name": "P and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/P%20and%20PI.md",
-        "sn": 17,
+        "sn": 21,
         "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
         "template": "# Write code here"
       },
@@ -241,7 +241,7 @@
         "str_id": "pid",
         "name": "PID Controller",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/PID.md",
-        "sn": 18,
+        "sn": 22,
         "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
         "template": "# Write code here"
       }

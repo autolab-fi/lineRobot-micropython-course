@@ -38,22 +38,6 @@ Each `print()` call sends one message. The assignment expects three lines in thi
 
 ---
 
-## **Example Implementation**
-
-```python
-sensor_values = [132, 128, 140, 137]
-count = len(sensor_values)
-average = sum(sensor_values) / count
-
-print(f"LOG:COUNT={count}")
-print("LOG:VALUES=" + ",".join(str(value) for value in sensor_values))
-print(f"LOG:AVERAGE={average:.2f}")
-```
-
-The second line uses `join()` to combine the integer readings into a comma-separated string. `{average:.2f}` keeps the average readable while preserving accuracy.
-
----
-
 ## **Assignment**
 
 1. Create a list with at least three integer sensor readings.

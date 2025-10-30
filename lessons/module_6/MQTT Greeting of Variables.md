@@ -26,38 +26,11 @@ Robots often send compact updates about their status to a control dashboard. Mic
 Formatted string literals (f-strings) combine text with variable values. Curly braces `{} ` are replaced with the values of the variables inside them when the string is evaluated.
 
 ```python
-robot_name = "LineRacer"
-speed_cm_s = 18
-battery_v = 7.4
-is_ready = True
+Name = "Alex"
+Age = 18
 
-print(f"STATUS:name={robot_name};speed={speed_cm_s};battery={battery_v};ready={is_ready}")
+print(f"Name={Name};Age={Age}")
 ```
-
-The example creates four variables and prints a `STATUS:` message containing key-value pairs separated by semicolons.
-
----
-
-## **Example Implementation**
-
-```python
-robot_name = "LineRacer"
-speed_cm_s = 22
-battery_v = 7.2
-is_ready = False
-
-status_message = (
-    f"STATUS:name={robot_name};"
-    f"speed={speed_cm_s};"
-    f"battery={battery_v};"
-    f"ready={is_ready}"
-)
-print(status_message)
-```
-
-The message is sent once with all values already formatted. You can change the variable contents without altering the f-string pattern.
-
----
 
 ## **Assignment**
 

@@ -24,34 +24,6 @@ travel_time = distance / speed
 
 If the distance is in centimetres and the speed is in centimetres per second, the result is measured in seconds.
 
-### **Formatting Telemetry**
-
-Telemetry strings use key-value pairs separated by semicolons. For this lesson the required order is:
-
-```
-MISSION:distance=120cm;speed=18.0cm/s;time=<value>s
-```
-
-The time value should be a decimal string that ends with the letter `s`.
-
----
-
-## **Example Implementation**
-
-```python
-distance_cm = 120
-speed_cm_s = 18.0
-travel_time = distance_cm / speed_cm_s
-
-print(
-    f"MISSION:distance={distance_cm}cm;"
-    f"speed={speed_cm_s:.1f}cm/s;"
-    f"time={travel_time:.2f}s"
-)
-```
-
-`{speed_cm_s:.1f}` keeps the speed at one decimal place, matching the assignment requirement. `{travel_time:.2f}` rounds the time to two decimal places so that the output remains readable while staying accurate.
-
 ---
 
 ## **Assignment**

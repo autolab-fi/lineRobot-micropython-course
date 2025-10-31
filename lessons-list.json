@@ -214,37 +214,5 @@
         "template": "# Write code here"
       }
     ]
-  },
-  {
-    "name": "Advanced Line Following",
-    "description": "Advanced line following techniques including relay, P, PI, and PID controllers for smooth and accurate robot movement.",
-    "sn": 7,
-    "str_id": "module_7",
-    "lessons": [
-      {
-        "str_id": "basic_line_follower",
-        "name": "Relay, P, and PI Controllers",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
-        "sn": 20,
-        "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "pi",
-        "name": "P and PI Controllers",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/P%20and%20PI.md",
-        "sn": 21,
-        "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "pid",
-        "name": "PID Controller",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/PID.md",
-        "sn": 22,
-        "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
-        "template": "# Write code here"
-      }
-    ]
   }
 ]

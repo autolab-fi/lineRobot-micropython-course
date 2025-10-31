@@ -114,7 +114,7 @@ def headlights(robot, image, td: dict):
     return image, td, text, result
 
 
-def task_test(robot, image, td: dict):
+def alarm(robot, image, td: dict):
     """lesson 7: Alarm - Detects LED blinking with 1-second intervals."""
 
     result = {

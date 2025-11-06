@@ -110,7 +110,7 @@ def maneuvering(robot, image, td: dict):
     if not td:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 12,
+            "end_time": time.time() + 20,
             "target_angle": [
                 {"left": 90, "right": 0},
                 {"left": 90, "right": 0},
@@ -239,7 +239,7 @@ def long_distance_race(robot, image, td: dict):
     if not td:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 24,
+            "end_time": time.time() + 30,
             "data": {},
             "delta": 4,
             "reached_point": False

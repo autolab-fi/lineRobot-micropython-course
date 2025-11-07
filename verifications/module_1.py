@@ -251,7 +251,7 @@ def long_distance_race(robot, image, td: dict):
             [{'left': 90, 'right': 0}],
             {'forward': 20, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 30, 'backward': 0},
+            {'forward': 28, 'backward': 0},
             [{'left': 0, 'right': 90}],
             {'forward': 20, 'backward': 0}
         ]

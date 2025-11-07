@@ -142,30 +142,6 @@
     "str_id": "module_6",
     "lessons": [
       {
-        "str_id": "introduction_to_variables_and_conditional_statements",
-        "name": "Introduction to Variables and Conditional Statements",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Introduction%20to%20Variables%20and%20Conditional%20Statements.md",
-        "sn": 13,
-        "description": "Learn how to declare and use variables in programming, and apply conditional logic using if, else if, and else statements.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "loops_and_conditional_logic",
-        "name": "Loops and Conditional Logic",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Loops%20and%20Conditional%20Logic.md",
-        "sn": 14,
-        "description": "Learn how to repeat actions using for and while loops combined with conditional statements.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "array_and_processing_data",
-        "name": "Arrays and Processing Data with Loops",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Arrays%20and%20Processing%20Data%20with%20Loops.md",
-        "sn": 15,
-        "description": "Understand how to use arrays to store and analyze sensor data with systematic data collection.",
-        "template": "# Write code here"
-      },
-      {
         "str_id": "hello_mqtt_variables",
         "name": "MQTT Greeting of Variables",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/MQTT%20Greeting%20of%20Variables.md",

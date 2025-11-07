@@ -135,23 +135,35 @@ def alarm(robot, image, td: dict):
                 "last_state": None,
                 "state_start_time": None,
                 "durations": [],
-                "state_buffer": []  # Buffer to smooth state changes
-            }
+                "state_buffer": [],  # Buffer to smooth state changes
+                "turn-on": None,
+                "turn-off": None,
+                "turn-on-mask": None,
+                "turn-off-mask": None
+            },
+            "finished": False,
+            "finish_time": None
         }
 
         basepath = os.path.abspath(os.path.dirname(__file__))
 
-        temp_on = cv2.imread(os.path.join(basepath,"images", "headlight-on.jpg"))
-        temp_off = cv2.imread(os.path.join(basepath,"images", "headlight-off.jpg"))
+        temp_on_path = os.path.join(basepath, "images", "headlight-on.jpg")
+        temp_off_path = os.path.join(basepath,"images", "headlight-off.jpg")
 
-        temp_on = cv2.resize(temp_on, (temp_on.shape[1] // 3, temp_on.shape[0] // 3))
-        temp_off = cv2.resize(temp_off, (temp_off.shape[1] // 3, temp_off.shape[0] // 3))
+        # Check if files exist before loading
+        if os.path.exists(temp_on_path) and os.path.exists(temp_off_path):
+            temp_on = cv2.imread(temp_on_path)
+            temp_off = cv2.imread(temp_off_path)
 
-        td["data"]["turn-on"] = temp_on
-        td["data"]["turn-off"] = temp_off
+            if temp_on is not None and temp_off is not None:
+                temp_on = cv2.resize(temp_on, (temp_on.shape[1] // 3, temp_on.shape[0] // 3))
+                temp_off = cv2.resize(temp_off, (temp_off.shape[1] // 3, temp_off.shape[0] // 3))
 
-        td["data"]["turn-on-mask"] = cv2.inRange(temp_on, np.array([0, 240, 0]), np.array([15, 255, 15]))
-        td["data"]["turn-off-mask"] = cv2.inRange(temp_off, np.array([0, 0, 0]), np.array([15, 15, 15]))
+                td["data"]["turn-on"] = temp_on
+                td["data"]["turn-off"] = temp_off
+
+                td["data"]["turn-on-mask"] = cv2.inRange(temp_on, np.array([0, 240, 0]), np.array([15, 255, 15]))
+                td["data"]["turn-off-mask"] = cv2.inRange(temp_off, np.array([0, 0, 0]), np.array([15, 15, 15]))
 
     percentage_white = 0
     td["data"]["count_frames"] += 1
@@ -182,7 +194,7 @@ def alarm(robot, image, td: dict):
             # Create mask for detecting white pixels
             mask = cv2.inRange(cropped_image, lower_white, upper_white)
 
-            # Calculate white pixel percentage (same method as headlights function)
+            # Calculate white pixel percentage
             total_pixels = cropped_image.shape[0] * cropped_image.shape[1]
             white_pixels = cv2.countNonZero(mask)
             percentage_white = (white_pixels / total_pixels) * 100
@@ -207,16 +219,22 @@ def alarm(robot, image, td: dict):
             else:
                 smoothed_state = current_state
 
-            # Display current state
+            # Display current state with overlay images (only if loaded successfully)
             if smoothed_state:
                 text = "Headlights ON"
                 td["data"]["headlight_frames"] += 1
-                cv2.copyTo(td["data"]["turn-on"], td["data"]["turn-on-mask"],
-                          image[30:30 + td["data"]["turn-on"].shape[0], 1080:1080 + td["data"]["turn-on"].shape[1]])
+                if td["data"]["turn-on"] is not None and td["data"]["turn-on-mask"] is not None:
+                    overlay_h, overlay_w = td["data"]["turn-on"].shape[:2]
+                    if overlay_h + 30 <= image.shape[0] and overlay_w + 1080 <= image.shape[1]:
+                        cv2.copyTo(td["data"]["turn-on"], td["data"]["turn-on-mask"],
+                                  image[30:30 + overlay_h, 1080:1080 + overlay_w])
             else:
                 text = "Headlights OFF"
-                cv2.copyTo(td["data"]["turn-off"], td["data"]["turn-off-mask"],
-                          image[30:30 + td["data"]["turn-off"].shape[0], 1080:1080 + td["data"]["turn-off"].shape[1]])
+                if td["data"]["turn-off"] is not None and td["data"]["turn-off-mask"] is not None:
+                    overlay_h, overlay_w = td["data"]["turn-off"].shape[:2]
+                    if overlay_h + 30 <= image.shape[0] and overlay_w + 1080 <= image.shape[1]:
+                        cv2.copyTo(td["data"]["turn-off"], td["data"]["turn-off-mask"],
+                                  image[30:30 + overlay_h, 1080:1080 + overlay_w])
 
             # Initialize state tracking
             if td["data"]["last_state"] is None:
@@ -233,24 +251,33 @@ def alarm(robot, image, td: dict):
                 td["data"]["changed"] += 1
 
     # Check for task completion
-    if td["end_time"] - time.time() < 0.5:
-        # Add final duration
-        if td["data"]["state_start_time"]:
-            final_duration = time.time() - td["data"]["state_start_time"]
-            td["data"]["durations"].append(final_duration)
+    if not td.get("finished", False):
+        if td["end_time"] - time.time() < 0.5:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            
+            # Add final duration
+            if td["data"]["state_start_time"]:
+                final_duration = time.time() - td["data"]["state_start_time"]
+                td["data"]["durations"].append(final_duration)
 
-        # Check if durations are within acceptable range (0.75 to 1.25 seconds)
-        valid_durations = [0.75 <= d <= 1.25 for d in td["data"]["durations"]]
-        valid_ratio = sum(valid_durations) / len(td["data"]["durations"]) if td["data"]["durations"] else 0
+            # Check if durations are within acceptable range (0.75 to 1.25 seconds)
+            valid_durations = [0.75 <= d <= 1.25 for d in td["data"]["durations"]]
+            valid_ratio = sum(valid_durations) / len(td["data"]["durations"]) if td["data"]["durations"] else 0
 
-        # Require at least 13 state changes (7 full blink cycles) and 80% valid timing
-        if len(td["data"]["durations"]) >= 13 and valid_ratio >= 0.8:
-            result["success"] = True
-            result["description"] = f"Success! The robot blinked correctly"
-            result["score"] = 100
-        else:
-            result["success"] = False
-            result["description"] = f"Failed. Please Try Again"
-            result["score"] = 0
+            # Require at least 10 state changes and 75% valid timing
+            if len(td["data"]["durations"]) >= 10 and valid_ratio >= 0.75:
+                result["success"] = True
+                result["description"] = "Success! The robot blinked correctly"
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["description"] = "Assignment failed"
+                result["score"] = 0
+    else:
+        # Show result for 3 seconds before ending
+        if time.time() - td["finish_time"] >= 3:
+            # Keep final result state
+            pass
 
     return image, td, text, result

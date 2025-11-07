@@ -141,8 +141,8 @@ def alarm(robot, image, td: dict):
 
         basepath = os.path.abspath(os.path.dirname(__file__))
 
-        temp_on = cv2.imread(os.path.join(basepath,"auto_tests", "images", "headlight-on.jpg"))
-        temp_off = cv2.imread(os.path.join(basepath, "auto_tests","images", "headlight-off.jpg"))
+        temp_on = cv2.imread(os.path.join(basepath,"images", "headlight-on.jpg"))
+        temp_off = cv2.imread(os.path.join(basepath,"images", "headlight-off.jpg"))
 
         temp_on = cv2.resize(temp_on, (temp_on.shape[1] // 3, temp_on.shape[0] // 3))
         temp_off = cv2.resize(temp_off, (temp_off.shape[1] // 3, temp_off.shape[0] // 3))

@@ -45,4 +45,4 @@ robot.publish(f"LED_FADE:steps={fade_steps}")
 Create a program that defines a list of PWM levels, cycles both LEDs through each value with a short delay, and publishes a single line formatted `LED_FADE:steps=[...]` once the fade completes. The task is finished when the `analog_led_fade` verification_function reads your `LED_FADE:` message, confirms the levels stay within range, and replays the list to match the observed LED behaviour.
 
 ## Conclusion
-Great job! You used lists to script a brightness pattern, loops to play it back, and telemetry to document the result. The final lesson shifts from lists to dictionaries so you can assemble richer telemetry reports.
+Great job! You used lists to script a brightness pattern, loops to play it back, and telemetry to document the result. The final lesson puts those list skills to work on live sensor readings and LED status reporting.

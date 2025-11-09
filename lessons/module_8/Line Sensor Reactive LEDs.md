@@ -1,4 +1,4 @@
-# Lesson 1: Line Sensor Reactive LEDs
+# Lesson 3: Line Sensor Reactive LEDs
 
 ## Lesson objective
 Understand how Python lists store ordered data and how to apply them in your robot programs.
@@ -51,7 +51,13 @@ for temp in temperatures:
 These techniques transfer directly to robot code: you can gather sensor samples in a list, inspect individual positions, and turn that decision into visible feedback.
 
 ## Assignment
-Write a program that reads all eight Octoliner values into a list, evaluates the centre positions to decide whether the line is under the robot, mirrors that decision on both LEDs, and prints one heartbeat string in the format `LINE_LED:state=...;readings=[...]`. The assignment is complete when the `line_sensor_leds` verification_function receives your `LINE_LED:` line, confirms the LED state matches the list logic, and sees readings that support the decision.
+Write a program that:
+
+- reads all eight Octoliner values into a list
+- checks the centre positions to decide whether the line is under the robot
+- mirrors that decision on both LEDs so the lights match the list logic
+- prints one heartbeat string formatted `LINE_LED:state=...;readings=[...]`
+- completes when the `line_sensor_leds` verification_function receives your `LINE_LED:` line, confirms the LED state matches the decision, and sees readings that support the outcome
 
 ## Conclusion
-Nice work! You explored how lists organise ordered values and applied indexing to drive the robot's indicator lights. The next lesson keeps building list confidence while adding loops and PWM for smooth LED animation.
+Nice work! You explored how lists organise ordered values and applied indexing to drive the robot's indicator lights. You're ready to combine these ideas with other sensors and controls as you continue through the course.

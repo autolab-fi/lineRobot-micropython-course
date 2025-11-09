@@ -1,59 +1,57 @@
 # Lesson 1: Line Sensor Reactive LEDs
 
 ## Lesson objective
-Practise building Python lists from sensor readings, index the list to inspect specific positions, and connect the resulting logic to LED output and telemetry text.
+Understand how Python lists store ordered data and how to apply them in your robot programs.
 
 ## Introduction
-Lists keep related data in order, making them ideal for processing an array of line sensor values. In this lesson you will read the Octoliner array into a list, use indexing to inspect the centre sensors, turn the outcome into LED feedback, and print one heartbeat line that records what the robot saw.
+Lists are Python's flexible containers for ordered values. They let you group readings, configuration numbers, or status text so the items stay in sequence. Once you can gather data in a list and access positions by index, you can reuse the same pattern for sensors, LED patterns, or any other structured information.
 
 ## Theory
 
-### Lists collect ordered sensor data
-Python lists store items in sequence. Converting the Octoliner reading to a list preserves the order of the eight sensors so index `0` remains the left edge and index `7` the right edge.
+### Creating and viewing lists
+A list literal surrounds comma-separated items with square brackets. You can mix data types, although keeping similar values together makes processing easier.
 
 ```python
-from octoliner import Octoliner
-
-sensor = Octoliner()
-sensor.begin(i2c)
-readings = list(sensor.analog_read_all())
-print(readings)
+numbers = [10, 20, 30, 40]
+fruits = ["apple", "banana", "cherry"]
+mixed = [1, "two", 3.0, True]
 ```
 
-### Indexing finds the centre of the line
-Lists use zero-based indexing. The centre pair of the Octoliner sits at indexes `3` and `4`. Comparing these values with a threshold highlights whether the robot is lined up with the track.
+### Accessing and updating elements
+List indexes start at `0`. Use the index inside square brackets to read or assign a value.
 
 ```python
-LINE_THRESHOLD = 120
-line_seen = readings[3] < LINE_THRESHOLD or readings[4] < LINE_THRESHOLD
+first_number = numbers[0]      # 10
+third_fruit = fruits[2]        # "cherry"
+fruits[1] = "blueberry"        # Update the second item
 ```
 
-### Turning a decision into LED output
-The boolean stored in `line_seen` can immediately control both indicator LEDs. Matching the physical lights to the logic helps confirm your list processing is correct.
+### Expanding and reducing a list
+Lists grow or shrink as you work. `append()` adds an item to the end, `insert()` places one at a chosen position, and `pop()` removes and returns an item.
 
 ```python
-robot.set_led_state(line_seen, line_seen)
+fruits.append("orange")        # Add to the end
+numbers.insert(1, 15)          # Insert at index 1
+removed = numbers.pop(2)       # Remove index 2
 ```
 
-### Capturing the result in a status line
-Logging the readings alongside the LED state creates a traceable heartbeat. A formatted string keeps the list together so the verifier can replay the logic.
+### Using list values in decisions
+Looping over a list lets you check each value and react.
 
 ```python
-state = "on" if line_seen else "off"
-message = f"LINE_LED:state={state};readings={readings}"
-robot.publish(message)
+temperatures = [23, 19, 25, 30]
+
+for temp in temperatures:
+    if temp > 25:
+        print("High temperature alert")
+    else:
+        print("Temperature normal")
 ```
+
+These techniques transfer directly to robot code: you can gather sensor samples in a list, inspect individual positions, and turn that decision into visible feedback.
 
 ## Assignment
-Write a script that stores the eight Octoliner readings in a list, checks the centre indexes against a threshold to decide whether the line is beneath the robot, switches both LEDs on when the line is seen, and publishes a single message formatted as `LINE_LED:state=...;readings=[...]`.
-
-Platform API:
-- `sensor = Octoliner(); sensor.begin(i2c)` – initialise the line sensor hardware.
-- `sensor.analog_read_all()` – fetch all eight readings at once.
-- `robot.set_led_state(left_on: bool, right_on: bool)` – control the left and right indicator LEDs.
-- `robot.publish(message: str)` – send text output to the MQTT log.
-
-The assignment is marked complete when the `line_sensor_leds` verification_function reads your `LINE_LED:` line, confirms the LED state matches the sensor logic, and verifies the recorded readings justify the decision.
+Write a program that reads all eight Octoliner values into a list, evaluates the centre positions to decide whether the line is under the robot, mirrors that decision on both LEDs, and prints one heartbeat string in the format `LINE_LED:state=...;readings=[...]`. The assignment is complete when the `line_sensor_leds` verification_function receives your `LINE_LED:` line, confirms the LED state matches the list logic, and sees readings that support the decision.
 
 ## Conclusion
-Great work! You used lists to organise sensor data, indexed specific positions to make a line-detection decision, and tied that logic to both LED control and telemetry output. The next lesson will build on list skills to choreograph PWM fades with loops.
+Nice work! You explored how lists organise ordered values and applied indexing to drive the robot's indicator lights. The next lesson keeps building list confidence while adding loops and PWM for smooth LED animation.

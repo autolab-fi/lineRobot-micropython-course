@@ -1,10 +1,10 @@
 # Lesson 2: Analog LED Fade with Loops
 
 ## Lesson objective
-Create a list of PWM brightness targets, iterate through them with a `for` loop, and publish the exact sequence used to fade the robot's LEDs.
+Strengthen list and loop skills by designing a PWM brightness profile, iterating through it with `for` loops, and coordinating LED output with logged telemetry.
 
 ## Introduction
-Now that you can toggle LEDs on and off, it is time to explore pulse-width modulation (PWM) for smoother feedback in the remote lab. In this lesson you will build a list of brightness values, sweep through them with MicroPython, command the robot's LED driver, and document the sequence so the verifier can replay the effect.
+Smooth LED effects rely on repeating patterns. This lesson demonstrates how lists can hold a planned series of brightness levels, how loops step through each value, and how PWM commands translate the numbers into gradual light changes that you can record for verification.
 
 ## Theory
 
@@ -42,17 +42,14 @@ robot.publish(f"LED_FADE:steps={steps}")
 ```
 
 ## Assignment
-Task: Program a PWM fade that raises the LEDs from off to full brightness and back down, driving both LEDs in sync and broadcasting the sequence you used.
+Create a program that defines a symmetric list of LED brightness values, runs a loop that applies each level to both LEDs with a short delay, and prints `LED_FADE:steps=[...]` so the playback sequence is recorded.
 
 Platform API:
 - `robot.set_led_pwm(channel: str, duty_cycle: int)` – set `"left"` or `"right"` LED brightness (0–255).
 - `time.sleep(seconds: float)` – pause between PWM updates so the fade is perceptible.
 - `robot.publish(message: str)` – send a heartbeat message to the MQTT log.
 
-Verification: The `analog_led_fade` verification_function waits for `LED_FADE:steps=[...]`, replays your list, and checks that every value stays within the allowed range and forms a smooth fade. Your submission passes once the printed sequence matches the LED output.
+The work is complete when the `analog_led_fade` verification_function observes your `LED_FADE:` message, confirms the values stay in range, and replays the list to match the LED output.
 
 ## Conclusion
 Well done! You combined lists, loops, and PWM to choreograph a smooth LED fade and documented the behaviour for automated checking. Up next you will reuse these collection skills to generate richer telemetry messages.
-
-## Links
-- [MicroPython PWM Tutorial](https://docs.micropython.org/en/latest/tutorial/pwm.html)

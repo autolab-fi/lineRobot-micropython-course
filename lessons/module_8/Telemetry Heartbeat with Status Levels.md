@@ -1,15 +1,15 @@
 # Lesson 3: Telemetry Heartbeat with Status Levels
 
 ## Lesson objective
-Reuse the module 6 STATUS telemetry fields, compute a health label from current robot data, and publish the expanded heartbeat in a single line.
+Organise telemetry fields inside a Python dictionary, derive a health label from numeric thresholds, and format a complete STATUS heartbeat string.
 
 ## Introduction
-Operators monitoring the remote lab robot need both raw telemetry and a quick “is everything okay?” indicator. In this lesson you will collect the name, speed, battery voltage, and readiness flag just like in module 6, classify the robot's overall health with a few threshold checks, package everything in a dictionary, and publish one STATUS heartbeat that includes the new field.
+When data points belong together, dictionaries provide named access that keeps related values readable. This lesson shows how to gather the STATUS telemetry fields, add a derived `health` key using conditional checks, and produce a single formatted heartbeat line.
 
 ## Theory
 
 ### Capturing the base telemetry
-Start by reading or defining the familiar STATUS values. The dashboard helper exposes convenience calls that mirror the module 6 API so your code stays short.
+Begin by calling the helper functions that return the raw data. Each variable becomes a dictionary entry later.
 
 ```python
 robot_name = robot.get_name()
@@ -62,7 +62,7 @@ robot.publish(status_line)
 ```
 
 ## Assignment
-Task: Gather the four core telemetry values, derive the `health` field using the thresholds above, and publish a single STATUS line that contains all five entries.
+Write a program that reads the robot name, speed, battery voltage, and readiness flag, computes the `health` label with the provided thresholds, stores everything in a dictionary, and publishes one string that begins with `STATUS:` and lists all five key/value pairs.
 
 Platform API:
 - `robot.get_name() -> str` – return the robot's configured name.
@@ -71,10 +71,7 @@ Platform API:
 - `robot.is_ready() -> bool` – report whether the robot is ready for commands.
 - `robot.publish(message: str)` – send a telemetry heartbeat to the MQTT log.
 
-Verification: The `telemetry_heartbeat_health` verification_function listens for the expanded STATUS line, checks that the numeric fields are present, and recomputes the health classification. Your submission succeeds when the published `health` value matches the verifier's thresholds.
+Completion is recorded when the `telemetry_heartbeat_health` verification_function reads your expanded STATUS line, confirms all numeric fields, and recomputes the `health` label to match your output.
 
 ## Conclusion
-Excellent job! You extended the STATUS heartbeat with a derived health indicator while keeping the data structured in a dictionary. This workflow mirrors real-world telemetry design and prepares you for richer diagnostics in upcoming modules.
-
-## Links
-- [MicroPython Dictionaries](https://docs.micropython.org/en/latest/tutorial/data_types.html#dictionaries)
+Excellent job! You kept related telemetry inside a dictionary, generated a health summary with conditional logic, and published a neatly formatted STATUS heartbeat. These dictionary skills pave the way for more advanced diagnostics in future lessons.

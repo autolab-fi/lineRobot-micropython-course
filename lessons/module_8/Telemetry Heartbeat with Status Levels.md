@@ -1,36 +1,41 @@
-# **Lesson 3: Telemetry Heartbeat with Status Levels**
+# Lesson 3: Telemetry Heartbeat with Status Levels
 
-## **Lesson Objective**
+## Lesson objective
+Reuse the module 6 STATUS telemetry fields, compute a health label from current robot data, and publish the expanded heartbeat in a single line.
 
-Reuse the STATUS line from Module 6, add a computed health field, and organise the data with a dictionary before printing.
+## Introduction
+Operators monitoring the remote lab robot need both raw telemetry and a quick “is everything okay?” indicator. In this lesson you will collect the name, speed, battery voltage, and readiness flag just like in module 6, classify the robot's overall health with a few threshold checks, package everything in a dictionary, and publish one STATUS heartbeat that includes the new field.
 
----
+## Theory
 
-## **Introduction**
+### Capturing the base telemetry
+Start by reading or defining the familiar STATUS values. The dashboard helper exposes convenience calls that mirror the module 6 API so your code stays short.
 
-Module 6 collected the robot name, speed, battery voltage, and readiness flag into one STATUS message. Operators also want a quick answer to the question “is everything okay?”. This lesson shows how to calculate a health label from the same numbers, keep the values together in a dictionary, and publish the expanded heartbeat.
+```python
+robot_name = robot.get_name()
+speed_cm_s = robot.read_speed_cm_s()
+battery_v = robot.read_battery_voltage()
+is_ready = robot.is_ready()
+```
 
----
+### Classifying health from thresholds
+A derived field summarises the numbers. This course uses three bands:
 
-## **Theory**
+- `low` if the battery is below `7.0` volts or the speed is `0` cm/s.
+- `warn` if the battery is below `9.0` volts, the speed is below `10` cm/s, or the robot is not ready.
+- `ok` for all other cases.
 
-### **Start from Known Variables**
+```python
+if battery_v < 7.0 or speed_cm_s == 0:
+    health = "low"
+elif battery_v < 9.0 or speed_cm_s < 10 or not is_ready:
+    health = "warn"
+else:
+    health = "ok"
+```
 
-Create the four variables again: `robot_name`, `speed_cm_s`, `battery_v`, and `is_ready`. These values continue to feed the STATUS message.
-
-### **Classifying Health**
-
-Use simple thresholds so the health field lines up with what the robot is doing:
-
-- Report `low` if the battery is below `7.0` volts or the speed is `0`.
-- Otherwise report `warn` if the battery is below `9.0` volts, the speed is below `10` cm/s, or `is_ready` is `False`.
-- In all other cases report `ok`.
-
-Store the text in a variable named `health_level`.
-
-### **Store Everything in a Dictionary**
-
-Placing the values in a dictionary keeps the code tidy and makes it easy to add the extra field.
+### Organising data with a dictionary
+Dictionaries keep related telemetry together, making it easy to format the outgoing message and to adjust the structure in later modules.
 
 ```python
 telemetry = {
@@ -38,29 +43,38 @@ telemetry = {
     "speed": speed_cm_s,
     "battery": battery_v,
     "ready": is_ready,
-    "health": health_level,
+    "health": health,
 }
 ```
 
-### **Publish One STATUS Line**
+### Publishing the extended STATUS line
+The verifier expects a single string beginning with `STATUS:` followed by the five key/value pairs separated by semicolons. Format carefully so the checker can parse each field.
 
-Stick with the format from earlier lessons and add the new field at the end.
-
+```python
+status_line = (
+    f"STATUS:name={telemetry['name']};"
+    f"speed={telemetry['speed']};"
+    f"battery={telemetry['battery']};"
+    f"ready={telemetry['ready']};"
+    f"health={telemetry['health']}"
+)
+robot.publish(status_line)
 ```
-STATUS:name=Robo;speed=42;battery=9.6;ready=True;health=ok
-```
 
----
+## Assignment
+Task: Gather the four core telemetry values, derive the `health` field using the thresholds above, and publish a single STATUS line that contains all five entries.
 
-## **Assignment**
+Platform API:
+- `robot.get_name() -> str` – return the robot's configured name.
+- `robot.read_speed_cm_s() -> float` – measure the current forward speed in centimetres per second.
+- `robot.read_battery_voltage() -> float` – report the present battery voltage.
+- `robot.is_ready() -> bool` – report whether the robot is ready for commands.
+- `robot.publish(message: str)` – send a telemetry heartbeat to the MQTT log.
 
-1. Define the four telemetry variables with sensible values.
-2. Decide the `health_level` string using the thresholds above.
-3. Build the `telemetry` dictionary containing the original fields plus the `"health"` entry.
-4. Print a single STATUS line that includes all five fields so the `telemetry_heartbeat_health` verifier can check both the numbers and the decision.
+Verification: The `telemetry_heartbeat_health` verification_function listens for the expanded STATUS line, checks that the numeric fields are present, and recomputes the health classification. Your submission succeeds when the published `health` value matches the verifier's thresholds.
 
----
+## Conclusion
+Excellent job! You extended the STATUS heartbeat with a derived health indicator while keeping the data structured in a dictionary. This workflow mirrors real-world telemetry design and prepares you for richer diagnostics in upcoming modules.
 
-## **Conclusion**
-
-Adding a derived field to the STATUS heartbeat delivers both raw data and an easy-to-read summary. Keeping everything in a dictionary prepares you for longer reports in later modules.
+## Links
+- [MicroPython Dictionaries](https://docs.micropython.org/en/latest/tutorial/data_types.html#dictionaries)

@@ -1,60 +1,58 @@
-# **Lesson 2: Analog LED Fade with Loops**
+# Lesson 2: Analog LED Fade with Loops
 
-## **Lesson Objective**
+## Lesson objective
+Create a list of PWM brightness targets, iterate through them with a `for` loop, and publish the exact sequence used to fade the robot's LEDs.
 
-Use a list of brightness steps to drive PWM with a `for` loop, create a smooth LED fade, and share the steps through MQTT.
+## Introduction
+Now that you can toggle LEDs on and off, it is time to explore pulse-width modulation (PWM) for smoother feedback in the remote lab. In this lesson you will build a list of brightness values, sweep through them with MicroPython, command the robot's LED driver, and document the sequence so the verifier can replay the effect.
 
----
+## Theory
 
-## **Introduction**
+### Understanding PWM brightness
+PWM rapidly switches the LED on and off. Higher duty cycles keep the LED on for a larger fraction of each cycle, making it appear brighter. The dashboard exposes `robot.set_led_pwm(channel, duty_cycle)` with values from `0` (off) to `255` (fully on).
 
-Pulse-width modulation (PWM) lets the robot output more than just on or off. By sending different duty cycles to the LED, you can make it brighten and dim. This lesson walks through building a list of target levels, playing them back with a loop, and printing the exact sequence so the checker can replay the fade.
+```python
+robot.set_led_pwm("left", 128)  # Half brightness on the left LED
+```
 
----
-
-## **Theory**
-
-### **PWM Basics**
-
-`analogWrite(pin, value)` accepts values from `0` (off) to `255` (fully on). Moving through that range slowly creates a visible ramp.
-
-### **Lists Keep the Sequence Clear**
-
-Storing the targets in a list shows the shape of the fade and makes it easy to tweak.
+### Building a fade profile with lists
+Lists let you design the fade curve numerically. Starting at `0`, stepping up to `255`, and gliding back down creates a symmetric glow.
 
 ```python
 steps = [0, 32, 64, 96, 128, 160, 192, 224, 255, 224, 192, 160, 128, 96, 64, 32, 0]
 ```
 
-### **Looping Over Each Step**
-
-A `for` loop sends every value to the LED. Add a short pause so the change is visible.
+### Looping through each brightness step
+A `for` loop visits every entry in the list. Apply each level to the LED and pause briefly so the fade is visible on the physical robot.
 
 ```python
+import time
+
 for level in steps:
-    analogWrite(robot.LED_LEFT, level)
+    robot.set_led_pwm("left", level)
+    robot.set_led_pwm("right", level)
     time.sleep(0.05)
 ```
 
-### **MQTT Summary Line**
+### Publishing the fade summary
+After the loop completes, publish the exact list so the backend can verify the profile. The verifier listens for a single `LED_FADE:` line with a `steps` field.
 
-The verifier reads one line beginning with `LED_FADE:` followed by the list you used.
-
+```python
+robot.publish(f"LED_FADE:steps={steps}")
 ```
-LED_FADE:steps=[0, 32, 64, 96, 128, 160, 192, 224, 255, 224, 192, 160, 128, 96, 64, 32, 0]
-```
 
----
+## Assignment
+Task: Program a PWM fade that raises the LEDs from off to full brightness and back down, driving both LEDs in sync and broadcasting the sequence you used.
 
-## **Assignment**
+Platform API:
+- `robot.set_led_pwm(channel: str, duty_cycle: int)` – set `"left"` or `"right"` LED brightness (0–255).
+- `time.sleep(seconds: float)` – pause between PWM updates so the fade is perceptible.
+- `robot.publish(message: str)` – send a heartbeat message to the MQTT log.
 
-1. Build a list named `steps` that rises from `0` to at least `255` and returns to `0`.
-2. Loop over the list and call `analogWrite` on one LED for each value.
-3. Include `time.sleep` inside the loop so the fade is smooth.
-4. After the loop, print the MQTT line above so the `analog_led_fade` verifier can match your program.
+Verification: The `analog_led_fade` verification_function waits for `LED_FADE:steps=[...]`, replays your list, and checks that every value stays within the allowed range and forms a smooth fade. Your submission passes once the printed sequence matches the LED output.
 
----
+## Conclusion
+Well done! You combined lists, loops, and PWM to choreograph a smooth LED fade and documented the behaviour for automated checking. Up next you will reuse these collection skills to generate richer telemetry messages.
 
-## **Conclusion**
-
-Lists and loops give you precise control over PWM output. Recording the same list in your printout documents the effect and lets the verifier check every brightness level.
+## Links
+- [MicroPython PWM Tutorial](https://docs.micropython.org/en/latest/tutorial/pwm.html)

@@ -1,65 +1,68 @@
-# **Lesson 1: Line Sensor Reactive LEDs**
+# Lesson 1: Line Sensor Reactive LEDs
 
-## **Lesson Objective**
+## Lesson objective
+Collect Octoliner sensor readings into a Python list, decide whether the robot is centred over the line, and drive the status LEDs while reporting the result through MQTT.
 
-Collect Octoliner readings in a list, decide whether the robot sees the line, drive the LEDs, and report the result with a single MQTT message.
+## Introduction
+In the remote lab you can read the Octoliner line sensor array and light the robot's front LEDs from your MicroPython script. This lesson shows how to capture all eight sensor values, use list indexing to decide if the line is under the robot, mirror that decision on the LEDs, and publish a single heartbeat line that documents both the readings and the LED state.
 
----
+## Theory
 
-## **Introduction**
-
-Earlier modules showed how the line sensor reports eight light values and how LEDs can display quick feedback. In this lesson you will store the readings in order, use a small bit of logic to decide if the line is under the robot, mirror that decision to the LED hardware, and print one status line that matches the checker format.
-
----
-
-## **Theory**
-
-### **Lists Store the Eight Sensor Values**
-
-`robot.read_line_sensors()` returns an iterable of eight numbers. Wrapping it in `list()` keeps the values together so you can check specific positions later.
+### Reading the Octoliner array
+The Octoliner library exposes `analog_read_all()` so you can snapshot all eight channels in one call. Wrapping the result in `list()` keeps the values ordered from left (index `0`) to right (index `7`).
 
 ```python
-readings = list(robot.read_line_sensors())
+from octoliner import Octoliner
+
+sensor = Octoliner()
+sensor.begin(i2c)
+readings = list(sensor.analog_read_all())
+print(readings)
 ```
 
-### **Checking the Centre Sensors**
-
-A typical threshold for detecting black tape is `120`. Looking at indexes `3` and `4` tells you whether the centre of the robot is still above the path.
+### Checking the centre sensors
+A dark line typically produces lower readings than the surrounding floor. Comparing the centre pair (indexes `3` and `4`) against a threshold such as `120` lets you detect whether the robot is still aligned with the track.
 
 ```python
-line_seen = readings[3] < 120 or readings[4] < 120
+LINE_THRESHOLD = 120
+line_seen = readings[3] < LINE_THRESHOLD or readings[4] < LINE_THRESHOLD
 ```
 
-### **Dictionaries Describe LED States**
-
-A dictionary keeps the LED decision clear and makes it easy to print the same information you show on the robot.
+### Driving indicator LEDs
+Create a small dictionary to describe the desired LED states so both channels follow the same decision. The dashboard exposes `robot.set_led_state(left_on, right_on)` to toggle the hardware.
 
 ```python
-leds = {"left": "on" if line_seen else "off", "right": "on" if line_seen else "off"}
+led_state = {
+    "left": "on" if line_seen else "off",
+    "right": "on" if line_seen else "off",
+}
+robot.set_led_state(line_seen, line_seen)
 ```
 
-### **Single-Line MQTT Output**
+### Publishing a diagnostic heartbeat
+The verifier watches MQTT for a single summary line that begins with `LINE_LED:`. Include both the logical state and the raw readings so the checker can compare your code's decision with the sensor data.
 
-The verifier expects one line with the prefix `LINE_LED:`.
-
+```python
+message = "LINE_LED:state={state};readings={values}".format(
+    state=led_state["left"],
+    values=readings,
+)
+robot.publish(message)
 ```
-LINE_LED:state=on;readings=[212, 205, 48, 36, 210, 220, 225, 218]
-```
 
-Make sure the state you print comes from the actual sensor check.
+## Assignment
+Task: Program the robot to read the Octoliner array, decide whether the centre sensors see the line, mirror that decision on both LEDs, and publish one MQTT line containing the LED state and the eight readings.
 
----
+Platform API:
+- `sensor = Octoliner(); sensor.begin(i2c)` – initialise the line sensor.
+- `sensor.analog_read_all()` – return a tuple of eight raw readings.
+- `robot.set_led_state(left_on: bool, right_on: bool)` – turn each indicator LED on (`True`) or off (`False`).
+- `robot.publish(message: str)` – send a text heartbeat to the dashboard MQTT log.
 
-## **Assignment**
+Verification: Your code will pass when the `line_sensor_leds` verification_function receives a line starting with `LINE_LED:`, confirms the `state` field matches the actual LED logic, and validates that the printed readings support the decision.
 
-1. Read the eight sensor values into a list named `readings`.
-2. Decide if the line is seen by checking indexes `3` and `4` against the `120` threshold.
-3. Build a dictionary named `leds` with keys `"left"` and `"right"` that match the decision.
-4. Call `digitalWrite` for each LED so the hardware matches the dictionary.
-5. Print a single line exactly like the example so the `line_sensor_leds` verifier can compare the LED state with the readings.
+## Conclusion
+Great work! You now have a repeatable way to read the Octoliner, reason about its centre channels with lists, and drive both LEDs and telemetry from the same logic. The next lesson will build on this by exploring loops and PWM to create smooth LED animations.
 
----
-
-## **Conclusion**
-
-Lists and dictionaries help you keep the sensor result, LED feedback, and debug message in sync. The same structure will support longer behaviours later in the module.
+## Links
+- [Octoliner MicroPython Library](https://github.com/Robopoly/octoliner-micropython)

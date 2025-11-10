@@ -1,48 +1,49 @@
-# Lesson 2: Analog LED Fade with Loops
+# Lesson 2: LED Flash Counter with Loops
 
 ## Lesson objective
-Build confidence with Python lists and loops while coordinating gradual LED brightness changes.
+Build confidence using Python loops and timing to repeat LED actions.
 
 ## Introduction
-Many robotics effects depend on repeating values in a specific order. Lists give you a convenient place to store that sequence, and loops let you step through each entry without rewriting the same command. Pairing those structures with pulse-width modulation (PWM) opens the door to smooth LED fades and other time-based behaviours.
+Loops let you repeat a block of code without copying the same command over and over. When you pair a loop with a short delay, you can choreograph LED flashes that communicate what the robot just sensed. This lesson practises counting iterations, waiting between flashes, and mapping sensor readings to a visible signal.
 
 ## Theory
 
-### Understanding PWM brightness
-PWM rapidly toggles an LED on and off. A higher duty cycle means the LED spends more time on during each cycle, which the eye perceives as a brighter light.
+### Looping a set number of times
+The built-in `range()` function is a quick way to run a loop a specific number of times. The loop counter can help you customise each pass if you need to.
 
 ```python
-robot.set_led_pwm("left", 128)  # Half brightness on the left LED
+for count in range(3):  # Runs three times: 0, 1, 2
+    print("Flash", count + 1)
 ```
 
-### Designing sequences with lists
-Lists can outline the entire fade pattern. A symmetric list climbs from dark to bright and then returns to dark.
-
-```python
-fade_steps = [0, 32, 64, 96, 128, 160, 192, 224, 255, 224, 192, 160, 128, 96, 64, 32, 0]
-```
-
-### Looping through each step
-A `for` loop applies every list value in turn. Adding a short pause makes each stage visible on the physical robot.
+### Pausing between loop iterations
+`time.sleep(seconds)` suspends the program for the given number of seconds. Adding a delay inside the loop spaces out each LED change so you can see the flashes individually.
 
 ```python
 import time
 
-for level in fade_steps:
-    robot.set_led_pwm("left", level)
-    robot.set_led_pwm("right", level)
-    time.sleep(0.05)
+time.sleep(2)  # Wait two seconds before the next command
 ```
 
-### Recording the plan for verification
-Telemetry messages can capture the exact list you executed, giving the verifier a record to check against the LED output.
+### Choosing a count from sensor readings
+The Octoliner array returns eight values in order from the left sensor to the right sensor. By scanning the readings for the darkest value, you can identify which sensor is currently over the line and use that position to decide how many times to flash.
 
 ```python
-robot.publish(f"LED_FADE:steps={fade_steps}")
+from octoliner import Octoliner
+
+sensor = Octoliner()
+sensor.begin(i2c)
+readings = list(sensor.analog_read_all())
+line_index = readings.index(min(readings)) + 1  # Convert to a 1-based position
 ```
 
 ## Assignment
-Create a program that defines a list of PWM levels, cycles both LEDs through each value with a short delay, and publishes a single line formatted `LED_FADE:steps=[...]` once the fade completes. The task is finished when the `analog_led_fade` verification_function reads your `LED_FADE:` message, confirms the levels stay within range, and replays the list to match the observed LED behaviour.
+Write a program that:
+
+- reads all eight Octoliner values into a list and determines which sensor (1 through 8) is over the line
+- flashes both front LEDs on and off that many times, using a two-second pause between each flash
+- ensures the pattern finishes after the chosen number of flashes so the count matches the detected sensor position
+- passes when the `analog_led_fade` verification_function observes six flashes separated by roughly two-second intervals
 
 ## Conclusion
-Great job! You used lists to script a brightness pattern, loops to play it back, and telemetry to document the result. The final lesson puts those list skills to work on live sensor readings and LED status reporting.
+Great job! You used loops, timing, and list processing to turn sensor data into an LED signal. Next, you'll apply list logic directly to live sensor readings and document the outcome with telemetry text.

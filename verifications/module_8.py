@@ -1,12 +1,13 @@
 import ast
 import cv2
 import time
+from typing import Optional
 
 LINE_SENSOR_THRESHOLD = 120
 MAX_FADE_STEP = 64
 HEALTH_LEVELS = {"ok", "warn", "low"}
 HEALTH_WARN_VOLTAGE = 9.0
-HEALTH_LOW_VOLTAGE = 7.0
+HEALTH_LOW_VOLTAGE = 5.0
 HEALTH_WARN_SPEED = 10
 
 
@@ -332,7 +333,13 @@ def _classify_health(speed: int, battery: float, ready: bool) -> str:
     return "ok"
 
 
-def _validate_status_payload(payload: str, *, require_health: bool, allow_optional_health: bool):
+def _validate_status_payload(
+    payload: str,
+    *,
+    require_health: bool,
+    allow_optional_health: bool,
+    expected_health: Optional[str] = None,
+):
     """Validate a STATUS payload and return parsed values or an error message."""
 
     parts = payload.split(";") if payload else []
@@ -385,17 +392,31 @@ def _validate_status_payload(payload: str, *, require_health: bool, allow_option
         return None, "Battery voltage must be between 0 and 20 volts."
 
     ready = ready_value == "True"
-    expected_health = _classify_health(speed, battery, ready)
+    expected_health_auto = _classify_health(speed, battery, ready)
 
     reported_health = values.get("health")
     if require_health or (allow_optional_health and reported_health is not None):
         if reported_health is None:
             return None, "Missing field: health"
-        reported_health = reported_health.lower()
-        if reported_health not in HEALTH_LEVELS:
+        reported_health_normalised = reported_health.lower()
+        if reported_health_normalised not in HEALTH_LEVELS:
             return None, "Health must be one of ok, warn, or low."
-        if reported_health != expected_health:
-            return None, f"Health flag should be '{expected_health}' for the provided telemetry."
+        if expected_health is not None:
+            expected_health = expected_health.lower()
+            if reported_health_normalised != expected_health:
+                return None, (
+                    f"Health flag should be '{expected_health}' for the provided telemetry."
+                )
+            expected_value = expected_health
+        else:
+            if reported_health_normalised != expected_health_auto:
+                return None, (
+                    f"Health flag should be '{expected_health_auto}' for the provided telemetry."
+                )
+            expected_value = expected_health_auto
+    else:
+        reported_health_normalised = None
+        expected_value = expected_health_auto
 
     return {
         "name": name,
@@ -403,8 +424,8 @@ def _validate_status_payload(payload: str, *, require_health: bool, allow_option
         "battery": battery,
         "ready": ready,
         "ready_raw": ready_value,
-        "reported_health": values.get("health"),
-        "expected_health": expected_health,
+        "reported_health": reported_health_normalised,
+        "expected_health": expected_value,
     }, None
 
 
@@ -539,11 +560,143 @@ def _verify_status_message(robot, image, td, *, require_health: bool, allow_opti
 
 
 def telemetry_heartbeat_health(robot, image, td):
-    """Validate STATUS heartbeat that includes a derived health flag."""
-    return _verify_status_message(
-        robot,
+    """Validate two STATUS reports that demonstrate dictionary usage."""
+    result = {
+        "success": True,
+        "description": "Waiting for two STATUS reports...",
+        "score": 0,
+    }
+    text = "Listening for STATUS reports..."
+    image = robot.draw_info(image)
+
+    if not td:
+        td = _initial_td("No STATUS reports received yet.")
+        td["end_time"] = time.time() + 30
+        td["data"]["first"] = None
+        td["data"]["second"] = None
+        td["data"]["phase"] = "initial"
+
+    msg = robot.get_msg()
+    if msg is not None:
+        td["data"]["messages"].append(msg)
+        text = f"Received: {msg}"
+        if msg.startswith("STATUS:"):
+            payload = msg[len("STATUS:") :]
+            expecting_second = td["data"]["first"] is not None
+            expected_health = "warn" if expecting_second else "ok"
+            parsed, error = _validate_status_payload(
+                payload,
+                require_health=True,
+                allow_optional_health=False,
+                expected_health=expected_health,
+            )
+            if error:
+                td["data"]["error"] = error
+            else:
+                target_battery = 6.0 if expecting_second else 10.0
+                tolerance = 0.25
+                if abs(parsed["battery"] - target_battery) > tolerance:
+                    label = "second" if expecting_second else "first"
+                    td["data"]["error"] = (
+                        f"The {label} STATUS battery must be {target_battery:.0f} volts."
+                    )
+                else:
+                    td["data"]["error"] = ""
+                    if expecting_second:
+                        td["data"]["second"] = parsed
+                        td["data"]["validated"] = True
+                    else:
+                        td["data"]["first"] = parsed
+                        td["data"]["phase"] = "after_move"
+        else:
+            td["data"]["error"] = "Message must start with 'STATUS:'."
+
+    cv2.putText(
         image,
-        td,
-        require_health=True,
-        allow_optional_health=False,
+        f"Messages received: {len(td['data']['messages'])}",
+        (20, 60),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.6,
+        (255, 255, 255),
+        2,
     )
+    cv2.putText(
+        image,
+        f"Time remaining: {td['end_time'] - time.time():.1f}s",
+        (20, 90),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.6,
+        (255, 255, 255),
+        2,
+    )
+
+    first = td["data"].get("first")
+    if first:
+        cv2.putText(
+            image,
+            f"Initial battery: {first['battery']:.1f}V, health: {first['reported_health']}",
+            (20, 120),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (255, 255, 255),
+            1,
+        )
+
+    second = td["data"].get("second")
+    if second:
+        cv2.putText(
+            image,
+            f"Post-run battery: {second['battery']:.1f}V, health: {second['reported_health']}",
+            (20, 145),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (255, 255, 255),
+            1,
+        )
+
+    if td["data"].get("error"):
+        cv2.putText(
+            image,
+            f"Error: {td['data']['error']}",
+            (20, 175),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.5,
+            (0, 0, 255),
+            1,
+        )
+
+    if not td.get("finished", False):
+        if td["data"].get("validated"):
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result.update(
+                {
+                    "success": True,
+                    "description": "Both STATUS reports validated successfully!",
+                    "score": 100,
+                }
+            )
+            text = "Verification successful!"
+        elif time.time() > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = time.time()
+            result["success"] = False
+            result["description"] = td["data"].get(
+                "error", "Did not receive both STATUS reports in time."
+            )
+            text = "Verification failed."
+        else:
+            result["success"] = True
+            result["description"] = td["data"].get(
+                "error", result["description"]
+            )
+    else:
+        if time.time() - td["finish_time"] >= 3:
+            if td["data"].get("validated"):
+                result["success"] = True
+                result["score"] = 100
+            else:
+                result["success"] = False
+                result["score"] = 0
+
+    return image, td, text, result

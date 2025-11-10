@@ -33,10 +33,12 @@ Dictionaries can store computed values alongside raw readings. Conditional logic
 
 ```python
 battery_v = telemetry["battery"]
+speed = telemetry["speed"]
+ready = telemetry.get("ready", True)
 
-if battery_v < 7.0:
+if battery_v <= 5.0 or speed == 0:
     telemetry["health"] = "low"
-elif battery_v < 9.0:
+elif battery_v < 9.0 or speed < 10 or not ready:
     telemetry["health"] = "warn"
 else:
     telemetry["health"] = "ok"
@@ -53,20 +55,16 @@ status_line = (
     f"ready={telemetry.get('ready', False)};"
     f"health={telemetry['health']}"
 )
-robot.publish(status_line)
+print(status_line)
 ```
 
 ## Assignment
 Write a program that:
 
-- gathers the robot name, speed, battery voltage, and readiness flag
-- determines a `health` label using these thresholds:
-  - `low`: battery below 7.0 volts or speed equal to 0
-  - `warn`: battery below 9.0 volts, speed below 10, or readiness set to `False`
-  - `ok`: any state not covered by the previous rules
-- stores every field in a dictionary so each value is labelled clearly
-- publishes one line starting with `STATUS:` that lists all five fields
-- passes when the `telemetry_heartbeat_health` verification_function receives your heartbeat, confirms the numeric data, and recomputes the health label to match your output
+- builds a telemetry dictionary with sensible defaults (for example, name, readiness flag, speed above 10, and `battery=10`) and prints a `STATUS:` line whose health field resolves to `ok`
+- simulates one volt of battery drain each second while calling `robot.move_forward_seconds(4)` so the robot drives forward for four seconds
+- updates the same dictionary to reflect the new battery level of 6.0 volts, recomputes the health label as `warn`, and prints a second `STATUS:` line
+- completes the lesson only when both outputs are received in order: the first with `battery=10` and `health=ok`, the second with `battery=6` and `health=warn`
 
 ## Conclusion
 Excellent work! You organised telemetry with dictionaries, derived a readable health summary, and produced a consistent heartbeat message. Those skills prepare you for richer diagnostic reporting in later modules.

@@ -1,10 +1,10 @@
 # Lesson 1: Telemetry Heartbeat with Status Levels
 
 ## Lesson objective
-Explore how Python dictionaries organise named values and use them to summarise robot telemetry.
+Understand how Python dictionaries store related information with named keys.
 
 ## Introduction
-Dictionaries pair keys with values so you can label each piece of information you collect. In robotics they help group related telemetry, configuration settings, or status flags in one structure. By learning how to create dictionaries and derive new entries from existing data, you can craft clear reports that computers and humans can read.
+Dictionaries pair keys with values so you can label the data you gather. They make it easy to keep related facts together, update individual pieces, and look them up by name. In this lesson you will practise building small telemetry dictionaries and turning their contents into readable status summaries.
 
 ## Theory
 
@@ -33,12 +33,10 @@ Dictionaries can store computed values alongside raw readings. Conditional logic
 
 ```python
 battery_v = telemetry["battery"]
-speed = telemetry["speed"]
-ready = telemetry.get("ready", True)
 
-if battery_v <= 5.0 or speed == 0:
-    telemetry["health"] = "low"
-elif battery_v < 9.0 or speed < 10 or not ready:
+if battery_v < 6:
+    telemetry["health"] = "critical"
+elif battery_v < 9:
     telemetry["health"] = "warn"
 else:
     telemetry["health"] = "ok"
@@ -61,10 +59,10 @@ print(status_line)
 ## Assignment
 Write a program that:
 
-- builds a telemetry dictionary with sensible defaults (for example, name, readiness flag, speed above 10, and `battery=10`) and prints a `STATUS:` line whose health field resolves to `ok`
-- simulates one volt of battery drain each second while calling `robot.move_forward_seconds(4)` so the robot drives forward for four seconds
-- updates the same dictionary to reflect the new battery level of 6.0 volts, recomputes the health label as `warn`, and prints a second `STATUS:` line
-- completes the lesson only when both outputs are received in order: the first with `battery=10` and `health=ok`, the second with `battery=6` and `health=warn`
+- creates three dictionaries named `robot1`, `robot2`, and `robot3`, each containing a `name` field and a `battery` field with values `3`, `8`, and `10` respectively
+- uses if/elif/else logic to add a `status` field to each dictionary so that batteries below `6` read as `critical`, batteries below `9` read as `warn`, and all higher values read as `ok`
+- prints one line per robot using `print(f"{data['name']} status={data['status']} battery={data['battery']}")` so the output lists the name first, followed by the computed status and the battery value
+- passes the checker only when the output shows `robot1 status=critical battery=3`, `robot2 status=warn battery=8`, and `robot3 status=ok battery=10` (in any order)
 
 ## Conclusion
 Excellent work! You organised telemetry with dictionaries, derived a readable health summary, and produced a consistent heartbeat message. Those skills prepare you for richer diagnostic reporting in later modules.

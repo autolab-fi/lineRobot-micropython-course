@@ -1,14 +1,17 @@
 import ast
 import cv2
 import time
-from typing import Optional
 
 LINE_SENSOR_THRESHOLD = 120
 MAX_FADE_STEP = 64
-HEALTH_LEVELS = {"ok", "warn", "low"}
-HEALTH_WARN_VOLTAGE = 9.0
-HEALTH_LOW_VOLTAGE = 5.0
-HEALTH_WARN_SPEED = 10
+
+EXPECTED_ROBOT_STATUSES = {
+    "robot1": {"battery": 3, "status": "critical"},
+    "robot2": {"battery": 8, "status": "warn"},
+    "robot3": {"battery": 10, "status": "ok"},
+}
+
+ALLOWED_STATUS_VALUES = {info["status"] for info in EXPECTED_ROBOT_STATUSES.values()}
 
 
 target_points = {
@@ -324,292 +327,88 @@ def analog_led_fade(robot, image, td):
     return image, td, text, result
 
 
-def _classify_health(speed: int, battery: float, ready: bool) -> str:
-    """Return the expected health classification for the provided telemetry."""
-    if battery < HEALTH_LOW_VOLTAGE or speed <= 0:
-        return "low"
-    if battery < HEALTH_WARN_VOLTAGE or speed < HEALTH_WARN_SPEED or not ready:
-        return "warn"
-    return "ok"
+def _parse_robot_status_line(line: str):
+    """Parse a status line of the form 'robotX status=... battery=...'."""
 
+    cleaned = line.strip()
+    if not cleaned:
+        return None, "Received an empty status line."
 
-def _validate_status_payload(
-    payload: str,
-    *,
-    require_health: bool,
-    allow_optional_health: bool,
-    expected_health: Optional[str] = None,
-):
-    """Validate a STATUS payload and return parsed values or an error message."""
+    parts = cleaned.replace(",", " ").replace(";", " ").split()
+    if not parts:
+        return None, "Unable to parse the status line."
 
-    parts = payload.split(";") if payload else []
+    name = parts[0]
+    if name not in EXPECTED_ROBOT_STATUSES:
+        return None, f"Unexpected robot name '{name}'."
 
-    min_fields = 5 if require_health else 4
-    max_fields = 5 if (require_health or allow_optional_health) else 4
-    if len(parts) < min_fields or len(parts) > max_fields:
-        if require_health:
-            return None, "STATUS message must contain five fields separated by semicolons."
-        if allow_optional_health:
-            return None, "STATUS message must contain four or five fields separated by semicolons."
-        return None, "STATUS message must contain four fields separated by semicolons."
+    fields = {}
+    for token in parts[1:]:
+        if "=" not in token:
+            return None, "Each status line must include key=value pairs after the name."
+        key, value = token.split("=", 1)
+        key = key.lower().strip()
+        value = value.strip().lower()
+        if key in fields:
+            return None, f"Duplicate field '{key}' detected."
+        fields[key] = value
 
-    values = {}
-    for part in parts:
-        if "=" not in part:
-            return None, "Each STATUS field must contain an '=' sign."
-        key, value = part.split("=", 1)
-        values[key.strip()] = value.strip()
-
-    required_fields = {"name", "speed", "battery", "ready"}
-    missing = [field for field in required_fields if field not in values]
-    if missing:
-        return None, f"Missing field: {missing[0]}"
-
-    allowed_fields = set(required_fields)
-    if require_health or (allow_optional_health and "health" in values):
-        allowed_fields.add("health")
-
-    unexpected = set(values) - allowed_fields
-    if unexpected:
-        field = unexpected.pop()
-        return None, f"Unexpected field: {field}"
+    if "status" not in fields or "battery" not in fields:
+        return None, "Include both status=... and battery=... after the robot name."
 
     try:
-        name = values["name"]
-        speed = int(values["speed"])
-        battery = float(values["battery"])
-        ready_value = values["ready"]
-        if ready_value not in {"True", "False"}:
-            raise ValueError("Ready must be True or False.")
+        battery_value = int(fields["battery"])
     except ValueError as exc:
-        return None, str(exc)
+        return None, f"Battery value must be an integer: {exc}"
 
-    if not name:
-        return None, "Robot name must not be empty."
-    if not (1 <= speed <= 200):
-        return None, "Speed must be an integer between 1 and 200 cm/s."
-    if not (0.0 < battery < 20.0):
-        return None, "Battery voltage must be between 0 and 20 volts."
-
-    ready = ready_value == "True"
-    expected_health_auto = _classify_health(speed, battery, ready)
-
-    reported_health = values.get("health")
-    if require_health or (allow_optional_health and reported_health is not None):
-        if reported_health is None:
-            return None, "Missing field: health"
-        reported_health_normalised = reported_health.lower()
-        if reported_health_normalised not in HEALTH_LEVELS:
-            return None, "Health must be one of ok, warn, or low."
-        if expected_health is not None:
-            expected_health = expected_health.lower()
-            if reported_health_normalised != expected_health:
-                return None, (
-                    f"Health flag should be '{expected_health}' for the provided telemetry."
-                )
-            expected_value = expected_health
-        else:
-            if reported_health_normalised != expected_health_auto:
-                return None, (
-                    f"Health flag should be '{expected_health_auto}' for the provided telemetry."
-                )
-            expected_value = expected_health_auto
-    else:
-        reported_health_normalised = None
-        expected_value = expected_health_auto
+    status_value = fields["status"]
+    if status_value not in ALLOWED_STATUS_VALUES:
+        return None, "Status must be one of ok, warn, or critical."
 
     return {
         "name": name,
-        "speed": speed,
-        "battery": battery,
-        "ready": ready,
-        "ready_raw": ready_value,
-        "reported_health": reported_health_normalised,
-        "expected_health": expected_value,
+        "status": status_value,
+        "battery": battery_value,
     }, None
 
 
-def _verify_status_message(robot, image, td, *, require_health: bool, allow_optional_health: bool):
-    result = {
-        "success": True,
-        "description": "Awaiting STATUS message...",
-        "score": 0,
-    }
-    text = "Listening for STATUS message..."
-    image = robot.draw_info(image)
-
-    if not td:
-        td = {
-            "end_time": time.time() + 10,
-            "data": {
-                "validated": False,
-                "error": "No STATUS message received yet.",
-                "messages": [],
-                "expected_health": None,
-                "reported_health": None,
-            },
-            "finished": False,
-            "finish_time": None,
-        }
-
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        if msg.startswith("STATUS:"):
-            payload = msg[len("STATUS:") :]
-            parsed, error = _validate_status_payload(
-                payload,
-                require_health=require_health,
-                allow_optional_health=allow_optional_health,
-            )
-            if error:
-                td["data"]["error"] = error
-            else:
-                td["data"]["validated"] = True
-                td["data"]["error"] = ""
-                td["data"]["expected_health"] = parsed["expected_health"]
-                td["data"]["reported_health"] = parsed["reported_health"]
-        else:
-            td["data"]["error"] = "Message must start with 'STATUS:'."
-
-    cv2.putText(
-        image,
-        f"Messages received: {len(td['data']['messages'])}",
-        (20, 60),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-    cv2.putText(
-        image,
-        f"Time remaining: {td['end_time'] - time.time():.1f}s",
-        (20, 90),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-
-    if td["data"].get("error"):
-        cv2.putText(
-            image,
-            f"Error: {td['data']['error']}",
-            (20, 120),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            1,
-        )
-
-    if td["data"].get("expected_health") is not None:
-        expected = td["data"]["expected_health"]
-        reported = td["data"].get("reported_health")
-        display = reported if reported is not None else "(not reported)"
-        cv2.putText(
-            image,
-            f"Expected health: {expected}",
-            (20, 150),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
-        cv2.putText(
-            image,
-            f"Reported health: {display}",
-            (20, 175),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
-
-    if not td.get("finished", False):
-        if td["data"]["validated"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update(
-                {
-                    "success": True,
-                    "description": "STATUS message validated successfully!",
-                    "score": 100,
-                }
-            )
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get("error", "No valid STATUS message received.")
-            text = "Verification failed."
-        else:
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        if time.time() - td["finish_time"] >= 3:
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
-    return image, td, text, result
-
-
 def telemetry_heartbeat_health(robot, image, td):
-    """Validate two STATUS reports that demonstrate dictionary usage."""
+    """Validate three printed robot status summaries."""
     result = {
         "success": True,
-        "description": "Waiting for two STATUS reports...",
+        "description": "Waiting for robot status lines...",
         "score": 0,
     }
-    text = "Listening for STATUS reports..."
+    text = "Listening for status lines..."
     image = robot.draw_info(image)
 
     if not td:
-        td = _initial_td("No STATUS reports received yet.")
-        td["end_time"] = time.time() + 30
-        td["data"]["first"] = None
-        td["data"]["second"] = None
-        td["data"]["phase"] = "initial"
+        td = _initial_td("No robot status lines received yet.")
+        td["end_time"] = time.time() + 20
+        td["data"]["reports"] = {}
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
         text = f"Received: {msg}"
-        if msg.startswith("STATUS:"):
-            payload = msg[len("STATUS:") :]
-            expecting_second = td["data"]["first"] is not None
-            expected_health = "warn" if expecting_second else "ok"
-            parsed, error = _validate_status_payload(
-                payload,
-                require_health=True,
-                allow_optional_health=False,
-                expected_health=expected_health,
-            )
-            if error:
-                td["data"]["error"] = error
-            else:
-                target_battery = 6.0 if expecting_second else 10.0
-                tolerance = 0.25
-                if abs(parsed["battery"] - target_battery) > tolerance:
-                    label = "second" if expecting_second else "first"
-                    td["data"]["error"] = (
-                        f"The {label} STATUS battery must be {target_battery:.0f} volts."
-                    )
-                else:
-                    td["data"]["error"] = ""
-                    if expecting_second:
-                        td["data"]["second"] = parsed
-                        td["data"]["validated"] = True
-                    else:
-                        td["data"]["first"] = parsed
-                        td["data"]["phase"] = "after_move"
+        parsed, error = _parse_robot_status_line(msg)
+        if error:
+            td["data"]["error"] = error
         else:
-            td["data"]["error"] = "Message must start with 'STATUS:'."
+            expected = EXPECTED_ROBOT_STATUSES[parsed["name"]]
+            if parsed["status"] != expected["status"]:
+                td["data"]["error"] = (
+                    f"{parsed['name']} status must be {expected['status']}."
+                )
+            elif parsed["battery"] != expected["battery"]:
+                td["data"]["error"] = (
+                    f"{parsed['name']} battery must be {expected['battery']}."
+                )
+            else:
+                td["data"]["error"] = ""
+                td["data"]["reports"][parsed["name"]] = parsed
+                if len(td["data"]["reports"]) == len(EXPECTED_ROBOT_STATUSES):
+                    td["data"]["validated"] = True
 
     cv2.putText(
         image,
@@ -630,29 +429,20 @@ def telemetry_heartbeat_health(robot, image, td):
         2,
     )
 
-    first = td["data"].get("first")
-    if first:
-        cv2.putText(
-            image,
-            f"Initial battery: {first['battery']:.1f}V, health: {first['reported_health']}",
-            (20, 120),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
-
-    second = td["data"].get("second")
-    if second:
-        cv2.putText(
-            image,
-            f"Post-run battery: {second['battery']:.1f}V, health: {second['reported_health']}",
-            (20, 145),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
+    if td["data"].get("reports"):
+        y = 120
+        for name in sorted(td["data"]["reports"]):
+            report = td["data"]["reports"][name]
+            cv2.putText(
+                image,
+                f"{name}: status={report['status']} battery={report['battery']}",
+                (20, y),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (255, 255, 255),
+                1,
+            )
+            y += 25
 
     if td["data"].get("error"):
         cv2.putText(
@@ -672,7 +462,7 @@ def telemetry_heartbeat_health(robot, image, td):
             result.update(
                 {
                     "success": True,
-                    "description": "Both STATUS reports validated successfully!",
+                    "description": "All robot status lines validated successfully!",
                     "score": 100,
                 }
             )
@@ -682,7 +472,7 @@ def telemetry_heartbeat_health(robot, image, td):
             td["finish_time"] = time.time()
             result["success"] = False
             result["description"] = td["data"].get(
-                "error", "Did not receive both STATUS reports in time."
+                "error", "Did not receive all robot status lines in time."
             )
             text = "Verification failed."
         else:

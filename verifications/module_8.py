@@ -4,14 +4,12 @@ import numpy as np
 import time
 
 target_points = {
-    'line_sensor_leds': [(30, 50), (0, -200)],
-    'analog_led_fade': [(30, 50), (0, -200)],
-    'telemetry_heartbeat_health': [(30, 50), (30,0)],
+    'line_sensor_leds': [(45, 50), (30, 0)],
+    'telemetry_heartbeat_health': [(30, 50), (30, 0)],
 }
 
 block_library_functions = {
     'line_sensor_leds': False,
-    'analog_led_fade': False,
     'telemetry_heartbeat_health': False,
 }
 
@@ -24,7 +22,7 @@ def get_block_library_functions(task):
 def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
-
+    
 def telemetry_heartbeat_health(robot, image, td):
     result = {
         "success": True,
@@ -38,7 +36,7 @@ def telemetry_heartbeat_health(robot, image, td):
     if not td:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 10,
+            "end_time": time.time() + 15,
             "data": {
                 "messages": [],
                 "robots": {}
@@ -130,8 +128,9 @@ def telemetry_heartbeat_health(robot, image, td):
     
     return image, td, text, result
 
+
 def line_sensor_leds(robot, image, td: dict):
-    """Verification: Check if LEDs flash 6 times with 2-second intervals"""
+    """Verification: Check if LEDs flash with 2-second ON and 2-second OFF intervals"""
 
     result = {
         "success": True,
@@ -145,12 +144,13 @@ def line_sensor_leds(robot, image, td: dict):
     if not td:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 35,
+            "end_time": time.time() + 30,
             "data": {
                 "flash_count": 0,
                 "last_state": None,
                 "state_start_time": None,
-                "intervals": [],
+                "on_durations": [],
+                "off_durations": [],
                 "state_buffer": []
             },
             "finished": False,
@@ -161,7 +161,7 @@ def line_sensor_leds(robot, image, td: dict):
     current_state = False
 
     if robot:
-        lower_white = np.array([215, 215, 215])
+        lower_white = np.array([245, 245, 245])
         upper_white = np.array([255, 255, 255])
 
         robot_info = robot.get_info()
@@ -213,42 +213,53 @@ def line_sensor_leds(robot, image, td: dict):
                 td["data"]["last_state"] = smoothed_state
                 td["data"]["state_start_time"] = time.time()
 
-            # Detect state change (OFF to ON = one flash)
+            # Detect state change - measure duration of previous state
             elif smoothed_state != td["data"]["last_state"]:
                 duration = time.time() - td["data"]["state_start_time"]
                 
-                # Count flash when LED turns ON
-                if smoothed_state:
-                    td["data"]["flash_count"] += 1
-                    if len(td["data"]["intervals"]) > 0:
-                        # Store interval between flashes
-                        td["data"]["intervals"].append(duration)
+                # Store duration based on what state just ENDED
+                if td["data"]["last_state"]:  # Was ON, now OFF
+                    td["data"]["on_durations"].append(duration)
+                else:  # Was OFF, now ON
+                    td["data"]["off_durations"].append(duration)
+                    td["data"]["flash_count"] += 1  # Count when turning ON
                 
                 td["data"]["last_state"] = smoothed_state
                 td["data"]["state_start_time"] = time.time()
-
-    # Display status information
-    cv2.putText(image, f"Flashes detected: {td['data']['flash_count']}/6", 
-                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
-                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    
+    if len(td["data"]["off_durations"]) > 0:
+        off_text = ", ".join([f"{d:.1f}s" for d in td["data"]["off_durations"]])
+        cv2.putText(image, f"OFF: {off_text}", 
+                    (20, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
     # Check for task completion
     if not td.get("finished", False):
-        if td["data"]["flash_count"] >= 6 or time.time() > td["end_time"]:
+        if td["data"]["flash_count"] >= 7 or time.time() > td["end_time"]:
             td["finished"] = True
             td["finish_time"] = time.time()
             
-            # Validation: Must have exactly 6 flashes
-            if td["data"]["flash_count"] == 6:
-                # Check intervals (should be ~2 seconds each, tolerance ±0.3s)
-                valid_intervals = [1.7 <= interval <= 2.3 for interval in td["data"]["intervals"]]
-                valid_ratio = sum(valid_intervals) / len(valid_intervals) if valid_intervals else 0
+            # Add final duration if still in a state
+            if td["data"]["state_start_time"]:
+                final_duration = time.time() - td["data"]["state_start_time"]
+                if td["data"]["last_state"]:
+                    td["data"]["on_durations"].append(final_duration)
+                else:
+                    td["data"]["off_durations"].append(final_duration)
+            
+            # Validation: Must have 5-7 flashes
+            if 5 <= td["data"]["flash_count"] <= 7:
+                # Check ON durations (should be ~2 seconds, tolerance ±0.5s)
+                valid_on = [1.5 <= d <= 2.5 for d in td["data"]["on_durations"]]
+                on_ratio = sum(valid_on) / len(valid_on) if valid_on else 0
                 
-                # Need at least 80% of intervals to be valid
-                if valid_ratio >= 0.8:
+                # Check OFF durations (should be ~2 seconds, tolerance ±0.5s)
+                valid_off = [1.5 <= d <= 2.5 for d in td["data"]["off_durations"]]
+                off_ratio = sum(valid_off) / len(valid_off) if valid_off else 0
+                
+                # Need at least 60% of both ON and OFF durations to be valid
+                if on_ratio >= 0.6 and off_ratio >= 0.6:
                     result["success"] = True
-                    result["description"] = "Success! LED flashed 6 times with correct intervals."
+                    result["description"] = "Success! LED flashed with correct intervals."
                     result["score"] = 100
                     text = "Verification successful!"
                 else:

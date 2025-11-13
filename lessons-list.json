@@ -230,14 +230,6 @@
         "template": "# Write code here"
       },
       {
-        "str_id": "analog_led_fade",
-        "name": "Analog LED Fade with Loops",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Analog%20LED%20Fade.md",
-        "sn": 21,
-        "description": "Use a list of PWM steps and a for loop to create a breathing LED animation and log the brightness profile.",
-        "template": "# Write code here"
-      },
-      {
         "str_id": "line_sensor_leds",
         "name": "Line Sensor Reactive LEDs",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",

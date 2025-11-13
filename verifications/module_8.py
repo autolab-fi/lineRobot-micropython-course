@@ -3,21 +3,10 @@ import cv2
 import numpy as np
 import time
 
-LINE_SENSOR_THRESHOLD = 120
-
-EXPECTED_ROBOT_STATUSES = {
-    "robot1": {"battery": 3, "status": "critical"},
-    "robot2": {"battery": 8, "status": "warn"},
-    "robot3": {"battery": 10, "status": "ok"},
-}
-
-ALLOWED_STATUS_VALUES = {info["status"] for info in EXPECTED_ROBOT_STATUSES.values()}
-
-
 target_points = {
     'line_sensor_leds': [(30, 50), (0, -200)],
     'analog_led_fade': [(30, 50), (0, -200)],
-    'telemetry_heartbeat_health': [(30, 50), (0, -200)],
+    'telemetry_heartbeat_health': [(30, 50), (30,0)],
 }
 
 block_library_functions = {
@@ -36,498 +25,250 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-
-def _initial_td(message):
-    return {
-        "end_time": time.time() + 10,
-        "data": {
-            "validated": False,
-            "error": message,
-            "messages": [],
-        },
-        "finished": False,
-        "finish_time": None,
-    }
-
-
-def line_sensor_leds(robot, image, td):
-    """Verify that LED state reflects the middle line sensor readings."""
+def telemetry_heartbeat_health(robot, image, td):
     result = {
         "success": True,
-        "description": "Awaiting LINE_LED summary...",
-        "score": 0,
+        "description": "Verifying robot status messages...",
+        "score": 0
     }
-    text = "Listening for LINE_LED message..."
+    text = "Waiting for robot status messages..."
+
     image = robot.draw_info(image)
 
     if not td:
-        td = _initial_td("No LINE_LED message received yet.")
-        td["data"]["state"] = None
-        td["data"]["line_seen"] = None
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 10,
+            "data": {
+                "messages": [],
+                "robots": {}
+            },
+            "finished": False,
+            "finish_time": None
+        }
 
     msg = robot.get_msg()
     if msg is not None:
         td["data"]["messages"].append(msg)
         text = f"Received: {msg}"
-        if msg.startswith("LINE_LED:"):
-            payload = msg[len("LINE_LED:") :]
-            parts = payload.split(";") if payload else []
-            values = {}
-            try:
-                for part in parts:
-                    if "=" not in part:
-                        raise ValueError("Each LINE_LED field must contain an '=' sign.")
-                    key, value = part.split("=", 1)
-                    values[key.strip()] = value.strip()
-                state = values["state"].lower()
-                if state not in {"on", "off"}:
-                    raise ValueError("State must be 'on' or 'off'.")
-                readings_raw = values["readings"]
-                readings = ast.literal_eval(readings_raw)
-                if not isinstance(readings, list) or len(readings) < 5:
-                    raise ValueError("Readings must be a list containing at least five values.")
-                numbers = [int(v) for v in readings]
-            except KeyError as missing:
-                td["data"]["error"] = f"Missing field: {missing.args[0]}"
-            except (ValueError, SyntaxError) as exc:
-                td["data"]["error"] = str(exc)
-            else:
-                centre = numbers[2:6] if len(numbers) >= 6 else numbers
-                line_seen = any(value < LINE_SENSOR_THRESHOLD for value in centre)
-                if state == "on" and not line_seen:
-                    td["data"]["error"] = "State is 'on' but centre readings are above the threshold."
-                elif state == "off" and line_seen:
-                    td["data"]["error"] = "State is 'off' but centre readings indicate the line is present."
-                else:
-                    td["data"]["validated"] = True
-                    td["data"]["error"] = ""
-                td["data"]["state"] = state
-                td["data"]["line_seen"] = "yes" if line_seen else "no"
-        else:
-            td["data"]["error"] = "Message must start with 'LINE_LED:'."
+        
+        # Parse message format: "robot1 status=critical battery=3"
+        import re
+        pattern = r'(robot\d+)\s+status=(\w+)\s+battery=(\d+)'
+        match = re.search(pattern, msg)
+        
+        if match:
+            robot_name = match.group(1)
+            status = match.group(2)
+            battery = int(match.group(3))
+            
+            # Only store if it's one of the expected robots
+            if robot_name in ["robot1", "robot2", "robot3"]:
+                td["data"]["robots"][robot_name] = {
+                    "status": status,
+                    "battery": battery
+                }
 
-    cv2.putText(
-        image,
-        f"Messages received: {len(td['data']['messages'])}",
-        (20, 60),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-    cv2.putText(
-        image,
-        f"Time remaining: {td['end_time'] - time.time():.1f}s",
-        (20, 90),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
+    # Display detected robots
+    status_y = 150
+    for robot_name, data in td["data"]["robots"].items():
+        cv2.putText(image, f"{robot_name}: {data['status']}, battery={data['battery']}", 
+                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        status_y += 25
 
-    if td["data"].get("error"):
-        cv2.putText(
-            image,
-            f"Error: {td['data']['error']}",
-            (20, 120),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            1,
-        )
+    # Expected values - ALL must match exactly
+    expected = {
+        "robot1": {"status": "critical", "battery": 3},
+        "robot2": {"status": "warn", "battery": 8},
+        "robot3": {"status": "ok", "battery": 10}
+    }
 
-    state = td["data"].get("state")
-    if state:
-        cv2.putText(
-            image,
-            f"Reported state: {state}",
-            (20, 150),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
-    seen = td["data"].get("line_seen")
-    if seen:
-        cv2.putText(
-            image,
-            f"Line detected: {seen}",
-            (20, 175),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1,
-        )
-
+    # Only mark as finished once
     if not td.get("finished", False):
-        if td["data"]["validated"]:
+        if len(td["data"]["robots"]) == 3:
             td["finished"] = True
             td["finish_time"] = time.time()
-            result.update(
-                {
-                    "success": True,
-                    "description": "LINE_LED message validated successfully!",
-                    "score": 100,
-                }
+            
+            # Check if ALL expected robots match EXACTLY
+            all_match = (
+                len(td["data"]["robots"]) == 3 and
+                td["data"]["robots"].get("robot1", {}).get("status") == "critical" and
+                td["data"]["robots"].get("robot1", {}).get("battery") == 3 and
+                td["data"]["robots"].get("robot2", {}).get("status") == "warn" and
+                td["data"]["robots"].get("robot2", {}).get("battery") == 8 and
+                td["data"]["robots"].get("robot3", {}).get("status") == "ok" and
+                td["data"]["robots"].get("robot3", {}).get("battery") == 10
             )
-            text = "Verification successful!"
+            
+            if all_match:
+                result["success"] = True
+                result["description"] = "Success! All robot statuses are correct."
+                result["score"] = 100
+                text = "Verification successful!"
+            else:
+                result["success"] = False
+                result["description"] = "Assignment failed."
+                result["score"] = 0
+                text = "Assignment failed."
+                
         elif time.time() > td["end_time"]:
             td["finished"] = True
             td["finish_time"] = time.time()
             result["success"] = False
-            result["description"] = td["data"].get("error", "No valid LINE_LED message received.")
-            text = "Verification failed."
+            result["description"] = "Assignment failed."
+            result["score"] = 0
+            text = "Assignment failed."
         else:
+            # Keep running
             result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
+            result["description"] = f"Waiting for robot messages... ({len(td['data']['robots'])}/3 received)"
     else:
+        # Show result for 3 seconds before ending
         if time.time() - td["finish_time"] >= 3:
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
+            # Keep final result state (don't change success/score)
+            pass
+    
     return image, td, text, result
 
-
-def analog_led_fade(robot, image, td):
-    """Verify that the LEDs flash six times with roughly two-second spacing."""
+def line_sensor_leds(robot, image, td: dict):
+    """Verification: Check if LEDs flash 6 times with 2-second intervals"""
 
     result = {
         "success": True,
-        "description": "Watching for timed LED flashes...",
-        "score": 0,
+        "description": "Verifying LED flashes...",
+        "score": 0
     }
-    text = "Detecting LED state..."
+    text = "Monitoring LED flashes..."
+
     image = robot.draw_info(image)
 
     if not td:
-        td = _initial_td("LED flash pattern not detected yet.")
-        td["end_time"] = time.time() + 40
-        td["data"].update(
-            {
-                "state_buffer": [],
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 35,
+            "data": {
+                "flash_count": 0,
                 "last_state": None,
-                "state_started": None,
-                "last_change": None,
-                "flashes": 0,
-                "last_on_time": None,
+                "state_start_time": None,
                 "intervals": [],
-                "durations_on": [],
-                "durations_off": [],
-            }
-        )
-        td["data"]["error"] = ""
+                "state_buffer": []
+            },
+            "finished": False,
+            "finish_time": None
+        }
 
-    now = time.time()
+    percentage_white = 0
+    current_state = False
 
-    robot_info = robot.get_info()
-    position = robot_info.get("position_px") if robot_info else None
+    if robot:
+        lower_white = np.array([215, 215, 215])
+        upper_white = np.array([255, 255, 255])
 
-    led_on = False
-    if position is not None:
-        crop_x = int(position[0] + 80)
-        crop_y = int(position[1] - 90)
-        crop_w, crop_h = 80, 180
+        robot_info = robot.get_info()
+        robot_position = robot_info.get("position_px")
 
-        height, width, _ = image.shape
-        crop_x = max(0, min(crop_x, width - crop_w))
-        crop_y = max(0, min(crop_y, height - crop_h))
+        if robot_position:
+            crop_x, crop_y = robot_position[0] + 80, robot_position[1] - 90
+            crop_width, crop_height = 80, 180
 
-        region = image[crop_y : crop_y + crop_h, crop_x : crop_x + crop_w]
-        hsv = cv2.cvtColor(region, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv, np.array([0, 0, 200]), np.array([180, 60, 255]))
-        white_pixels = cv2.countNonZero(mask)
-        total_pixels = mask.size
-        led_on = (white_pixels / max(total_pixels, 1)) > 0.02
+            h, w, _ = image.shape
+            crop_x = max(0, min(crop_x, w - crop_width))
+            crop_y = max(0, min(crop_y, h - crop_height))
 
-        cv2.rectangle(image, (crop_x, crop_y), (crop_x + crop_w, crop_y + crop_h), (0, 255, 0), 1)
+            crop_x, crop_y = int(crop_x), int(crop_y)
+            crop_width, crop_height = int(crop_width), int(crop_height)
 
-    buffer = td["data"]["state_buffer"]
-    buffer.append(led_on)
-    if len(buffer) > 5:
-        buffer.pop(0)
-    smoothed_state = sum(buffer) > len(buffer) / 2 if buffer else False
+            cropped_image = image[crop_y:crop_y + crop_height, crop_x:crop_x + crop_width]
 
-    last_state = td["data"].get("last_state")
-    if last_state is None:
-        td["data"]["last_state"] = smoothed_state
-        td["data"]["state_started"] = now
-        td["data"]["last_change"] = now
-        if smoothed_state:
-            td["data"]["flashes"] = 1
-            td["data"]["last_on_time"] = now
-    elif smoothed_state != last_state:
-        last_change = td["data"].get("last_change")
-        if last_change is None or now - last_change >= 0.3:
-            duration = now - td["data"]["state_started"]
-            if last_state:
-                td["data"]["durations_on"].append(duration)
+            mask = cv2.inRange(cropped_image, lower_white, upper_white)
+
+            total_pixels = cropped_image.shape[0] * cropped_image.shape[1]
+            white_pixels = cv2.countNonZero(mask)
+            percentage_white = (white_pixels / total_pixels) * 100
+
+            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            contour_image = cropped_image.copy()
+            cv2.drawContours(contour_image, contours, -1, (0, 255, 0), 2)
+            image[crop_y:crop_y + crop_height, crop_x:crop_x + crop_width] = contour_image
+
+            current_state = percentage_white > 2
+
+            # Smoothing with buffer (last 3 frames)
+            td["data"]["state_buffer"].append(current_state)
+            if len(td["data"]["state_buffer"]) > 3:
+                td["data"]["state_buffer"].pop(0)
+
+            if len(td["data"]["state_buffer"]) >= 2:
+                smoothed_state = sum(td["data"]["state_buffer"]) > len(td["data"]["state_buffer"]) / 2
             else:
-                td["data"]["durations_off"].append(duration)
-
-            td["data"]["last_state"] = smoothed_state
-            td["data"]["state_started"] = now
-            td["data"]["last_change"] = now
+                smoothed_state = current_state
 
             if smoothed_state:
-                td["data"]["flashes"] += 1
-                last_on = td["data"].get("last_on_time")
-                if last_on is not None:
-                    td["data"]["intervals"].append(now - last_on)
-                td["data"]["last_on_time"] = now
+                text = "LED ON"
+            else:
+                text = "LED OFF"
 
-    flashes = td["data"].get("flashes", 0)
-    intervals = td["data"].get("intervals", [])
+            # Initialize state tracking
+            if td["data"]["last_state"] is None:
+                td["data"]["last_state"] = smoothed_state
+                td["data"]["state_start_time"] = time.time()
 
-    if flashes >= 6 and len(intervals) >= 5:
-        recent_intervals = intervals[-5:]
-        if all(1.7 <= interval <= 2.3 for interval in recent_intervals):
-            td["data"]["validated"] = True
-            td["data"]["error"] = ""
-        else:
-            td["data"]["error"] = "Intervals between flashes must be about two seconds."
+            # Detect state change (OFF to ON = one flash)
+            elif smoothed_state != td["data"]["last_state"]:
+                duration = time.time() - td["data"]["state_start_time"]
+                
+                # Count flash when LED turns ON
+                if smoothed_state:
+                    td["data"]["flash_count"] += 1
+                    if len(td["data"]["intervals"]) > 0:
+                        # Store interval between flashes
+                        td["data"]["intervals"].append(duration)
+                
+                td["data"]["last_state"] = smoothed_state
+                td["data"]["state_start_time"] = time.time()
 
-    cv2.putText(
-        image,
-        f"Flashes counted: {flashes}",
-        (20, 60),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-    if intervals:
-        last_interval = intervals[-1]
-        cv2.putText(
-            image,
-            f"Last interval: {last_interval:.2f}s",
-            (20, 90),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.6,
-            (255, 255, 255),
-            2,
-        )
+    # Display status information
+    cv2.putText(image, f"Flashes detected: {td['data']['flash_count']}/6", 
+                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
+                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
-    remaining = td["end_time"] - now
-    cv2.putText(
-        image,
-        f"Time remaining: {remaining:.1f}s",
-        (20, 120),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-
-    if td["data"].get("error"):
-        cv2.putText(
-            image,
-            f"Error: {td['data']['error']}",
-            (20, 150),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            1,
-        )
-
+    # Check for task completion
     if not td.get("finished", False):
-        if td["data"].get("validated"):
+        if td["data"]["flash_count"] >= 6 or time.time() > td["end_time"]:
             td["finished"] = True
-            td["finish_time"] = now
-            result.update(
-                {
-                    "success": True,
-                    "description": "Detected six LED flashes with two-second spacing!",
-                    "score": 100,
-                }
-            )
-            text = "Verification successful!"
-        elif now > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = now
-            result["success"] = False
-            result["description"] = td["data"].get(
-                "error", "Did not detect the required LED flash pattern."
-            )
-            text = "Verification failed."
-        else:
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        if now - td["finish_time"] >= 3:
-            if td["data"].get("validated"):
-                result["success"] = True
-                result["score"] = 100
+            td["finish_time"] = time.time()
+            
+            # Validation: Must have exactly 6 flashes
+            if td["data"]["flash_count"] == 6:
+                # Check intervals (should be ~2 seconds each, tolerance ±0.3s)
+                valid_intervals = [1.7 <= interval <= 2.3 for interval in td["data"]["intervals"]]
+                valid_ratio = sum(valid_intervals) / len(valid_intervals) if valid_intervals else 0
+                
+                # Need at least 80% of intervals to be valid
+                if valid_ratio >= 0.8:
+                    result["success"] = True
+                    result["description"] = "Success! LED flashed 6 times with correct intervals."
+                    result["score"] = 100
+                    text = "Verification successful!"
+                else:
+                    result["success"] = False
+                    result["description"] = "Assignment failed."
+                    result["score"] = 0
+                    text = "Assignment failed."
             else:
                 result["success"] = False
+                result["description"] = "Assignment failed."
                 result["score"] = 0
-
-    return image, td, text, result
-
-
-def _parse_robot_status_line(line: str):
-    """Parse a status line of the form 'robotX status=... battery=...'."""
-
-    cleaned = line.strip()
-    if not cleaned:
-        return None, "Received an empty status line."
-
-    parts = cleaned.replace(",", " ").replace(";", " ").split()
-    if not parts:
-        return None, "Unable to parse the status line."
-
-    name = parts[0]
-    if name not in EXPECTED_ROBOT_STATUSES:
-        return None, f"Unexpected robot name '{name}'."
-
-    fields = {}
-    for token in parts[1:]:
-        if "=" not in token:
-            return None, "Each status line must include key=value pairs after the name."
-        key, value = token.split("=", 1)
-        key = key.lower().strip()
-        value = value.strip().lower()
-        if key in fields:
-            return None, f"Duplicate field '{key}' detected."
-        fields[key] = value
-
-    if "status" not in fields or "battery" not in fields:
-        return None, "Include both status=... and battery=... after the robot name."
-
-    try:
-        battery_value = int(fields["battery"])
-    except ValueError as exc:
-        return None, f"Battery value must be an integer: {exc}"
-
-    status_value = fields["status"]
-    if status_value not in ALLOWED_STATUS_VALUES:
-        return None, "Status must be one of ok, warn, or critical."
-
-    return {
-        "name": name,
-        "status": status_value,
-        "battery": battery_value,
-    }, None
-
-
-def telemetry_heartbeat_health(robot, image, td):
-    """Validate three printed robot status summaries."""
-    result = {
-        "success": True,
-        "description": "Waiting for robot status lines...",
-        "score": 0,
-    }
-    text = "Listening for status lines..."
-    image = robot.draw_info(image)
-
-    if not td:
-        td = _initial_td("No robot status lines received yet.")
-        td["end_time"] = time.time() + 20
-        td["data"]["reports"] = {}
-
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        parsed, error = _parse_robot_status_line(msg)
-        if error:
-            td["data"]["error"] = error
+                text = "Assignment failed."
         else:
-            expected = EXPECTED_ROBOT_STATUSES[parsed["name"]]
-            if parsed["status"] != expected["status"]:
-                td["data"]["error"] = (
-                    f"{parsed['name']} status must be {expected['status']}."
-                )
-            elif parsed["battery"] != expected["battery"]:
-                td["data"]["error"] = (
-                    f"{parsed['name']} battery must be {expected['battery']}."
-                )
-            else:
-                td["data"]["error"] = ""
-                td["data"]["reports"][parsed["name"]] = parsed
-                if len(td["data"]["reports"]) == len(EXPECTED_ROBOT_STATUSES):
-                    td["data"]["validated"] = True
-
-    cv2.putText(
-        image,
-        f"Messages received: {len(td['data']['messages'])}",
-        (20, 60),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-    cv2.putText(
-        image,
-        f"Time remaining: {td['end_time'] - time.time():.1f}s",
-        (20, 90),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-    )
-
-    if td["data"].get("reports"):
-        y = 120
-        for name in sorted(td["data"]["reports"]):
-            report = td["data"]["reports"][name]
-            cv2.putText(
-                image,
-                f"{name}: status={report['status']} battery={report['battery']}",
-                (20, y),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.5,
-                (255, 255, 255),
-                1,
-            )
-            y += 25
-
-    if td["data"].get("error"):
-        cv2.putText(
-            image,
-            f"Error: {td['data']['error']}",
-            (20, 175),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            1,
-        )
-
-    if not td.get("finished", False):
-        if td["data"].get("validated"):
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update(
-                {
-                    "success": True,
-                    "description": "All robot status lines validated successfully!",
-                    "score": 100,
-                }
-            )
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get(
-                "error", "Did not receive all robot status lines in time."
-            )
-            text = "Verification failed."
-        else:
+            # Keep running
             result["success"] = True
-            result["description"] = td["data"].get(
-                "error", result["description"]
-            )
+            result["description"] = f"Monitoring... ({td['data']['flash_count']}/6 flashes)"
     else:
+        # Show result for 3 seconds before ending
         if time.time() - td["finish_time"] >= 3:
-            if td["data"].get("validated"):
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
+            # Keep final result state
+            pass
 
     return image, td, text, result

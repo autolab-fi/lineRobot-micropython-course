@@ -120,22 +120,6 @@
     ]
   },
   {
-    "name": "Encoders",
-    "description": "Explore the use of encoders in robotics, covering their purpose, types, and practical applications for movement control!",
-    "sn": 4,
-    "str_id": "module_4",
-    "lessons": [
-      {
-        "str_id": "encoders",
-        "name": "Encoder",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/encoders_en.md",
-        "sn": 11,
-        "description": "This lesson introduces encoders as sensors for measuring wheel rotation and and provides practical exercise to read encoder values.",
-        "template": "# Write code here"
-      }
-    ]
-  },
-  {
     "name": "Line Sensor Introduction",
     "description": "Understanding how IR line sensors work and detecting black lines using the Octoliner sensor array.",
     "sn": 5,

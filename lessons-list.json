@@ -174,5 +174,29 @@
         "template": "# Write code here"
       }
     ]
+  },
+  {
+    "name": "Lists, Dictionaries and More",
+    "description": "Hands-on assignments that connect sensors, LEDs, PWM, and telemetry using MicroPython data structures.",
+    "sn": 7,
+    "str_id": "module_8",
+    "lessons": [
+      {
+        "str_id": "telemetry_heartbeat_health",
+        "name": "Telemetry Heartbeat with Status Levels",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Telemetry%20Heartbeat%20with%20Status%20Levels.md",
+        "sn": 20,
+        "description": "Derive a health flag from readiness, speed, and battery data and include it in the STATUS heartbeat.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "line_sensor_leds",
+        "name": "Line Sensor Reactive LEDs",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",
+        "sn": 22,
+        "description": "Mirror Octoliner readings to the LEDs using lists and dictionaries, then report the snapshot over MQTT.",
+        "template": "# Write code here"
+      }
+    ]
   }
 ]

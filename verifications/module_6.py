@@ -584,7 +584,7 @@ def loops_and_conditional_logic(robot, image, td):
         else:
             result.update({
                 "success": False,
-                "description": "No sensors detected with values > 200." if sensors_above == 0 else "Assignment Failed",
+                "description": "No sensors detected on Line." if sensors_above == 0 else "Assignment Failed",
                 "score": 0,
             })
             text = "Verification complete!"
@@ -621,16 +621,11 @@ def array_and_processing_data(robot, image, td):
                 if value > 200:
                     td["data"]["values_above_200"] += 1
 
-    cv2.putText(image, f"Total values received: {td['data']['total_values']}", (20, 30),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
-    cv2.putText(image, f"Values above 200: {td['data']['values_above_200']}", (20, 60),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
-
     if time.time() > td["end_time"]:
         if td["data"]["values_above_200"] >= 2:
             text = "Verification complete!"
             result["description"] = (
-                f"Assignment passed! Found {td['data']['values_above_200']} values > 200 "
+                f"Assignment passed!"
                 f"out of {td['data']['total_values']} total values"
             )
         else:

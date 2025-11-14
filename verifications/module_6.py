@@ -528,12 +528,12 @@ def introduction_to_variables_and_conditional_statements(robot, image, td):
         td["data"]["result_displayed"] = True
         if td["data"]["sensors_on_line"]:
             detected = ", ".join(str(s) for s in sorted(td["data"]["sensors_on_line"]))
-            result["description"] = f"Assignment passed! Detected sensors on line: {detected}"
+            result["description"] = f"Assignment passed!"
             text = "Verification successful!"
         else:
             result.update({
                 "success": False,
-                "description": "No sensor was detected as ON LINE.",
+                "description": "Assignment failed!",
                 "score": 0,
             })
             text = "Verification failed."

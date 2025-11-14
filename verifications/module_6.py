@@ -10,7 +10,7 @@ target_points = {
     'sensor_log_summary': [(30, 50), (0, -200)],
     'list_operations_check': [(30, 50), (0, -200)],
     'introduction_to_variables_and_conditional_statements': [(30, 50), (0, -200)],
-    'loops_and_conditional_logic': [(45, 50), (30, 0)],
+    'loops_and_conditional_logic': [(65, 50), (30, 0)],
     'array_and_processing_data': [(30, 50), (30, 0)],
 }
 

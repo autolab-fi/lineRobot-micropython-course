@@ -120,6 +120,22 @@
     ]
   },
   {
+    "name": "Encoders",
+    "description": "Explore the use of encoders in robotics, covering their purpose, types, and practical applications for movement control!",
+    "sn": 4,
+    "str_id": "module_4",
+    "lessons": [
+      {
+        "str_id": "encoders",
+        "name": "Encoder",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/encoders_en.md",
+        "sn": 11,
+        "description": "This lesson introduces encoders as sensors for measuring wheel rotation and and provides practical exercise to read encoder values.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
     "name": "Line Sensor Introduction",
     "description": "Understanding how IR line sensors work and detecting black lines using the Octoliner sensor array.",
     "sn": 5,
@@ -142,6 +158,30 @@
     "str_id": "module_6",
     "lessons": [
       {
+        {
+        "str_id": "introduction_to_variables_and_conditional_statements",
+        "name": "Introduction to Variables and Conditional Statements",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Introduction%20to%20Variables%20and%20Conditional%20Statements.md",
+        "sn": 13,
+        "description": "Learn how to declare and use variables in programming, and apply conditional logic using if, else if, and else statements.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "loops_and_conditional_logic",
+        "name": "Loops and Conditional Logic",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Loops%20and%20Conditional%20Logic.md",
+        "sn": 14,
+        "description": "Learn how to repeat actions using for and while loops combined with conditional statements.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "array_and_processing_data",
+        "name": "Arrays and Processing Data with Loops",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Arrays%20and%20Processing%20Data%20with%20Loops.md",
+        "sn": 15,
+        "description": "Understand how to use arrays to store and analyze sensor data with systematic data collection.",
+        "template": "# Write code here"
+      },
         "str_id": "hello_mqtt_variables",
         "name": "MQTT Greeting of Variables",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/MQTT%20Greeting%20of%20Variables.md",
@@ -176,16 +216,48 @@
     ]
   },
   {
+    "name": "Advanced Line Following",
+    "description": "Advanced line following techniques including relay, P, PI, and PID controllers for smooth and accurate robot movement.",
+    "sn": 7,
+    "str_id": "module_7",
+    "lessons": [
+      {
+        "str_id": "basic_line_follower",
+        "name": "Relay, P, and PI Controllers",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
+        "sn": 20,
+        "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "pi",
+        "name": "P and PI Controllers",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/P%20and%20PI.md",
+        "sn": 21,
+        "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "pid",
+        "name": "PID Controller",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/PID.md",
+        "sn": 22,
+        "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
+        "template": "# Write code here"
+      }
+    ]
+  }
+  {
     "name": "Lists, Dictionaries and More",
     "description": "Hands-on assignments that connect sensors, LEDs, PWM, and telemetry using MicroPython data structures.",
-    "sn": 7,
+    "sn": 8,
     "str_id": "module_8",
     "lessons": [
       {
         "str_id": "telemetry_heartbeat_health",
         "name": "Telemetry Heartbeat with Status Levels",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Telemetry%20Heartbeat%20with%20Status%20Levels.md",
-        "sn": 20,
+        "sn": 23,
         "description": "Derive a health flag from readiness, speed, and battery data and include it in the STATUS heartbeat.",
         "template": "# Write code here"
       },
@@ -193,7 +265,7 @@
         "str_id": "line_sensor_leds",
         "name": "Line Sensor Reactive LEDs",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",
-        "sn": 22,
+        "sn": 24,
         "description": "Mirror Octoliner readings to the LEDs using lists and dictionaries, then report the snapshot over MQTT.",
         "template": "# Write code here"
       }

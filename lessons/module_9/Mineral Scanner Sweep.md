@@ -1,38 +1,58 @@
-# Lesson 2: Mineral Scanner Sweep
+# Lesson 2.7: Multi-Point Mineral Survey
 
-## Lesson objective
-Reach a target waypoint, activate a spinning mineral scanner visualised with LEDs and an OpenCV cone, and log any mineral signatures detected during the sweep.
+## Lesson Objective
+Navigate to 5 different scanning zones, activate the detection system at each location for 2 seconds to reveal minerals, wait 3 seconds for collection, then proceed to the next zone.
 
 ## Introduction
-The rover has landed near a promising rock cluster. Before digging in, it must travel to a waypoint, deploy a scanner, and rotate on the spot to detect mineral signatures. LEDs mirror the scanner state while an OpenCV wedge shows the detection cone. Any mineral hit must be recorded for later reporting.
+Mission Control has identified 5 mineral-rich zones in your survey area. Your robot must systematically visit each zone, activate its scanner LEDs to reveal what minerals are present, wait for the collection system to gather samples, then move to the next location. This multi-waypoint survey mission requires precise timing and navigation.
 
 ## Theory
 
-### Coordinating movement and scanner state
-Break the mission into clear phases: drive to the waypoint, stop, switch the LEDs to a scanning colour, then rotate in place. Keeping phases separate makes the timing and logging predictable.
+### Survey Zone Map
+The exploration area is divided into 5 distinct scanning zones. Each zone may contain different mineral deposits that will only be revealed when your scanner is active.
 
-### Visualising the detection cone
-Represent the scanner as a wedge drawn in OpenCV and aligned to the robot heading. Update the cone angle as the robot rotates so you can see where the scanner is “looking.”
+![Survey Zones](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_9/survey_zones.png?raw=true)
 
-### Detecting and storing mineral hits
-Define bearing ranges that map to mineral types (iron, ice, crystal, etc.). When the cone crosses a range, record the mineral name in a list or variable so Lesson 3 can reuse it.
+Study the zone layout carefully. Your robot must visit each numbered zone in sequence, performing a complete scan and collection cycle at each stop.
 
-### Loading the overlay asset
-An optional overlay is available to illustrate the scanner cone:
+### Multi-Waypoint Navigation
+Instead of scanning from one position, you'll move between 5 different zones. Each zone requires the same scanning procedure:
+1. Navigate to the zone center
+2. Activate scanner (turn LEDs ON)
+3. Hold for 2 seconds (mineral detection phase)
+4. Turn LEDs OFF
+5. Wait 3 seconds (mineral collection phase)
+6. Move to next zone
 
-```python
-OVERLAY_PATH = "images/module_9/scanner_overlay.png"
-# Load or display this overlay in your dashboard while the scanner spins.
-```
+### Timing Requirements
+The scanner requires exactly **2 seconds of LED activation** to properly analyze the mineral composition at each zone. After detection, the collection mechanism needs **3 seconds** to extract the sample. These timing windows are critical for accurate data collection.
+
+**Per-zone timing:**
+- LEDs ON: 2.0 seconds (±0.2 seconds)
+- LEDs OFF: 3.0 seconds (±0.3 seconds)
+- Total per zone: ~5 seconds
+- Total mission: ~25 seconds for all 5 zones
 
 ## Assignment
 Write a program that:
 
-- Drives the robot to the assigned waypoint and halts before starting the scan.
-- Sets the LEDs to a “scanner active” colour/brightness that stays on during the sweep.
-- Rotates the robot 360° while updating an OpenCV cone overlay aligned with the current heading.
-- Logs any mineral types detected when the cone passes their bearing ranges and prints a summary at the end of the spin.
-- Saves the detected mineral type for use in Lesson 3.
+1. Visits all **5 scanning zones** shown in the zone map using movement functions
+2. At each zone:
+   - **Stop at the zone center** (robot must be stationary during scanning)
+   - **Turn LEDs ON** to activate the mineral scanner
+   - **Keep LEDs ON for exactly 2 seconds** (mineral detection phase)
+   - **Turn LEDs OFF** after scanning completes
+   - **Wait 3 seconds** with LEDs off (mineral collection phase)
+3. Moves to the next zone after collection completes
+4. Repeats until all 5 zones are surveyed
+
+**Requirements:**
+- Must visit all 5 zones in sequence
+- LEDs must be ON for 2 seconds at each zone
+- LEDs must be OFF for 3 seconds at each zone (collection time)
+- Scanner must be active (LEDs ON) for at least 40% of total mission time
+- Complete the mission within the time limit
+- Use `time.sleep()` for precise timing control
 
 ## Conclusion
-You combined waypoint navigation with a rotating scan, linked LED states to visual feedback, and captured mineral data for later missions. These skills are the basis for autonomous surveys that blend motion control with sensor logging.
+You've programmed a systematic multi-zone survey mission that combines navigation, precise timing control, and repeated procedures. This type of mission is essential in planetary exploration where rovers must survey multiple sites efficiently while managing power and time constraints.

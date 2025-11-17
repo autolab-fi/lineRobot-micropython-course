@@ -1,39 +1,46 @@
-# Lesson 1: Fog of War Survey
+# Lesson 7.10: Planetary Surface Mapping
 
-## Lesson objective
-Guide the robot through a repeatable snake pattern that uncovers at least 90% of a hidden map image.
+## Lesson Objective
+Program the robot to systematically explore and reveal a fog-covered terrain map by executing a repeatable movement pattern that uncovers at least 60% of the hidden surface.
 
 ## Introduction
-Mission Control shares a map image of a cloudy landing zone. Your robot has to sweep the area without manual steering, revealing almost the entire map through a predictable path. Instead of micromanaging every turn, you will rely on a simple boustrophedon (snake) pattern that alternates direction each row so you waste no time repositioning.
+Mission Control provides a partially obscured map—only areas the robot physically visits will be revealed. Your task is to write a sequence of movements that can be repeated to efficiently survey the landing zone, uncovering more than half the terrain without manually controlling each step.
 
 ## Theory
 
-### Why a snake pattern works
-A snake sweep reduces dead time because the robot reaches the end of one row and immediately starts the next in the opposite direction. This keeps motion continuous and avoids long reposition arcs.
+### Fog of War Exploration
+In planetary exploration, robots often face limited sensor range or data transmission constraints. The "fog of war" concept means areas remain hidden until directly surveyed. Your robot must follow a systematic pattern to maximize map coverage with minimal backtracking.
 
-### Breaking the field into passes
-Decide how many straight passes you need based on the map image dimensions. Each pass should span the usable width of the map so neighbouring lines slightly overlap. Store the pass length and the small step that moves you down to the next row so you can reuse them in a loop.
+### Movement Sequences
+Rather than writing individual commands for each move, you'll create a reusable movement pattern. Think of it like a lawnmower pattern—moving forward in straight lines, then shifting over and repeating. The key is:
+- **Consistency**: Each pass should cover equal distance
+- **Overlap**: Slight overlap ensures no gaps in coverage
 
-### Tracking revealed area
-Keep a running counter of how many passes are complete versus the total planned. The simplest completion check is `coverage = (completed_passes / total_passes) * 100`. Stop once coverage reaches or exceeds 90% so the rover does not overrun its mission boundary.
+### Calculating Coverage
+The verification system tracks what percentage of the map your robot reveals. Your goal is **60% minimum coverage** within the time limit. More efficient patterns mean higher coverage scores.
 
-### Loading the map asset
-You can visualise progress against the provided map image:
+### Map Overview
 
-```python
-MAP_PATH = "images/module_9/fog_map.png"
-
-# Load or display this image however your environment prefers.
-# For example, you might show it on a dashboard while the robot sweeps.
-```
+Robot directions
+![Starting Point](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_9/fog.png?raw=true)
 
 ## Assignment
 Write a program that:
 
-- Loads the provided map image from `images/module_9/fog_map.png` so you can refer to the mission area while debugging.
-- Defines two helpers: one to drive a full horizontal pass and one to step down to the next row.
-- Uses a loop to alternate direction each pass, creating a continuous snake pattern until at least **90%** of the planned passes are finished.
-- Logs the coverage percentage after each pass and reports the final percentage when the loop ends.
+1. Moves the robot forward a fixed distance (one "pass" across the survey area)
+2. Shifts position slightly to start the next parallel pass
+3. Repeats this pattern multiple times using a loop
+4. The movement sequence should be simple enough to repeat
+
+
+**Example approach:**
+```python
+# Pseudocode - adapt to your strategy
+for pass_number in range(number_of_passes):
+    move_forward_distance(survey_distance)
+    # Add turning logic here
+    # Add positioning logic here
+```
 
 ## Conclusion
-You used a simple, repeatable movement plan to uncover nearly the entire map with minimal wasted turns. This pattern is reliable whenever you need broad coverage without complex path planning.
+You've programmed an autonomous exploration pattern that systematically reveals unknown terrain. This principle applies to real planetary rovers that must efficiently survey large areas with limited human intervention. By using loops and fixed movement sequences, you created a scalable solution that could map even larger territories.

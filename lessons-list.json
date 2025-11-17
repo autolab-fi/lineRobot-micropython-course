@@ -141,7 +141,7 @@
     "sn": 6,
     "str_id": "module_6",
     "lessons": [
-        {
+      {
         "str_id": "introduction_to_variables_and_conditional_statements",
         "name": "Introduction to Variables and Conditional Statements",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Introduction%20to%20Variables%20and%20Conditional%20Statements.md",
@@ -210,7 +210,7 @@
         "name": "Relay, P, and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
         "sn": 20,
-        "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
+        "description": "Understand how different types of controllers work \u2014 Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
         "template": "# Write code here"
       },
       {
@@ -251,6 +251,22 @@
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",
         "sn": 24,
         "description": "Mirror Octoliner readings to the LEDs using lists and dictionaries, then report the snapshot over MQTT.",
+        "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Exploration and Mapping",
+    "description": "Simulated exploration missions that reveal a foggy map with simple coverage sweeps.",
+    "sn": 9,
+    "str_id": "module_9",
+    "lessons": [
+      {
+        "str_id": "fog_of_war_survey",
+        "name": "Fog of War Survey",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Fog%20of%20War%20Survey.md",
+        "sn": 25,
+        "description": "Use a snake-pattern sweep to uncover a provided foggy map and stop once coverage passes 90%.",
         "template": "# Write code here"
       }
     ]

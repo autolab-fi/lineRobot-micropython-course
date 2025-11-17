@@ -276,14 +276,6 @@
         "sn": 26,
         "description": "Reach a waypoint, spin with an OpenCV cone overlay, and log mineral hits for later reporting.",
         "template": "# Write code here"
-      },
-      {
-        "str_id": "coordinate_navigation_log",
-        "name": "Coordinate Navigation Log",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Coordinate%20Navigation%20Log.md",
-        "sn": 27,
-        "description": "Navigate to a target coordinate on an overlaid grid and publish a log including the scanned mineral.",
-        "template": "# Write code here"
       }
     ]
   }

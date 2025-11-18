@@ -51,7 +51,7 @@ def fog_of_war_survey(robot, image, td):
         
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 20,  # 20 seconds to explore
+            "end_time": time.time() + 60,  # 20 seconds to explore
             "data": {
                 "fog_overlay": fog_overlay,
                 "revealed_mask": revealed_mask,

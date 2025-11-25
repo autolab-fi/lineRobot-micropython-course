@@ -41,7 +41,7 @@ def fog_of_war_survey(robot, image, td):
     image = robot.draw_info(image)
     
     # Define the map area (exclude right debug panel)
-    map_width = 1015  # Width of map area (before debug panel starts)
+    map_width = 1300  # Width of map area (before debug panel starts)
     
     if not td:
         # Initialize fog of war overlay (only for map area)

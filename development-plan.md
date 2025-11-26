@@ -25,7 +25,7 @@
 **What you'll learn:** Using library functions to move a specific distance, both forward and backward.
 
 #### 5. Maneuvering
-**What you'll learn:** Turning right and left in place. Task: Read data from a file and write it to another.
+**What you'll learn:** Turning right and left in place.
 
 #### 6. Fruit Ninja
 **What you'll learn:** Writing a program with a sequence of commands to move along a trajectory depicted in the diagram.
@@ -33,7 +33,7 @@
 ---
 
 ## Module 2: Controlling LEDs
-**Description:** Basic arduino functions of working with GPIO using LEDs as examples.
+**Description:** Basic Micropython functions of working with GPIO using LEDs as examples.
 
 ### Lessons
 
@@ -41,7 +41,7 @@
 **What you'll learn:** Understanding how LEDs work. Task: Turning on LEDs.
 
 #### 8. Robot's alarm
-**What you'll learn:** More about the digitalWrite() and pinMode() functions. Task: Blinking LEDs.
+**What you'll learn:** Task: Blinking LEDs.
 
 ---
 
@@ -54,7 +54,7 @@
 **What you'll learn:** An introduction to the robot's kinematics. Task: Experiment with functions for moving the robot forward.
 
 #### 10. Movement Function
-**What you'll learn:** Writing functions in Arduino. Task: Write a function to rotate the robot.
+**What you'll learn:** Writing functions in Micropython. Task: Write a function to rotate the robot.
 
 #### 11. Electric Motor
 **What you'll learn:** Basic principles of DC motors. Task: Move to a specific point on the map using only functions for controlling motors.

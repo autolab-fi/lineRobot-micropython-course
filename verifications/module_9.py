@@ -6,7 +6,7 @@ import numpy as np
 # Adjust points if the simulator expects a specific spawn zone
 # Format: "task": [(x, y), (angle, speed)]
 target_points = {
-    "fog_of_war_survey": [(25,25), (30, 0)],
+    "fog_of_war_survey": [(30,30), (30, 0)],
     "miniral_scanner_sweep" : [(30,50), (30, 0)]
 }
 
@@ -52,7 +52,7 @@ def fog_of_war_survey(robot, image, td):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 50,  # 20 seconds to explore
+            "end_time": time.time() + 50,  # 50 seconds to explore
             "data": {
                 "fog_overlay": fog_overlay,
                 "revealed_mask": revealed_mask,
@@ -60,7 +60,7 @@ def fog_of_war_survey(robot, image, td):
                 "total_pixels": image.shape[0] * map_width,  # Only count map pixels
                 "revealed_pixels": 0,
                 "reveal_radius": 100,  # Radius around robot that gets revealed
-                "target_percentage": 40,  # Need to reveal 85% of map
+                "target_percentage": 40,  # Need to reveal 40% of map
                 "task_completed": False,
                 "completion_time": None
             },
@@ -69,6 +69,7 @@ def fog_of_war_survey(robot, image, td):
         }
 
     # Get robot position
+    revealed_percentage = 0
     if robot and robot.position_px:
         robot_x, robot_y = robot.position_px
 
@@ -94,11 +95,32 @@ def fog_of_war_survey(robot, image, td):
             fog_colored[:, :td["data"]["map_width"]], 0.7, 0
         )
 
+        # Update text with current progress
+        time_remaining = max(0, td["end_time"] - time.time())
+        text = f"Exploring: {revealed_percentage:.1f}% revealed"
+
         # Check if target reached
         if revealed_percentage >= td["data"]["target_percentage"] and not td["data"]["task_completed"]:
             td["data"]["task_completed"] = True
             td["data"]["completion_time"] = time.time()
-            text = f"Map explored! {revealed_percentage:.1f}% revealed!"
+            elapsed_time = td["data"]["completion_time"] - td["start_time"]
+            text = f"SUCCESS! Map explored in {elapsed_time:.1f}s! ({revealed_percentage:.1f}% revealed)"
+
+    # Display progress on image
+    progress_y = 30
+    cv2.putText(image, f"Map Revealed: {revealed_percentage:.1f}% / {td['data']['target_percentage']}%", 
+                (20, progress_y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    
+    # Draw progress bar
+    bar_x, bar_y, bar_w, bar_h = 20, progress_y + 10, 300, 20
+    cv2.rectangle(image, (bar_x, bar_y), (bar_x + bar_w, bar_y + bar_h), (100, 100, 100), -1)
+    progress_width = int((revealed_percentage / td['data']['target_percentage']) * bar_w)
+    progress_width = min(progress_width, bar_w)
+    
+    # Color: green if complete, yellow if in progress
+    bar_color = (0, 255, 0) if td["data"]["task_completed"] else (0, 255, 255)
+    cv2.rectangle(image, (bar_x, bar_y), (bar_x + progress_width, bar_y + bar_h), bar_color, -1)
+    cv2.rectangle(image, (bar_x, bar_y), (bar_x + bar_w, bar_y + bar_h), (255, 255, 255), 2)
 
     # Check completion
     if not td.get("finished", False):
@@ -108,16 +130,33 @@ def fog_of_war_survey(robot, image, td):
                 td["finish_time"] = time.time()
                 result["success"] = True
                 result["score"] = 100
-                result["description"] = f"Success! Explored {revealed_percentage:.1f}% of the map!"
+                elapsed_time = td["data"]["completion_time"] - td["start_time"]
+                result["description"] = (
+                    f"Excellent work! You successfully explored {revealed_percentage:.1f}% "
+                    f"of the map in {elapsed_time:.1f} seconds!"
+                )
+                text = "✓ MISSION COMPLETE!"
         elif time.time() > td["end_time"]:
             td["finished"] = True
             td["finish_time"] = time.time()
             result["success"] = False
-            result["score"] = 0
-            result["description"] = f"Time expired. Only explored {revealed_percentage:.1f}% of map."
+            result["score"] = int((revealed_percentage / td['data']['target_percentage']) * 100)
+            result["description"] = (
+                f" Time's up! You explored {revealed_percentage:.1f}% of the map, "
+                f"but needed {td['data']['target_percentage']}% to pass. "
+                f"Try moving more systematically to cover more area!"
+            )
+            text = f"✗ FAILED - Only {revealed_percentage:.1f}% explored"
     else:
         if time.time() - td["finish_time"] >= 2:
             pass  # Keep final state
+
+    # Display time remaining (only if not finished)
+    if not td.get("finished", False):
+        time_remaining = max(0, td["end_time"] - time.time())
+        time_text = f"Time Remaining: {time_remaining:.1f}s"
+        cv2.putText(image, time_text, (20, progress_y + 50), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
     return image, td, text, result
     

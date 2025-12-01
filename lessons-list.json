@@ -60,6 +60,14 @@
         "name": "Fruit Ninja",
         "description": "Writing a program with a sequence of commands to move along a trajectory depicted in the diagram.",
         "template": "# Write code here"
+      },
+      {
+        "str_id": "Parking",
+        "url":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/8-sapkota-test-assignment/lessons/module_1/Praking.md",
+        "sn":6,
+        "name": "Parking",
+        "description":"Write a program with the correct command to park the robo car",
+        "template": "# Write code here"
       }
     ]
   },

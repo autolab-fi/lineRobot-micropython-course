@@ -182,7 +182,6 @@ def maneuvering(robot, image, td: dict):
     result["description"] += f' | Score: {result["score"]}'  
     return image, td, text, result
 
-
 def calculate_target_point(rb, targets):
     """Calculate the target points based on the robot's current position and movement directions."""
     
@@ -211,18 +210,6 @@ def calculate_target_point(rb, targets):
 
     res.reverse()
     return res
-
-def image_to_mask(filename, percentage):
-    """Load an image and create a mask with a given scaling percentage."""
-    
-    # Try to load the image
-    temp = cv2.imread(filename)
-
-    lower_limit = np.array([0, 0, 0])  
-    upper_limit = np.array([255, 254, 255])  
-    mask = cv2.inRange(temp, lower_limit, upper_limit)
-
-    return temp, mask
 
 
 def long_distance_race(robot, image, td: dict):
@@ -260,23 +247,21 @@ def long_distance_race(robot, image, td: dict):
         td["data"]['delta'] = 4
         td["data"]['reached_point'] = False
 
-        td["data"]["fruit"] = {}
-        td["data"]["mask"] = {}
-        td["data"]["animation"] = {}
-
+        # Load single mineral image
         basepath = os.path.abspath(os.path.dirname(__file__))
+        filepath = os.path.join(basepath, 'images', 'mineral.png')
         
-
-        for i in range(4):
-            td["data"]["fruit"][i] = {}
-            td["data"]["mask"][i] = {}
-
-            for j in range(1, 7):
-                filepath = os.path.join(basepath,'images', f'{i}-{j}.jpg')
-                td["data"]["fruit"][i][j], td["data"]["mask"][i][j] = image_to_mask(filepath, percentage=0.7)
-
-            td["data"]["animation"][i] = 1
-
+        mineral_img = cv2.imread(filepath)
+        
+        if mineral_img is None:
+            print("Error: Could not load mineral.png")
+            td["data"]["mineral"] = None
+        else:
+            td["data"]["mineral"] = mineral_img
+        
+        # Track which checkpoints are still visible
+        td["data"]["checkpoint_visible"] = [True] * 4
+        
         td["data"]['coordinates'] = [
             (robot.cm_to_pixel(x), robot.cm_to_pixel(y)) for x, y in td["data"]['targets']
         ]
@@ -294,11 +279,15 @@ def long_distance_race(robot, image, td: dict):
 
             if d < td["data"]['delta']:
                 if len(td["data"]['targets']) > 1:
-                    td["data"]["animation"][len(td["data"]['targets']) - 1] += 1
+                    # Mark this checkpoint as collected
+                    checkpoint_index = len(td["data"]['targets']) - 1
+                    td["data"]["checkpoint_visible"][checkpoint_index] = False
+                    
                     td["data"]['delta'] += 1.3
                     td["data"]['targets'].pop()
                 elif not td["data"]['reached_point']:
-                    td["data"]["animation"][0] += 1
+                    # Final checkpoint collected
+                    td["data"]["checkpoint_visible"][0] = False
                     td["data"]['reached_point'] = True
                     td["end_time"] = time.time() + 4
 
@@ -315,26 +304,24 @@ def long_distance_race(robot, image, td: dict):
         result["success"] = False
         result["score"] = 0
 
-    if td["data"]:
-        for i in range(len(td["data"]['coordinates'])):
-            if td["data"]["animation"][i] > 6:
-                td["data"]['coordinates'].pop()
-                td["data"]['fruit'].pop(i)
-                td["data"]["mask"].pop(i)
-                td["data"]["animation"].pop(i)
-            else:
-                x, y = td["data"]['coordinates'][i]
-                fruit = td["data"]["fruit"][i][td["data"]["animation"][i]]
-                mask = td["data"]["mask"][i][td["data"]["animation"][i]]
-
-                ymin = fruit.shape[0] // 2
-                ymax = fruit.shape[0] - ymin
-                xmin = fruit.shape[1] // 2
-                xmax = fruit.shape[1] - xmin
-
-                cv2.copyTo(fruit, mask, image[y - ymin:y + ymax, x - xmin:x + xmax])
-
-                if td["data"]["animation"][i] > 1:
-                    td["data"]["animation"][i] += 1
+    # Draw minerals at checkpoint locations
+    if td["data"] and td["data"]["mineral"] is not None:
+        mineral = td["data"]["mineral"]
+        mineral_h, mineral_w = mineral.shape[:2]
+        
+        for i, (x, y) in enumerate(td["data"]['coordinates']):
+            # Only draw if checkpoint is still visible
+            if i < len(td["data"]["checkpoint_visible"]) and td["data"]["checkpoint_visible"][i]:
+                # Calculate position (centered on checkpoint)
+                x1 = int(x - mineral_w // 2)
+                y1 = int(y - mineral_h // 2)
+                x2 = x1 + mineral_w
+                y2 = y1 + mineral_h
+                
+                # Check bounds before drawing
+                if (x1 >= 0 and y1 >= 0 and 
+                    x2 <= image.shape[1] and y2 <= image.shape[0]):
+                    # Simply overlay the image
+                    image[y1:y2, x1:x2] = mineral
 
     return image, td, text, result

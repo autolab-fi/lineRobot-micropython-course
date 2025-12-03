@@ -256,8 +256,21 @@ def long_distance_race(robot, image, td: dict):
         if mineral_img is None:
             print("Error: Could not load mineral.png")
             td["data"]["mineral"] = None
+            td["data"]["mask"] = None
         else:
+            # Resize mineral to match original fruit size
+            original_height = mineral_img.shape[0]
+            original_width = mineral_img.shape[1]
+            new_height = int(original_height * 0.2)
+            new_width = int(original_width * 0.2)
+            mineral_img = cv2.resize(mineral_img, (new_width, new_height))
+            
+            # Create mask: non-black pixels are visible
+            gray = cv2.cvtColor(mineral_img, cv2.COLOR_BGR2GRAY)
+            _, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
+            
             td["data"]["mineral"] = mineral_img
+            td["data"]["mask"] = mask
         
         # Track which checkpoints are still visible
         td["data"]["checkpoint_visible"] = [True] * 4
@@ -304,24 +317,24 @@ def long_distance_race(robot, image, td: dict):
         result["success"] = False
         result["score"] = 0
 
-    # Draw minerals at checkpoint locations
-    if td["data"] and td["data"]["mineral"] is not None:
+    # Draw minerals at checkpoint locations with masking
+    if td["data"] and td["data"]["mineral"] is not None and td["data"]["mask"] is not None:
         mineral = td["data"]["mineral"]
-        mineral_h, mineral_w = mineral.shape[:2]
+        mask = td["data"]["mask"]
+        
+        # Use same positioning as original code
+        ymin = mineral.shape[0] // 2
+        ymax = mineral.shape[0] - ymin
+        xmin = mineral.shape[1] // 2
+        xmax = mineral.shape[1] - xmin
         
         for i, (x, y) in enumerate(td["data"]['coordinates']):
             # Only draw if checkpoint is still visible
             if i < len(td["data"]["checkpoint_visible"]) and td["data"]["checkpoint_visible"][i]:
-                # Calculate position (centered on checkpoint)
-                x1 = int(x - mineral_w // 2)
-                y1 = int(y - mineral_h // 2)
-                x2 = x1 + mineral_w
-                y2 = y1 + mineral_h
-                
                 # Check bounds before drawing
-                if (x1 >= 0 and y1 >= 0 and 
-                    x2 <= image.shape[1] and y2 <= image.shape[0]):
-                    # Simply overlay the image
-                    image[y1:y2, x1:x2] = mineral
+                if (y - ymin >= 0 and y + ymax <= image.shape[0] and 
+                    x - xmin >= 0 and x + xmax <= image.shape[1]):
+                    # Use cv2.copyTo to apply mask (only non-black pixels)
+                    cv2.copyTo(mineral, mask, image[y - ymin:y + ymax, x - xmin:x + xmax])
 
     return image, td, text, result

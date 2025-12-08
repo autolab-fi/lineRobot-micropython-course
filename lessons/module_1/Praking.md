@@ -29,4 +29,4 @@ You can refresh your memory of the library functions by revisiting the previous 
 
 ## Conclusion
 
-You are awesome! You've gained insight into the concept of a program and its executor.
+You are awesome! You've gained insight into the concept of a program and it's executor.

@@ -67,7 +67,7 @@
         "sn":6,
         "name": "Parking",
         "description":"Write a program with the correct command to park the robo car",
-        "template": "# Write code here"
+        "template": "#Write code here"
       }
     ]
   },

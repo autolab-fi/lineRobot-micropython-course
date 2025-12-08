@@ -418,7 +418,7 @@ def Parking(robot, image, td: dict):
 
 
 # ---------------------------------------------------------
-# TASK DISPATCHER
+# TASK DISPATCHE
 # ---------------------------------------------------------
 
 def run_task(task, robot, image, td):

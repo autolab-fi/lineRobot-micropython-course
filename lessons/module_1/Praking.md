@@ -21,7 +21,12 @@ This is like any other program, just a list of steps to take in order. But for a
 
 Parking is a perfect example of this. The robot must be in the correct location and orientation to be considered successful. But it can go straight and then turn and then move - what I'm saying is it essentially condenses movement into easier pieces of the puzzle. Also, using the compass rose pieces to differentiate movements are also helpful.
 ## Assignment
-
+``` python
+from lineRobot import Robot
+robot=Robot()
+robot.move_distance()
+robot.turn_left()
+```
 You must program it so it can go in this route and park correctly, directionally.
 
 

@@ -26,7 +26,7 @@ Each function within the **lineRobot** library executes a sequence of commands s
 
 Write a program for the robot to follow the route represented in the image.
 
-![trajectory](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_1/trajectory.png?raw=true)
+![trajectory](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/trajectory.png?raw=true)
 
 You can refresh your memory of the library functions by revisiting the previous lessons.
 

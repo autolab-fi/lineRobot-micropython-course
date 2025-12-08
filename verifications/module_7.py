@@ -43,7 +43,6 @@ def pid(robot, image, td: dict):
     cell_indices = [0,1,3,4,5,6,7,8,9,10,11]  # All cells
     return checkpoint_verification_grid(robot, image, td, cell_indices, 50, "pid")
 
-
 def checkpoint_verification_grid(robot, image, td, cell_indices, verification_time, task_name):
     """
     Crops the image to a region of interest (ROI), divides it into a 3x4 grid (3 rows, 4 cols),
@@ -133,14 +132,15 @@ def checkpoint_verification_grid(robot, image, td, cell_indices, verification_ti
                 "task_completed": False,
                 "task_name": task_name,
                 "show_grid": True,  # Flag to show grid temporarily
-                "grid_start_time": time.time()
+                "grid_start_time": time.time(),
+                "completion_time": None  # Track when all checkpoints completed
             }
         }
         
         # Load checkpoint image (cone) if needed
         try:
             basepath = os.path.abspath(os.path.dirname(__file__))
-            filepath = os.path.join(basepath, "auto_tests", "images", "traffic-sign.jpg")
+            filepath = os.path.join(basepath, "auto_tests", "traffic-sign.jpg")
             if not os.path.exists(filepath):
                 cone = np.zeros((60, 60, 3), dtype=np.uint8)
                 cone[:, :] = (0, 255, 0)
@@ -182,11 +182,20 @@ def checkpoint_verification_grid(robot, image, td, cell_indices, verification_ti
                 x_end = min(image.shape[1], x + 30)
                 cv2.circle(image, (x, y), 30, (255, 255, 255), -1)
                 text = f"Checkpoint {i+1}/{len(checkpoint_positions)} reached!"
-        if all(td["data"]["reached_checkpoints"]):
+        
+        # Check if all checkpoints are completed
+        if all(td["data"]["reached_checkpoints"]) and not td["data"]["task_completed"]:
             td["data"]["task_completed"] = True
-            td["end_time"] = time.time() + 1
+            td["data"]["completion_time"] = time.time()  # Record completion time
             text = "All checkpoints passed!"
-            result["description"] = "The robot successfully passed through all checkpoints!"
+
+    # Check if 0.5 seconds have passed since completion
+    if td["data"]["task_completed"] and td["data"]["completion_time"]:
+        if time.time() - td["data"]["completion_time"] >= 0.5:
+            result["success"] = True
+            result["description"] = "Success! The robot passed through all checkpoints."
+            result["score"] = 100
+            return image, td, text, result
 
     # Check for time limit
     if td["end_time"] - time.time() < 1:
@@ -199,5 +208,6 @@ def checkpoint_verification_grid(robot, image, td, cell_indices, verification_ti
             result["score"] = 0
             completed = sum(td["data"]["reached_checkpoints"])
             total = len(td["data"]["reached_checkpoints"])
-            result["description"] = f"❌ The robot only passed {completed}/{total} checkpoints in the allotted time."
+            result["description"] = f"The robot only passed {completed}/{total} checkpoints in the allotted time."
+    
     return image, td, text, result

@@ -2,7 +2,7 @@
 
 ## Description
 
-Hello and welcome to sandbox-draw mode, where you can test your code. Additionally, you can execute Verify and a blue trail will be left behind the robot for 20 seconds.
+Hello and welcome to sandbox-draw mode, where you can test your code. Additionally, you can execute Verify' and a blue trail will be left behind the rover for 1 minute.
 
 ## Code example
 

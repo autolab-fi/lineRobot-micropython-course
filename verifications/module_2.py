@@ -64,7 +64,7 @@ def headlights(robot, image, td: dict):
     image = robot.draw_info(image)
 
     if robot:
-        lower_white = np.array([215, 215, 215])
+        lower_white = np.array([225, 225, 225])
         upper_white = np.array([255, 255, 255])
 
         # ✅ Use safe position retrieval
@@ -172,7 +172,7 @@ def alarm(robot, image, td: dict):
     current_state = False  # Default to OFF
 
     if robot:
-        lower_white = np.array([215, 215, 215])
+        lower_white = np.array([225, 225, 225])
         upper_white = np.array([255, 255, 255])
 
         robot_info = robot.get_info()

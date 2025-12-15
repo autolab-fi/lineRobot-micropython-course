@@ -8,7 +8,7 @@ import numpy as np
 target_points = {
     'short_distance_race': [(80, 50), (30, 0)],
     'maneuvering': [(35, 50), (30, 0)],
-    'long_distance_race': [(35, 50), (30, 0)]
+    'long_distance_race': [(35, 60), (30, 0)]
 }
 
 block_library_functions = {
@@ -234,13 +234,13 @@ def long_distance_race(robot, image, td: dict):
 
     if not td["data"] and robot:
         route = [
-            {'forward': 30, 'backward': 0},
+            {'forward': 35, 'backward': 0},
             [{'left': 90, 'right': 0}],
-            {'forward': 20, 'backward': 0},
+            {'forward': 25, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 28, 'backward': 0},
+            {'forward': 35, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 20, 'backward': 0}
+            {'forward': 25, 'backward': 0}
         ]
 
         td["data"]['targets'] = calculate_target_point(robot, route)

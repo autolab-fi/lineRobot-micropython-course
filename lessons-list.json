@@ -268,14 +268,6 @@
         "sn": 25,
         "description": "Use a snake-pattern sweep to uncover a provided foggy map and stop once coverage passes 90%.",
         "template": "# Write code here"
-      },
-      {
-        "str_id": "mineral_scanner_sweep",
-        "name": "Mineral Scanner Sweep",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Mineral%20Scanner%20Sweep.md",
-        "sn": 26,
-        "description": "Reach a waypoint, spin with an OpenCV cone overlay, and log mineral hits for later reporting.",
-        "template": "# Write code here"
       }
     ]
   }

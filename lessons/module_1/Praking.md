@@ -9,29 +9,60 @@ next: draw
 
 ## Objective
 
-Drive the robot through a short sequence of movements and park it in a specific spot.
+Program the robot to drive along a short route and park at a specific position and direction.
 
 ## Introduction
 
-You already know how to move the robot forward, backward, and turn it. This lesson puts those skills together. You’ll guide the robot through a small route and stop it exactly where it needs to be.
+So far, you have learned how to move the robot forward, backward, and turn it.
+In this lesson, you will combine those actions to complete a real task: parking.
+
+Parking is not about one single move. It is about doing the right moves in the right order so the robot ends up exactly where it should be.
 
 ## Theory
 
-This is like any other program, just a list of steps to take in order. But for a robot, everything is time based. Each action affects the next one.
+A robot program is simply a sequence of instructions:
 
-Parking is a perfect example of this. The robot must be in the correct location and orientation to be considered successful. But it can go straight and then turn and then move - what I'm saying is it essentially condenses movement into easier pieces of the puzzle. Also, using the compass rose pieces to differentiate movements are also helpful.
+- move forward
+
+- turn left or right
+
+- move again
+
+Each instruction changes the robot’s position and direction.
+Because of this, small errors early in the program can affect the final result.
+
+For this lesson, how you move is flexible, but where you end is not.
+
+The parking task is considered successful only if:
+
+- the robot reaches the correct final position
+
+- the robot is facing the correct direction
+
+The robot may take any valid route to get there.
 ## Assignment
-``` python
-from lineRobot import Robot
-robot=Robot()
-robot.move_distance()
-robot.turn_left()
-```
-You must program it so it can go in this route and park correctly, directionally.
+Write a program that:
 
+1. Starts from the default reset position
 
-You can refresh your memory of the library functions by revisiting the previous lessons.
+2. Drives the robot through a short route using movement commands
+
+3. Stops with the robot parked in the correct spot and orientation
+
+You must use the robot movement functions you learned earlier, such as:
+
+- moving forward by a distance
+
+- turning left or right
+
+The verification system will not check your commands directly.
+It will only check the robot’s final position and angle.
+
+If the robot is close enough to the required parking spot and direction, the task passes.
 
 ## Conclusion
+Great job reaching this lesson.
+Parking combines planning, sequencing, and precision.
+Once you understand this, you understand how real robot programs work.
 
 You are awesome! You've gained insight into the concept of a program and it's executor.

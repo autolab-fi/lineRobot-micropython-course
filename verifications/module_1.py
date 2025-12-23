@@ -10,6 +10,8 @@ target_points = {
     'maneuvering': [(35, 50), (30, 0)],
     'long_distance_race': [(35, 50), (30, 0)],
     "Parking" : [(20,30),(43,0)],
+    # Parking_final defines the REQUIRED final position and angle
+    # The task succeeds ONLY if the robot ends here within tolerance
     'Parking_final': [(115.3, 55.1), (177, 0)]
 }
 
@@ -418,8 +420,10 @@ def Parking(robot, image, td: dict):
 
 
 # ---------------------------------------------------------
-# TASK DISPATCHE
+# TASK DISPATCHER
 # ---------------------------------------------------------
+# run_task dispatches the active lesson verification
+# based on the selected task name
 
 def run_task(task, robot, image, td):
     if task == "Parking":

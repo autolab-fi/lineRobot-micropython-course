@@ -45,14 +45,14 @@ def fog_of_war_survey(robot, image, td):
     if not td:
         # Initialize fog of war overlay (only for map area)
         fog_overlay = np.zeros_like(image)
-        fog_overlay[:, :map_width] = (150, 150, 150)  # Dark gray fog only on map
+        fog_overlay[:, :map_width] = (0, 0, 0)  # Black fog only on map
 
         # Create revealed areas mask (only for map area)
         revealed_mask = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 50,  # 50 seconds to explore
+            "end_time": time.time() + 40,  # 50 seconds to explore
             "data": {
                 "fog_overlay": fog_overlay,
                 "revealed_mask": revealed_mask,
@@ -86,14 +86,15 @@ def fog_of_war_survey(robot, image, td):
 
         # Apply fog where not revealed (only on map area)
         fog_mask = cv2.bitwise_not(td["data"]["revealed_mask"])
-        fog_colored = cv2.bitwise_and(td["data"]["fog_overlay"], td["data"]["fog_overlay"], 
-                                       mask=fog_mask)
 
-        # Only apply fog to map area, leave debug panel clear
-        image[:, :td["data"]["map_width"]] = cv2.addWeighted(
-            image[:, :td["data"]["map_width"]], 1.0, 
-            fog_colored[:, :td["data"]["map_width"]], 0.7, 0
-        )
+        # Create a darkened version of the map (darken it even more)
+        darkened_map = (image[:, :td["data"]["map_width"]] * 0.1).astype(np.uint8)  # Darken to 5% brightness
+
+        # Apply the darkened map where fog exists
+        map_area = image[:, :td["data"]["map_width"]].copy()
+        fog_mask_map = fog_mask[:, :td["data"]["map_width"]]
+        map_area[fog_mask_map == 255] = darkened_map[fog_mask_map == 255]
+        image[:, :td["data"]["map_width"]] = map_area
 
         # Update text with current progress
         time_remaining = max(0, td["end_time"] - time.time())
@@ -110,13 +111,13 @@ def fog_of_war_survey(robot, image, td):
     progress_y = 30
     cv2.putText(image, f"Map Revealed: {revealed_percentage:.1f}% / {td['data']['target_percentage']}%", 
                 (20, progress_y), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
-    
+
     # Draw progress bar
     bar_x, bar_y, bar_w, bar_h = 20, progress_y + 10, 300, 20
     cv2.rectangle(image, (bar_x, bar_y), (bar_x + bar_w, bar_y + bar_h), (100, 100, 100), -1)
     progress_width = int((revealed_percentage / td['data']['target_percentage']) * bar_w)
     progress_width = min(progress_width, bar_w)
-    
+
     # Color: green if complete, yellow if in progress
     bar_color = (0, 255, 0) if td["data"]["task_completed"] else (0, 255, 255)
     cv2.rectangle(image, (bar_x, bar_y), (bar_x + progress_width, bar_y + bar_h), bar_color, -1)

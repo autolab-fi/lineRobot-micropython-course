@@ -268,6 +268,14 @@
         "sn": 25,
         "description": "Use a snake-pattern sweep to uncover a provided foggy map and stop once coverage passes 90%.",
         "template": "# Write code here"
+      },
+      {
+        "str_id": "docking",
+        "name": "Docking",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Docking.md",
+        "sn": 26,
+        "description": "Implement an auto-docking procedure to navigate the robot to a charging station ",
+        "template": "# Write code here"
       }
     ]
   }

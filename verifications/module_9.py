@@ -7,7 +7,8 @@ import numpy as np
 # Format: "task": [(x, y), (angle, speed)]
 target_points = {
     "fog_of_war_survey": [(30,30), (30, 0)],
-    "miniral_scanner_sweep" : [(30,50), (30, 0)]
+    "miniral_scanner_sweep" : [(30,50), (30, 0)],
+    "docking": [(50,61), (0, 0)]
 }
 
 # Library call restrictions to discourage bypassing the assignment
@@ -399,5 +400,98 @@ def miniral_scanner_sweep(robot, image, td):
     else:
         if current_time - td["finish_time"] >= 2:
             pass
+    
+    return image, td, text, result
+
+
+def docking(robot, image, td):
+    """
+    Auto-dock verification - robot must achieve charging >= 10
+    """
+    result = {
+        "success": True,
+        "description": "Finding charging station...",
+        "score": 0
+    }
+    text = "Move backward to find charging station!"
+    
+    image = robot.draw_info(image)
+    
+    if not td:
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 30,  # 30 seconds timeout
+            "data": {
+                "charging_detected": False,
+                "max_charging": 0,
+                "current_charging": 0,
+                "detection_time": None,
+                "task_completed": False
+            },
+            "finished": False,
+            "finish_time": None
+        }
+    
+    current_time = time.time()
+    
+    # Get charging status from robot messages
+    msg = robot.get_msg()
+    if msg:
+        # Try to parse charging value from message
+        # Assuming format like "Voltage: 23.40V, Charging: 12.34"
+        try:
+            if "Charging:" in str(msg):
+                charging_str = str(msg).split("Charging:")[1].strip()
+                td["data"]["current_charging"] = float(charging_str)
+        except:
+            pass
+    
+    # Update maximum charging seen
+    if td["data"]["current_charging"] > td["data"]["max_charging"]:
+        td["data"]["max_charging"] = td["data"]["current_charging"]
+    # Draw robot position
+    if robot and robot.position_px:
+        robot_x, robot_y = robot.position_px
+        circle_color = (0, 255, 0) if td["data"]["current_charging"] >= 10 else (0, 165, 255)
+        cv2.circle(image, (robot_x, robot_y), 25, circle_color, 3)
+    
+    # Check success condition
+    if td["data"]["current_charging"] >= 10:
+        if not td["data"]["charging_detected"]:
+            td["data"]["charging_detected"] = True
+            td["data"]["detection_time"] = current_time
+            text = f"Charging detected! Value: {td['data']['current_charging']:.2f}"
+        
+        # Confirm for 1 second before completion
+        if current_time - td["data"]["detection_time"] >= 1.0:
+            td["data"]["task_completed"] = True
+    
+    # Check completion
+    if not td.get("finished", False):
+        if td["data"]["task_completed"]:
+            td["finished"] = True
+            td["finish_time"] = current_time
+            result["success"] = True
+            result["score"] = 100
+            elapsed = td["data"]["detection_time"] - td["start_time"]
+            result["description"] = (
+                f"Success! Auto-dock complete in {elapsed:.1f}s. "
+                f"Charging value: {td['data']['current_charging']:.2f}"
+            )
+            text = "✓ DOCKED SUCCESSFULLY!"
+            
+        elif current_time > td["end_time"]:
+            td["finished"] = True
+            td["finish_time"] = current_time
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"Timeout - Charging station not found. "
+                f"Max charging reached: {td['data']['max_charging']:.2f} (needed: 10.00)"
+            )
+            text = f"✗ FAILED - Max charging: {td['data']['max_charging']:.2f}"
+    else:
+        if current_time - td["finish_time"] >= 2:
+            pass  # Keep final state
     
     return image, td, text, result

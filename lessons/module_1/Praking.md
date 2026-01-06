@@ -26,7 +26,7 @@ A robot program is simply a sequence of instructions:
 
 - turn left or right
 
-- move again!
+- move again
 
 Each instruction changes the robot’s position and direction.
 Because of this, small errors early in the program can affect the final result.

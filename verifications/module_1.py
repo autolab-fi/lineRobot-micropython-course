@@ -8,21 +8,13 @@ import numpy as np
 target_points = {
     'short_distance_race': [(80, 50), (30, 0)],
     'maneuvering': [(35, 50), (30, 0)],
-    'long_distance_race': [(35, 50), (30, 0)]
-
-    # Parking reset / reference position
-    'Parking': [(20, 30), (43, 0)],
-
-    # REQUIRED final parking position and angle
-    'Parking_final': [(115.3, 55.1), (177, 0)]
+    'long_distance_race': [(35, 60), (30, 0)]
 }
-
 
 block_library_functions = {
     'short_distance_race': False,
     'maneuvering': False,
     'long_distance_race': False,
-    'Parking':False
 }
 
 def get_block_library_functions(task):
@@ -346,101 +338,3 @@ def long_distance_race(robot, image, td: dict):
                     cv2.copyTo(mineral, mask, image[y - ymin:y + ymax, x - xmin:x + xmax])
 
     return image, td, text, result
-
-
-def Parking(robot, image, td: dict):
-    """Lesson 15: Parking verification"""
-
-    result = {
-        "success": True,
-        "description": "Parking completed successfully",
-        "score": 100
-    }
-
-    text = "Not recognized"
-
-    # Draw robot info
-    image = robot.draw_info(image)
-
-    # Init state
-    if not td:
-        td = {
-            "start_time": time.time(),
-            "end_time": time.time() + 30,
-            "parked": False,
-            "reset_checked": False
-        }
-
-    # ------------------------------
-    # 1. Check reset position
-    # ------------------------------
-    if not td["reset_checked"] and robot:
-
-        expected_pos, expected_ang_tuple = get_target_points("Parking")
-        expected_ang = expected_ang_tuple[0]
-
-        real_pos = robot.get_info().get("position")
-        real_ang = robot.compute_angle_x()
-
-        if real_pos is not None:
-            d = delta_points(real_pos, expected_pos)
-            a = abs((real_ang - expected_ang + 180) % 360 - 180)
-
-            text = f"Reset check: dist {d:.1f} cm | angle error {a:.1f}°"
-
-        td["reset_checked"] = True
-
-    # ------------------------------
-    # 2. Check final parking target
-    # ------------------------------
-    final_pos, final_ang_tuple = get_target_points("Parking_final")
-    final_ang = final_ang_tuple[0]
-
-    pos = robot.get_info().get("position")
-
-    if pos is not None:
-        dist = delta_points(pos, final_pos)
-        ang_err = abs((robot.compute_angle_x() - final_ang + 180) % 360 - 180)
-
-        text = f"Distance to parking: {dist:.1f} cm | angle error: {ang_err:.1f}°"
-
-        if dist < 4 and ang_err < 10:
-            td["parked"] = True
-            td["end_time"] = time.time() + 2
-
-    # ------------------------------
-    # 3. Timeout fail
-    # ------------------------------
-    if time.time() > td["end_time"] and not td["parked"]:
-        result["success"] = False
-        result["score"] = 0
-        result["description"] = (
-            f"Robot failed to park. Target: {final_pos} @ {final_ang}°"
-        )
-
-    return image, td, text, result
-
-
-
-# ---------------------------------------------------------
-# TASK DISPATCHER
-# ---------------------------------------------------------
-# run_task dispatches the active lesson verification
-# based on the selected task name
-
-def run_task(task, robot, image, td):
-    if task == "Parking":
-        return Parking(robot, image, td)
-
-    if task == "short_distance_race":
-        return short_distance_race(robot, image, td)
-    if task == "maneuvering":
-        return maneuvering(robot, image, td)
-    if task == "long_distance_race":
-        return long_distance_race(robot, image, td)
-
-    return image, td, "Unknown task", {
-        "success": False,
-        "description": "Task name not recognized",
-        "score": 0
-    }

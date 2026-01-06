@@ -9,11 +9,14 @@ target_points = {
     'short_distance_race': [(80, 50), (30, 0)],
     'maneuvering': [(35, 50), (30, 0)],
     'long_distance_race': [(35, 50), (30, 0)],
-    "Parking" : [(20,30),(43,0)],
-    # Parking_final defines the REQUIRED final position and angle
-    # The task succeeds ONLY if the robot ends here within tolerance
+
+    # Parking reset / reference position
+    'Parking': [(20, 30), (43, 0)],
+
+    # REQUIRED final parking position and angle
     'Parking_final': [(115.3, 55.1), (177, 0)]
 }
+
 
 block_library_functions = {
     'short_distance_race': False,

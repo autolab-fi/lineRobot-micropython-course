@@ -196,6 +196,14 @@
         "sn": 19,
         "description": "Manipulate a mixed-type list and report its contents and length via MQTT.",
         "template": "# Write code here"
+      },
+      {
+        "str_id": "mqtt_quiz_example",
+        "name": "MQTT Quiz Example",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mqtt_quiz_example.md",
+        "sn": 20,
+        "description": "Send a single ANSWER:42 message over MQTT for verification.",
+        "template": "# Write code here"
       }
     ]
   },
@@ -209,7 +217,7 @@
         "str_id": "basic_line_follower",
         "name": "Relay, P, and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
-        "sn": 20,
+        "sn": 21,
         "description": "Understand how different types of controllers work \u2014 Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
         "template": "# Write code here"
       },
@@ -217,7 +225,7 @@
         "str_id": "pi",
         "name": "P and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/P%20and%20PI.md",
-        "sn": 21,
+        "sn": 22,
         "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
         "template": "# Write code here"
       },
@@ -225,7 +233,7 @@
         "str_id": "pid",
         "name": "PID Controller",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/PID.md",
-        "sn": 22,
+        "sn": 23,
         "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
         "template": "# Write code here"
       }
@@ -241,7 +249,7 @@
         "str_id": "telemetry_heartbeat_health",
         "name": "Telemetry Heartbeat with Status Levels",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Telemetry%20Heartbeat%20with%20Status%20Levels.md",
-        "sn": 23,
+        "sn": 24,
         "description": "Derive a health flag from readiness, speed, and battery data and include it in the STATUS heartbeat.",
         "template": "# Write code here"
       },
@@ -249,7 +257,7 @@
         "str_id": "line_sensor_leds",
         "name": "Line Sensor Reactive LEDs",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",
-        "sn": 24,
+        "sn": 25,
         "description": "Mirror Octoliner readings to the LEDs using lists and dictionaries, then report the snapshot over MQTT.",
         "template": "# Write code here"
       }
@@ -265,7 +273,7 @@
         "str_id": "fog_of_war_survey",
         "name": "Fog of War Survey",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Fog%20of%20War%20Survey.md",
-        "sn": 25,
+        "sn": 26,
         "description": "Use a snake-pattern sweep to uncover a provided foggy map and stop once coverage passes 90%.",
         "template": "# Write code here"
       },
@@ -273,7 +281,7 @@
         "str_id": "docking",
         "name": "Docking",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Docking.md",
-        "sn": 26,
+        "sn": 27,
         "description": "Implement an auto-docking procedure to navigate the robot to a charging station ",
         "template": "# Write code here"
       }

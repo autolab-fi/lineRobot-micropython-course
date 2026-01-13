@@ -37,6 +37,7 @@ def mqtt_quiz_example(robot, image, td):
                 "validated": False,
                 "error": "No ANSWER message received yet.",
                 "messages": [],
+                "last_answer": None,
             },
             "finished": False,
             "finish_time": None,
@@ -44,6 +45,7 @@ def mqtt_quiz_example(robot, image, td):
 
     msg = robot.get_msg()
     if msg is not None:
+        td["data"]["last_answer"] = msg.strip()
         td["data"]["messages"].append(msg)
         text = f"Received: {msg}"
         match = re.match(r"^ANSWER:([+-]?\d+)$", msg.strip())
@@ -60,6 +62,18 @@ def mqtt_quiz_example(robot, image, td):
                     td["data"]["error"] = "Answer must be 42."
         else:
             td["data"]["error"] = "Message must match 'ANSWER:<number>'."
+
+    last_answer = td["data"].get("last_answer") or "ANSWER:..."
+    answer_color = (0, 255, 0) if td["data"]["validated"] else (0, 0, 255)
+    cv2.putText(
+        image,
+        f"Received: {last_answer}",
+        (20, 120),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.7,
+        answer_color,
+        2,
+    )
 
     cv2.putText(
         image,

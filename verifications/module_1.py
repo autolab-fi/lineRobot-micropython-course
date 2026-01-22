@@ -32,7 +32,7 @@ def delta_points(point_0, point_1):
                      ((point_0[1] - point_1[1]) ** 2))
 
 
-def short_distance_race(robot, image, td: dict):
+def short_distance_race(robot, image, td: dict, user_code=None):
     """Test for lesson 3: Short distance race"""
 
     result = {
@@ -96,7 +96,7 @@ def short_distance_race(robot, image, td: dict):
 
     return image, td, text, result
 
-def maneuvering(robot, image, td: dict):
+def maneuvering(robot, image, td: dict, user_code=None):
     """Test for lesson 4: Maneuvering"""
 
     result = {
@@ -212,7 +212,7 @@ def calculate_target_point(rb, targets):
     return res
 
 
-def long_distance_race(robot, image, td: dict):
+def long_distance_race(robot, image, td: dict, user_code=None):
     """Test for lesson 5: Long distance race."""
 
     result = {

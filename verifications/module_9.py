@@ -27,7 +27,7 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-def fog_of_war_survey(robot, image, td):
+def fog_of_war_survey(robot, image, td, user_code=None):
     """
     Assignment 1: Fog of War - Explore and reveal the map
     """
@@ -162,7 +162,7 @@ def fog_of_war_survey(robot, image, td):
 
     return image, td, text, result
     
-def miniral_scanner_sweep(robot, image, td):
+def miniral_scanner_sweep(robot, image, td, user_code=None):
     """
     Lesson 2.7: Multi-Point Mineral Survey
     Visit 5 scanning zones and activate scanner at each zone
@@ -404,7 +404,7 @@ def miniral_scanner_sweep(robot, image, td):
     return image, td, text, result
 
 
-def docking(robot, image, td):
+def docking(robot, image, td, user_code=None):
     """
     Auto-dock verification - robot must achieve charging >= 10
     """

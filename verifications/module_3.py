@@ -32,7 +32,7 @@ def get_target_points(task):
 
 
 
-def move_function(robot, image, td: dict):
+def move_function(robot, image, td: dict, user_code=None):
     """Test: Robot must turn 180 degrees."""
     # overlay robot info on image
     image = robot.draw_info(image)
@@ -79,7 +79,7 @@ def move_function(robot, image, td: dict):
 
 
 
-def electric_motor(robot, image, td: dict):
+def electric_motor(robot, image, td: dict, user_code=None):
     """Test for lesson 8: Electric motor"""
     result = {
         "success": True,
@@ -189,7 +189,7 @@ def rotate_image(image, angle):
     result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
     return result
 
-def differential_drive(robot, image, td):
+def differential_drive(robot, image, td, user_code=None):
     """Verification function for driving straight assignment"""
     result = {
         "success": True,

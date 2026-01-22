@@ -23,7 +23,7 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-def line_sensor_intro(robot, image, td):
+def line_sensor_intro(robot, image, td, user_code=None):
     result = {
         "success": True,
         "description": "Verifying sensor values...",

@@ -25,7 +25,7 @@ def get_target_points(task):
     return target_points.get(task, [])
 
 
-def headlights(robot, image, td: dict):
+def headlights(robot, image, td: dict, user_code=None):
     """Test for lesson 6: Headlights."""
 
     result = {
@@ -114,7 +114,7 @@ def headlights(robot, image, td: dict):
     return image, td, text, result
 
 
-def alarm(robot, image, td: dict):
+def alarm(robot, image, td: dict, user_code=None):
     """lesson 7: Alarm - Detects LED blinking with 1-second intervals."""
 
     result = {

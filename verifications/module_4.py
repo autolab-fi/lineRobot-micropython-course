@@ -22,7 +22,7 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-def encoders(robot, image, td):
+def encoders(robot, image, td, user_code=None):
     """Verification function for Lesson 1: Encoder"""
     result = {
         "success": True,

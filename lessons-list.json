@@ -8,57 +8,73 @@
       {
         "str_id": "sandbox",
         "name": "Sandbox",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/sandbox.md",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/sandbox.md",
         "sn": 0,
         "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
         "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
-      },
-      {
-        "str_id": "test_drive",
-        "name": "Test drive",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/test_drive.md",
-        "sn": 1,
-        "description": "Some introductory words on moving the robot forward using a library.",
-        "template": "# Paste code here"
-      },
-      {
-        "str_id": "license_to_drive",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/license_to_drive.md",
-        "sn": 2,
-        "name": "License to drive",
-        "description": "Writing a simple program independently, similar to the previous lesson.",
-        "template": "# Write code here"
       }
     ]
   },
   {
-    "name": "Controlling Robot Movement",
+    "name": "Manual Control & Python Basics",
     "description": "Demonstrating the robot's capabilities.",
     "sn": 1,
     "str_id": "module_1",
     "lessons": [
       {
-        "str_id": "short_distance_race",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/short_distance_race.md",
+        "str_id": "welcome",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.1.md",
+        "sn": 1,
+        "name": "Mission 1.1. Welcome to Artemis Support Program",
+        "description": "Get oriented with the mission control interface and verify the rover connection.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "test_drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.2.md",
+        "sn": 2,
+        "name": "Mission 1.2. Test drive",
+        "description": "Create a robot object and run your first movement command.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "license_to_drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.3.md",
         "sn": 3,
-        "name": "Short distance race",
-        "description": "Using library functions to move a specific distance, both forward and backward.",
+        "name": "Mission 1.3. License to drive",
+        "description": "Write a simple program independently using import, object creation, and movement commands.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "directional_movement",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.4.md",
+        "sn": 4,
+        "name": "Mission 1.4. Directional Movement",
+        "description": "Use distance-based movement functions to move forward and backward precisely.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "python_variables_&_commands",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.5.md",
+        "sn": 5,
+        "name": "Mission 1.5. Python Variables & Commands",
+        "description": "Introduce variables, arithmetic, and print statements to control and report motion.",
         "template": "# Write code here"
       },
       {
         "str_id": "maneuvering",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/maneuvering.md",
-        "sn": 4,
-        "name": "Maneuvering",
-        "description": "Turning right and left in place. Task: Read data from a file and write it to another.",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.6.md",
+        "sn": 6,
+        "name": "Mission 1.6. Maneuvering",
+        "description": "Perform 90-degree and precision turns with and without variables.",
         "template": "# Write code here"
       },
       {
-        "str_id": "long_distance_race",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/long_distance_race.md",
-        "sn": 5,
-        "name": "Fruit Ninja",
-        "description": "Writing a program with a sequence of commands to move along a trajectory depicted in the diagram.",
+        "str_id": "sequential_navigation",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.7.md",
+        "sn": 7,
+        "name": "Mission 1.7. Sequential navigation",
+        "description": "Plan a multi-step route and document your code using comments.",
         "template": "# Write code here"
       }
     ]

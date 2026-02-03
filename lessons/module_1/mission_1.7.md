@@ -6,7 +6,7 @@ previous: maneuvering
 next: weekly_challenge_1
 ---
 
-# Mission 1.7. Sequential navigation
+# Mission 1.7 Sequential navigation
 
 ## Objective
 

@@ -6,7 +6,7 @@ previous: python_variables_&_commands
 next: sequential_navigation
 ---
 
-# Mission 1.6. Maneuvering
+# Mission 1.6 Maneuvering
 
 ## Objective
 
@@ -35,15 +35,15 @@ As you can see, the turning functions don't require any parameters. It's suffici
 Real-world paths are rarely perfect squares. Sometimes you need to turn just a little bit, or make a U-turn.
 To do this, you can pass a **parameter** (an integer or float) to the turn functions.
 
-* **`robot.turn_right(degrees)`** — Turns right by the specified angle.
-* **`robot.turn_left(degrees)`** — Turns left by the specified angle.
+* **`robot.turn_right_angle(degrees)`** — Turns right by the specified angle.
+* **`robot.turn_left_angle(degrees)`** — Turns left by the specified angle.
 
 ### 3. Using Variables for Turns
 Remember the variables from the last mission? You can use them here too! This makes your code readable and easy to change.
 
 ```python
 turn_angle = 45
-robot.turn_left(turn_angle)
+robot.turn_left_angle(turn_angle)
 ```
 
 ## Assignment

@@ -96,8 +96,8 @@ def short_distance_race(robot, image, td: dict): #now it's 1.4
 
     return image, td, text, result
 
-def maneuvering(robot, image, td: dict): #now lesson 1.6
-    """Test for lesson 4: Maneuvering"""
+def maneuvering(robot, image, td: dict, user_code=None): 
+    """Test for Mission 1.6 Maneuvering"""
 
     result = {
         "success": True,
@@ -112,7 +112,7 @@ def maneuvering(robot, image, td: dict): #now lesson 1.6
             "start_time": time.time(),
             "end_time": time.time() + 20,
             "target_angle": [
-                {"left": 90, "right": 0},
+                {"left": 145, "right": 0},
                 {"left": 90, "right": 0},
                 {"left": 0, "right": 90}
             ]
@@ -212,8 +212,8 @@ def calculate_target_point(rb, targets):
     return res
 
 
-def long_distance_race(robot, image, td: dict): #now lesson 1.7
-    """Test for lesson 5: Long distance race."""
+def long_distance_race(robot, image, td: dict): 
+    """Test for 1.7 Sequential navigation"""
 
     result = {
         "success": True,

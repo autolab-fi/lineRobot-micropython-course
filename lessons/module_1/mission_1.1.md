@@ -6,7 +6,7 @@ previous:
 next: test_drive
 ---
 
-# Mission 1.1 Welcome to Artemis Support Program
+# Mission 2.1 Welcome to Artemis Support Program
 
 ## Objective
 
@@ -52,4 +52,4 @@ System check complete!
 
 You have successfully connected to the platform and verified the communication link. In the next mission, we will introduce you to the rover hardware and analyze how this code actually works.
 
-Proceed to Mission 1.2.
+Proceed to next Mission

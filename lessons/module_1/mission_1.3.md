@@ -6,7 +6,7 @@ previous: test_drive
 next: directional_movement
 ---
 
-# Mission 1.3 License to drive
+# Mission 2.3 License to drive
 
 ## Objective
 

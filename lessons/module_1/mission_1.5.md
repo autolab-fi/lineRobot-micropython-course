@@ -1,7 +1,7 @@
 ---
 index: 5
 module: module_1
-task: python_variables_&_commands
+task: python_variables_commands
 previous: directional_movement
 next: maneuvering
 ---

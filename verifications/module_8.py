@@ -23,7 +23,7 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
     
-def telemetry_heartbeat_health(robot, image, td):
+def telemetry_heartbeat_health(robot, image, td, user_code=None):
     result = {
         "success": True,
         "description": "Verifying robot status messages...",
@@ -129,7 +129,7 @@ def telemetry_heartbeat_health(robot, image, td):
     return image, td, text, result
 
 
-def line_sensor_leds(robot, image, td: dict):
+def line_sensor_leds(robot, image, td: dict, user_code=None):
     """Verification: Check if LEDs flash with 2-second ON and 2-second OFF intervals"""
 
     result = {

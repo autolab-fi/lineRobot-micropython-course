@@ -35,7 +35,7 @@ def get_target_points(task):
     return target_points.get(task, [])
 
 
-def hello_mqtt_variables(robot, image, td):
+def hello_mqtt_variables(robot, image, td, user_code=None):
     result = {
         "success": True,  # Changed to True to keep running
         "description": "Awaiting STATUS message...",
@@ -143,7 +143,7 @@ def hello_mqtt_variables(robot, image, td):
     return image, td, text, result
 
 
-def mission_time_report(robot, image, td):
+def mission_time_report(robot, image, td, user_code=None):
     result = {
         "success": True,  # Changed to True to keep running
         "description": "Awaiting mission report...",
@@ -252,7 +252,7 @@ def mission_time_report(robot, image, td):
     return image, td, text, result
 
 
-def sensor_log_summary(robot, image, td):
+def sensor_log_summary(robot, image, td, user_code=None):
     result = {
         "success": True,  # Changed to True to keep running
         "description": "Awaiting LOG messages...",
@@ -375,7 +375,7 @@ def sensor_log_summary(robot, image, td):
 
     return image, td, text, result
 
-def list_operations_check(robot, image, td):
+def list_operations_check(robot, image, td, user_code=None):
     result = {
         "success": True,  # Changed to True to keep running
         "description": "Awaiting LIST messages...",
@@ -498,7 +498,7 @@ def list_operations_check(robot, image, td):
     return image, td, text, result
 
 
-def introduction_to_variables_and_conditional_statements(robot, image, td):
+def introduction_to_variables_and_conditional_statements(robot, image, td, user_code=None):
     """Check that at least one sensor is reported as ON LINE within the allotted time."""
     result = {
         "success": True,
@@ -540,7 +540,7 @@ def introduction_to_variables_and_conditional_statements(robot, image, td):
     return image, td, text, result
 
 
-def loops_and_conditional_logic(robot, image, td):
+def loops_and_conditional_logic(robot, image, td, user_code=None):
     result = {
         "success": True,
         "description": "Collecting sensor data...",
@@ -591,7 +591,7 @@ def loops_and_conditional_logic(robot, image, td):
     return image, td, text, result
 
 
-def array_and_processing_data(robot, image, td):
+def array_and_processing_data(robot, image, td, user_code=None):
     result = {
         "success": True,
         "description": "Checking for values above 200...",

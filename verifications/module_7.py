@@ -26,24 +26,56 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-def basic_line_follower(robot, image, td: dict):
+def basic_line_follower(robot, image, td: dict, user_code=None):
     """Place checkpoints only in cells 1 and 2 (first row, first two cells)"""
     cell_indices = [0, 1,4]  # Cells 1, 2
-    return checkpoint_verification_grid(robot, image, td, cell_indices, 20, "basic_line_follower")
+    return checkpoint_verification_grid(
+        robot,
+        image,
+        td,
+        cell_indices,
+        20,
+        "basic_line_follower",
+        user_code=user_code,
+    )
 
 
-def pi(robot, image, td: dict):
+def pi(robot, image, td: dict, user_code=None):
     """Place checkpoints in cells 2, 3, 5, 6, 8, 9"""
     cell_indices = [3,6,7,10,11]  # Cells 2, 3, 5, 6, 8, 9 (0-indexed)
-    return checkpoint_verification_grid(robot, image, td, cell_indices, 30, "pi")
+    return checkpoint_verification_grid(
+        robot,
+        image,
+        td,
+        cell_indices,
+        30,
+        "pi",
+        user_code=user_code,
+    )
 
 
-def pid(robot, image, td: dict):
+def pid(robot, image, td: dict, user_code=None):
     """Place checkpoints in all 12 cells"""
     cell_indices = [0,1,3,4,5,6,7,8,9,10,11]  # All cells
-    return checkpoint_verification_grid(robot, image, td, cell_indices, 50, "pid")
+    return checkpoint_verification_grid(
+        robot,
+        image,
+        td,
+        cell_indices,
+        50,
+        "pid",
+        user_code=user_code,
+    )
 
-def checkpoint_verification_grid(robot, image, td, cell_indices, verification_time, task_name):
+def checkpoint_verification_grid(
+    robot,
+    image,
+    td,
+    cell_indices,
+    verification_time,
+    task_name,
+    user_code=None,
+):
     """
     Crops the image to a region of interest (ROI), divides it into a 3x4 grid (3 rows, 4 cols),
     and places checkpoints only in specified cells on the black line.

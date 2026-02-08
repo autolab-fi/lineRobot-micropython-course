@@ -6,7 +6,7 @@ previous: python_variables_&_commands
 next: sequential_navigation
 ---
 
-# Maneuvering
+# Mission 2.6 Maneuvering
 
 ## Objective
 

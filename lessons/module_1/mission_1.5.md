@@ -6,7 +6,7 @@ previous: directional_movement
 next: maneuvering
 ---
 
-# Python Variables & Commands
+# Mission 2.5 Python Variables & Commands
 
 ## Objective
 

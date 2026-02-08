@@ -3,18 +3,27 @@ import math
 import time
 import os
 import numpy as np
+import re
 
 
 target_points = {
-    'short_distance_race': [(80, 50), (30, 0)],
+    'welcome': [(35, 50), (30, 0)],
+    'test_drive': [(35, 50), (30, 0)],
+    'license_to_drive': [(35, 50), (30, 0)],
+    'directional_movement': [(80, 50), (30, 0)],
+    'python_variables_commands': [(80, 50), (30, 0)],
     'maneuvering': [(35, 50), (30, 0)],
-    'long_distance_race': [(35, 60), (30, 0)]
+    'sequential_navigation': [(35, 60), (30, 0)]
 }
 
 block_library_functions = {
-    'short_distance_race': False,
+    'welcome': False,
+    'test_drive': False,
+    'license_to_drive': False,
+    'directional_movement': False,
+    'python_variables_commands': False,
     'maneuvering': False,
-    'long_distance_race': False,
+    'sequential_navigation': False,
 }
 
 def get_block_library_functions(task):
@@ -31,9 +40,94 @@ def delta_points(point_0, point_1):
     return math.sqrt(((point_0[0] - point_1[0]) ** 2) +
                      ((point_0[1] - point_1[1]) ** 2))
 
+def welcome(robot, image, td: dict, user_code=None):
+    """Test for Mission 1.1 Welcome"""
+    result = {
+        "success": True,
+        "description": "Connection established! System check complete.",
+        "score": 100
+    }
 
-def short_distance_race(robot, image, td: dict, user_code=None):
-    """Test for lesson 3: Short distance race"""
+    if not td:
+        td = {"start_time": time.time(), "end_time": time.time() + 2}
+
+    if time.time() > td["end_time"]:
+        return image, td, "Link: Stable", result
+    
+    return image, td, "Checking connection...", result
+
+
+def test_drive(robot, image, td: dict, user_code=None):
+    """Test for Mission 1.2 Test drive"""
+
+    # init result dictionary
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    # init test data dictionary
+    if not td:
+        td = {
+            "end_time": time.time() + 10,
+            'time_for_task': 3,
+            "prev_robot_center": None
+        }
+
+    robot_position = robot.get_info()["position"]
+
+    text = "Not recognized"
+    image = robot.draw_info(image)
+
+    # check if robot position is not none and previous robot is not none
+    if  td["prev_robot_center"] is not None and robot_position is not None:
+        # calculate delta position
+        delta_pos = delta_points(robot_position, td["prev_robot_center"])
+        
+        text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
+        # init time when robot started motion
+        if 'robot_start_move_time' not in td and delta_pos>0.7:
+            td['robot_start_move_time'] = time.time()
+            td["end_time"] = time.time() + td['time_for_task'] + 3
+        # init time when robot finished motion
+        if 'robot_start_move_time' in td and 'robot_end_move_time' not in td and delta_pos<0.7:
+            td['robot_end_move_time'] = time.time()
+
+    # check if task failed
+    if ('robot_end_move_time' not in td and td["end_time"]-1<time.time()
+            ) or ('robot_start_move_time'in td and 'robot_end_move_time' in td and 
+            (td['time_for_task']+0.8<td['robot_end_move_time']-td['robot_start_move_time'] 
+            or td['robot_end_move_time']-td['robot_start_move_time']<td['time_for_task']-0.8)):
+
+        result["success"] = False
+        result["score"] = 0
+        # check reason that task failed
+        if 'robot_start_move_time' in td and ('robot_end_move_time' not in td or 'robot_end_move_time' in td 
+            and td['robot_start_move_time']+td['time_for_task']+0.7<td['robot_end_move_time']):
+            result["description"] = 'It is disappointing, but robot failed the task. The robot moved more than it should have.'
+        else:
+            result["description"] = 'It is disappointing, but robot failed the task. The robot moved less then it should have'
+    
+    # update previous robot position
+    if robot_position:
+        td["prev_robot_center"] = robot_position
+
+    return image, td, text, result
+
+def license_to_drive(robot, image, td: dict, user_code=None):
+    """Test for Mission 1.3 License to drive"""
+    # init test data dictionary
+    if not td:
+        td = {
+            "end_time": time.time() + 10,
+            'time_for_task': 5,
+            "prev_robot_center": None
+        }
+
+    return test_drive(robot, image, td)
+
+def directional_movement(robot, image, td: dict, user_code=None):
+    """Test for Mission 1.4 Directional Movement"""
 
     result = {
         "success": True,
@@ -96,8 +190,45 @@ def short_distance_race(robot, image, td: dict, user_code=None):
 
     return image, td, text, result
 
-def maneuvering(robot, image, td: dict, user_code=None):
-    """Test for lesson 4: Maneuvering"""
+def python_variables_commands(robot, image, td: dict, user_code):
+    """Test for Mission 1.5 Python Variables & Commands"""
+    
+    if not td:
+        td = {
+            "end_time": time.time() + 25,
+            "prev_robot_center": None,
+            "goal": {"forward": 15, "backward": 20.5}
+        }
+
+    # Physical movement check
+    image, td, text, move_result = directional_movement(robot, image, td)
+
+    # Code style check
+    has_float = re.search(r"=\s*\d+\.\d+", user_code)
+    has_int = re.search(r"=\s*\d+", user_code)
+    has_plus = "+" in user_code
+    has_print = "print" in user_code
+    code_is_correct = has_float and has_int and has_plus and has_print
+
+    # Final judgment logic
+    time_up = time.time() > td["end_time"]
+    movement_done = (td['goal']['forward'] <= 3 and td['goal']['backward'] <= 3)
+
+    # If physical task is finished or time is out, check the code style
+    if movement_done or time_up:
+        if not code_is_correct:
+            move_result.update({
+                "success": False,
+                "score": 0,
+                "description": "Task failed. Use variables (int, float), '+' and print()."
+            })
+            # Return current position (text) along with the error
+            return image, td, text, move_result
+        
+    return image, td, text, move_result
+
+def maneuvering(robot, image, td: dict, user_code): 
+    """Test for Mission 1.6 Maneuvering"""
 
     result = {
         "success": True,
@@ -112,7 +243,7 @@ def maneuvering(robot, image, td: dict, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + 20,
             "target_angle": [
-                {"left": 90, "right": 0},
+                {"left": 145, "right": 0},
                 {"left": 90, "right": 0},
                 {"left": 0, "right": 90}
             ]
@@ -150,6 +281,16 @@ def maneuvering(robot, image, td: dict, user_code=None):
         text = f"Current angle with x-axis: {ang:0.0f}"
         td['ang_0'] = ang
 
+    # Code style check
+    style_ok = True
+    param_match = re.search(r"turn_left_angle\s*\(\s*([^)]+)\s*\)", user_code)
+    if param_match:
+        param = param_match.group(1).strip()
+        if re.match(r"^\d+\.?\d*$", param): # If only digits
+            style_ok = False
+    else:
+        style_ok = False
+
     if (
         td['target_angle'][-1]['left'] < -min_for_error or
         td['target_angle'][-1]['right'] < -min_for_error or
@@ -178,6 +319,10 @@ def maneuvering(robot, image, td: dict, user_code=None):
                     f"{int(td['target_angle'][i]['left'])} degrees left; "
                 )
 
+    if result["success"] and not style_ok:
+        result["success"] = False
+        result["score"] = 0
+        result["description"] = "Task failed. Use a variable for the 145 degree turn."
 
     result["description"] += f' | Score: {result["score"]}'  
     return image, td, text, result
@@ -212,8 +357,8 @@ def calculate_target_point(rb, targets):
     return res
 
 
-def long_distance_race(robot, image, td: dict, user_code=None):
-    """Test for lesson 5: Long distance race."""
+def sequential_navigation(robot, image, td: dict, user_code): 
+    """Test for Mission 1.7 Sequential navigation"""
 
     result = {
         "success": True,
@@ -231,6 +376,10 @@ def long_distance_race(robot, image, td: dict, user_code=None):
             "delta": 4,
             "reached_point": False
         }
+
+    # Code style check
+    comments_count = user_code.count('#')
+    style_ok = comments_count >= 3
 
     if not td["data"] and robot:
         route = [
@@ -316,6 +465,13 @@ def long_distance_race(robot, image, td: dict, user_code=None):
         result["description"] = text
         result["success"] = False
         result["score"] = 0
+
+    # Final check
+    time_up = time.time() > td["end_time"]
+    if td["data"].get('reached_point') or time_up:
+        if not style_ok and result["success"]:
+            result.update({"success": False, "score": 0, 
+                           "description": "Task failed. Use at least 3 comments (#) in your code."})
 
     # Draw minerals at checkpoint locations with masking
     if td["data"] and td["data"]["mineral"] is not None and td["data"]["mask"] is not None:

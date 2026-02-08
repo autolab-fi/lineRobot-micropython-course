@@ -6,7 +6,7 @@ previous: welcome
 next: license_to_drive
 ---
 
-# Mission 1.2 Test drive
+# Test drive
 
 ## Objective
 

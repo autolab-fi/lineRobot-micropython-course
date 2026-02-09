@@ -22,7 +22,7 @@ In this mission, you will learn how to orient the robot in space. We will cover 
 
 Below, the image represents the possible directions of the robot's movement.
 
-![robot_directions](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_1/directions.png?raw=true)
+![robot_directions](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/robot_directions.png?raw=true)
 
 ### 1. Standard Turns (90 Degrees)
 For simple navigation, like a maze or a city grid, we usually turn exactly 90 degrees.

@@ -28,7 +28,7 @@ Watch the briefing video below to understand the mission:
 
 Before you begin coding, take a moment to understand your workspace.
 
-![Interface](../../images/module-1/Interface1.png)
+![Interface](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/Interface1.png?raw=true)
 
 * **Red Box:** This area contains the **Mission Briefing** (instructions). Read these carefully.
 * **Yellow Box:** This is the **Code Editor**. Here you will write your Python scripts.
@@ -43,7 +43,7 @@ Let's run a system check to make sure you are connected to the facility. You don
 
 Upload the program to the rover - see the animation below: click the Verify button (Red Arrow), watch the video feed (Blue Box):
 
-![Interface's animation](../../images/module-1/upload.gif)
+![Interface's animation](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/upload.gif?raw=true)
 
 
 ## Conclusion

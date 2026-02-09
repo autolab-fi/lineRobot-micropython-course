@@ -47,14 +47,22 @@ def welcome(robot, image, td: dict, user_code=None):
         "description": "Connection established! System check complete.",
         "score": 100
     }
+    image = robot.draw_info(image)
+    msg = robot.get_msg()
 
     if not td:
         td = {"start_time": time.time(), "end_time": time.time() + 2}
 
     if time.time() > td["end_time"]:
-        return image, td, "Link: Stable", result
+        text = "Link: Stable"
+        if msg is not None:
+            text = f"Message received: {msg}"
+        return image, td, text, result
     
-    return image, td, "Checking connection...", result
+    text = "Checking connection..."
+    if msg is not None:
+        text = f"Message received: {msg}"
+    return image, td, text, result
 
 
 def test_drive(robot, image, td: dict, user_code=None):

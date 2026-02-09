@@ -13,7 +13,7 @@ target_points = {
     'directional_movement': [(80, 50), (30, 0)],
     'python_variables_commands': [(80, 50), (30, 0)],
     'maneuvering': [(35, 50), (30, 0)],
-    'sequential_navigation': [(35, 60), (30, 0)]
+    'sequential_navigation': [(35, 60), (30, 0)],
 }
 
 block_library_functions = {
@@ -33,8 +33,8 @@ def get_block_library_functions(task):
 
 # function to get value from dictionary target_point
 def get_target_points(task):
-    global target_points
-    return target_points[task]
+    """Retrieve target points for a given task."""
+    return target_points.get(task, [])
 
 def delta_points(point_0, point_1):
     return math.sqrt(((point_0[0] - point_1[0]) ** 2) +

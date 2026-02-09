@@ -27,7 +27,7 @@
         "sn": 1,
         "name": "Welcome to Artemis Support Program",
         "description": "Get oriented with the mission control interface and verify the rover connection.",
-        "template": "from lineRobot import Robot\n\nprint(\"--- ARTEMIS LTV SYSTEM DIAGNOSTIC ---\")\nprint(\"Initializing hardware...\")\n\n# Initialize LTV unit\nltv_unit = Robot()\n\nprint(\"[TEST 1] Checking Main Drive...\")\nltv_unit.move_forward_distance(15)\nltv_unit.move_backward_distance(15)\n\nprint(\"[TEST 2] Checking Steering Mechanism...\")\nltv_unit.turn_left()\nltv_unit.turn_right()\n\nprint(\"--- DIAGNOSTIC COMPLETE. SYSTEMS NOMINAL. ---\")\nprint(\"Welcome to the team!\")"
+        "template": "from lineRobot import Robot\n\nprint(\"ARTEMIS LTV SYSTEM DIAGNOSTIC\")\nprint(\"Initializing hardware...\")\n\n# Initialize LTV unit\nltv_unit = Robot()\n\nprint(\"[TEST 1] Checking Main Drive...\")\nltv_unit.move_forward_distance(15)\nltv_unit.move_backward_distance(15)\n\nprint(\"[TEST 2] Checking Steering Mechanism...\")\nltv_unit.turn_left()\nltv_unit.turn_right()\n\nprint(\"DIAGNOSTIC COMPLETE. SYSTEMS NOMINAL.\")\nprint(\"Welcome to the team!\")"
       },
       {
         "str_id": "test_drive",

@@ -36,3 +36,8 @@ Course info:
 - *imageBig*: URL for the large image (approximately 1920x1080 px).
 - *workload*: Estimated time required to complete the course.
 - *programmingLanguage*: string identifyer of programming language used in course.
+
+## Verification documentation (for maintainers)
+
+- Start here: [`docs/verification-documentation-assignment.md`](docs/verification-documentation-assignment.md)
+- Runtime verification contract details: [`docs/task_test_documentation.md`](docs/task_test_documentation.md)

@@ -294,5 +294,14 @@
         "template": "# Write code here"
       }
     ]
+  },
+  {
+             "str_id": "Parking",
+       
+        "sn":6,
+        "name": "Parking",
+        "description":"Write a program with the correct command to park the robo car",
+        "template": "#Write code here"
+        /* "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Parking.md"*/
   }
 ]

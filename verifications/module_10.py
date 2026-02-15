@@ -28,7 +28,8 @@ def get_target_points(task):
 # HELPERS
 
 def delta_points(a, b):
-    return math.sqrt((a[0] - b[0])2 + (a[1] - b[1])2)
+    return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+
 
 
 def angle_diff(a, b):

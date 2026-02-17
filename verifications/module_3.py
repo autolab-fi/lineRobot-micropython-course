@@ -595,7 +595,7 @@ def processing_sensor_data(robot, image, td, user_code=None):
         basepath = os.path.abspath(os.path.dirname(__file__))
 
         try:
-            mineral_img = cv2.imread(os.path.join(basepath, "mineral.png"), cv2.IMREAD_UNCHANGED)
+            mineral_img = cv2.imread(os.path.join(basepath, "images", "mineral.png"), cv2.IMREAD_UNCHANGED)
 
             if mineral_img is None:
                 print("Warning: mineral.png not found, using placeholder")

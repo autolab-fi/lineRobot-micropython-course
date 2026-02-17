@@ -3,11 +3,14 @@ import math
 import time
 import os
 import numpy as np
+import re
 
 target_points = {
     'differential_drive': [(30, 50), (30, 0)],
     'move_function':[(50, 50), (30, 0)],
-    'electric_motor': [(50, 50), (30, 0)]
+    'electric_motor': [(50, 50), (30, 0)],
+    'intro_to_octoliner': [(100,60),(30,0)],
+    'processing_sensor_data': [(60,60),(30,0)]
 }
 
 block_library_functions = {
@@ -394,4 +397,307 @@ def differential_drive(robot, image, td, user_code=None):
             result["description"] = f"Robot only drove straight for {td['data']['straight_driving_duration']:.1f}s (need 3.0s)"
             result["score"] = 0
     
+    return image, td, text, result
+
+#NEW
+
+def intro_to_octoliner(robot, image, td, code):
+    """
+    Octoliner Introduction Task - Verify student reads sensor 3 or 4
+    Uses state-lock pattern to prevent result overwriting by platform
+    """
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    # CRITICAL: Always start with success=True (platform requirement)
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Not recognized"
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if td is None:
+        # Code validation - check for analog_read(3) or analog_read(4)
+        # Filter out commented lines to avoid false positives
+        lines = code.split('\n')
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        has_sensor_3 = "analog_read(3)" in active_code
+        has_sensor_4 = "analog_read(4)" in active_code
+
+        code_valid = has_sensor_3 or has_sensor_4
+        missing = [] if code_valid else ["analog_read(3) or analog_read(4)"]
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 20,
+            "data": {
+                "sensor_3": None,
+                "sensor_4": None,
+                "completed": False,
+                "code_valid": code_valid,
+                "missing_functions": missing
+            }
+        }
+
+    # ===== 2. STATE LOCK - Early Return if Already Completed =====
+    # If task already completed, return saved result immediately
+    # This prevents platform from overwriting our result
+    if td["data"].get("completed", False):
+        final_result = td["data"].get("final_result", result)
+        final_text = td["data"].get("final_text", text)
+
+        # Still draw sensor values on video
+        image = robot.draw_info(image)
+        if td["data"]["sensor_3"] is not None:
+            cv2.putText(image, f"Sensor 3: {td['data']['sensor_3']}", (20, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 1)
+        if td["data"]["sensor_4"] is not None:
+            cv2.putText(image, f"Sensor 4: {td['data']['sensor_4']}", (20, 50),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 1)
+
+        return image, td, final_text, final_result
+
+    # ===== 3. DRAWING & TELEMETRY =====
+    image = robot.draw_info(image)
+
+    info = robot.get_info()
+    robot_position = info.get('position')
+    if robot_position is not None:
+        text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
+
+    # Display sensor values on video overlay
+    if td["data"]["sensor_3"] is not None:
+        cv2.putText(image, f"Sensor 3: {td['data']['sensor_3']}", (20, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 1)
+    if td["data"]["sensor_4"] is not None:
+        cv2.putText(image, f"Sensor 4: {td['data']['sensor_4']}", (20, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 1)
+
+    # ===== 4. MESSAGE PROCESSING =====
+    msg = robot.get_msg()
+
+    if td["data"]["code_valid"] and msg is not None:
+        # Extract numbers from message (e.g., "Sensor 3: 450")
+        numbers = [int(num) for num in re.findall(r'\d+', msg)]
+        if numbers:
+            # Store first number in empty sensor slot
+            if td["data"]["sensor_3"] is None:
+                td["data"]["sensor_3"] = numbers[0]
+            elif td["data"]["sensor_4"] is None:
+                td["data"]["sensor_4"] = numbers[0]
+
+        # Update text to show message received
+        text = f"Message received: {msg}"
+
+    # ===== 5. EVALUATION LOGIC =====
+    elapsed = time.time() - td["start_time"]
+    timeout_reached = time.time() >= td["end_time"]
+    got_sensor_data = (td["data"]["sensor_3"] is not None or
+                       td["data"]["sensor_4"] is not None)
+
+    if td["data"]["code_valid"]:
+        # Code is valid - check if we got data or timed out
+        if got_sensor_data or timeout_reached:
+            td["data"]["completed"] = True  # Set completion flag FIRST
+
+            if got_sensor_data:
+                # SUCCESS: Got sensor reading
+                result = {
+                    "success": True,
+                    "score": 100,
+                    "description": f"Perfect! Sensor reading received: S3={td['data']['sensor_3']}, S4={td['data']['sensor_4']}"
+                }
+                text = "Assignment complete!"
+            else:
+                # FAIL: Timeout without data
+                result = {
+                    "success": False,  # Safe because completed=True is set
+                    "score": 0,
+                    "description": "Timeout: No sensor readings received"
+                }
+                text = "No readings received."
+    else:
+        # Code validation failed - wait 3 seconds before failing
+        # This gives MQTT time to stabilize
+        if elapsed > 3.0:
+            td["data"]["completed"] = True  # Set completion flag FIRST
+            result = {
+                "success": False,  # Safe because completed=True is set
+                "score": 0,
+                "description": f"Code missing required functions: {', '.join(td['data']['missing_functions'])}"
+            }
+            text = "Code validation failed."
+
+    # ===== 6. SAVE FINAL STATE =====
+    # Store result in td so state lock can return it on subsequent frames
+    if td["data"]["completed"]:
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
+    
+
+def processing_sensor_data(robot, image, td, user_code=None):
+    """
+    Verification function for geological layers detection assignment.
+
+    Students must:
+    - Move forward 15 times (1cm each)
+    - Scan with sensors 3 and 4
+    - Detect when sensor values exceed threshold (900)
+    - Send message containing "Found geological layers!" with sensor values
+    """
+
+    # ========== CONFIGURATION - EDIT THESE VALUES ==========
+    mineral_pos = (670, 500)          # (x, y) position of mineral icon on screen
+    position_tolerance = 50           # Detection radius in pixels
+    sensor_threshold = 900            # Minimum sensor value for detection
+    detection_time = 20               # Time limit in seconds
+    min_detections = 2                # Minimum valid detections required to pass
+    robot_position_offset = (100, 0)  # (x, y) offset from robot center to sensor position
+    # ========================================================
+
+    result = {
+        "success": True,
+        "description": "Scanning for geological layers...",
+        "score": 100
+    }
+    text = "Verifying..."
+
+    # Initialize task data on first frame
+    if not td:
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + detection_time,
+            "data": {
+                "detections_above_threshold": 0,
+                "total_readings": 0,
+                "last_detection_time": None,
+                "mineral_display_until": 0,
+                "mineral_icon_x": mineral_pos[0],
+                "mineral_icon_y": mineral_pos[1],
+                "mineral_target_x": mineral_pos[0] + 32,  # Center of icon
+                "mineral_target_y": mineral_pos[1] + 32,
+                "position_tolerance": position_tolerance,
+                "sensor_threshold": sensor_threshold,
+                "robot_offset_x": robot_position_offset[0],
+                "robot_offset_y": robot_position_offset[1],
+                "valid_position_detections": 0,
+            }
+        }
+
+        # Load mineral icon (one-time setup)
+        basepath = os.path.abspath(os.path.dirname(__file__))
+
+        try:
+            mineral_img = cv2.imread(os.path.join(basepath, "mineral.png"), cv2.IMREAD_UNCHANGED)
+
+            if mineral_img is None:
+                print("Warning: mineral.png not found, using placeholder")
+                mineral_img = np.zeros((64, 64, 4), dtype=np.uint8)
+                cv2.circle(mineral_img, (32, 32), 28, (0, 255, 0, 255), -1)
+
+            if mineral_img.shape[0] != 64 or mineral_img.shape[1] != 64:
+                mineral_img = cv2.resize(mineral_img, (64, 64))
+
+            if mineral_img.shape[2] == 4:  # PNG with alpha channel
+                bgr = mineral_img[:, :, :3]
+                alpha = mineral_img[:, :, 3]
+                _, mask = cv2.threshold(alpha, 1, 255, cv2.THRESH_BINARY)
+                td["data"]["mineral"] = bgr
+                td["data"]["mineral-mask"] = mask
+            else:
+                gray = cv2.cvtColor(mineral_img, cv2.COLOR_BGR2GRAY)
+                _, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
+                td["data"]["mineral"] = mineral_img
+                td["data"]["mineral-mask"] = mask
+
+        except Exception as e:
+            print(f"Error loading mineral icon: {e}")
+            mineral_img = np.zeros((64, 64, 3), dtype=np.uint8)
+            mineral_img[:, :] = (0, 200, 100)
+            mask = np.ones((64, 64), dtype=np.uint8) * 255
+            td["data"]["mineral"] = mineral_img
+            td["data"]["mineral-mask"] = mask
+
+    # Draw robot info overlay
+    image = robot.draw_info(image)
+
+    # Parse incoming MQTT messages
+    msg = robot.get_msg()
+    if msg and "Found geological layers" in msg:
+        numbers = re.findall(r"\d+", msg)
+
+        for num_str in numbers:
+            try:
+                value = int(num_str)
+            except ValueError:
+                continue
+
+            if 0 <= value <= 1023:
+                td["data"]["total_readings"] += 1
+
+                if value > td["data"]["sensor_threshold"]:
+                    td["data"]["detections_above_threshold"] += 1
+                    td["data"]["last_detection_time"] = time.time()
+
+                    robot_position = robot.get_info().get("position_px")
+
+                    if robot_position is not None:
+                        sensor_x = robot_position[0] + td["data"]["robot_offset_x"]
+                        sensor_y = robot_position[1] + td["data"]["robot_offset_y"]
+                        target_x = td["data"]["mineral_target_x"]
+                        target_y = td["data"]["mineral_target_y"]
+
+                        distance = np.sqrt((sensor_x - target_x)**2 + (sensor_y - target_y)**2)
+
+                        if distance <= td["data"]["position_tolerance"]:
+                            td["data"]["valid_position_detections"] += 1
+                            td["data"]["mineral_display_until"] = time.time() + 2.0
+                            text = "MINERAL COLLECTED!"
+                        else:
+                            text = f"Sensor triggered, not at mineral ({distance:.0f}px away)"
+                    else:
+                        td["data"]["mineral_display_until"] = time.time() + 2.0
+                        text = "MINERAL DETECTED! (position not verified)"
+
+    # Show mineral icon when recently detected
+    if time.time() < td["data"]["mineral_display_until"]:
+        text = "MINERAL COLLECTED!"
+        icon_x = td["data"]["mineral_icon_x"]
+        icon_y = td["data"]["mineral_icon_y"]
+        icon_height = td["data"]["mineral"].shape[0]
+        icon_width = td["data"]["mineral"].shape[1]
+
+        if (icon_y + icon_height <= image.shape[0] and
+                icon_x + icon_width <= image.shape[1]):
+            cv2.copyTo(
+                td["data"]["mineral"],
+                td["data"]["mineral-mask"],
+                image[icon_y:icon_y + icon_height,
+                      icon_x:icon_x + icon_width]
+            )
+
+    # Check if time is up
+    if time.time() > td["end_time"]:
+        if td["data"]["valid_position_detections"] >= min_detections:
+            text = "Verification complete!"
+            result["description"] = (
+                f"Assignment passed! Found {td['data']['valid_position_detections']} "
+                f"valid mineral detections at correct location "
+                f"(out of {td['data']['detections_above_threshold']} total sensor triggers)."
+            )
+        else:
+            result["success"] = False
+            result["description"] = (
+                f"Assignment Failed! Only {td['data']['valid_position_detections']} "
+                f"detections at correct position (need at least {min_detections}). "
+                f"Total sensor triggers: {td['data']['detections_above_threshold']}"
+            )
+            result["score"] = 0
+            text = "Verification complete!"
+
     return image, td, text, result

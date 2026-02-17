@@ -16,7 +16,9 @@ target_points = {
 block_library_functions = {
     'differential_drive': True,
     "move_function": True,
-    'electric_motor': True
+    'electric_motor': True,
+    'intro_to_octoliner': True,
+    'processing_sensor_data': True
 }
 
 def get_block_library_functions(task):

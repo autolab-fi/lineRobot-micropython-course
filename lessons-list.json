@@ -132,6 +132,22 @@
         "name": "Electric Motor",
         "description": "Basic principles of DC motors. Task: Move to a specific point on the map using only functions for controlling motors.",
         "template": "# Write code here"
+      },
+      {
+        "str_id": "intro_to_octoliner",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/intro_to_octoliner.md",
+        "sn": 27,
+        "name": "Intoduction to Octoliner",
+        "description": "Calibration",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "processing_sensor_data",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/processing_sensor_data.md",
+        "sn": 28,
+        "name": "Processing sensor data",
+        "description": "Processign sensor data: Ground deposits",
+        "template": "# Write code here"
       }
     ]
   },

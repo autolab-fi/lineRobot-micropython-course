@@ -80,26 +80,58 @@
     ]
   },
   {
-    "name": "Controlling LEDs",
-    "description": "Basic arduino functions of working with GPIO using LEDs as examples.",
+    "name": "Loops & Functions",
+    "description": "Mastering control flow, functions, and sensor feedback.",
     "sn": 2,
     "str_id": "module_2",
     "lessons": [
       {
-        "str_id": "headlights",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/headlights.md",
-        "sn": 6,
-        "name": "Headlights",
-        "description": "Understanding how LEDs work. Task: Turning on LEDs.",
-        "template": "# Write code here"
+        "str_id": "electric_motors",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.1.md",
+        "sn": 1,
+        "name": "Electric Motors",
+        "description": "Understanding motor control basics and timing.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Write code here"
       },
       {
-        "str_id": "alarm",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/alarm.md",
-        "sn": 7,
-        "name": "Robot's alarm",
-        "description": "More about the digitalWrite() and pinMode() functions. Task: Blinking LEDs.",
-        "template": "# Write code here"
+        "str_id": "differential_drive",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.2.md",
+        "sn": 2,
+        "name": "Differential Drive",
+        "description": "Using PWM to control speed and correct drift.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# TODO: Start the left motor with a raw PWM value\n# TODO: Start the right motor with a slightly different PWM value to fix the drift\n\n# Wait for 3 seconds\ntime.sleep(3)\n\n# TODO: Stop the motors"
+      },
+      {
+        "str_id": "defining_functions",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.3.md",
+        "sn": 3,
+        "name": "Defining Functions",
+        "description": "Creating reusable code blocks for movement.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Define your function here\ndef move_square():\n    pass\n\n# Call your function\n# move_square()"
+      },
+      {
+        "str_id": "for_loops",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.4.md",
+        "sn": 4,
+        "name": "For Loops",
+        "description": "Repeating actions efficiently using loops.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\nside = 60\nstep = 5 \n\n# TODO: Set up a loop to repeat the pattern 10 times using 'for'\n# TODO: Inside the loop, calculate the distance and move the robot\n\nrobot.stop()"
+      },
+      {
+        "str_id": "encoder_theory",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.5.md",
+        "sn": 5,
+        "name": "Encoder Theory",
+        "description": "Reading sensor data to measure rotation and distance.",
+        "template": "from lineRobot import Robot\nimport time\nimport math\n\nrobot = Robot()\nD = 3.5\n\n# Reset both encoders\n# Start motors using manual PWM and wait for a short duration - adjust the parameters\n# Stop motors manually \n# Read and print the encoder degrees\n# TODO: Calculate distance in cm using math.pi and D\n# Print the distance result\nprint(\"Distance in cm:\", distance)"
+      },
+      {
+        "str_id": "while_loops",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.6.md",
+        "sn": 6,
+        "name": "While Loops",
+        "description": "Active monitoring and conditional stopping logic.",
+        "template": "# All imports that you need\n\nrobot = \nD = 3.5\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
       }
     ]
   },

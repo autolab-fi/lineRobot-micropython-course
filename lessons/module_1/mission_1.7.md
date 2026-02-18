@@ -3,7 +3,7 @@ index: 7
 module: module_1
 task: sequential_navigation
 previous: maneuvering
-next: weekly_challenge_1
+next: electric_motors
 ---
 
 # Mission 2.7 Sequential navigation

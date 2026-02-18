@@ -5,7 +5,7 @@ task: for_loops
 previous: defining_functions
 next: encoder_theory
 ---
-# Mission 2.4 For Loops & Patterns
+# Mission 2.4 For Loops
 
 ## Objective
 Learn how to use **for** loops to create complex movement patterns by using the loop counter variable.

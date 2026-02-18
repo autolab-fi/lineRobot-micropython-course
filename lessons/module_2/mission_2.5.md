@@ -2,7 +2,7 @@
 index: 5
 module: module_2
 task: encoder_theory
-previous: sequential_navigation
+previous: for_loops
 next: while_loops
 ---
 
@@ -38,8 +38,8 @@ robot.encoder_degrees_left()   # Get left wheel rotation in degrees
 robot.encoder_degrees_right()  # Get right wheel rotation in degrees
 robot.reset_left_encoder()     # Reset left encoder to 0
 robot.reset_right_encoder()    # Reset right encoder to 0
-robot.run_motor_left()       # Stops left motor WITHOUT resetting the encoder
-robot.run_motor_right()      # Stops right motor WITHOUT resetting the encoder
+robot.stop_motor_left()       # Stops left motor WITHOUT resetting the encoder
+robot.stop_motor_right()      # Stops right motor WITHOUT resetting the encoder
 ```
 
 ### Distance and Rotation
@@ -51,7 +51,7 @@ Your task is to find the perfect "pulse" for your robot to make it drive almost 
 **Requirements:**
 1. **Reset:** At the very beginning of your code, reset both encoders to **0**.
 2. **Calibration:** Experiment with the PWM value and the `time.sleep` duration to get the encoder readings for both wheels between **310 and 360 degrees**.
-3. **Stopping:** **Do not use `robot.stop()`**. Instead, use `robot.run_motor_left(0)` and `robot.run_motor_right(0)` to keep the encoder data visible.
+3. **Stopping:** **Do not use `robot.stop()`**. Instead, use `robot.stop_motor_left()` and `robot.stop_motor_right()` to keep the encoder data visible.
 4. **Distance Calculation:** Use the math library to calculate how many centimeters the robot traveled based on the left wheel's degrees.
 5. **Output:** Print the final encoder degrees and the calculated distance to the console.
 

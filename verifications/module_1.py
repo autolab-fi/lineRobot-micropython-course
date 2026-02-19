@@ -51,7 +51,7 @@ def welcome(robot, image, td: dict, user_code=None):
     msg = robot.get_msg()
 
     if not td:
-        td = {"start_time": time.time(), "end_time": time.time() + 2}
+        td = {"start_time": time.time(), "end_time": time.time() + 10}
 
     if time.time() > td["end_time"]:
         text = "Link: Stable"

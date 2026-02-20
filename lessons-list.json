@@ -111,7 +111,7 @@
       {
         "str_id": "while_loops",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.6.md",
-        "sn": 613,
+        "sn": 13,
         "name": "While Loops",
         "description": "Active monitoring and conditional stopping logic.",
         "template": "# All imports that you need\n\nrobot = \nD = 3.5\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
@@ -125,7 +125,7 @@
     "str_id": "module_3",
     "lessons": [
       {
-        "str_id": "differential_drive",
+        "str_id": "differential_drive_old",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/differential_drive.md",
         "sn": 8,
         "name": "Differential drive",
@@ -327,7 +327,7 @@
     ]
   },
   {
-    "name": "Introduction to the Robot",
+    "name": "Sandbox and robot info",
     "description": "Getting familiar with the platform and learning how to control the robot.",
     "sn": 100,
     "str_id": "module_0",
@@ -336,7 +336,7 @@
         "str_id": "sandbox",
         "name": "Sandbox",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/sandbox.md",
-        "sn": 1000,
+        "sn": 100,
         "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
         "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
       }

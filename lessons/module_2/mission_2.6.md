@@ -34,7 +34,7 @@ In programming, choosing the right loop changes how the robot thinks.
     * *Logic:* We don't know if the obstacle is 1 meter or 5 meters away. We only know we must stop *before* hitting it.
     * *Code:* "Keep moving **while** `distance_to_wall > 10`."
 
-![for_vs_while](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_2/for_vs_while.jpeg?raw=True)
+![for_vs_while](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/for_vs_while.jpeg?raw=true)
 
 
 ### 2. The Cycle of Monitoring

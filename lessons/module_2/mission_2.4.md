@@ -25,7 +25,7 @@ If you want to repeat a command, you could just copy-paste it. But:
 ### 2. How the "For" Loop Works
 A `for` loop follows a specific structure in Python: `for variable in sequence:`. 
 
-* **The Variable (`i`):** Think of `i` as a temporary "container." In every "lap" (iteration), Python takes the next number from your sequence and puts it into this container.
+* **The Variable (`i`):** Think of `i` as a temporary "container". In every "lap" (iteration), Python takes the next number from your sequence and puts it into this container.
 * **The `range()` function:** This is what creates the list of numbers. By default, `range(5)` creates the sequence: `0, 1, 2, 3, 4`. 
 * **The Body (Indentation):** Python uses indentation to know which commands belong to the loop. When the code reaches the last indented line, it jumps back to the top, updates `i` with the next number, and starts again.
 

@@ -55,7 +55,7 @@ Your task is to find the perfect "pulse" for your robot to make it drive almost 
 4. **Distance Calculation:** Use the math library to calculate how many centimeters the robot traveled based on the left wheel's degrees.
 5. **Output:** Print the final encoder degrees and the calculated distance to the console.
 
-**Hint:** To calculate distance, remember that a full $360^{\circ}$ turn equals the wheel's circumference ($\pi \times \text{Diameter}$). Your distance is just a fraction of that circumference based on the angle you measured.
+**Hint:** To calculate distance, remember that a full 360 degrees turn equals the wheel's circumference pi * Diameter. Your distance is just a fraction of that circumference based on the angle you measured.
 
 
 ## Conclusion

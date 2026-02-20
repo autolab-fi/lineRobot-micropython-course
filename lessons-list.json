@@ -107,8 +107,7 @@
         "sn": 12,
         "name": "Encoder Theory",
         "description": "Reading sensor data to measure rotation and distance.",
-        "template": "from lineRobot import Robot\nimport time\nimport math\n\nrobot = Robot()\nD = 3.5\n\n# Reset both encoders\n# Start motors using manual PWM and wait for a short duration - adjust the parameters\n# Stop motors manually \n# Read and print the encoder degrees\n# TODO: Calculate distance in cm using math.pi and D\n# Print the distance result\nprint(\"Distance in cm:\", distance)"
-      },
+        "template": "from lineRobot import Robot\nimport time\nimport math\n\nrobot = Robot()\nD = 3.5\n\n# 1. Reset both encoders\n\n\n# 2. Pulse: Start motors using manual PWM and wait - here you need to adjust parameters\nrobot.run_motor_left(550)\nrobot.run_motor_right(550)\n# time.sleep()\n\n# 3. Stop motors manually to preserve encoder values\n\n# 4. Read and print the encoder degrees\nleft_deg = \nprint(\"Encoder degrees left:\", left_deg)\n\n# 5. Calculate distance in cm \ndistance = \n\n# 6. Print the distance result\nprint(\"Distance in cm:\", distance)"},
       {
         "str_id": "while_loops",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.6.md",

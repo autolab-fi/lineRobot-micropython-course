@@ -5,15 +5,37 @@ import os
 import numpy as np
 
 target_points = {
+    # new
+    'electric_motor': [(30, 50), (30, 0)],
+    'differential_drive': [(30, 50), (30, 0)],
+    'defining_functions':[(50, 50), (30, 0)],
+    'for_loops': [(50,30),(30,0)],
+    #'encoder_theory': [(30, 50), (30, 0)], #pending
+    #'while_loops': [(30, 50), (30, 0)], #pending
+
+
+    # old
     'headlights': [(30, 50), (30, 0)],
     'alarm': [(30, 50), (30, 0)],
+
 }
 
 block_library_functions = {
+    # new
+    'electric_motor': False,
+    'differential_drive': False,
+    'defining_functions': False,
+    'for_loops': False,
+    #'encoder_theory': False, #pending
+    #'while_loops': False, #pending
+
+    # old
     'headlights': False,
     'alarm': False,
 }
 
+
+# Core Functions
 
 def get_block_library_functions(task):
     """Retrieve block library status for a given task."""
@@ -24,6 +46,637 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
+    return np.argmin(dist_2)
+
+# Necessary Helper Functions
+
+
+def closest_node(node, nodes):
+    """Find the index of the closest node in a set of nodes"""
+    nodes = np.asarray(nodes)
+    dist_2 = np.sum((nodes - node)**2, axis=1)
+    return np.argmin(dist_2)
+
+def rotate_image(image, angle):
+    """Rotate an image by the given angle"""
+    image_center = tuple(np.array(image.shape[1::-1]) / 2)
+    rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
+    result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
+    return result
+
+
+def restore_trajectory(image, prev_point, point, color, width):
+    """Function for restoring trajectory if robot was not recognized"""
+    cv2.line(image, prev_point, point, color, width)
+
+
+def draw_trajectory(image, points, color, width, restore):
+    """Function for drawing point trajectory"""
+    prev_point = None
+    for point in points:
+        cv2.circle(image, point, width, color, -1)
+        if restore and prev_point is not None and math.sqrt(
+                (prev_point[0] - point[0]) ** 2 + (prev_point[1] - point[1]) ** 2) > 1:
+            restore_trajectory(image, prev_point, point, color, int(width * 2))
+
+
+#New functions
+
+#2.1 electric motor
+
+def electric_motor(robot, image, td: dict, user_code=None):
+    """Test for lesson 8: Electric motor"""
+
+    # ===== CONFIGURATION =====
+    FLAG_X = 300        # pixel x coordinate of flag on screen
+    FLAG_Y = 400        # pixel y coordinate of flag on screen
+    FLAG_THRESHOLD = 7.0  # detection radius in cm
+    # =========================
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Not recognized"
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if not td:
+        banned = ["turn_left", "turn_right", "move_forward_distance",
+                  "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        found_banned = [f for f in banned if f in active_code]
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 10,
+            "data": {
+                "completed": False,
+                "reached": False,
+                "code_valid": len(found_banned) == 0,
+                "banned_found": found_banned,
+                "flag-coords": (FLAG_X, FLAG_Y),
+                "flag-coords-cm": (robot.pixels_to_cm(FLAG_X), robot.pixels_to_cm(FLAG_Y)),
+            }
+        }
+
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
+
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "flag_finish.jpg")
+
+            flag = cv2.imread(filepath)
+
+            if flag is None:
+                print("Warning: flag_finish.jpg not found, using placeholder")
+                flag = np.zeros((90, 60, 3), dtype=np.uint8)
+                cv2.rectangle(flag, (5, 10), (8, 85), (180, 120, 60), -1)
+                cv2.rectangle(flag, (8, 10), (55, 40), (0, 0, 220), -1)
+                for row in range(3):
+                    for col in range(5):
+                        if (row + col) % 2 == 0:
+                            cv2.rectangle(flag,
+                                        (8 + col*9, 10 + row*10),
+                                        (17 + col*9, 20 + row*10),
+                                        (255, 255, 255), -1)
+
+            flag = cv2.resize(flag, (int(flag.shape[1]/3), int(flag.shape[0]/3)))
+            lower_green = np.array([0, 240, 0])
+            upper_green = np.array([50, 255, 50])
+            td["data"]["flag-mask"] = cv2.bitwise_not(cv2.inRange(flag, lower_green, upper_green))
+            td["data"]["flag"] = flag
+
+        except Exception as e:
+            print(f"Error loading or processing image: {e}")
+            td["data"]["image_error"] = True
+            return image, td, f"Error processing image: {str(e)}", result
+
+    # ===== 2. STATE LOCK =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(image)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(image)
+
+    # ===== 4. CODE VALIDATION CHECK =====
+    # Don't return early — just block evaluation and wait for timeout
+    if not td["data"]["code_valid"]:
+        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
+
+    # ===== 5. FLAG IMAGE DRAWING =====
+    if not td["data"].get("image_error", False) and "flag" in td["data"]:
+        flag = td["data"]["flag"]
+        x_left = int(flag.shape[0]/2)
+        x_right = flag.shape[0] - x_left
+        y_bottom = int(flag.shape[1]/2)
+        y_up = flag.shape[1] - y_bottom
+        coords = td["data"]["flag-coords"]
+
+        if (0 <= coords[0] - x_left < image.shape[0] and
+            coords[0] + x_right < image.shape[0] and
+            0 <= coords[1] - y_bottom < image.shape[1] and
+            coords[1] + y_up < image.shape[1]):
+
+            if td["data"]["reached"]:
+                result_img = rotate_image(flag, 45)
+                mask = cv2.inRange(result_img, (0, 0, 0), (205, 205, 205))
+                result_img[mask > 0] = (0, 255, 0)
+                cv2.copyTo(result_img, rotate_image(td["data"]["flag-mask"], 45),
+                          image[coords[0] - x_left:x_right + coords[0],
+                                coords[1] - y_bottom:y_up + coords[1]])
+            else:
+                cv2.copyTo(flag, td["data"]["flag-mask"],
+                          image[coords[0] - x_left:x_right + coords[0],
+                                coords[1] - y_bottom:y_up + coords[1]])
+
+    # ===== 6. EVALUATION LOOP =====
+    # Only runs if code is valid
+    if td["data"]["code_valid"]:
+        position = robot.get_info()["position"]
+        if position and "flag-coords-cm" in td["data"]:
+            delta = robot.delta_points((position[1], position[0]), td["data"]["flag-coords-cm"])
+
+            if delta < FLAG_THRESHOLD:
+                td["data"]["reached"] = True
+                if "confirm_start" not in td["data"]:
+                    td["data"]["confirm_start"] = time.time()
+                elif time.time() - td["data"]["confirm_start"] > 1.0:
+                    td["data"]["completed"] = True
+                    result["success"] = True
+                    result["score"] = 100
+                    result["description"] = "You are amazing! The Robot has reached the target point | Score: 100"
+                    text = "The robot has reached target point!"
+                    td["data"]["final_result"] = result
+                    td["data"]["final_text"] = text
+                else:
+                    text = "The robot has reached target point!"
+            else:
+                if "confirm_start" in td["data"]:
+                    del td["data"]["confirm_start"]
+                text = f'Distance to target point {delta:0.1f} cm'
+
+    # ===== 7. TIMEOUT / FINAL EVALUATION =====
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            text = "Banned functions detected."
+        else:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = "Robot did not reach the target point | Score: 0"
+            text = "Failed to reach target point."
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
+
+# 2.2 differential drive
+
+def differential_drive(robot, image, td, user_code=None):
+    """Verification function for driving straight assignment"""
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    # CRITICAL: Always start with success=True (platform requirement)
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Drive the robot in a straight line for 3 seconds"
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if not td:
+        # Check for banned functions in user code
+        banned = ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds",
+                  "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"]
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        found_banned = [f for f in banned if f in active_code]
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 10,
+            "data": {
+                "completed": False,
+                "code_valid": len(found_banned) == 0,
+                "banned_found": found_banned,
+                "task-failed": "",
+                "failed-cone": {},
+                "direction_0": None,
+                "prev_robot_position": None,
+                "robot_start_move_time": None,
+                "robot_end_move_time": None,
+                "max_angle_deviation": 0,
+                "straight_driving_start": None,
+                "straight_driving_duration": 0,
+                "cones-coords": [],
+            }
+        }
+
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "traffic-sign.jpg")
+
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "traffic-sign.jpg")
+
+            if not os.path.exists(filepath):
+                # Placeholder cone - orange triangle with white stripe
+                print("Warning: traffic-sign.jpg not found, using placeholder")
+                cone = np.ones((100, 100, 3), dtype=np.uint8) * 255
+                pts = np.array([[50, 5], [95, 95], [5, 95]], np.int32)
+                cv2.fillPoly(cone, [pts], (0, 100, 255))
+                cv2.polylines(cone, [pts], True, (0, 0, 0), 2)
+                cv2.line(cone, (27, 65), (73, 65), (255, 255, 255), 6)
+            else:
+                cone = cv2.imread(filepath)
+                cone = cv2.resize(cone, (int(cone.shape[1]), int(cone.shape[0])))
+
+            lower_green = np.array([0, 240, 0])
+            upper_green = np.array([35, 255, 35])
+            td["data"]["cone-mask"] = cv2.bitwise_not(cv2.inRange(cone, lower_green, upper_green))
+            td["data"]["cone"] = cone
+
+        except Exception as e:
+            print(f"Error initializing drive straight test: {e}")
+            td["data"]["image_error"] = True
+
+    # ===== 2. STATE LOCK - early return if already completed =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(image)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(image)
+
+    # ===== 4. CODE VALIDATION CHECK =====
+    # Don't return failure here — just block evaluation and wait for timeout
+    # This way success=False is only set at timeout where completed=True is safe
+    if not td["data"]["code_valid"]:
+        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
+
+    # ===== 5. SET UP CONE CORRIDOR =====
+    # Cones always drawn regardless of code validity
+    # Keep retrying until robot position is detected
+    if robot and robot.position_px and len(td["data"].get("cones-coords", [])) == 0:
+        y_u = robot.position_px[1] - 150
+        y_d = robot.position_px[1] + 150
+        for i in range(10):
+            x = robot.position_px[0] + (i % 5) * 200
+            if i < 5:
+                td["data"]["cones-coords"].append((y_u, x))
+            else:
+                td["data"]["cones-coords"].append((y_d, x))
+
+        if td["data"]["direction_0"] is None:
+            td["data"]["direction_0"] = robot.compute_angle_x()
+            if td["data"]["direction_0"] > 180:
+                td["data"]["direction_0"] -= 360
+
+    # ===== 6. DRAW CONES =====
+    if "cones-coords" in td["data"] and "cone" in td["data"] and len(td["data"]["cones-coords"]) > 0:
+        try:
+            cone = td["data"]["cone"]
+            x_left = int(cone.shape[0] / 2)
+            x_right = cone.shape[0] - x_left
+            y_bottom = int(cone.shape[1] / 2)
+            y_up = cone.shape[1] - y_bottom
+
+            for i in range(min(10, len(td["data"]["cones-coords"]))):
+                coords = td["data"]["cones-coords"][i]
+
+                if (0 <= coords[0] - x_left < image.shape[0] and
+                    coords[0] + x_right < image.shape[0] and
+                    0 <= coords[1] - y_bottom < image.shape[1] and
+                    coords[1] + y_up < image.shape[1]):
+
+                    if i in td["data"]["failed-cone"]:
+                        result_img = rotate_image(cone, td["data"]["failed-cone"][i])
+                        cv2.copyTo(
+                            result_img,
+                            rotate_image(td["data"]["cone-mask"], td["data"]["failed-cone"][i]),
+                            image[coords[0] - x_left:x_right + coords[0],
+                                 coords[1] - y_bottom:y_up + coords[1]]
+                        )
+                        if td["data"]["failed-cone"][i] > -89:
+                            td["data"]["failed-cone"][i] -= 45
+                    else:
+                        cv2.copyTo(
+                            cone,
+                            td["data"]["cone-mask"],
+                            image[coords[0] - x_left:x_right + coords[0],
+                                 coords[1] - y_bottom:y_up + coords[1]]
+                        )
+        except Exception as e:
+            print(f"Error drawing cones: {e}")
+
+    # ===== 7. EVALUATION LOOP =====
+    # Only runs if code is valid
+    if td["data"]["code_valid"] and robot and robot.position is not None:
+        angle_x = robot.compute_angle_x()
+        angle_x_disp = angle_x
+
+        if angle_x > 180:
+            angle_x -= 360
+
+        if td["data"]["direction_0"] is not None:
+            angle_diff = abs(td["data"]["direction_0"] - angle_x)
+            if angle_diff > 180:
+                angle_diff = 360 - angle_diff
+
+            td["data"]["max_angle_deviation"] = max(td["data"]["max_angle_deviation"], angle_diff)
+            text = f'Robot angle with x: {angle_x_disp:0.0f}°, Deviation: {angle_diff:.1f}°'
+
+            if td["data"]["prev_robot_position"] is not None:
+                delta_pos = robot.delta_points(robot.position, td["data"]["prev_robot_position"])
+
+                if td["data"]["robot_start_move_time"] is None and delta_pos > 1:
+                    td["data"]["robot_start_move_time"] = time.time()
+                    td["data"]["straight_driving_start"] = time.time()
+                    text = f"Robot started moving at angle {angle_x_disp:0.0f}°"
+
+                if td["data"]["robot_start_move_time"] is not None and delta_pos > 0.5:
+                    if angle_diff <= 10 and td["data"]["straight_driving_start"] is not None:
+                        current_time = time.time()
+                        td["data"]["straight_driving_duration"] = current_time - td["data"]["straight_driving_start"]
+
+                        if td["data"]["straight_driving_duration"] >= 3.0:
+                            # SUCCESS — lock in immediately, no need to wait for timeout
+                            td["data"]["completed"] = True
+                            result["success"] = True
+                            result["score"] = 100
+                            result["description"] = (
+                                f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s "
+                                f"with max deviation of {td['data']['max_angle_deviation']:.1f}° | Score: 100"
+                            )
+                            text = f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s"
+                            td["data"]["final_result"] = result
+                            td["data"]["final_text"] = text
+                        else:
+                            text = f"Straight: {td['data']['straight_driving_duration']:.1f}/3.0s, Deviation: {angle_diff:.1f}°"
+
+                    elif angle_diff > 10:
+                        td["data"]["straight_driving_start"] = None
+                        td["data"]["straight_driving_duration"] = 0
+
+                        if not td["data"]["task-failed"]:
+                            td["data"]["task-failed"] = f"Robot deviated {angle_diff:.1f}° (max allowed: 10°)"
+
+                            if robot.position_px is not None and len(td["data"]["cones-coords"]) > 0:
+                                min_index = closest_node((robot.position_px[1], robot.position_px[0]),
+                                                        td["data"]["cones-coords"])
+                                if min_index not in td["data"]["failed-cone"]:
+                                    td["data"]["failed-cone"][min_index] = -20
+
+                if td["data"]["robot_start_move_time"] is not None and delta_pos < 0.5:
+                    if td["data"]["robot_end_move_time"] is None:
+                        td["data"]["robot_end_move_time"] = time.time()
+                        if td["data"]["straight_driving_duration"] < 3.0 and not td["data"]["task-failed"]:
+                            td["data"]["task-failed"] = (
+                                f"Robot only drove straight for {td['data']['straight_driving_duration']:.1f}s (need 3.0s)"
+                            )
+
+        td["data"]["prev_robot_position"] = robot.position
+
+    # ===== 8. TIMEOUT / FINAL EVALUATION =====
+    # All failure cases handled here — completed=True is always set before success=False
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
+        if not td["data"]["code_valid"]:
+            # Safe now — completed=True set above
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            text = "Banned functions detected."
+
+        elif td["data"]["task-failed"]:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = td["data"]["task-failed"] + " | Score: 0"
+            text = "Failed: " + td["data"]["task-failed"]
+
+        elif td["data"].get("robot_start_move_time") is None:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = "Robot didn't start moving | Score: 0"
+            text = "Robot didn't start moving."
+
+        else:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = (
+                f"Robot only drove straight for {td['data']['straight_driving_duration']:.1f}s "
+                f"(need 3.0s) | Score: 0"
+            )
+            text = f"Only {td['data']['straight_driving_duration']:.1f}s straight, need 3.0s."
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
+
+# 2.3 CHANGED FROM "movement" in module_3
+
+def defining_functions(robot, image, td: dict, user_code=None):
+    """Test: Robot must turn 180 degrees."""
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100,
+    }
+    text = "Waiting..."
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if not td:
+        banned = ["turn_left", "turn_right", "move_forward_distance",
+                  "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        found_banned = [f for f in banned if f in active_code]
+
+        current_ang = robot.compute_angle_x()
+        target_ang = current_ang + 180 if current_ang < 180 else current_ang - 180
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 10,
+            "target_ang": target_ang,
+            "data": {
+                "completed": False,
+                "code_valid": len(found_banned) == 0,
+                "banned_found": found_banned,
+            }
+        }
+
+    # ===== 2. STATE LOCK =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(image)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(image)
+    ang = robot.compute_angle_x()
+    delta_ang = abs(ang - td["target_ang"])
+
+    # ===== 4. CODE VALIDATION CHECK =====
+    # Don't return early — just block evaluation and wait for timeout
+    if not td["data"]["code_valid"]:
+        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
+
+    # ===== 5. EVALUATION LOOP =====
+    # Only runs if code is valid
+    if td["data"]["code_valid"]:
+        text = f"Robot must turn to: {delta_ang:0.0f}°"
+
+        if delta_ang < 10 and not td["data"]["completed"]:
+            if "confirm_start" not in td["data"]:
+                td["data"]["confirm_start"] = time.time()
+            elif time.time() - td["data"]["confirm_start"] > 1.0:
+                td["data"]["completed"] = True
+                result["success"] = True
+                result["score"] = 100
+                result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
+                text = "Target angle reached!"
+                td["data"]["final_result"] = result
+                td["data"]["final_text"] = text
+        else:
+            if "confirm_start" in td["data"]:
+                del td["data"]["confirm_start"]
+
+    # ===== 6. TIMEOUT / FINAL EVALUATION =====
+    if (td["end_time"] - time.time()) < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            text = "Banned functions detected."
+        else:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = f"Robot did not turn 180 degrees. Final error: {delta_ang:0.0f}° | Score: 0"
+            text = "Failed to reach target angle."
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
+
+# 2.4 "for loops"
+# make a drawing board (like in the sandbox, but change the starting point) + checking the code for a loop
+
+def for_loops(robot, image, td: dict, user_code=None):
+    """Verification for lesson: For Loops / Drawing trajectory"""
+
+    # ===== CONFIGURATION =====
+    TASK_DURATION = 60      # seconds to record trajectory
+    TRAJECTORY_COLOR = (255, 0, 0)  # BGR - blue
+    TRAJECTORY_WIDTH = 3
+    # =========================
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    # CRITICAL: Always start with success=True (platform requirement)
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Not recognized"
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if not td:
+        # Check for for loop in user code
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        code_valid = 'for' in active_code
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "data": {
+                "completed": False,
+                "code_valid": code_valid,
+            },
+            "trajectory": []
+        }
+
+    # ===== 2. STATE LOCK - early return if already completed =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(image)
+        draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(image)
+
+    # ===== 4. CODE VALIDATION CHECK =====
+    # Don't return early — just flag and wait for timeout
+    if not td["data"]["code_valid"]:
+        text = "No for loop detected in code"
+
+    # ===== 5. TRAJECTORY TRACKING =====
+    # Always track regardless of code validity — visual feedback for student
+    info = robot.get_info()
+    robot_position_px = info["position_px"]
+    robot_position = info["position"]
+
+    if robot_position is not None:
+        td["trajectory"].append(robot_position_px)
+        text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
+
+    if len(td["trajectory"]) > 0:
+        draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
+
+    # ===== 6. MQTT MESSAGE =====
+    msg = robot.get_msg()
+    if msg is not None:
+        text = f"Message received: {msg}"
+
+    # ===== 7. TIMEOUT / FINAL EVALUATION =====
+    # All failure cases handled here — completed=True always set before success=False
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = "No for loop found in code | Score: 0"
+            text = "No for loop detected."
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = f"You are amazing! The Robot has completed the assignment | Score: 100"
+            text = "Trajectory complete!"
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
+
+
+
+
+
+
+#Old module_2 functions
 
 def headlights(robot, image, td: dict, user_code=None):
     """Test for lesson 6: Headlights."""
@@ -51,7 +704,7 @@ def headlights(robot, image, td: dict, user_code=None):
         temp_off = cv2.imread(os.path.join(basepath, "images", "headlight-off.jpg"))
         temp_on = cv2.resize(temp_on, (int(temp_on.shape[1]/3), int(temp_on.shape[0]/3)))
         temp_off = cv2.resize(temp_off, (int(temp_off.shape[1]/3), int(temp_off.shape[0]/3)))
-        
+
 
         td["data"]["turn-on"] = temp_on
         td["data"]["turn-off"] = temp_off
@@ -255,7 +908,7 @@ def alarm(robot, image, td: dict, user_code=None):
         if td["end_time"] - time.time() < 0.5:
             td["finished"] = True
             td["finish_time"] = time.time()
-            
+
             # Add final duration
             if td["data"]["state_start_time"]:
                 final_duration = time.time() - td["data"]["state_start_time"]

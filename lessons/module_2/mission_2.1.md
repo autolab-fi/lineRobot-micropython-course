@@ -18,7 +18,7 @@ In Module 1, you learned how to drive the rover using built-in commands. But to 
 ### 1. What is an Electric Motor?
 An electric motor is a device that converts electrical energy into mechanical energy using a magnetic field. There are various types of motors, but for our rover, we use Direct Current (DC) brushed motors.
 
-![inside_motor](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_2/inside_motor.jpg?raw=True)
+![inside_motor](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/inside_motor.jpg?raw=true)
 
 An electric motor consists of two main parts:
 * **Stator:** The stationary outer part that creates a constant magnetic field, which in our case is provided by permanent magnets.
@@ -27,14 +27,14 @@ An electric motor consists of two main parts:
 ### 2. Principle of Operation
 When voltage of different polarities is applied to the brushes, it creates magnetic fields in the coil windings. This causes the rotor to rotate as it constantly pushes against and pulls towards the stator's magnets. It keeps the rotor in motion as long as voltage is supplied.
 
-![motor_animation](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_2/animation.gif?raw=True)
+![motor_animation](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/animation.gif?raw=true)
 
 ### 3. Gearbox in Electric Motors
 Raw electric motors spin very fast but don't have much pushing power (torque). If we connected wheels directly to the motor shaft, the robot wouldn't be able to move its own weight! 
 
 To fix this, an electric motor can be equipped with a **gearbox**. 
 
-![small_size_gearbox](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_2/small_size_gearbox.jpg?raw=True)
+![small_size_gearbox](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/small_size_gearbox.jpg?raw=true)
 
 A gearbox transfers the rotational motion from the motor shaft to the mechanism. It consists of a set of gears that greatly increase the maximum torque while reducing the rotational speed. Our rover's geared motors run at a steady **178 RPM** (Revolutions Per Minute).
 
@@ -55,7 +55,7 @@ However, you will not be able to use the built-in robot movement functions. The 
 2. Use `time.sleep()` to wait for the exact amount of time needed to reach the target.
 3. Use `stop()` to stop the motors once the robot is on the point.
 
-![finish_point](https://github.com/autolab-fi/line-robot-curriculum/blob/main/images/module_2/finish_point.jpg?raw=True)
+![finish_point](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/finish_point.jpg?raw=true)
 
 *Hint: You will need to run the code multiple times, adjusting your `time.sleep()` value until the robot stops exactly on the target!*
 

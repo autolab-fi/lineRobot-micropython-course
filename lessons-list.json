@@ -2,7 +2,7 @@
   {
     "name": "Manual Control & Python Basics",
     "description": "Demonstrating the robot's capabilities.",
-    "sn": 1,
+    "sn": 0,
     "str_id": "module_1",
     "lessons": [
       {
@@ -66,7 +66,7 @@
   {
     "name": "Loops & Functions",
     "description": "Mastering control flow, functions, and sensor feedback.",
-    "sn": 2,
+    "sn": 1,
     "str_id": "module_2",
     "lessons": [
       {
@@ -329,14 +329,14 @@
   {
     "name": "Introduction to the Robot",
     "description": "Getting familiar with the platform and learning how to control the robot.",
-    "sn": 0,
+    "sn": 100,
     "str_id": "module_0",
     "lessons": [
       {
         "str_id": "sandbox",
         "name": "Sandbox",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/sandbox.md",
-        "sn": 0,
+        "sn": 1000,
         "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
         "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
       }

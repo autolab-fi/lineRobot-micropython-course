@@ -10,7 +10,7 @@ target_points = {
     'differential_drive': [(30, 50), (30, 0)],
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
-    #'encoder_theory': [(30, 50), (30, 0)], #pending
+    'encoder_theory': [(30, 50), (30, 0)],
     #'while_loops': [(30, 50), (30, 0)], #pending
 
 
@@ -26,7 +26,7 @@ block_library_functions = {
     'differential_drive': False,
     'defining_functions': False,
     'for_loops': False,
-    #'encoder_theory': False, #pending
+    'encoder_theory': False,
     #'while_loops': False, #pending
 
     # old
@@ -672,11 +672,191 @@ def for_loops(robot, image, td: dict, user_code=None):
     return image, td, text, result
 
 
+# 2.5 Encoder theory
+#checking the value of the encoders (falling within the range of 310-350) and checking the distance output
+
+def encoder_theory(robot, image, td: dict, user_code=None):
+    """Verification function for encoder theory task.
+    Checks: math import, encoder resets, math.pi, printed encoder value 310-360°,
+    printed distance in expected range, AND physical displacement matches.
+    """
+
+    # ===== CONFIGURATION =====
+    WHEEL_RADIUS = 3.4      # actual measured wheel radius in cm
+    ENCODER_MIN = 310       # minimum acceptable encoder degrees
+    ENCODER_MAX = 360       # maximum acceptable encoder degrees
+    DISTANCE_MIN = 18.0     # (310/360) * 2 * π * 3.4 = ~18.38 cm
+    DISTANCE_MAX = 21.4     # (360/360) * 2 * π * 3.4 = ~21.36 cm
+    DISPLACEMENT_MIN = 19.0 # OpenCV physical measurement lower bound
+    DISPLACEMENT_MAX = 26.0 # OpenCV physical measurement upper bound
+    TASK_DURATION = 20      # seconds
+    # =========================
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Reading encoder data..."
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if not td:
+        lines = code.split('\n') if code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        missing = []
+        if 'import math' not in active_code and 'from math' not in active_code:
+            missing.append('math library')
+        if 'reset_left_encoder' not in active_code:
+            missing.append('reset_left_encoder()')
+        if 'reset_right_encoder' not in active_code:
+            missing.append('reset_right_encoder()')
+        if 'math.pi' not in active_code:
+            missing.append('math.pi')
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "data": {
+                "completed": False,
+                "code_valid": len(missing) == 0,
+                "missing": missing,
+                "encoder_left": None,
+                "distance": None,
+                "start_position": None,
+                "end_position": None,
+            }
+        }
+
+    # ===== 2. STATE LOCK =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(frame)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(frame)
+
+    # ===== 4. CODE VALIDATION CHECK =====
+    if not td["data"]["code_valid"]:
+        text = f"Missing: {', '.join(td['data']['missing'])}"
+
+    # ===== 5. TRACK PHYSICAL DISPLACEMENT =====
+    # Always track regardless of code validity
+    pos = robot.position
+    if pos is not None:
+        if td["data"]["start_position"] is None:
+            td["data"]["start_position"] = pos
+        td["data"]["end_position"] = pos
+
+    # ===== 6. PARSE MQTT MESSAGES =====
+    # Matches student template print format:
+    # print("Encoder degrees left:", left_deg)
+    # print("Distance in cm:", distance)
+    msg = robot.get_msg()
+    if msg is not None:
+        text = f"Received: {msg}"
+        try:
+            if msg.startswith("Encoder degrees left:"):
+                td["data"]["encoder_left"] = float(msg.split(":")[1].strip())
+            elif msg.startswith("Distance in cm:"):
+                td["data"]["distance"] = float(msg.split(":")[1].strip())
+        except (ValueError, IndexError):
+            pass
+
+    # Show live readings on overlay
+    if td["data"]["encoder_left"] is not None:
+        text = (f"Left: {td['data']['encoder_left']:.0f}° "
+                f"Dist: {td['data']['distance'] or 0:.2f}cm")
+
+    # ===== 7. TIMEOUT / FINAL EVALUATION =====
+    # All failure cases handled here — completed=True always set before success=False
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False  # safe — completed=True set above
+            result["score"] = 0
+            result["description"] = f"Missing required elements: {', '.join(td['data']['missing'])} | Score: 0"
+            text = "Code validation failed."
+
+        else:
+            left = td["data"]["encoder_left"]
+            distance = td["data"]["distance"]
+            start = td["data"]["start_position"]
+            end = td["data"]["end_position"]
+
+            # Cross-check: expected distance from encoder using correct formula
+            expected = (left / 360) * (2 * math.pi * WHEEL_RADIUS) if left else None
+
+            if left is None:
+                result["success"] = False
+                result["score"] = 0
+                result["description"] = "No encoder data received | Score: 0"
+                text = "No encoder data received."
+
+            elif not (ENCODER_MIN <= left <= ENCODER_MAX):
+                result["success"] = False
+                result["score"] = 0
+                result["description"] = (
+                    f"Encoder value out of range. "
+                    f"Left: {left:.0f}° "
+                    f"(need {ENCODER_MIN}-{ENCODER_MAX}°) | Score: 0"
+                )
+                text = "Encoder value out of range."
+
+            elif distance is None:
+                result["success"] = False
+                result["score"] = 0
+                result["description"] = "No distance calculation received | Score: 0"
+                text = "Distance not printed."
+
+            elif distance < DISTANCE_MIN or distance > DISTANCE_MAX:
+                result["success"] = False
+                result["score"] = 0
+                result["description"] = (
+                    f"Distance out of range: {distance:.2f}cm "
+                    f"(expected {DISTANCE_MIN}-{DISTANCE_MAX}cm based on R={WHEEL_RADIUS}cm) | Score: 0"
+                )
+                text = "Distance calculation incorrect."
+
+            elif start is None or end is None:
+                result["success"] = False
+                result["score"] = 0
+                result["description"] = "Robot not detected in camera frame | Score: 0"
+                text = "Robot not detected."
+
+            else:
+                displacement = robot.delta_points(start, end)
+                if displacement < DISPLACEMENT_MIN or displacement > DISPLACEMENT_MAX:
+                    result["success"] = False
+                    result["score"] = 0
+                    result["description"] = (
+                        f"Physical movement mismatch: robot moved {displacement:.1f}cm "
+                        f"but printed distance was {distance:.2f}cm "
+                        f"(expected from encoder: {expected:.2f}cm) | Score: 0"
+                    )
+                    text = "Movement does not match printed values."
+                else:
+                    result["success"] = True
+                    result["score"] = 100
+                    result["description"] = (
+                        f"Left encoder: {left:.0f}° "
+                        f"Printed distance: {distance:.2f}cm "
+                        f"Expected: {expected:.2f}cm "
+                        f"Physical displacement: {displacement:.1f}cm | Score: 100"
+                    )
+                    text = "Encoder task complete!"
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return image, td, text, result
 
 
 
-
-#Old module_2 functions
+##Old module_2 functions
 
 def headlights(robot, image, td: dict, user_code=None):
     """Test for lesson 6: Headlights."""

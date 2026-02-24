@@ -1,21 +1,5 @@
 [
   {
-    "name": "Introduction to the Robot",
-    "description": "Getting familiar with the platform and learning how to control the robot.",
-    "sn": 0,
-    "str_id": "module_0",
-    "lessons": [
-      {
-        "str_id": "sandbox",
-        "name": "Sandbox",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/sandbox.md",
-        "sn": 0,
-        "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
-        "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
-      }
-    ]
-  },
-  {
     "name": "Manual Control & Python Basics",
     "description": "Demonstrating the robot's capabilities.",
     "sn": 1,
@@ -24,7 +8,7 @@
       {
         "str_id": "welcome",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.1.md",
-        "sn": 1,
+        "sn": 10,
         "name": "Welcome to Artemis Support Program",
         "description": "Get oriented with the mission control interface and verify the rover connection.",
         "template": "from lineRobot import Robot\n\nprint(\"ARTEMIS LTV SYSTEM DIAGNOSTIC\")\nprint(\"Initializing hardware...\")\n\n# Initialize LTV unit\nltv_unit = Robot()\n\nprint(\"[TEST 1] Checking Main Drive...\")\nltv_unit.move_forward_distance(15)\nltv_unit.move_backward_distance(15)\n\nprint(\"[TEST 2] Checking Steering Mechanism...\")\nltv_unit.turn_left()\nltv_unit.turn_right()\n\nprint(\"DIAGNOSTIC COMPLETE. SYSTEMS NOMINAL.\")\nprint(\"Welcome to the team!\")"
@@ -32,7 +16,7 @@
       {
         "str_id": "test_drive",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.2.md",
-        "sn": 2,
+        "sn": 11,
         "name": "Test drive",
         "description": "Create a robot object and run your first movement command.",
         "template": "# Write code here"
@@ -40,7 +24,7 @@
       {
         "str_id": "license_to_drive",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.3.md",
-        "sn": 3,
+        "sn": 12,
         "name": "License to drive",
         "description": "Write a simple program independently using import, object creation, and movement commands.",
         "template": "# Write code here"
@@ -48,7 +32,7 @@
       {
         "str_id": "directional_movement",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.4.md",
-        "sn": 4,
+        "sn": 13,
         "name": "Directional Movement",
         "description": "Use distance-based movement functions to move forward and backward precisely.",
         "template": "# Write code here"
@@ -56,7 +40,7 @@
       {
         "str_id": "python_variables_commands",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.5.md",
-        "sn": 5,
+        "sn": 14,
         "name": "Python Variables & Commands",
         "description": "Introduce variables, arithmetic, and print statements to control and report motion.",
         "template": "from lineRobot import Robot\n\nrobot = Robot()\n\n# 1. Create variables\n# back_dist = \n# fwd_dist = \n\n# 2. Move using variables\n# (Write your movement commands here)\n\n\n# 3. Calculate and print total distance\n# (Write your calculation and print here)\n"
@@ -64,7 +48,7 @@
       {
         "str_id": "maneuvering",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.6.md",
-        "sn": 6,
+        "sn": 15,
         "name": "Maneuvering",
         "description": "Perform 90-degree and precision turns with and without variables.",
         "template": "# Write code here"
@@ -72,7 +56,7 @@
       {
         "str_id": "sequential_navigation",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.7.md",
-        "sn": 7,
+        "sn": 16,
         "name": "Sequential navigation",
         "description": "Plan a multi-step route and document your code using comments.",
         "template": "# Write code here"
@@ -88,7 +72,7 @@
       {
         "str_id": "electric_motors",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.1.md",
-        "sn": 1,
+        "sn": 17,
         "name": "Electric Motors",
         "description": "Understanding motor control basics and timing.",
         "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Write code here"
@@ -96,7 +80,7 @@
       {
         "str_id": "differential_drive",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.2.md",
-        "sn": 2,
+        "sn": 18,
         "name": "Differential Drive",
         "description": "Using PWM to control speed and correct drift.",
         "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# TODO: Start the left motor with a raw PWM value\n# TODO: Start the right motor with a slightly different PWM value to fix the drift\n\n# Wait for 3 seconds\ntime.sleep(3)\n\n# TODO: Stop the motors"
@@ -104,7 +88,7 @@
       {
         "str_id": "defining_functions",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.3.md",
-        "sn": 3,
+        "sn": 19,
         "name": "Defining Functions",
         "description": "Creating reusable code blocks for movement.",
         "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Define your function here\ndef move_square():\n    pass\n\n# Call your function\n# move_square()"
@@ -112,7 +96,7 @@
       {
         "str_id": "for_loops",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.4.md",
-        "sn": 4,
+        "sn": 20,
         "name": "For Loops",
         "description": "Repeating actions efficiently using loops.",
         "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\nside = 60\nstep = 5 \n\n# TODO: Set up a loop to repeat the pattern 10 times using 'for'\n# TODO: Inside the loop, calculate the distance and move the robot\n\nrobot.stop()"
@@ -120,7 +104,7 @@
       {
         "str_id": "encoder_theory",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.5.md",
-        "sn": 5,
+        "sn": 21,
         "name": "Encoder Theory",
         "description": "Reading sensor data to measure rotation and distance.",
         "template": "from lineRobot import Robot\nimport time\nimport math\n\nrobot = Robot()\nD = 3.5\n\n# Reset both encoders\n# Start motors using manual PWM and wait for a short duration - adjust the parameters\n# Stop motors manually \n# Read and print the encoder degrees\n# TODO: Calculate distance in cm using math.pi and D\n# Print the distance result\nprint(\"Distance in cm:\", distance)"
@@ -128,7 +112,7 @@
       {
         "str_id": "while_loops",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.6.md",
-        "sn": 6,
+        "sn": 22,
         "name": "While Loops",
         "description": "Active monitoring and conditional stopping logic.",
         "template": "# All imports that you need\n\nrobot = \nD = 3.5\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
@@ -144,7 +128,7 @@
       {
         "str_id": "differential_drive",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/differential_drive.md",
-        "sn": 8,
+        "sn": 23,
         "name": "Differential drive",
         "description": "An introduction to the robot's kinematics. Task: Experiment with functions for moving the robot forward.",
         "template": "# Write code here"
@@ -152,7 +136,7 @@
       {
         "str_id": "move_function",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/move_function.md",
-        "sn": 9,
+        "sn": 24,
         "name": "Movement Function",
         "description": "Writing functions in Arduino. Task: Write a function to rotate the robot.",
         "template": "# Write code here"
@@ -160,7 +144,7 @@
       {
         "str_id": "electric_motor",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/electric_motor.md",
-        "sn": 10,
+        "sn": 25,
         "name": "Electric Motor",
         "description": "Basic principles of DC motors. Task: Move to a specific point on the map using only functions for controlling motors.",
         "template": "# Write code here"
@@ -168,15 +152,15 @@
       {
         "str_id": "intro_to_octoliner",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/intro_to_octoliner.md",
-        "sn": 27,
-        "name": "Intoduction to Octoliner",
+        "sn": 26,
+        "name": "Introduction to Octoliner",
         "description": "Calibration",
         "template": "# Write code here"
       },
       {
         "str_id": "processing_sensor_data",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/processing_sensor_data.md",
-        "sn": 28,
+        "sn": 27,
         "name": "Processing sensor data",
         "description": "Processign sensor data: Ground deposits",
         "template": "# Write code here"
@@ -186,14 +170,14 @@
   {
     "name": "Line Sensor Introduction",
     "description": "Understanding how IR line sensors work and detecting black lines using the Octoliner sensor array.",
-    "sn": 5,
+    "sn": 4,
     "str_id": "module_5",
     "lessons": [
       {
         "str_id": "line_sensor_intro",
         "name": "Line Sensor and Black Line Detection",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/line_senosor_intro.md",
-        "sn": 12,
+        "sn": 28,
         "description": "This lesson focuses on understanding how an Octoliner sensor detects black lines using IR sensors and implementing black line detection.",
         "template": "# Write code here"
       }
@@ -202,14 +186,14 @@
   {
     "name": "Programming Fundamentals",
     "description": "Essential programming concepts including variables, conditional statements, loops, and arrays for robot control.",
-    "sn": 6,
+    "sn": 5,
     "str_id": "module_6",
     "lessons": [
       {
         "str_id": "introduction_to_variables_and_conditional_statements",
         "name": "Introduction to Variables and Conditional Statements",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Introduction%20to%20Variables%20and%20Conditional%20Statements.md",
-        "sn": 13,
+        "sn": 29,
         "description": "Learn how to declare and use variables in programming, and apply conditional logic using if, else if, and else statements.",
         "template": "# Write code here"
       },
@@ -217,7 +201,7 @@
         "str_id": "loops_and_conditional_logic",
         "name": "Loops and Conditional Logic",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Loops%20and%20Conditional%20Logic.md",
-        "sn": 14,
+        "sn": 30,
         "description": "Learn how to repeat actions using for and while loops combined with conditional statements.",
         "template": "# Write code here"
       },
@@ -225,7 +209,7 @@
         "str_id": "array_and_processing_data",
         "name": "Arrays and Processing Data with Loops",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Arrays%20and%20Processing%20Data%20with%20Loops.md",
-        "sn": 15,
+        "sn": 31,
         "description": "Understand how to use arrays to store and analyze sensor data with systematic data collection.",
         "template": "# Write code here"
       },
@@ -233,7 +217,7 @@
         "str_id": "hello_mqtt_variables",
         "name": "MQTT Greeting of Variables",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/MQTT%20Greeting%20of%20Variables.md",
-        "sn": 16,
+        "sn": 32,
         "description": "Declare variables of different types and broadcast them in a single MQTT status line.",
         "template": "# Write code here"
       },
@@ -241,7 +225,7 @@
         "str_id": "mission_time_report",
         "name": "Telemetry: Calculating Time",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Telemetry%20Calculating%20Time.md",
-        "sn": 17,
+        "sn": 33,
         "description": "Compute mission travel time from distance and speed and format it as telemetry.",
         "template": "# Write code here"
       },
@@ -249,7 +233,7 @@
         "str_id": "sensor_log_summary",
         "name": "Sensor Log: List and Aggregates",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Sensor%20Log%20List%20and%20Aggregates.md",
-        "sn": 18,
+        "sn": 34,
         "description": "Summarise a list of sensor readings by reporting the count, values, and average.",
         "template": "# Write code here"
       },
@@ -257,7 +241,7 @@
         "str_id": "list_operations_check",
         "name": "Working with Lists: Adding, Removing, and Measuring",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/Working%20with%20Lists%20Adding%20Removing%20and%20Measuring.md",
-        "sn": 19,
+        "sn": 35,
         "description": "Manipulate a mixed-type list and report its contents and length via MQTT.",
         "template": "# Write code here"
       }
@@ -266,22 +250,22 @@
   {
     "name": "Advanced Line Following",
     "description": "Advanced line following techniques including relay, P, PI, and PID controllers for smooth and accurate robot movement.",
-    "sn": 7,
+    "sn": 6,
     "str_id": "module_7",
     "lessons": [
       {
         "str_id": "basic_line_follower",
         "name": "Relay, P, and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/basic_line_follower.md",
-        "sn": 20,
-        "description": "Understand how different types of controllers work \u2014 Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
+        "sn": 36,
+        "description": "Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI) for line following.",
         "template": "# Write code here"
       },
       {
         "str_id": "pi",
         "name": "P and PI Controllers",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/P%20and%20PI.md",
-        "sn": 21,
+        "sn": 37,
         "description": "Learn about Proportional and Proportional-Integral controllers for improved line following performance.",
         "template": "# Write code here"
       },
@@ -289,7 +273,7 @@
         "str_id": "pid",
         "name": "PID Controller",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_7/PID.md",
-        "sn": 22,
+        "sn": 38,
         "description": "Implement a complete PID controller combining proportional, integral, and derivative terms for optimal line following.",
         "template": "# Write code here"
       }
@@ -298,14 +282,14 @@
   {
     "name": "Lists, Dictionaries and More",
     "description": "Hands-on assignments that connect sensors, LEDs, PWM, and telemetry using MicroPython data structures.",
-    "sn": 8,
+    "sn": 7,
     "str_id": "module_8",
     "lessons": [
       {
         "str_id": "telemetry_heartbeat_health",
         "name": "Telemetry Heartbeat with Status Levels",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Telemetry%20Heartbeat%20with%20Status%20Levels.md",
-        "sn": 23,
+        "sn": 39,
         "description": "Derive a health flag from readiness, speed, and battery data and include it in the STATUS heartbeat.",
         "template": "# Write code here"
       },
@@ -313,7 +297,7 @@
         "str_id": "line_sensor_leds",
         "name": "Line Sensor Reactive LEDs",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_8/Line%20Sensor%20Reactive%20LEDs.md",
-        "sn": 24,
+        "sn": 40,
         "description": "Mirror Octoliner readings to the LEDs using lists and dictionaries, then report the snapshot over MQTT.",
         "template": "# Write code here"
       }
@@ -322,14 +306,14 @@
   {
     "name": "Exploration and Mapping",
     "description": "Exploration missions that reveal a foggy map, scan for minerals, and navigate by coordinates with visual overlays.",
-    "sn": 9,
+    "sn": 8,
     "str_id": "module_9",
     "lessons": [
       {
         "str_id": "fog_of_war_survey",
         "name": "Fog of War Survey",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Fog%20of%20War%20Survey.md",
-        "sn": 25,
+        "sn": 41,
         "description": "Use a snake-pattern sweep to uncover a provided foggy map and stop once coverage passes 90%.",
         "template": "# Write code here"
       },
@@ -337,9 +321,25 @@
         "str_id": "docking",
         "name": "Docking",
         "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_9/Docking.md",
-        "sn": 26,
+        "sn": 42,
         "description": "Implement an auto-docking procedure to navigate the robot to a charging station ",
         "template": "# Write code here"
+      }
+    ]
+  },
+  {
+    "name": "Introduction to the Robot",
+    "description": "Getting familiar with the platform and learning how to control the robot.",
+    "sn": 9,
+    "str_id": "module_0",
+    "lessons": [
+      {
+        "str_id": "sandbox",
+        "name": "Sandbox",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_0/sandbox.md",
+        "sn": 43,
+        "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
+        "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
       }
     ]
   }

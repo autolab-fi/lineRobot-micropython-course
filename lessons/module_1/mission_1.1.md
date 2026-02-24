@@ -6,7 +6,7 @@ previous:
 next: test_drive
 ---
 
-# Mission 2.1 Welcome to Artemis Support Program
+# Mission 1.1 Welcome to Artemis Support Program
 
 ## Objective
 

@@ -6,7 +6,7 @@ previous: maneuvering
 next: electric_motors
 ---
 
-# Mission 2.7 Sequential navigation
+# Mission 1.7 Sequential navigation
 
 ## Objective
 

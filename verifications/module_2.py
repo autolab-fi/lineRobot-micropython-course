@@ -11,7 +11,7 @@ target_points = {
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
     'encoder_theory': [(30, 50), (30, 0)],
-    #'while_loops': [(30, 50), (30, 0)], #pending
+    'while_loops': [(30, 50), (30, 0)],
 
 
     # old
@@ -27,7 +27,7 @@ block_library_functions = {
     'defining_functions': False,
     'for_loops': False,
     'encoder_theory': False,
-    #'while_loops': False, #pending
+    'while_loops': False,
 
     # old
     'headlights': False,
@@ -854,7 +854,174 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
     return image, td, text, result
 
+#2.6 While loops
 
+def while_loops(robot, frame, td, code):
+    """
+    Verification: Don't Hit the Wall
+    - Wall hit determined by physical displacement (OpenCV)
+    - Score determined by encoder-derived distance
+    - Both reported in final description
+    - Final encoder read after stop is the authoritative value
+    """
+
+    # ===== CONFIGURATION =====
+    TASK_DURATION       = 15
+    TARGET_DISTANCE_CM  = 40.0          # wall position — robot must not exceed this physically
+    SUCCESS_MIN_CM      = 38.0          # must reach at least this (encoder)
+    R                   = 3.4           # wheel radius cm
+    ENCODER_SANITY_CAP  = 2000          # filter concatenated MQTT values
+    WALL_VISUAL_OFFSET  = 150           # extra pixels past target for wall line (tweak freely)
+    BANNED_FUNCTIONS    = ["move_forward", "move_backward", "move_forward_distance",
+                           "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
+    # =========================
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
+    result = {
+        "success": True,
+        "description": "You are amazing! Robot stopped before the wall.",
+        "score": 100
+    }
+    text = "Waiting..."
+
+    # ===== 1. FIRST-RUN INITIALIZATION =====
+    if td is None:
+        lines = code.split('\n') if code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        found_banned = [f for f in BANNED_FUNCTIONS if f in active_code]
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "start_position": None,
+            "wall_px": None,
+            "data": {
+                "completed": False,
+                "wall_hit": False,
+                "code_valid": len(found_banned) == 0,
+                "banned_found": found_banned,
+                "encoder_left": None,       # last value received — final print after stop is authoritative
+                "final_displacement": None,
+                "peak_displacement": 0.0,   # track max displacement to avoid jitter inflation
+                "final_result": None,
+                "final_text": None,
+            }
+        }
+
+    # ===== 2. STATE LOCK =====
+    if td["data"].get("completed", False):
+        frame = robot.draw_info(frame)
+        if td["wall_px"] is not None:
+            wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
+            cv2.line(frame, (td["wall_px"], 0), (td["wall_px"], frame.shape[0]), wall_color, 3)
+        return frame, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. BANNED FUNCTION CHECK =====
+    if not td["data"]["code_valid"]:
+        td["data"]["completed"] = True
+        result["success"] = False
+        result["score"] = 0
+        result["description"] = (f"Banned functions used: "
+                                  f"{', '.join(td['data']['banned_found'])} | Score: 0")
+        text = "Banned functions detected."
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+        return frame, td, text, result
+
+    # ===== 4. CAPTURE START POSITION & DERIVE WALL PIXEL X =====
+    pos    = robot.position
+    pos_px = robot.position_px
+
+    if td["start_position"] is None and pos is not None and pos_px is not None:
+        td["start_position"] = pos
+        if pos[0] != 0:
+            px_per_cm = pos_px[0] / pos[0]
+            td["wall_px"] = int(pos_px[0] + TARGET_DISTANCE_CM * px_per_cm + WALL_VISUAL_OFFSET)
+
+    # ===== 5. PARSE MQTT MESSAGES =====
+    # The last message received is the authoritative encoder value —
+    # student is instructed to do a final print after stop, capturing true position with drift
+    msg = robot.get_msg()
+    if msg is not None:
+        try:
+            val = float(msg.strip().split(":")[-1].strip())
+            if val < ENCODER_SANITY_CAP:
+                td["data"]["encoder_left"] = val
+        except (ValueError, IndexError):
+            pass
+
+    # ===== 6. DRAW OVERLAY =====
+    frame = robot.draw_info(frame)
+
+    # ===== 7. TRACK DISPLACEMENT & WALL HIT FLAG =====
+    if td["start_position"] is not None and pos is not None:
+        dx = pos[0] - td["start_position"][0]
+        dy = pos[1] - td["start_position"][1]
+        displacement = math.sqrt(dx**2 + dy**2)
+
+        # Track peak displacement to avoid post-stop jitter inflating the value
+        if displacement > td["data"]["peak_displacement"]:
+            td["data"]["peak_displacement"] = displacement
+
+        td["data"]["final_displacement"] = displacement
+
+        enc = td["data"]["encoder_left"] or 0
+        text = f"Displacement: {displacement:.1f}cm | Encoder: {enc:.0f}°"
+
+        # Wall hit is a physical event — triggered by peak displacement
+        if td["data"]["peak_displacement"] >= TARGET_DISTANCE_CM:
+            td["data"]["wall_hit"] = True
+            text = f"WALL HIT! Displacement: {displacement:.1f}cm | Encoder: {enc:.0f}°"
+
+    # ===== 8. DRAW WALL LINE =====
+    # Color reflects wall_hit state set in section 7 — drawn after check so correct this frame
+    if td["wall_px"] is not None:
+        wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
+        cv2.line(frame, (td["wall_px"], 0), (td["wall_px"], frame.shape[0]), wall_color, 3)
+
+    # ===== 9. TIMEOUT EVALUATION =====
+    if time.time() > td["end_time"] and not td["data"]["completed"]:
+        td["data"]["completed"] = True
+        enc       = td["data"]["encoder_left"]
+        peak_disp = td["data"]["peak_displacement"]
+        enc_dist  = (enc / 360) * (2 * math.pi * R) if enc is not None else None
+
+        if enc is None:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "No encoder data received. Did you print inside the loop? | Score: 0"
+            text = "No encoder data received."
+
+        elif td["data"]["wall_hit"]:
+            # Wall hit takes priority — but still report encoder distance so student sees the gap
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (f"Robot hit the wall! "
+                                      f"Encoder distance: {enc_dist:.1f}cm | "
+                                      f"Final displacement (with drift): {peak_disp:.1f}cm | Score: 0")
+            text = "WALL HIT!"
+
+        elif enc_dist < SUCCESS_MIN_CM:
+            result["success"] = False
+            result["score"] = 50
+            result["description"] = (f"Stopped too early — "
+                                      f"Encoder distance: {enc_dist:.1f}cm | "
+                                      f"Final displacement: {peak_disp:.1f}cm | Score: 50")
+            text = "Stopped too short."
+
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = (f"Stopped in the zone! "
+                                      f"Encoder distance: {enc_dist:.1f}cm | "
+                                      f"Final displacement: {peak_disp:.1f}cm | Score: 100")
+            text = "Stopped in the zone!"
+
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
+    return frame, td, text, result
 
 ##Old module_2 functions
 

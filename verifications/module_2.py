@@ -104,7 +104,7 @@ def electric_motors(robot, image, td: dict, user_code=None):
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
                 "flag-coords": (FLAG_X, FLAG_Y),
-                "flag-coords-cm": (robot.pixels_to_cm(FLAG_X), robot.pixels_to_cm(FLAG_Y)),
+                "flag-coords-cm": None,  # set lazily once robot is detected
             }
         }
 
@@ -168,7 +168,11 @@ def electric_motors(robot, image, td: dict, user_code=None):
     # evaluation — only if code valid
     if td["data"]["code_valid"]:
         position = robot.get_info()["position"]
-        if position and "flag-coords-cm" in td["data"]:
+        if position:
+            # set flag-coords-cm lazily on first detection
+            if td["data"]["flag-coords-cm"] is None:
+                coords = td["data"]["flag-coords"]
+                td["data"]["flag-coords-cm"] = (robot.pixels_to_cm(coords[0]), robot.pixels_to_cm(coords[1]))
             delta = robot.delta_points((position[1], position[0]), td["data"]["flag-coords-cm"])
             if delta < FLAG_THRESHOLD:
                 td["data"]["reached"] = True
@@ -432,24 +436,27 @@ def defining_functions(robot, image, td: dict, user_code=None):
         active_code = '\n'.join(active_lines)
         found_banned = [f for f in banned if f in active_code]
 
-        current_ang = robot.compute_angle_x()
-        target_ang = current_ang + 180 if current_ang < 180 else current_ang - 180
-
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
-            "target_ang": target_ang,
+            "target_ang": None,  # set lazily once robot is detected
             "data": {
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
             }
         }
 
+    # set target_ang lazily on first robot detection
     ang = robot.compute_angle_x()
-    delta_ang = abs(ang - td["target_ang"])
+    if ang is not None and td["target_ang"] is None:
+        td["target_ang"] = ang + 180 if ang < 180 else ang - 180
+
+    delta_ang = abs(ang - td["target_ang"]) if ang is not None and td["target_ang"] is not None else None
 
     if not td["data"]["code_valid"]:
         text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
+    elif delta_ang is None:
+        text = "Waiting for robot detection..."
     else:
         text = f"Robot must turn to: {delta_ang:0.0f}°"
 
@@ -457,7 +464,6 @@ def defining_functions(robot, image, td: dict, user_code=None):
             if "confirm_start" not in td["data"]:
                 td["data"]["confirm_start"] = time.time()
             elif time.time() - td["data"]["confirm_start"] > 1.0:
-                # success — lock result early, timeout will confirm
                 result["success"] = True
                 result["score"] = 100
                 result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
@@ -473,6 +479,11 @@ def defining_functions(robot, image, td: dict, user_code=None):
             result["score"] = 0
             result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
             text = "Banned functions detected."
+        elif delta_ang is None:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Robot not detected in camera frame | Score: 0"
+            text = "Robot not detected."
         elif delta_ang < 10:
             result["success"] = True
             result["score"] = 100

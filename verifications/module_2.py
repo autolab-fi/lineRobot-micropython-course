@@ -12,27 +12,27 @@ target_points = {
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
     'encoder_theory': [(30, 50), (30, 0)],
-    'while_loops': [(30, 50), (30, 0)]
+    'while_loops': [(30, 50), (30, 0)],
 
 
     # old
-    #'headlights': [(30, 50), (30, 0)],
-    #'alarm': [(30, 50), (30, 0)],
+    'headlights': [(30, 50), (30, 0)],
+    'alarm': [(30, 50), (30, 0)],
 
 }
 
 block_library_functions = {
     # new
-    'electric_motors': False,
+    'electric_motor': False,
     'differential_drive': False,
     'defining_functions': False,
     'for_loops': False,
     'encoder_theory': False,
-    'while_loops': False
+    'while_loops': False,
 
     # old
-    #'headlights': False,
-    #'alarm': False,
+    'headlights': False,
+    'alarm': False,
 }
 
 
@@ -157,7 +157,7 @@ def electric_motors(robot, image, td: dict, user_code=None):
         except Exception as e:
             print(f"Error loading or processing image: {e}")
             td["data"]["image_error"] = True
-            #return image, td, f"Error processing image: {str(e)}", result
+            # don't return early — task continues without flag image
 
     # ===== 2. STATE LOCK =====
     if td["data"].get("completed", False):
@@ -921,16 +921,10 @@ def while_loops(robot, image, td: dict, user_code=None):
         return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
 
     # ===== 3. BANNED FUNCTION CHECK =====
+    # Don't return early — just flag and wait for timeout
+    # Returning success=False here would terminate the platform immediately
     if not td["data"]["code_valid"]:
-        td["data"]["completed"] = True
-        result["success"] = False
-        result["score"] = 0
-        result["description"] = (f"Banned functions used: "
-                                  f"{', '.join(td['data']['banned_found'])} | Score: 0")
-        text = "Banned functions detected."
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
-        return image, td, text, result
+        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
 
     # ===== 4. CAPTURE START POSITION & DERIVE WALL PIXEL X =====
     pos    = robot.position
@@ -990,7 +984,14 @@ def while_loops(robot, image, td: dict, user_code=None):
         peak_disp = td["data"]["peak_displacement"]
         enc_dist  = (enc / 360) * (2 * math.pi * R) if enc is not None else None
 
-        if enc is None:
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (f"Banned functions used: "
+                                      f"{', '.join(td['data']['banned_found'])} | Score: 0")
+            text = "Banned functions detected."
+
+        elif enc is None:
             result["success"] = False
             result["score"] = 0
             result["description"] = "No encoder data received. Did you print inside the loop? | Score: 0"

@@ -6,18 +6,15 @@ import numpy as np
 import re
 
 target_points = {
-    # new
     'electric_motors': [(30, 50), (30, 0)],
     'differential_drive': [(30, 50), (30, 0)],
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
     'encoder_theory': [(30, 50), (30, 0)],
     'while_loops': [(30, 50), (30, 0)]
-
 }
 
 block_library_functions = {
-    # new
     'electric_motors': False,
     'differential_drive': False,
     'defining_functions': False,
@@ -43,7 +40,6 @@ def delta_points(point_0, point_1):
                      ((point_0[1] - point_1[1]) ** 2))
 
 # Necessary Helper Functions
-
 
 def closest_node(node, nodes):
     """Find the index of the closest node in a set of nodes"""
@@ -74,20 +70,15 @@ def draw_trajectory(image, points, color, width, restore):
             restore_trajectory(image, prev_point, point, color, int(width * 2))
 
 
-#New functions
-
-#2.1 electric motor
+# 2.1 electric motors
 
 def electric_motors(robot, image, td: dict, user_code=None):
-    """Test for lesson 8: Electric motor"""
+    """Test for lesson: Electric Motors — robot must reach the flag using run_motor commands"""
+    #Values in relation to robot!
+    FLAG_X = 400
+    FLAG_Y = 1000
+    FLAG_THRESHOLD = 7.0
 
-    # ===== CONFIGURATION =====
-    FLAG_X = 300        # pixel x coordinate of flag on screen
-    FLAG_Y = 400        # pixel y coordinate of flag on screen
-    FLAG_THRESHOLD = 7.0  # detection radius in cm
-    # =========================
-
-    # ===== 0. INITIAL RESULT TEMPLATE =====
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -95,7 +86,8 @@ def electric_motors(robot, image, td: dict, user_code=None):
     }
     text = "Not recognized"
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if not td:
         banned = ["turn_left", "turn_right", "move_forward_distance",
                   "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
@@ -108,7 +100,6 @@ def electric_motors(robot, image, td: dict, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
-                "completed": False,
                 "reached": False,
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
@@ -120,7 +111,6 @@ def electric_motors(robot, image, td: dict, user_code=None):
         try:
             basepath = os.path.abspath(os.path.dirname(__file__))
             filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
-
             if not os.path.exists(filepath):
                 filepath = os.path.join(basepath, "images", "flag_finish.jpg")
 
@@ -148,22 +138,8 @@ def electric_motors(robot, image, td: dict, user_code=None):
         except Exception as e:
             print(f"Error loading or processing image: {e}")
             td["data"]["image_error"] = True
-            # don't return early — task continues without flag image
 
-    # ===== 2. STATE LOCK =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(image)
-
-    # ===== 4. CODE VALIDATION CHECK =====
-    # Don't return early — just block evaluation and wait for timeout
-    if not td["data"]["code_valid"]:
-        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
-
-    # ===== 5. FLAG IMAGE DRAWING =====
+    # draw flag
     if not td["data"].get("image_error", False) and "flag" in td["data"]:
         flag = td["data"]["flag"]
         x_left = int(flag.shape[0]/2)
@@ -189,59 +165,45 @@ def electric_motors(robot, image, td: dict, user_code=None):
                           image[coords[0] - x_left:x_right + coords[0],
                                 coords[1] - y_bottom:y_up + coords[1]])
 
-    # ===== 6. EVALUATION LOOP =====
-    # Only runs if code is valid
+    # evaluation — only if code valid
     if td["data"]["code_valid"]:
         position = robot.get_info()["position"]
         if position and "flag-coords-cm" in td["data"]:
             delta = robot.delta_points((position[1], position[0]), td["data"]["flag-coords-cm"])
-
             if delta < FLAG_THRESHOLD:
                 td["data"]["reached"] = True
-                if "confirm_start" not in td["data"]:
-                    td["data"]["confirm_start"] = time.time()
-                elif time.time() - td["data"]["confirm_start"] > 1.0:
-                    td["data"]["completed"] = True
-                    result["success"] = True
-                    result["score"] = 100
-                    result["description"] = "You are amazing! The Robot has reached the target point | Score: 100"
-                    text = "The robot has reached target point!"
-                    td["data"]["final_result"] = result
-                    td["data"]["final_text"] = text
-                else:
-                    text = "The robot has reached target point!"
+                text = "The robot has reached target point!"
             else:
-                if "confirm_start" in td["data"]:
-                    del td["data"]["confirm_start"]
                 text = f'Distance to target point {delta:0.1f} cm'
+    else:
+        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
 
-    # ===== 7. TIMEOUT / FINAL EVALUATION =====
-    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
-        td["data"]["completed"] = True
-
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
             text = "Banned functions detected."
-        else:
-            result["success"] = False  # safe — completed=True set above
+        elif not td["data"]["reached"]:
+            result["success"] = False
             result["score"] = 0
             result["description"] = "Robot did not reach the target point | Score: 0"
             text = "Failed to reach target point."
-
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! The Robot has reached the target point | Score: 100"
+            text = "The robot has reached target point!"
 
     return image, td, text, result
+
 
 # 2.2 differential drive
 
 def differential_drive(robot, image, td, user_code=None):
     """Verification function for driving straight assignment"""
 
-    # ===== 0. INITIAL RESULT TEMPLATE =====
-    # CRITICAL: Always start with success=True (platform requirement)
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -249,9 +211,9 @@ def differential_drive(robot, image, td, user_code=None):
     }
     text = "Drive the robot in a straight line for 3 seconds"
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if not td:
-        # Check for banned functions in user code
         banned = ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds",
                   "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"]
         lines = user_code.split('\n') if user_code else []
@@ -263,7 +225,6 @@ def differential_drive(robot, image, td, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
-                "completed": False,
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
                 "task-failed": "",
@@ -282,12 +243,10 @@ def differential_drive(robot, image, td, user_code=None):
         try:
             basepath = os.path.abspath(os.path.dirname(__file__))
             filepath = os.path.join(basepath, "auto_tests", "images", "traffic-sign.jpg")
-
             if not os.path.exists(filepath):
                 filepath = os.path.join(basepath, "images", "traffic-sign.jpg")
 
             if not os.path.exists(filepath):
-                # Placeholder cone - orange triangle with white stripe
                 print("Warning: traffic-sign.jpg not found, using placeholder")
                 cone = np.ones((100, 100, 3), dtype=np.uint8) * 255
                 pts = np.array([[50, 5], [95, 95], [5, 95]], np.int32)
@@ -307,23 +266,10 @@ def differential_drive(robot, image, td, user_code=None):
             print(f"Error initializing drive straight test: {e}")
             td["data"]["image_error"] = True
 
-    # ===== 2. STATE LOCK - early return if already completed =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(image)
-
-    # ===== 4. CODE VALIDATION CHECK =====
-    # Don't return failure here — just block evaluation and wait for timeout
-    # This way success=False is only set at timeout where completed=True is safe
     if not td["data"]["code_valid"]:
         text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
 
-    # ===== 5. SET UP CONE CORRIDOR =====
-    # Cones always drawn regardless of code validity
-    # Keep retrying until robot position is detected
+    # set up cone corridor
     if robot and robot.position_px and len(td["data"].get("cones-coords", [])) == 0:
         y_u = robot.position_px[1] - 150
         y_d = robot.position_px[1] + 150
@@ -339,7 +285,7 @@ def differential_drive(robot, image, td, user_code=None):
             if td["data"]["direction_0"] > 180:
                 td["data"]["direction_0"] -= 360
 
-    # ===== 6. DRAW CONES =====
+    # draw cones
     if "cones-coords" in td["data"] and "cone" in td["data"] and len(td["data"]["cones-coords"]) > 0:
         try:
             cone = td["data"]["cone"]
@@ -350,7 +296,6 @@ def differential_drive(robot, image, td, user_code=None):
 
             for i in range(min(10, len(td["data"]["cones-coords"]))):
                 coords = td["data"]["cones-coords"][i]
-
                 if (0 <= coords[0] - x_left < image.shape[0] and
                     coords[0] + x_right < image.shape[0] and
                     0 <= coords[1] - y_bottom < image.shape[1] and
@@ -376,12 +321,10 @@ def differential_drive(robot, image, td, user_code=None):
         except Exception as e:
             print(f"Error drawing cones: {e}")
 
-    # ===== 7. EVALUATION LOOP =====
-    # Only runs if code is valid
+    # evaluation — only if code valid
     if td["data"]["code_valid"] and robot and robot.position is not None:
         angle_x = robot.compute_angle_x()
         angle_x_disp = angle_x
-
         if angle_x > 180:
             angle_x -= 360
 
@@ -403,31 +346,17 @@ def differential_drive(robot, image, td, user_code=None):
 
                 if td["data"]["robot_start_move_time"] is not None and delta_pos > 0.5:
                     if angle_diff <= 10 and td["data"]["straight_driving_start"] is not None:
-                        current_time = time.time()
-                        td["data"]["straight_driving_duration"] = current_time - td["data"]["straight_driving_start"]
-
+                        td["data"]["straight_driving_duration"] = time.time() - td["data"]["straight_driving_start"]
                         if td["data"]["straight_driving_duration"] >= 3.0:
-                            # SUCCESS — lock in immediately, no need to wait for timeout
-                            td["data"]["completed"] = True
-                            result["success"] = True
-                            result["score"] = 100
-                            result["description"] = (
-                                f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s "
-                                f"with max deviation of {td['data']['max_angle_deviation']:.1f}° | Score: 100"
-                            )
                             text = f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s"
-                            td["data"]["final_result"] = result
-                            td["data"]["final_text"] = text
+                            td["data"]["task-failed"] = ""
                         else:
                             text = f"Straight: {td['data']['straight_driving_duration']:.1f}/3.0s, Deviation: {angle_diff:.1f}°"
-
                     elif angle_diff > 10:
                         td["data"]["straight_driving_start"] = None
                         td["data"]["straight_driving_duration"] = 0
-
                         if not td["data"]["task-failed"]:
                             td["data"]["task-failed"] = f"Robot deviated {angle_diff:.1f}° (max allowed: 10°)"
-
                             if robot.position_px is not None and len(td["data"]["cones-coords"]) > 0:
                                 min_index = closest_node((robot.position_px[1], robot.position_px[0]),
                                                         td["data"]["cones-coords"])
@@ -444,32 +373,33 @@ def differential_drive(robot, image, td, user_code=None):
 
         td["data"]["prev_robot_position"] = robot.position
 
-    # ===== 8. TIMEOUT / FINAL EVALUATION =====
-    # All failure cases handled here — completed=True is always set before success=False
-    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
-        td["data"]["completed"] = True
-
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
-            # Safe now — completed=True set above
             result["success"] = False
             result["score"] = 0
             result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
             text = "Banned functions detected."
-
         elif td["data"]["task-failed"]:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = td["data"]["task-failed"] + " | Score: 0"
             text = "Failed: " + td["data"]["task-failed"]
-
         elif td["data"].get("robot_start_move_time") is None:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = "Robot didn't start moving | Score: 0"
             text = "Robot didn't start moving."
-
+        elif td["data"]["straight_driving_duration"] >= 3.0:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = (
+                f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s "
+                f"with max deviation of {td['data']['max_angle_deviation']:.1f}° | Score: 100"
+            )
+            text = f"Success! Drove straight for {td['data']['straight_driving_duration']:.1f}s"
         else:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = (
                 f"Robot only drove straight for {td['data']['straight_driving_duration']:.1f}s "
@@ -477,17 +407,14 @@ def differential_drive(robot, image, td, user_code=None):
             )
             text = f"Only {td['data']['straight_driving_duration']:.1f}s straight, need 3.0s."
 
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
-
     return image, td, text, result
 
-# 2.3 CHANGED FROM "movement" in module_3
+
+# 2.3 defining functions
 
 def defining_functions(robot, image, td: dict, user_code=None):
-    """Test: Robot must turn 180 degrees."""
+    """Test: Robot must turn 180 degrees using a defined function."""
 
-    # ===== 0. INITIAL RESULT TEMPLATE =====
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -495,7 +422,8 @@ def defining_functions(robot, image, td: dict, user_code=None):
     }
     text = "Waiting..."
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if not td:
         banned = ["turn_left", "turn_right", "move_forward_distance",
                   "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
@@ -512,81 +440,62 @@ def defining_functions(robot, image, td: dict, user_code=None):
             "end_time": time.time() + 10,
             "target_ang": target_ang,
             "data": {
-                "completed": False,
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
             }
         }
 
-    # ===== 2. STATE LOCK =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(image)
     ang = robot.compute_angle_x()
     delta_ang = abs(ang - td["target_ang"])
 
-    # ===== 4. CODE VALIDATION CHECK =====
-    # Don't return early — just block evaluation and wait for timeout
     if not td["data"]["code_valid"]:
         text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
-
-    # ===== 5. EVALUATION LOOP =====
-    # Only runs if code is valid
-    if td["data"]["code_valid"]:
+    else:
         text = f"Robot must turn to: {delta_ang:0.0f}°"
 
-        if delta_ang < 10 and not td["data"]["completed"]:
+        if delta_ang < 10:
             if "confirm_start" not in td["data"]:
                 td["data"]["confirm_start"] = time.time()
             elif time.time() - td["data"]["confirm_start"] > 1.0:
-                td["data"]["completed"] = True
+                # success — lock result early, timeout will confirm
                 result["success"] = True
                 result["score"] = 100
                 result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
                 text = "Target angle reached!"
-                td["data"]["final_result"] = result
-                td["data"]["final_text"] = text
         else:
             if "confirm_start" in td["data"]:
                 del td["data"]["confirm_start"]
 
-    # ===== 6. TIMEOUT / FINAL EVALUATION =====
-    if (td["end_time"] - time.time()) < 1 and not td["data"].get("completed", False):
-        td["data"]["completed"] = True
-
+    # timeout / final verdict
+    if (td["end_time"] - time.time()) < 1:
         if not td["data"]["code_valid"]:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
             text = "Banned functions detected."
+        elif delta_ang < 10:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
+            text = "Target angle reached!"
         else:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = f"Robot did not turn 180 degrees. Final error: {delta_ang:0.0f}° | Score: 0"
             text = "Failed to reach target angle."
 
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
-
     return image, td, text, result
 
-# 2.4 "for loops"
-# make a drawing board (like in the sandbox, but change the starting point) + checking the code for a loop
+
+# 2.4 for loops
 
 def for_loops(robot, image, td: dict, user_code=None):
     """Verification for lesson: For Loops / Drawing trajectory"""
 
-    # ===== CONFIGURATION =====
-    TASK_DURATION = 60      # seconds to record trajectory
-    TRAJECTORY_COLOR = (255, 0, 0)  # BGR - blue
+    TASK_DURATION = 60
+    TRAJECTORY_COLOR = (255, 0, 0)
     TRAJECTORY_WIDTH = 3
-    # =========================
 
-    # ===== 0. INITIAL RESULT TEMPLATE =====
-    # CRITICAL: Always start with success=True (platform requirement)
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -594,9 +503,9 @@ def for_loops(robot, image, td: dict, user_code=None):
     }
     text = "Not recognized"
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if not td:
-        # Check for for loop in user code
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
@@ -606,28 +515,15 @@ def for_loops(robot, image, td: dict, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + TASK_DURATION,
             "data": {
-                "completed": False,
                 "code_valid": code_valid,
             },
             "trajectory": []
         }
 
-    # ===== 2. STATE LOCK - early return if already completed =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(image)
-
-    # ===== 4. CODE VALIDATION CHECK =====
-    # Don't return early — just flag and wait for timeout
     if not td["data"]["code_valid"]:
         text = "No for loop detected in code"
 
-    # ===== 5. TRAJECTORY TRACKING =====
-    # Always track regardless of code validity — visual feedback for student
+    # trajectory tracking
     info = robot.get_info()
     robot_position_px = info["position_px"]
     robot_position = info["position"]
@@ -639,54 +535,40 @@ def for_loops(robot, image, td: dict, user_code=None):
     if len(td["trajectory"]) > 0:
         draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
 
-    # ===== 6. MQTT MESSAGE =====
     msg = robot.get_msg()
     if msg is not None:
         text = f"Message received: {msg}"
 
-    # ===== 7. TIMEOUT / FINAL EVALUATION =====
-    # All failure cases handled here — completed=True always set before success=False
-    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
-        td["data"]["completed"] = True
-
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = "No for loop found in code | Score: 0"
             text = "No for loop detected."
         else:
             result["success"] = True
             result["score"] = 100
-            result["description"] = f"You are amazing! The Robot has completed the assignment | Score: 100"
+            result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
             text = "Trajectory complete!"
-
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
 
     return image, td, text, result
 
 
-# 2.5 Encoder theory
-#checking the value of the encoders (falling within the range of 310-350) and checking the distance output
+# 2.5 encoder theory
 
 def encoder_theory(robot, image, td: dict, user_code=None):
-    """Verification function for encoder theory task.
-    Checks: math import, encoder resets, math.pi, printed encoder value 310-360°,
-    printed distance in expected range, AND physical displacement matches.
-    """
+    """Verification: encoder value 310-360°, distance calculation, physical displacement match."""
 
-    # ===== CONFIGURATION =====
-    WHEEL_RADIUS = 3.4      # actual measured wheel radius in cm
-    ENCODER_MIN = 310       # minimum acceptable encoder degrees
-    ENCODER_MAX = 360       # maximum acceptable encoder degrees
-    DISTANCE_MIN = 18.0     # (310/360) * 2 * π * 3.4 = ~18.38 cm
-    DISTANCE_MAX = 21.4     # (360/360) * 2 * π * 3.4 = ~21.36 cm
-    DISPLACEMENT_MIN = 19.0 # OpenCV physical measurement lower bound
-    DISPLACEMENT_MAX = 26.0 # OpenCV physical measurement upper bound
-    TASK_DURATION = 20      # seconds
-    # =========================
+    WHEEL_RADIUS = 3.4
+    ENCODER_MIN = 310
+    ENCODER_MAX = 360
+    DISTANCE_MIN = 18.0
+    DISTANCE_MAX = 21.4
+    DISPLACEMENT_MIN = 19.0
+    DISPLACEMENT_MAX = 26.0
+    TASK_DURATION = 20
 
-    # ===== 0. INITIAL RESULT TEMPLATE =====
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -694,7 +576,8 @@ def encoder_theory(robot, image, td: dict, user_code=None):
     }
     text = "Reading encoder data..."
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if not td:
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
@@ -714,7 +597,6 @@ def encoder_theory(robot, image, td: dict, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + TASK_DURATION,
             "data": {
-                "completed": False,
                 "code_valid": len(missing) == 0,
                 "missing": missing,
                 "encoder_left": None,
@@ -724,30 +606,17 @@ def encoder_theory(robot, image, td: dict, user_code=None):
             }
         }
 
-    # ===== 2. STATE LOCK =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(image)
-
-    # ===== 4. CODE VALIDATION CHECK =====
     if not td["data"]["code_valid"]:
         text = f"Missing: {', '.join(td['data']['missing'])}"
 
-    # ===== 5. TRACK PHYSICAL DISPLACEMENT =====
-    # Always track regardless of code validity
+    # track physical displacement
     pos = robot.position
     if pos is not None:
         if td["data"]["start_position"] is None:
             td["data"]["start_position"] = pos
         td["data"]["end_position"] = pos
 
-    # ===== 6. PARSE MQTT MESSAGES =====
-    # Matches student template print format:
-    # print("Encoder degrees left:", left_deg)
-    # print("Distance in cm:", distance)
+    # parse MQTT messages
     msg = robot.get_msg()
     if msg is not None:
         text = f"Received: {msg}"
@@ -759,29 +628,22 @@ def encoder_theory(robot, image, td: dict, user_code=None):
         except (ValueError, IndexError):
             pass
 
-    # Show live readings on overlay
     if td["data"]["encoder_left"] is not None:
         text = (f"Left: {td['data']['encoder_left']:.0f}° "
                 f"Dist: {td['data']['distance'] or 0:.2f}cm")
 
-    # ===== 7. TIMEOUT / FINAL EVALUATION =====
-    # All failure cases handled here — completed=True always set before success=False
-    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
-        td["data"]["completed"] = True
-
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
-            result["success"] = False  # safe — completed=True set above
+            result["success"] = False
             result["score"] = 0
             result["description"] = f"Missing required elements: {', '.join(td['data']['missing'])} | Score: 0"
             text = "Code validation failed."
-
         else:
             left = td["data"]["encoder_left"]
             distance = td["data"]["distance"]
             start = td["data"]["start_position"]
             end = td["data"]["end_position"]
-
-            # Cross-check: expected distance from encoder using correct formula
             expected = (left / 360) * (2 * math.pi * WHEEL_RADIUS) if left else None
 
             if left is None:
@@ -789,7 +651,6 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                 result["score"] = 0
                 result["description"] = "No encoder data received | Score: 0"
                 text = "No encoder data received."
-
             elif not (ENCODER_MIN <= left <= ENCODER_MAX):
                 result["success"] = False
                 result["score"] = 0
@@ -799,13 +660,11 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                     f"(need {ENCODER_MIN}-{ENCODER_MAX}°) | Score: 0"
                 )
                 text = "Encoder value out of range."
-
             elif distance is None:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = "No distance calculation received | Score: 0"
                 text = "Distance not printed."
-
             elif distance < DISTANCE_MIN or distance > DISTANCE_MAX:
                 result["success"] = False
                 result["score"] = 0
@@ -814,13 +673,11 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                     f"(expected {DISTANCE_MIN}-{DISTANCE_MAX}cm based on R={WHEEL_RADIUS}cm) | Score: 0"
                 )
                 text = "Distance calculation incorrect."
-
             elif start is None or end is None:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = "Robot not detected in camera frame | Score: 0"
                 text = "Robot not detected."
-
             else:
                 displacement = robot.delta_points(start, end)
                 if displacement < DISPLACEMENT_MIN or displacement > DISPLACEMENT_MAX:
@@ -843,34 +700,27 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                     )
                     text = "Encoder task complete!"
 
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
-
     return image, td, text, result
 
-#2.6 While loops
+
+# 2.6 while loops
 
 def while_loops(robot, image, td: dict, user_code=None):
     """
     Verification: Don't Hit the Wall
     - Wall hit determined by physical displacement (OpenCV)
     - Score determined by encoder-derived distance
-    - Both reported in final description
-    - Final encoder read after stop is the authoritative value
     """
 
-    # ===== CONFIGURATION =====
-    TASK_DURATION       = 15
-    TARGET_DISTANCE_CM  = 40.0          # wall position — robot must not exceed this physically
-    SUCCESS_MIN_CM      = 38.0          # must reach at least this (encoder)
-    R                   = 3.4           # wheel radius cm
-    ENCODER_SANITY_CAP  = 2000          # filter concatenated MQTT values
-    WALL_VISUAL_OFFSET  = 150           # extra pixels past target for wall line (tweak freely)
-    BANNED_FUNCTIONS    = ["move_forward", "move_backward", "move_forward_distance",
-                           "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
-    # =========================
+    TASK_DURATION      = 15
+    TARGET_DISTANCE_CM = 40.0
+    SUCCESS_MIN_CM     = 38.0
+    R                  = 3.4
+    ENCODER_SANITY_CAP = 2000
+    WALL_VISUAL_OFFSET = 150
+    BANNED_FUNCTIONS   = ["move_forward", "move_backward", "move_forward_distance",
+                          "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
 
-    # ===== 0. INITIAL RESULT TEMPLATE =====
     result = {
         "success": True,
         "description": "You are amazing! Robot stopped before the wall.",
@@ -878,7 +728,8 @@ def while_loops(robot, image, td: dict, user_code=None):
     }
     text = "Waiting..."
 
-    # ===== 1. FIRST-RUN INITIALIZATION =====
+    image = robot.draw_info(image)
+
     if td is None:
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
@@ -891,33 +742,18 @@ def while_loops(robot, image, td: dict, user_code=None):
             "start_position": None,
             "wall_px": None,
             "data": {
-                "completed": False,
                 "wall_hit": False,
                 "code_valid": len(found_banned) == 0,
                 "banned_found": found_banned,
-                "encoder_left": None,       # last value received — final print after stop is authoritative
-                "final_displacement": None,
-                "peak_displacement": 0.0,   # track max displacement to avoid jitter inflation
-                "final_result": None,
-                "final_text": None,
+                "encoder_left": None,
+                "peak_displacement": 0.0,
             }
         }
 
-    # ===== 2. STATE LOCK =====
-    if td["data"].get("completed", False):
-        image = robot.draw_info(image)
-        if td["wall_px"] is not None:
-            wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
-            cv2.line(image, (td["wall_px"], 0), (td["wall_px"], image.shape[0]), wall_color, 3)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
-
-    # ===== 3. BANNED FUNCTION CHECK =====
-    # Don't return early — just flag and wait for timeout
-    # Returning success=False here would terminate the platform immediately
     if not td["data"]["code_valid"]:
         text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
 
-    # ===== 4. CAPTURE START POSITION & DERIVE WALL PIXEL X =====
+    # capture start position and derive wall pixel x
     pos    = robot.position
     pos_px = robot.position_px
 
@@ -927,9 +763,7 @@ def while_loops(robot, image, td: dict, user_code=None):
             px_per_cm = pos_px[0] / pos[0]
             td["wall_px"] = int(pos_px[0] + TARGET_DISTANCE_CM * px_per_cm + WALL_VISUAL_OFFSET)
 
-    # ===== 5. PARSE MQTT MESSAGES =====
-    # The last message received is the authoritative encoder value —
-    # student is instructed to do a final print after stop, capturing true position with drift
+    # parse MQTT messages
     msg = robot.get_msg()
     if msg is not None:
         try:
@@ -939,83 +773,64 @@ def while_loops(robot, image, td: dict, user_code=None):
         except (ValueError, IndexError):
             pass
 
-    # ===== 6. DRAW OVERLAY =====
-    image = robot.draw_info(image)
-
-    # ===== 7. TRACK DISPLACEMENT & WALL HIT FLAG =====
+    # track displacement and wall hit
     if td["start_position"] is not None and pos is not None:
         dx = pos[0] - td["start_position"][0]
         dy = pos[1] - td["start_position"][1]
         displacement = math.sqrt(dx**2 + dy**2)
 
-        # Track peak displacement to avoid post-stop jitter inflating the value
         if displacement > td["data"]["peak_displacement"]:
             td["data"]["peak_displacement"] = displacement
-
-        td["data"]["final_displacement"] = displacement
 
         enc = td["data"]["encoder_left"] or 0
         text = f"Displacement: {displacement:.1f}cm | Encoder: {enc:.0f}°"
 
-        # Wall hit is a physical event — triggered by peak displacement
         if td["data"]["peak_displacement"] >= TARGET_DISTANCE_CM:
             td["data"]["wall_hit"] = True
             text = f"WALL HIT! Displacement: {displacement:.1f}cm | Encoder: {enc:.0f}°"
 
-    # ===== 8. DRAW WALL LINE =====
-    # Color reflects wall_hit state set in section 7 — drawn after check so correct this frame
+    # draw wall line
     if td["wall_px"] is not None:
         wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
         cv2.line(image, (td["wall_px"], 0), (td["wall_px"], image.shape[0]), wall_color, 3)
 
-    # ===== 9. TIMEOUT EVALUATION =====
-    if time.time() > td["end_time"] and not td["data"]["completed"]:
-        td["data"]["completed"] = True
-        enc       = td["data"]["encoder_left"]
+    # timeout / final verdict
+    if time.time() > td["end_time"]:
+        enc      = td["data"]["encoder_left"]
         peak_disp = td["data"]["peak_displacement"]
-        enc_dist  = (enc / 360) * (2 * math.pi * R) if enc is not None else None
+        enc_dist = (enc / 360) * (2 * math.pi * R) if enc is not None else None
 
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
             result["description"] = (f"Banned functions used: "
-                                      f"{', '.join(td['data']['banned_found'])} | Score: 0")
+                                     f"{', '.join(td['data']['banned_found'])} | Score: 0")
             text = "Banned functions detected."
-
         elif enc is None:
             result["success"] = False
             result["score"] = 0
             result["description"] = "No encoder data received. Did you print inside the loop? | Score: 0"
             text = "No encoder data received."
-
         elif td["data"]["wall_hit"]:
-            # Wall hit takes priority — but still report encoder distance so student sees the gap
             result["success"] = False
             result["score"] = 0
             result["description"] = (f"Robot hit the wall! "
-                                      f"Encoder distance: {enc_dist:.1f}cm | "
-                                      f"Final displacement (with drift): {peak_disp:.1f}cm | Score: 0")
+                                     f"Encoder distance: {enc_dist:.1f}cm | "
+                                     f"Final displacement (with drift): {peak_disp:.1f}cm | Score: 0")
             text = "WALL HIT!"
-
         elif enc_dist < SUCCESS_MIN_CM:
             result["success"] = False
             result["score"] = 50
             result["description"] = (f"Stopped too early — "
-                                      f"Encoder distance: {enc_dist:.1f}cm | "
-                                      f"Final displacement: {peak_disp:.1f}cm | Score: 50")
+                                     f"Encoder distance: {enc_dist:.1f}cm | "
+                                     f"Final displacement: {peak_disp:.1f}cm | Score: 50")
             text = "Stopped too short."
-
         else:
             result["success"] = True
             result["score"] = 100
             result["description"] = (f"Stopped in the zone! "
-                                      f"Encoder distance: {enc_dist:.1f}cm | "
-                                      f"Final displacement: {peak_disp:.1f}cm | Score: 100")
+                                     f"Encoder distance: {enc_dist:.1f}cm | "
+                                     f"Final displacement: {peak_disp:.1f}cm | Score: 100")
             text = "Stopped in the zone!"
 
-        td["data"]["final_result"] = result
-        td["data"]["final_text"] = text
-
     return image, td, text, result
-
-

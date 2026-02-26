@@ -23,7 +23,7 @@ target_points = {
 
 block_library_functions = {
     # new
-    'electric_motor': False,
+    'electric_motors': False,
     'differential_drive': False,
     'defining_functions': False,
     'for_loops': False,

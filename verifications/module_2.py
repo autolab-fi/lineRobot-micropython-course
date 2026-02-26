@@ -157,7 +157,7 @@ def electric_motors(robot, image, td: dict, user_code=None):
         except Exception as e:
             print(f"Error loading or processing image: {e}")
             td["data"]["image_error"] = True
-            return image, td, f"Error processing image: {str(e)}", result
+            #return image, td, f"Error processing image: {str(e)}", result
 
     # ===== 2. STATE LOCK =====
     if td["data"].get("completed", False):

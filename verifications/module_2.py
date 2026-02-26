@@ -46,8 +46,6 @@ def get_target_points(task):
     """Retrieve target points for a given task."""
     return target_points.get(task, [])
 
-    return np.argmin(dist_2)
-
 # Necessary Helper Functions
 
 
@@ -702,7 +700,7 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
     # ===== 1. FIRST-RUN INITIALIZATION =====
     if not td:
-        lines = code.split('\n') if code else []
+        lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
 
@@ -732,11 +730,11 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
     # ===== 2. STATE LOCK =====
     if td["data"].get("completed", False):
-        image = robot.draw_info(frame)
+        image = robot.draw_info(image)
         return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
 
     # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(frame)
+    image = robot.draw_info(image)
 
     # ===== 4. CODE VALIDATION CHECK =====
     if not td["data"]["code_valid"]:

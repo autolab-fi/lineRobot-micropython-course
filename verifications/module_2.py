@@ -12,12 +12,12 @@ target_points = {
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
     'encoder_theory': [(30, 50), (30, 0)],
-    'while_loops': [(30, 50), (30, 0)],
+    'while_loops': [(30, 50), (30, 0)]
 
 
     # old
-    'headlights': [(30, 50), (30, 0)],
-    'alarm': [(30, 50), (30, 0)],
+    #'headlights': [(30, 50), (30, 0)],
+    #'alarm': [(30, 50), (30, 0)],
 
 }
 
@@ -28,11 +28,11 @@ block_library_functions = {
     'defining_functions': False,
     'for_loops': False,
     'encoder_theory': False,
-    'while_loops': False,
+    'while_loops': False
 
     # old
-    'headlights': False,
-    'alarm': False,
+    #'headlights': False,
+    #'alarm': False,
 }
 
 

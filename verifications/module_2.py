@@ -858,7 +858,7 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
 #2.6 While loops
 
-def while_loops(robot, frame, td, code):
+def while_loops(robot, image, td: dict, user_code=None):
     """
     Verification: Don't Hit the Wall
     - Wall hit determined by physical displacement (OpenCV)
@@ -888,7 +888,7 @@ def while_loops(robot, frame, td, code):
 
     # ===== 1. FIRST-RUN INITIALIZATION =====
     if td is None:
-        lines = code.split('\n') if code else []
+        lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
         found_banned = [f for f in BANNED_FUNCTIONS if f in active_code]
@@ -913,11 +913,11 @@ def while_loops(robot, frame, td, code):
 
     # ===== 2. STATE LOCK =====
     if td["data"].get("completed", False):
-        frame = robot.draw_info(frame)
+        image = robot.draw_info(image)
         if td["wall_px"] is not None:
             wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
-            cv2.line(frame, (td["wall_px"], 0), (td["wall_px"], frame.shape[0]), wall_color, 3)
-        return frame, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+            cv2.line(image, (td["wall_px"], 0), (td["wall_px"], image.shape[0]), wall_color, 3)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
 
     # ===== 3. BANNED FUNCTION CHECK =====
     if not td["data"]["code_valid"]:
@@ -929,7 +929,7 @@ def while_loops(robot, frame, td, code):
         text = "Banned functions detected."
         td["data"]["final_result"] = result
         td["data"]["final_text"] = text
-        return frame, td, text, result
+        return image, td, text, result
 
     # ===== 4. CAPTURE START POSITION & DERIVE WALL PIXEL X =====
     pos    = robot.position
@@ -954,7 +954,7 @@ def while_loops(robot, frame, td, code):
             pass
 
     # ===== 6. DRAW OVERLAY =====
-    frame = robot.draw_info(frame)
+    image = robot.draw_info(image)
 
     # ===== 7. TRACK DISPLACEMENT & WALL HIT FLAG =====
     if td["start_position"] is not None and pos is not None:
@@ -980,7 +980,7 @@ def while_loops(robot, frame, td, code):
     # Color reflects wall_hit state set in section 7 — drawn after check so correct this frame
     if td["wall_px"] is not None:
         wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
-        cv2.line(frame, (td["wall_px"], 0), (td["wall_px"], frame.shape[0]), wall_color, 3)
+        cv2.line(image, (td["wall_px"], 0), (td["wall_px"], image.shape[0]), wall_color, 3)
 
     # ===== 9. TIMEOUT EVALUATION =====
     if time.time() > td["end_time"] and not td["data"]["completed"]:
@@ -1023,7 +1023,7 @@ def while_loops(robot, frame, td, code):
         td["data"]["final_result"] = result
         td["data"]["final_text"] = text
 
-    return frame, td, text, result
+    return image, td, text, result
 
 ##Old module_2 functions
 

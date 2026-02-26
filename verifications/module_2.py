@@ -7,7 +7,7 @@ import re
 
 target_points = {
     # new
-    'electric_motor': [(30, 50), (30, 0)],
+    'electric_motors': [(30, 50), (30, 0)],
     'differential_drive': [(30, 50), (30, 0)],
     'defining_functions':[(50, 50), (30, 0)],
     'for_loops': [(50,30),(30,0)],
@@ -87,7 +87,7 @@ def draw_trajectory(image, points, color, width, restore):
 
 #2.1 electric motor
 
-def electric_motor(robot, image, td: dict, user_code=None):
+def electric_motors(robot, image, td: dict, user_code=None):
     """Test for lesson 8: Electric motor"""
 
     # ===== CONFIGURATION =====

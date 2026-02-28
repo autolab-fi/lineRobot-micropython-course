@@ -324,7 +324,24 @@
         "sn": 33,
         "description": "Implement an auto-docking procedure to navigate the robot to a charging station ",
         "template": "# Write code here"
+      },
+      {
+        "str_id": "module_sandbox",
+        "name": "Sandbox Verification Module",
+        "description": "Module for testing and developing verification scripts.",
+        "sn": 10,
+        "lessons": [
+          {
+            "str_id": "lesson_sandbox_0",
+            "name": "Basic Verification Test",
+            "url": "lessons/module_sandbox/lesson_0.md",
+            "sn": 0,
+            "description": "Sandbox test lesson.",
+            "verification": "verifications.sandbox_basic.verify_sandbox"
+          }
+        ]
       }
+
     ]
   },
   {

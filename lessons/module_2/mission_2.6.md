@@ -3,7 +3,7 @@ index: 6
 module: module_2
 task: while_loops
 previous: encoder_theory
-next:
+next: intro_to_octoliner
 ---
 
 # Mission 2.6 While Loops
@@ -53,7 +53,7 @@ Your navigation computer is damaged, so you cannot use high-level functions like
 
 
 **Requirements:**
-1.  **Math:** Calculate the `target` degrees for **20 cm** ($D = 3.5$ cm) and reset the encoders.
+1.  **Math:** Calculate the `target` degrees for **40 cm** ($D = 3.4$ cm) and reset the encoders.
 2.  **Manual Start:** Turn on both motors at **Low Speed (around 150)**.
     * *Why Low Speed?* With high speed we cannot check the data asap, so robot will hit the wall.
 3.  **The Loop:** Create a `while` loop that runs as long as some condition, that you need for the task (in this task you need to check only one encoder for simplification).

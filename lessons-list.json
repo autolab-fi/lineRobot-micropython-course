@@ -115,12 +115,12 @@
         "sn": 13,
         "name": "While Loops",
         "description": "Active monitoring and conditional stopping logic.",
-        "template": "# All imports that you need\n\nrobot = \nD = 3.5\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
+        "template": "# All imports that you need\n\nrobot = \nD = 3.4\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
       }
     ]
   },
   {
-    "name": "Controlling Motors",
+    "name": "Sensors & Basic Perception",
     "description": "Studying robot kinematics. Writing functions. What are DC motors.",
     "sn": 3,
     "str_id": "module_3",

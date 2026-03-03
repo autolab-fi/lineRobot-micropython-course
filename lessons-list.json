@@ -115,54 +115,70 @@
         "sn": 13,
         "name": "While Loops",
         "description": "Active monitoring and conditional stopping logic.",
-        "template": "# All imports that you need\n\nrobot = \nD = 3.5\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
+        "template": "# All imports that you need\n\nrobot = \nD = 3.4\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
       }
     ]
   },
   {
-    "name": "Controlling Motors",
-    "description": "Studying robot kinematics. Writing functions. What are DC motors.",
+    "name": "Sensors & Reactive Navigation",
+    "description": "From Octoliner basics to conditional logic, arrays, LED feedback, and first autonomous line-following behaviors.",
     "sn": 3,
     "str_id": "module_3",
     "lessons": [
       {
-        "str_id": "differential_drive_old",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/differential_drive.md",
-        "sn": 14,
-        "name": "Differential drive",
-        "description": "An introduction to the robot's kinematics. Task: Experiment with functions for moving the robot forward.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "move_function",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/move_function.md",
-        "sn": 15,
-        "name": "Movement Function",
-        "description": "Writing functions in Arduino. Task: Write a function to rotate the robot.",
-        "template": "# Write code here"
-      },
-      {
-        "str_id": "electric_motor",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/electric_motor.md",
-        "sn": 16,
-        "name": "Electric Motor",
-        "description": "Basic principles of DC motors. Task: Move to a specific point on the map using only functions for controlling motors.",
-        "template": "# Write code here"
-      },
-      {
         "str_id": "intro_to_octoliner",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/intro_to_octoliner.md",
-        "sn": 17,
-        "name": "Introduction to Octoliner",
-        "description": "Calibration",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.1.md",
+        "sn": 14,
+        "name": "Introduction to Octoliner Sensor",
+        "description": "Connect the Octoliner over I2C and read the central IR sensor to detect line contrast.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "conditional_logic",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.2.md",
+        "sn": 15,
+        "name": "Conditional Logic & Reactive Behavior",
+        "description": "Use if/else and break to make the rover react and stop when a line is detected.",
         "template": "# Write code here"
       },
       {
         "str_id": "processing_sensor_data",
-        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/processing_sensor_data.md",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.3.md",
+        "sn": 16,
+        "name": "Processing Sensor Data",
+        "description": "Apply comparison operators and booleans, then wrap threshold checks in a function.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "arrays_and_elif",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.4.md",
+        "sn": 17,
+        "name": "Arrays and Spatial Logic",
+        "description": "Read all 8 sensors, extract scout indices, and use elif to classify line position.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "led_feedback",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.5.md",
         "sn": 18,
-        "name": "Processing sensor data",
-        "description": "Processign sensor data: Ground deposits",
+        "name": "Visual Telemetry (LEDs)",
+        "description": "Control onboard LEDs with GPIO to show real-time scan status.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "simple_line_follower",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.6.md",
+        "sn": 19,
+        "name": "Simple Line Follower",
+        "description": "Build a relay (bang-bang) controller using scout sensors and motor speed commands.",
+        "template": "# Write code here"
+      },
+      {
+        "str_id": "logical_operators",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.7.md",
+        "sn": 20,
+        "name": "Upgrading Vision (Logical Operators)",
+        "description": "Use or/and to combine sensor zones, reduce blind spots, and detect intersections.",
         "template": "# Write code here"
       }
     ]

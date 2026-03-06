@@ -1,7 +1,7 @@
 {
     "fullCourseName":"Continuous course @ HAMK: Introduction to mobile robotics, 3 ECTS",
     "shortCourseName":"Introduction to mobile robitcs @ HAMK", 
-    "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors, read sensors, navigate along the track using a PID regulator.",
+    "shortDescription":"Hands-on introductory course where you learn programming by controlling a real robot remotely. You will write simple Python code and immediately see the results as a small "moon rover" robot moves on a lunar-themed track in HAMK’s robotics lab (Riihimäki campus).",
     "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",
     "imageSmall":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/hamk-small.jpg?raw=true",
     "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/hamk-big.jpg?raw=true",

@@ -1,5 +1,5 @@
 {
-    "fullCourseName":"Continuous course: Introduction to mobile robotics, 3 ECTS",
+    "fullCourseName":"Continuous course @ HAMK: Introduction to mobile robotics, 3 ECTS",
     "shortCourseName":"Introduction to mobile robitcs @ HAMK", 
     "shortDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors, read sensors, navigate along the track using a PID regulator.",
     "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",

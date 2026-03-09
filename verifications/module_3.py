@@ -9,11 +9,11 @@ import ast
 
 target_points = {
     'intro_to_octoliner': [(100,60),(30,0)],
-    'conditional_logic' : [(50,60), (30,0)],
-    'processing_sensor_data': [(60,60),(30,0)],
+    'conditional_logic' : [(80,60), (30,0)],
+    'processing_sensor_data': [(85,63),(30,0)],
     'arrays_and_elif': [(70, 50)],(30,0)],
     'led_feedback': [(70,50),(30,0)],
-    'simple_line_follower': [(40,79),(30,0)],
+    'simple_line_follower': [(25,87),(30,0)],
     'logical_operators': [(30,50),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
@@ -290,12 +290,12 @@ def processing_sensor_data(robot, image, td, user_code=None):
 
     # ===== CONFIGURATION =====
     TASK_DURATION        = 20           # seconds before timeout
-    SENSOR_THRESHOLD     = 900          # minimum sensor value for a valid detection
+    SENSOR_THRESHOLD     = 800          # minimum sensor value for a valid detection
     MIN_DETECTIONS       = 2            # valid above-threshold detections needed to pass
-    MINERAL_POS          = (670, 500)   # (x, y) pixel position of mineral icon on screen
-    POSITION_TOLERANCE   = 50           # detection radius in pixels
+    MINERAL_POS          = (860, 500)   # (x, y) pixel position of mineral icon on screen
+    POSITION_TOLERANCE   = 70           # detection radius in pixels
     ROBOT_SENSOR_OFFSET  = (100, 0)     # (x, y) offset from robot center to sensor position
-    MINERAL_FLASH_SECS   = 2.0          # seconds to show mineral icon after detection
+    MINERAL_FLASH_SECS   = 5.0          # seconds to show mineral icon after detection
     # =========================
 
     result = {
@@ -660,9 +660,9 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION     = 60
+    TASK_DURATION     = 90
     CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(70, 78), (80, 60), (70, 45)]
+    CHECKPOINTS       = [(60, 90), (105, 60), (80, 30)]
     # =========================
 
     result = {

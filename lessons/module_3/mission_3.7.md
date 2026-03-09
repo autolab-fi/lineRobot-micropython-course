@@ -42,7 +42,7 @@ if sensor_data[0] > threshold and sensor_data[7] > threshold:
 
 ## Assignment
 
-Upgrade your autonomous line-following algorithm. Use `and` to detect an intersection, and use `or` to create robust steering zones.
+Upgrade your autonomous line-following algorithm. Use `or` to create robust steering zones.
 
 ## Conclusion
 Module 3 complete! Outstanding work!

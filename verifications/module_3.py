@@ -11,7 +11,7 @@ target_points = {
     'intro_to_octoliner': [(100,60),(30,0)],
     'conditional_logic' : [(80,60), (30,0)],
     'processing_sensor_data': [(85,63),(30,0)],
-    'arrays_and_elif': [(70, 50)],(30,0)],
+    'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
     'simple_line_follower': [(25,87),(30,0)],
     'logical_operators': [(30,50),(30,0)]

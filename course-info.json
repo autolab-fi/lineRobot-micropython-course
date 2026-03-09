@@ -1,11 +1,11 @@
 {
     "fullCourseName":"Continuous course @ HAMK: Introduction to mobile robotics, 3 ECTS",
     "shortCourseName":"Introduction to mobile robitcs @ HAMK", 
-    "shortDescription":"Hands-on introductory course where you learn programming by controlling a real robot remotely. You will write simple Python code and immediately see the results as a small "moon rover" robot moves on a lunar-themed track in HAMK’s robotics lab (Riihimäki campus).",
-    "fullDescription":"Learn the basics of Micropython programming with a remote-controlled ESP32 robot. Control motors and LEDs, read sensors and navigate along the track using a PID regulator......",
+    "shortDescription":"Hands-on introductory course where you learn programming by controlling a real robot remotely. You will write simple Python code and immediately see the results as a small moon rover robot moves on a lunar-themed track in HAMK’s robotics lab (Riihimäki campus).",
+    "fullDescription":"Introduction to mobile robotics is a hands-on introductory course where you learn programming by controlling a real robot remotely. You will write simple Python code and immediately see the results as a small moon rover robot moves on a lunar-themed track in HAMK’s robotics lab (Riihimäki campus).  The hardware is real, the rover sits on a camera-monitored track and responds to each line of code you send. This beginner-friendly course (no prior coding experience needed) focuses on practical learning: you start with basic movements and gradually take on more complex tasks like reading sensors and guiding the robot through a course. By the end, you will understand how motors work, how sensors perceive the environment, and how control logic can make a robot move with purpose.  In short, you’ll learn core robotics concepts in a fun, interactive way, and see how your software code translates into real-world robot actions.",
     "imageSmall":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/hamk-small.jpg?raw=true",
     "imageBig":"https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/hamk-big.jpg?raw=true",
-    "workload":"64 hours",
+    "workload":"3 ECTS",
     "requirements":"No previous programming or robotics knowledge is required.",
     "programmingLanguage": "python"
 }

@@ -728,7 +728,7 @@ def while_loops(robot, image, td: dict, user_code=None):
     SUCCESS_MIN_CM     = 38.0
     R                  = 3.4
     ENCODER_SANITY_CAP = 2000
-    WALL_VISUAL_OFFSET = 140
+    WALL_VISUAL_OFFSET = 130
     BANNED_FUNCTIONS   = ["move_forward", "move_backward", "move_forward_distance",
                           "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
 

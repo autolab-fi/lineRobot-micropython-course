@@ -68,6 +68,7 @@ def draw_trajectory(image, points, color, width, restore):
         if restore and prev_point is not None and math.sqrt(
                 (prev_point[0] - point[0]) ** 2 + (prev_point[1] - point[1]) ** 2) > 1:
             restore_trajectory(image, prev_point, point, color, int(width * 2))
+        prev_point = point
 
 
 # 2.1 electric motors

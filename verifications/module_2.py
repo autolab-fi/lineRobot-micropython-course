@@ -539,8 +539,17 @@ def for_loops(robot, image, td: dict, user_code=None):
     robot_position_px = info["position_px"]
     robot_position = info["position"]
 
+    MIN_DIST_PX = 5   # only record a new point if robot moved at least this many pixels
+
     if robot_position is not None:
-        td["trajectory"].append(robot_position_px)
+        if len(td["trajectory"]) == 0:
+            td["trajectory"].append(robot_position_px)
+        else:
+            last = td["trajectory"][-1]
+            dx = robot_position_px[0] - last[0]
+            dy = robot_position_px[1] - last[1]
+            if (dx**2 + dy**2) ** 0.5 >= MIN_DIST_PX:
+                td["trajectory"].append(robot_position_px)
         text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
 
     if len(td["trajectory"]) > 0:

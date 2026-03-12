@@ -55,7 +55,7 @@ The video stream shows the robot moving so you can see how your code works.
 
 ---
 
-# Run, Verify, and Submit Your Work
+# Run and Verify
 
 Write your code in the **Code Editor**.
 

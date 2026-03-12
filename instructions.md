@@ -76,9 +76,11 @@ You can review course progress in the **Learning record** page. There you can al
 # Need Help
 
 ## Discord channel
+![Discord icon](https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d80db9971f10a9757c99_Symbol.svg)
+
+
 We keep our Discord channel open: https://discord.gg/McXvdwNr
 If you run into any issues during the course, feel free to contact us there. You can also ask for hints if you get stuck on an assignment.
-![Discord icon](https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d80db9971f10a9757c99_Symbol.svg)
 
 ## Problems on the Coding Platform
 

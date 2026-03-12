@@ -69,7 +69,8 @@ Check the **Terminal** and **Video recording** to see the error message and fix 
 ---
 
 # Course progress
-You can review course progress in the **Learning record** page. There you can also access last 3 assignments 
+
+You can review your course progress on the **Learning Record** page. You can also access your last three assignments there.
 
 ---
 

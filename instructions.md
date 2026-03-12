@@ -6,7 +6,7 @@ Follow these steps to register, access the course, write code, and submit your a
 
 Visit the platform using this link  [hamk.ondroid.org](https://hamk.ondroid.org)  and click **Sign Up**.
 
-Enter your username, email address, and password to create your account. We recommend that you use hamk email that you were given during the course enrollment so that we can link 
+Enter your username, email address, and password to create your account. We recommend using your **HAMK email** given during course enrollment so we can link your progress with the official HAMK Moodle LMS.
 After registering, verify your email to activate your profile.
 
 ![Registration form](images/course-info/sign-up-form.jpg)

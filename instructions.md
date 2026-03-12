@@ -51,7 +51,7 @@ Located in the lower right area.
 The terminal shows real time output from the robot.  
 The video stream shows the robot moving so you can see how your code works.
 
-![Platform layout](images/layout.png)
+![Platform layout](images/course-info/hamk-student-dashboard.jpg)
 
 ---
 

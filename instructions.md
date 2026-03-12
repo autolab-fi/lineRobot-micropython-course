@@ -26,7 +26,7 @@ After the group key is accepted, open your dashboard and click **LEARN**.
 
 This will take you to the **Continuous course @ HAMK: Introduction to mobile robotics, 3 ECTS** course.
 
-![Course card](images/layout.png)
+![Course card](images/course-info/hamk-course-card.jpg)
 
 ---
 

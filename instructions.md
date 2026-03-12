@@ -64,9 +64,7 @@ Click **Verify** to run the program.
 If the code is correct the video window turns green and the robot performs the task.
 
 If there is an error the window turns red.  
-Check the **Terminal** to see the error message and fix your code.
-
-After the video finishes open the three dot menu in the video window and select **Download**.
+Check the **Terminal** and **Video recording** to see the error message and fix your code.
 
 ---
 
@@ -78,8 +76,8 @@ You can review course progress in the **Learning record** page. There you can al
 # Need Help
 
 ## Discord channel
-Do not hesitate to reach out to us even if even fi you need some hints on specific assignment
-
+We keep our Discord channel open: https://discord.gg/McXvdwNr
+If you run into any issues during the course, feel free to contact us there. You can also ask for hints if you get stuck on an assignment.
 ![Discord icon](https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d80db9971f10a9757c99_Symbol.svg)
 
 ## Problems on the Coding Platform

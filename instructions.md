@@ -18,7 +18,7 @@ This connects you to the course and unlocks access to the remote robots and lear
 
 **Group key for this course**
 
-![Join group form](images/layout.png)
+![Join group form](images/course-info/join-group.jpg)
 
 ## Step 3. Start Learning
 

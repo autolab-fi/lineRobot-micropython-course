@@ -9,7 +9,7 @@ Visit the platform using this link  [hamk.ondroid.org](https://hamk.ondroid.org)
 Enter your username, email address, and password to create your account. We recommend that you use hamk email that you were given during the course enrollment so that we can link 
 After registering, verify your email to activate your profile.
 
-![Registration form](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/sign-up-form.jpg?raw=true)
+![Registration form](images/course-info/sign-up-form.jpg)
 
 ## Step 2. Enter Your Group Key
 

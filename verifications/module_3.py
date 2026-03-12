@@ -14,7 +14,7 @@ target_points = {
     'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
     'simple_line_follower': [(25,87),(30,0)],
-    'logical_operators': [(30,50),(30,0)]
+    'logical_operators': [(25,87),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
     #'move_function':[(50, 50), (30, 0)],
@@ -830,33 +830,179 @@ def simple_line_follower(robot, image, td, user_code=None):
 
 def logical_operators(robot, image, td, user_code=None):
     """
-    Placeholder verification for lesson: Logical Operators (Mission 3.7)
-    TODO: implement full verification logic
+    Verification for lesson: Simple Line Follower
+    Students must:
+    - Use analog_read_all() and extract scouts at indices 1 and 6
+    - Use if/elif/else steering logic
+    - Drive continuously through checkpoints in a while True loop
+    Checkpoint detection via robot position (OpenCV).
+    Flag overlays drawn at each checkpoint, turning green when hit.
     """
+
+    # ===== CONFIGURATION =====
+    TASK_DURATION     = 90
+    CHECKPOINT_RADIUS = 10.0   # cm
+    CHECKPOINTS       = [(60, 90), (105, 60), (80, 30)]
+    # =========================
+
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
         "score": 100
     }
-    text = "Not recognized, task not finished."
-
-    if td is None:
-        td = {
-            "start_time": time.time(),
-            "end_time": time.time() + 20,
-            "data": {}
-        }
+    text = "Waiting for robot to start..."
 
     image = robot.draw_info(image)
 
-    info = robot.get_info()
-    robot_position = info["position"]
-    if robot_position is not None:
-        text = f"Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}"
+    if td is None:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        has_read_all = "analog_read_all()" in active_code
+        has_elif     = "elif" in active_code
+        has_while    = "while True" in active_code
+        has_or       = " or " in active_code
+        code_valid   = has_read_all and has_elif and has_while and has_or
+
+        missing = []
+        if not has_read_all:
+            missing.append("analog_read_all()")
+        if not has_elif:
+            missing.append("elif statement")
+        if not has_while:
+            missing.append("while True loop")
+        if not has_or:
+            missing.append("or operator")
+
+        td = {
+            "start_time": time.time(),
+            "end_time":   time.time() + TASK_DURATION,
+            "data": {
+                "code_valid":            code_valid,
+                "missing":               missing,
+                "checkpoints_hit":       [],
+                "checkpoints_remaining": list(CHECKPOINTS),
+                "flag":                  None,
+                "flag_mask":             None,
+                "flag_green":            None,
+                "flag_green_mask":       None,
+                "image_error":           False,
+            }
+        }
+
+        # Load flag images
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "flag_finish.jpg")
+
+            flag = cv2.imread(filepath)
+            if flag is None:
+                raise FileNotFoundError(f"flag_finish.jpg not found at {filepath}")
+
+            flag = cv2.resize(flag, (int(flag.shape[1] / 3), int(flag.shape[0] / 3)))
+            lower_green = np.array([0, 240, 0])
+            upper_green = np.array([50, 255, 50])
+            mask = cv2.bitwise_not(cv2.inRange(flag, lower_green, upper_green))
+            td["data"]["flag"]      = flag
+            td["data"]["flag_mask"] = mask
+
+            # Green "hit" version of the flag
+            flag_green = flag.copy()
+            flag_green[mask > 0] = (0, 200, 0)
+            td["data"]["flag_green"]      = flag_green
+            td["data"]["flag_green_mask"] = mask
+
+        except Exception as e:
+            print(f"Flag load error: {e} — falling back to circle markers")
+            td["data"]["image_error"] = True
+
+    if not td["data"]["code_valid"]:
+        text = f"Code missing: {', '.join(td['data']['missing'])}"
+
+    # checkpoint detection
+    pos = robot.position
+    if pos is not None and td["data"]["checkpoints_remaining"]:
+        next_cp = td["data"]["checkpoints_remaining"][0]
+        dx   = pos[0] - next_cp[0]
+        dy   = pos[1] - next_cp[1]
+        dist = math.sqrt(dx**2 + dy**2)
+        text = f"Distance to next checkpoint: {dist:.1f}cm"
+
+        if dist < CHECKPOINT_RADIUS:
+            td["data"]["checkpoints_hit"].append(next_cp)
+            td["data"]["checkpoints_remaining"].pop(0)
+            text = f"Checkpoint {len(td['data']['checkpoints_hit'])}/{len(CHECKPOINTS)} reached!"
 
     msg = robot.get_msg()
     if msg is not None:
-        text = f"Message received: {msg}"
+        text = f"Message: {msg}"
+
+    # draw flag overlays
+    pos_px = robot.position_px
+    if pos is not None and pos_px is not None and pos[0] != 0:
+        px_per_cm     = pos_px[0] / pos[0]
+        radius_px     = int(CHECKPOINT_RADIUS * px_per_cm)
+        flag          = td["data"]["flag"]
+        flag_mask     = td["data"]["flag_mask"]
+        flag_green    = td["data"]["flag_green"]
+        use_flag      = not td["data"]["image_error"] and flag is not None
+
+        hits = td["data"]["checkpoints_hit"]
+
+        for cp_cm in CHECKPOINTS:
+            cp_px_x = int(cp_cm[0] * px_per_cm)   # col (x)
+            cp_px_y = int(cp_cm[1] * px_per_cm)   # row (y)
+            cp_px   = (cp_px_x, cp_px_y)
+            hit     = cp_cm in hits
+
+            # Detection radius ring — green if hit, orange if not
+            ring_color = (0, 200, 0) if hit else (0, 200, 255)
+            cv2.circle(image, cp_px, radius_px, ring_color, 1)
+
+            if use_flag:
+                # flag.shape = (height, width, channels)
+                # height → rows → y axis
+                # width  → cols → x axis
+                draw_flag = flag_green if hit else flag
+                half_w = int(draw_flag.shape[1] / 2)
+                half_h = int(draw_flag.shape[0] / 2)
+
+                r0 = cp_px_y - half_h
+                r1 = cp_px_y + (draw_flag.shape[0] - half_h)
+                c0 = cp_px_x - half_w
+                c1 = cp_px_x + (draw_flag.shape[1] - half_w)
+
+                if 0 <= r0 and r1 < image.shape[0] and 0 <= c0 and c1 < image.shape[1]:
+                    cv2.copyTo(draw_flag, flag_mask, image[r0:r1, c0:c1])
+            else:
+                color = (0, 200, 0) if hit else (0, 200, 255)
+                cv2.circle(image, cp_px, 5, color, -1)
+
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
+        hit   = len(td["data"]["checkpoints_hit"])
+        total = len(CHECKPOINTS)
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"]   = 0
+            result["description"] = f"Code missing: {', '.join(td['data']['missing'])} | Score: 0"
+            text = "Code validation failed."
+        elif hit < total:
+            result["success"] = False
+            result["score"]   = int((hit / total) * 100)
+            result["description"] = (
+                f"Only {hit}/{total} checkpoints reached | Score: {result['score']}"
+            )
+            text = f"Only {hit}/{total} checkpoints reached."
+        else:
+            result["success"] = True
+            result["score"]   = 100
+            result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
+            text = "Line following complete!"
 
     return image, td, text, result
 

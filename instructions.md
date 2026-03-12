@@ -1,4 +1,4 @@
-# Getting Started with the Robotics Remote Lab
+# Getting Started with the Mobile Robotics Remote Lab @ HAMK
 
 Follow these steps to register, access the course, write code, and submit your assignment.
 

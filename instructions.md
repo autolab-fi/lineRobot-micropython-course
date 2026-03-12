@@ -6,10 +6,10 @@ Follow these steps to register, access the course, write code, and submit your a
 
 Visit the platform using this link  [hamk.ondroid.org](https://hamk.ondroid.org)  and click **Sign Up**.
 
-Enter your username, email address, and password to create your account.  
+Enter your username, email address, and password to create your account. We recommend that you use hamk email that you were given during the course enrollment so that we can link 
 After registering, verify your email to activate your profile.
 
-![Registration form](images/layout.png)
+![Registration form](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/course-info/sign-up-form.jpg?raw=true)
 
 ## Step 2. Enter Your Group Key
 
@@ -71,8 +71,7 @@ After the video finishes open the three dot menu in the video window and select 
 ---
 
 # Course progress
-
-Cou
+You can review course progress in the **Learning record** page. There you can also access last 3 assignments 
 
 ---
 

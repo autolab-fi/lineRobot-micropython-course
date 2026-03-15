@@ -41,6 +41,8 @@ Write an autonomous line-following algorithm using your scout sensors and `elif`
 4. **Steering Logic (`if/elif/else`):** 
 5. **Stability:** Add a tiny delay at the end of the loop.
 
+*Hint*: in the loop, it's better to print sensor's data in order to understand what values should be set as a treshhold and sensitivity.
+
 ## Conclusion
 Congratulations! You have just programmed your first autonomous robot. 
 

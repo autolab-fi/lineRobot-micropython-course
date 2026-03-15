@@ -9,12 +9,12 @@ import ast
 
 target_points = {
     'intro_to_octoliner': [(100,60),(30,0)],
-    'conditional_logic' : [(50,60), (30,0)],
-    'processing_sensor_data': [(60,60),(30,0)],
+    'conditional_logic' : [(80,60), (30,0)],
+    'processing_sensor_data': [(85,63),(30,0)],
     'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
-    'simple_line_follower': [(40,79),(30,0)],
-    'logical_operators': [(30,50),(30,0)]
+    'simple_line_follower': [(35,30),(30,0)],
+    'logical_operators': [(35,30),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
     #'move_function':[(50, 50), (30, 0)],
@@ -290,12 +290,12 @@ def processing_sensor_data(robot, image, td, user_code=None):
 
     # ===== CONFIGURATION =====
     TASK_DURATION        = 20           # seconds before timeout
-    SENSOR_THRESHOLD     = 900          # minimum sensor value for a valid detection
+    SENSOR_THRESHOLD     = 800          # minimum sensor value for a valid detection
     MIN_DETECTIONS       = 2            # valid above-threshold detections needed to pass
-    MINERAL_POS          = (670, 500)   # (x, y) pixel position of mineral icon on screen
-    POSITION_TOLERANCE   = 50           # detection radius in pixels
+    MINERAL_POS          = (860, 500)   # (x, y) pixel position of mineral icon on screen
+    POSITION_TOLERANCE   = 70           # detection radius in pixels
     ROBOT_SENSOR_OFFSET  = (100, 0)     # (x, y) offset from robot center to sensor position
-    MINERAL_FLASH_SECS   = 2.0          # seconds to show mineral icon after detection
+    MINERAL_FLASH_SECS   = 5.0          # seconds to show mineral icon after detection
     # =========================
 
     result = {
@@ -536,9 +536,20 @@ def led_feedback(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION = 40
-    EXPECTED_MSGS = ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"]
-    COMPLETE_MSG  = "Survey complete."
+    TASK_DURATION      = 30
+    EXPECTED_MSGS      = ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"]
+    COMPLETE_MSG       = "Survey complete."
+    MIN_BLINK_CHANGES  = 4      # minimum ON/OFF state changes to confirm blinking
+    BLINK_DURATION_MIN = 0.1    # seconds — shortest acceptable ON or OFF phase
+    BLINK_DURATION_MAX = 1.5    # seconds — longest acceptable ON or OFF phase
+    BLINK_VALID_RATIO  = 0.2    # fraction of durations that must be within range
+    NUMBER_OF_SCANS    = 15
+    # LED crop — tuned from diagnostic (offset from robot center in px)
+    CROP_OFFSET_X      =  100
+    CROP_OFFSET_Y      = -50
+    CROP_W             =  30
+    CROP_H             = 100
+    WHITE_THRESHOLD    = 0.6    # white% threshold between OFF(~0) and ON(~0.95)
     # =========================
 
     result = {
@@ -546,11 +557,11 @@ def led_feedback(robot, image, td, user_code=None):
         "description": "You are amazing! The Robot has completed the assignment",
         "score": 100
     }
-    text = "Waiting for survey to begin..."
+    text = "Surveying..."
 
     image = robot.draw_info(image)
 
-    if not td:
+    if td is None:
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
@@ -588,15 +599,115 @@ def led_feedback(robot, image, td, user_code=None):
             "start_time": time.time(),
             "end_time": time.time() + TASK_DURATION,
             "data": {
-                "code_valid": code_valid,
-                "missing": missing,
-                "scan_msgs": [],
+                "code_valid":    code_valid,
+                "missing":       missing,
+                "scan_msgs":     [],
                 "complete_received": False,
+                # LED blink detection
+                "led_last_state":    None,
+                "led_state_buffer":  [],
+                "led_blink_changes": 0,
+                "led_state_start":   None,
+                "led_durations":     [],
+                # overlay images
+                "img_on":       None,
+                "img_on_mask":  None,
+                "img_off":      None,
+                "img_off_mask": None,
             }
         }
 
+        # load LED overlay images with dual-path fallback
+        basepath = os.path.abspath(os.path.dirname(__file__))
+        for key, filename in [("img_on", "headlight-on.jpg"), ("img_off", "headlight-off.jpg")]:
+            filepath = os.path.join(basepath, "auto_tests", "images", filename)
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", filename)
+            img = cv2.imread(filepath) if os.path.exists(filepath) else None
+
+            if img is not None:
+                img = cv2.resize(img, (img.shape[1] // 3, img.shape[0] // 3))
+                td["data"][key] = img
+                if key == "img_on":
+                    td["data"]["img_on_mask"] = cv2.inRange(
+                        img, np.array([0, 240, 0]), np.array([15, 255, 15]))
+                else:
+                    td["data"]["img_off_mask"] = cv2.inRange(
+                        img, np.array([0, 0, 0]), np.array([15, 15, 15]))
+            else:
+                # numpy placeholder: green square = ON, dark grey square = OFF
+                print(f"Warning: {filename} not found, using placeholder")
+                ph = np.zeros((60, 60, 3), dtype=np.uint8)
+                if key == "img_on":
+                    ph[:] = (0, 255, 180)   # cyan-green = LED on
+                    td["data"]["img_on"]      = ph
+                    td["data"]["img_on_mask"] = np.ones((60, 60), dtype=np.uint8) * 255
+                else:
+                    ph[:] = (40, 40, 40)    # dark grey = LED off
+                    td["data"]["img_off"]      = ph
+                    td["data"]["img_off_mask"] = np.ones((60, 60), dtype=np.uint8) * 255
+
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
+
+    # ===== LED BLINK DETECTION =====
+    robot_position = robot.get_info().get("position_px")
+    if robot_position is not None:
+        crop_x = int(robot_position[0] + CROP_OFFSET_X)
+        crop_y = int(robot_position[1] + CROP_OFFSET_Y)
+        crop_w, crop_h = CROP_W, CROP_H
+        h, w = image.shape[:2]
+        crop_x = max(0, min(crop_x, w - crop_w))
+        crop_y = max(0, min(crop_y, h - crop_h))
+
+        cropped = image[crop_y:crop_y + crop_h, crop_x:crop_x + crop_w]
+        mask = cv2.inRange(cropped, np.array([200, 200, 200]), np.array([255, 255, 255]))
+        white_pct = (cv2.countNonZero(mask) / (crop_w * crop_h)) * 100
+
+        # draw contours on overlay
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contour_img = cropped.copy()
+        cv2.drawContours(contour_img, contours, -1, (0, 255, 0), 2)
+        image[crop_y:crop_y + crop_h, crop_x:crop_x + crop_w] = contour_img
+
+        current_state = white_pct > WHITE_THRESHOLD
+
+        # 3-frame smoothing buffer
+        buf = td["data"]["led_state_buffer"]
+        buf.append(current_state)
+        if len(buf) > 3:
+            buf.pop(0)
+        smoothed = sum(buf) > len(buf) / 2
+
+        # count state changes and record durations
+        if td["data"]["led_last_state"] is None:
+            td["data"]["led_last_state"] = smoothed
+            td["data"]["led_state_start"] = time.time()
+        elif smoothed != td["data"]["led_last_state"]:
+            duration = time.time() - td["data"]["led_state_start"]
+            td["data"]["led_durations"].append(duration)
+            td["data"]["led_blink_changes"] += 1
+            td["data"]["led_last_state"] = smoothed
+            td["data"]["led_state_start"] = time.time()
+
+        led_status = "LED ON" if smoothed else "LED OFF"
+        cv2.putText(image, f"{led_status} (blinks: {td['data']['led_blink_changes']})",
+                    (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 1)
+
+        # draw ON/OFF overlay in top-left corner
+        if smoothed:
+            ov = td["data"]["img_on"]
+            ov_mask = td["data"]["img_on_mask"]
+        else:
+            ov = td["data"]["img_off"]
+            ov_mask = td["data"]["img_off_mask"]
+
+        if ov is not None and ov_mask is not None:
+            oh, ow = ov.shape[:2]
+            ox = 20
+            oy = 80
+            if oy + oh <= image.shape[0] and ox >= 0:
+                cv2.copyTo(ov, ov_mask, image[oy:oy + oh, ox:ox + ow])
 
     # parse MQTT messages
     msg = robot.get_msg()
@@ -604,13 +715,22 @@ def led_feedback(robot, image, td, user_code=None):
         text = f"Message: {msg}"
         if any(m in msg for m in EXPECTED_MSGS):
             td["data"]["scan_msgs"].append(msg)
-            text = f"Scan result ({len(td['data']['scan_msgs'])}/5): {msg}"
+            text = f"Scan result ({len(td['data']['scan_msgs'])}/{NUMBER_OF_SCANS}): {msg}"
         if COMPLETE_MSG in msg:
             td["data"]["complete_received"] = True
             text = "Survey complete message received!"
 
-    # timeout / final verdict
     if td["end_time"] - time.time() < 1:
+        led_blinked = td["data"]["led_blink_changes"] >= MIN_BLINK_CHANGES
+
+        # timing validation
+        durations = td["data"]["led_durations"]
+        if durations:
+            valid = [BLINK_DURATION_MIN <= d <= BLINK_DURATION_MAX for d in durations]
+            timing_ok = (sum(valid) / len(valid)) >= BLINK_VALID_RATIO
+        else:
+            timing_ok = False
+
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
@@ -628,25 +748,34 @@ def led_feedback(robot, image, td, user_code=None):
                 f"Only {len(td['data']['scan_msgs'])}/5 scan results received | Score: 0"
             )
             text = "Not enough scan results."
+        elif not led_blinked:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"LED blink not detected (state changes: {td['data']['led_blink_changes']}, "
+                f"need {MIN_BLINK_CHANGES}) | Score: 0"
+            )
+            text = "LED blink not detected."
+        elif not timing_ok:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"LED blink timing irregular — phases should be "
+                f"{BLINK_DURATION_MIN}–{BLINK_DURATION_MAX}s "
+                f"(recorded: {[f'{d:.2f}' for d in durations]}) | Score: 0"
+            )
+            text = "LED blink timing incorrect."
         else:
             result["success"] = True
             result["score"] = 100
             result["description"] = (
-                f"You are amazing! Survey with LED feedback complete | Score: 100"
+                f"You are amazing! Survey with LED feedback complete "
+                f"(blink changes: {td['data']['led_blink_changes']}) | Score: 100"
             )
             text = "Survey complete!"
 
     return image, td, text, result
 
-'''
-# Start pos 40, 79
-    # ===== TUNE THESE =====
-    CHECKPOINTS = [
-        (70, 78),   # CP1
-        (80, 60),   # CP2
-        (70, 45),   # CP3
-
-'''
 
 def simple_line_follower(robot, image, td, user_code=None):
     """
@@ -660,9 +789,9 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION     = 60
+    TASK_DURATION     = 180
     CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(70, 78), (80, 60), (70, 45)]
+    CHECKPOINTS       = [(80, 30), (105, 60), (60, 90) ]
     # =========================
 
     result = {
@@ -684,7 +813,8 @@ def simple_line_follower(robot, image, td, user_code=None):
         has_index_1  = "[1]" in active_code
         has_index_6  = "[6]" in active_code
         has_while    = "while True" in active_code
-        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while
+        has_or       = "or" in active_code
+        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while and has_or
 
         missing = []
         if not has_read_all:
@@ -695,6 +825,8 @@ def simple_line_follower(robot, image, td, user_code=None):
             missing.append("scout indices [1] and [6]")
         if not has_while:
             missing.append("while True loop")
+        if not has_or:
+            missing.append("or operator")
 
         td = {
             "start_time": time.time(),
@@ -830,33 +962,179 @@ def simple_line_follower(robot, image, td, user_code=None):
 
 def logical_operators(robot, image, td, user_code=None):
     """
-    Placeholder verification for lesson: Logical Operators (Mission 3.7)
-    TODO: implement full verification logic
+    Verification for lesson: Simple Line Follower
+    Students must:
+    - Use analog_read_all() and extract scouts at indices 1 and 6
+    - Use if/elif/else steering logic
+    - Drive continuously through checkpoints in a while True loop
+    Checkpoint detection via robot position (OpenCV).
+    Flag overlays drawn at each checkpoint, turning green when hit.
     """
+
+    # ===== CONFIGURATION =====
+    TASK_DURATION     = 90
+    CHECKPOINT_RADIUS = 10.0   # cm
+    CHECKPOINTS       = [(60, 90), (105, 60), (80, 30)]
+    # =========================
+
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
         "score": 100
     }
-    text = "Not recognized, task not finished."
-
-    if td is None:
-        td = {
-            "start_time": time.time(),
-            "end_time": time.time() + 20,
-            "data": {}
-        }
+    text = "Waiting for robot to start..."
 
     image = robot.draw_info(image)
 
-    info = robot.get_info()
-    robot_position = info["position"]
-    if robot_position is not None:
-        text = f"Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}"
+    if td is None:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        has_read_all = "analog_read_all()" in active_code
+        has_elif     = "elif" in active_code
+        has_while    = "while True" in active_code
+        has_or       = " or " in active_code
+        code_valid   = has_read_all and has_elif and has_while and has_or
+
+        missing = []
+        if not has_read_all:
+            missing.append("analog_read_all()")
+        if not has_elif:
+            missing.append("elif statement")
+        if not has_while:
+            missing.append("while True loop")
+        if not has_or:
+            missing.append("or operator")
+
+        td = {
+            "start_time": time.time(),
+            "end_time":   time.time() + TASK_DURATION,
+            "data": {
+                "code_valid":            code_valid,
+                "missing":               missing,
+                "checkpoints_hit":       [],
+                "checkpoints_remaining": list(CHECKPOINTS),
+                "flag":                  None,
+                "flag_mask":             None,
+                "flag_green":            None,
+                "flag_green_mask":       None,
+                "image_error":           False,
+            }
+        }
+
+        # Load flag images
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "flag_finish.jpg")
+
+            flag = cv2.imread(filepath)
+            if flag is None:
+                raise FileNotFoundError(f"flag_finish.jpg not found at {filepath}")
+
+            flag = cv2.resize(flag, (int(flag.shape[1] / 3), int(flag.shape[0] / 3)))
+            lower_green = np.array([0, 240, 0])
+            upper_green = np.array([50, 255, 50])
+            mask = cv2.bitwise_not(cv2.inRange(flag, lower_green, upper_green))
+            td["data"]["flag"]      = flag
+            td["data"]["flag_mask"] = mask
+
+            # Green "hit" version of the flag
+            flag_green = flag.copy()
+            flag_green[mask > 0] = (0, 200, 0)
+            td["data"]["flag_green"]      = flag_green
+            td["data"]["flag_green_mask"] = mask
+
+        except Exception as e:
+            print(f"Flag load error: {e} — falling back to circle markers")
+            td["data"]["image_error"] = True
+
+    if not td["data"]["code_valid"]:
+        text = f"Code missing: {', '.join(td['data']['missing'])}"
+
+    # checkpoint detection
+    pos = robot.position
+    if pos is not None and td["data"]["checkpoints_remaining"]:
+        next_cp = td["data"]["checkpoints_remaining"][0]
+        dx   = pos[0] - next_cp[0]
+        dy   = pos[1] - next_cp[1]
+        dist = math.sqrt(dx**2 + dy**2)
+        text = f"Distance to next checkpoint: {dist:.1f}cm"
+
+        if dist < CHECKPOINT_RADIUS:
+            td["data"]["checkpoints_hit"].append(next_cp)
+            td["data"]["checkpoints_remaining"].pop(0)
+            text = f"Checkpoint {len(td['data']['checkpoints_hit'])}/{len(CHECKPOINTS)} reached!"
 
     msg = robot.get_msg()
     if msg is not None:
-        text = f"Message received: {msg}"
+        text = f"Message: {msg}"
+
+    # draw flag overlays
+    pos_px = robot.position_px
+    if pos is not None and pos_px is not None and pos[0] != 0:
+        px_per_cm     = pos_px[0] / pos[0]
+        radius_px     = int(CHECKPOINT_RADIUS * px_per_cm)
+        flag          = td["data"]["flag"]
+        flag_mask     = td["data"]["flag_mask"]
+        flag_green    = td["data"]["flag_green"]
+        use_flag      = not td["data"]["image_error"] and flag is not None
+
+        hits = td["data"]["checkpoints_hit"]
+
+        for cp_cm in CHECKPOINTS:
+            cp_px_x = int(cp_cm[0] * px_per_cm)   # col (x)
+            cp_px_y = int(cp_cm[1] * px_per_cm)   # row (y)
+            cp_px   = (cp_px_x, cp_px_y)
+            hit     = cp_cm in hits
+
+            # Detection radius ring — green if hit, orange if not
+            ring_color = (0, 200, 0) if hit else (0, 200, 255)
+            cv2.circle(image, cp_px, radius_px, ring_color, 1)
+
+            if use_flag:
+                # flag.shape = (height, width, channels)
+                # height → rows → y axis
+                # width  → cols → x axis
+                draw_flag = flag_green if hit else flag
+                half_w = int(draw_flag.shape[1] / 2)
+                half_h = int(draw_flag.shape[0] / 2)
+
+                r0 = cp_px_y - half_h
+                r1 = cp_px_y + (draw_flag.shape[0] - half_h)
+                c0 = cp_px_x - half_w
+                c1 = cp_px_x + (draw_flag.shape[1] - half_w)
+
+                if 0 <= r0 and r1 < image.shape[0] and 0 <= c0 and c1 < image.shape[1]:
+                    cv2.copyTo(draw_flag, flag_mask, image[r0:r1, c0:c1])
+            else:
+                color = (0, 200, 0) if hit else (0, 200, 255)
+                cv2.circle(image, cp_px, 5, color, -1)
+
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
+        hit   = len(td["data"]["checkpoints_hit"])
+        total = len(CHECKPOINTS)
+
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"]   = 0
+            result["description"] = f"Code missing: {', '.join(td['data']['missing'])} | Score: 0"
+            text = "Code validation failed."
+        elif hit < total:
+            result["success"] = False
+            result["score"]   = int((hit / total) * 100)
+            result["description"] = (
+                f"Only {hit}/{total} checkpoints reached | Score: {result['score']}"
+            )
+            text = f"Only {hit}/{total} checkpoints reached."
+        else:
+            result["success"] = True
+            result["score"]   = 100
+            result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
+            text = "Line following complete!"
 
     return image, td, text, result
 

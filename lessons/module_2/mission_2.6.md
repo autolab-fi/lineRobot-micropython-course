@@ -46,14 +46,16 @@ A `while` loop checks the condition before every single step.
 If the condition becomes `False` (distance less then 10 cm), the loop breaks immediately, and the code moves to the next commands.
 
 ## Assignment: Don't Hit the Wall
-**The Scenario:** You are in a testing tunnel. There is a wall exactly **40.5 cm** away.
+**The Scenario:** You are in a testing tunnel. There is a wall exactly **40 cm** away.
 Your navigation computer is damaged, so you cannot use high-level functions like `move_forward()` (they reset encoders). You must fly "manual" using raw motor commands
 
 **Your Task:** Drive **40 cm** and stop. If you overshoot by just 0.5 cm, you hit the wall.
+**Note:** The robot has a wheel Radius of 3.4 cm, so the distance travelled on one full rotation of the wheel should be calculated with the formula:
+**target = (Target_cm / (2 * math.pi * radius)) * 360**
 
 
 **Requirements:**
-1.  **Math:** Calculate the `target` degrees for **40 cm** ($D = 3.4$ cm) and reset the encoders.
+1.  **Math:** Calculate the `target` degrees for **40 cm** ($R = 3.4$ cm) and reset the encoders.
 2.  **Manual Start:** Turn on both motors at **Low Speed (around 150)**.
     * *Why Low Speed?* With high speed we cannot check the data asap, so robot will hit the wall.
 3.  **The Loop:** Create a `while` loop that runs as long as some condition, that you need for the task (in this task you need to check only one encoder for simplification).

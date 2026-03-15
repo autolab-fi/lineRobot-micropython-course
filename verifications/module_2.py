@@ -68,6 +68,7 @@ def draw_trajectory(image, points, color, width, restore):
         if restore and prev_point is not None and math.sqrt(
                 (prev_point[0] - point[0]) ** 2 + (prev_point[1] - point[1]) ** 2) > 1:
             restore_trajectory(image, prev_point, point, color, int(width * 2))
+        prev_point = point
 
 
 # 2.1 electric motors
@@ -539,8 +540,17 @@ def for_loops(robot, image, td: dict, user_code=None):
     robot_position_px = info["position_px"]
     robot_position = info["position"]
 
+    MIN_DIST_PX = 5   # only record a new point if robot moved at least this many pixels
+
     if robot_position is not None:
-        td["trajectory"].append(robot_position_px)
+        if len(td["trajectory"]) == 0:
+            td["trajectory"].append(robot_position_px)
+        else:
+            last = td["trajectory"][-1]
+            dx = robot_position_px[0] - last[0]
+            dy = robot_position_px[1] - last[1]
+            if (dx**2 + dy**2) ** 0.5 >= MIN_DIST_PX:
+                td["trajectory"].append(robot_position_px)
         text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
 
     if len(td["trajectory"]) > 0:
@@ -725,10 +735,10 @@ def while_loops(robot, image, td: dict, user_code=None):
 
     TASK_DURATION      = 15
     TARGET_DISTANCE_CM = 40.0
-    SUCCESS_MIN_CM     = 38.0
+    SUCCESS_MIN_CM     = 37.0
     R                  = 3.4
     ENCODER_SANITY_CAP = 2000
-    WALL_VISUAL_OFFSET = 140
+    WALL_VISUAL_OFFSET = 130
     BANNED_FUNCTIONS   = ["move_forward", "move_backward", "move_forward_distance",
                           "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
 

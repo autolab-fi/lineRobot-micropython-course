@@ -3,7 +3,7 @@ index: 20
 module: module_3
 task: logical_operators
 previous: simple_line_follower
-next: module_4_intro
+next: python_lists
 ---
 
 # Mission 3.7 Upgrading Vision (Logical Operators)
@@ -42,7 +42,7 @@ if sensor_data[0] > threshold and sensor_data[7] > threshold:
 
 ## Assignment
 
-Upgrade your autonomous line-following algorithm. Use `and` to detect an intersection, and use `or` to create robust steering zones.
+Upgrade your autonomous line-following algorithm. Use `or` to create robust steering zones.
 
 ## Conclusion
 Module 3 complete! Outstanding work!

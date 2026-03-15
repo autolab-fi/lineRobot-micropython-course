@@ -1,10 +1,11 @@
 ---
-index: 2
+index: 9
 module: module_2
 task: differential_drive
 previous: electric_motors
 next: defining_functions
 ---
+
 # Mission 2.2 Differential Drive
 
 ## Objective

@@ -39,8 +39,8 @@ The Octoliner sensor array consists of 8 sensors, each providing an analog value
 ![IR Sensor Logic](https://github.com/pranavk-2003/line-robot-curriculum/blob/assignments/images/module_7/IR_sensor_array.png?raw=True)
 
 - **Central sensors (3 & 4)** → Move straight
-- **Left sensors (0,1,2)** → Guide left turns
-- **Right sensors (5,6,7)** → Guide right turns
+- **Left sensors (0,1,2)** → Guide right turns
+- **Right sensors (5,6,7)** → Guide left turns
 
 To check an entire zone, we would normally need to check all three of its sensors. However, to keep our very first navigation program simple, we will pick just **one specific sensor from each zone** to act as our primary "scout":
 * **Left Scout:** Index 1
@@ -70,7 +70,8 @@ Mission Control needs to map a long, dark basaltic mineral vein on the lunar sur
 1. **Setup:** The hardware is initialized in the template. Define a `threshold` variable. 
 2. **Scanning Cycle:** Create a loop.
 3. **Action:** Inside the loop, first move the rover forward and add a delay to let the instruments settle.
-4. **Read Data:** * Read all 8 sensors at once and save the result to a variable named `sensor_data`.
+4. **Read Data:** 
+    * Read all 8 sensors at once and save the result to a variable named `sensor_data`.
     * Extract the values for index `1`, index `3`, and index `6` from `sensor_data` and save them into three separate variables (e.g., `left_scout`).
 5. **Analyze & Report:** * Use an `if / elif / else` structure to check your variables.
     * Print `"Vein: Center"`, `"Vein: Left"`, `"Vein: Right"`, or `"No minerals"` accordingly.

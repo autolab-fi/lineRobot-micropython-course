@@ -20,9 +20,6 @@ You have been selected for the **Artemis Support Program**. Your goal is to deve
 
 To assist the astronauts, we are deploying autonomous **Lunar Terrain Vehicles (LTV)**. Before we send them to the lunar South Pole, they must be tested in our simulation facility.
 
-Watch the briefing video below to understand the mission:
-
-[![Artemis Intro Video](https://img.youtube.com/vi/PLACEHOLDER/0.jpg)](https://www.youtube.com/watch?v=PLACEHOLDER)
 
 ## Mission Control Interface
 

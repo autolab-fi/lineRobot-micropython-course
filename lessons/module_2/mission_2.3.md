@@ -1,5 +1,5 @@
 ---
-index: 3
+index: 10
 module: module_2
 task: defining_functions
 previous: differential_drive

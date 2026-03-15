@@ -1,5 +1,5 @@
 ---
-index: 6
+index: 13
 module: module_2
 task: while_loops
 previous: encoder_theory
@@ -46,10 +46,10 @@ A `while` loop checks the condition before every single step.
 If the condition becomes `False` (distance less then 10 cm), the loop breaks immediately, and the code moves to the next commands.
 
 ## Assignment: Don't Hit the Wall
-**The Scenario:** You are in a testing tunnel. There is a wall exactly **20.5 cm** away.
+**The Scenario:** You are in a testing tunnel. There is a wall exactly **40.5 cm** away.
 Your navigation computer is damaged, so you cannot use high-level functions like `move_forward()` (they reset encoders). You must fly "manual" using raw motor commands
 
-**Your Task:** Drive **20 cm** and stop. If you overshoot by just 0.5 cm, you hit the wall.
+**Your Task:** Drive **40 cm** and stop. If you overshoot by just 0.5 cm, you hit the wall.
 
 
 **Requirements:**

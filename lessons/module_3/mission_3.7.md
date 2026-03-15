@@ -3,7 +3,7 @@ index: 20
 module: module_3
 task: logical_operators
 previous: simple_line_follower
-next: module_4_intro
+next: python_lists
 ---
 
 # Mission 3.7 Upgrading Vision (Logical Operators)

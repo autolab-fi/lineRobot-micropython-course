@@ -1,5 +1,5 @@
 ---
-index: 1
+index: 8
 module: module_2
 task: electric_motors
 previous: sequential_navigation
@@ -55,7 +55,7 @@ However, you will not be able to use the built-in robot movement functions. The 
 2. Use `time.sleep()` to wait for the exact amount of time needed to reach the target.
 3. Use `stop()` to stop the motors once the robot is on the point.
 
-![finish_point](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/finish_point.jpg?raw=true)
+![finish_point](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/finish_point.png?raw=true)
 
 *Hint: You will need to run the code multiple times, adjusting your `time.sleep()` value until the robot stops exactly on the target!*
 

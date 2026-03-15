@@ -171,7 +171,7 @@
         "sn": 19,
         "name": "Simple Line Follower",
         "description": "Build a relay (bang-bang) controller using scout sensors and motor speed commands.",
-        "template": "from lineRobot import Robot\nimport machine\nfrom time import sleep\nfrom octoliner import Octoliner\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity() #try different values\n\nrobot = Robot()\n\n# 1. Define your variables\nthreshold = \nspeed = 30\nturn = \n\n# Create an infinite loop\nwhile True:\n    # Read the array and extract scouts\n\n    # Use if/elif/else to steer the rover\n\n    # Tiny delay for stability\n    sleep(0.02)\n"
+        "template": "from lineRobot import Robot\nimport machine\nfrom time import sleep\nfrom octoliner import Octoliner\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity() #try different values\n\nrobot = Robot()\n\n# 1. Define your variables\nthreshold = \nspeed = 15\nturn = \n\n# Create an infinite loop\nwhile True:\n    # Read the array and extract scouts\n\n    # Use if/elif/else to steer the rover\n\n    # Tiny delay for stability\n    time.sleep(0.02)\n"
       },
       {
         "str_id": "logical_operators",
@@ -179,8 +179,7 @@
         "sn": 20,
         "name": "Upgrading Vision (Logical Operators)",
         "description": "Use or/and to combine sensor zones, reduce blind spots, and detect intersections.",
-        "template": "# Write code here"
-      }
+        "template": "import machine\nfrom time import sleep\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity() # Try different values (0-255)\n\nrobot = Robot()\n\n# 1. Define your variables\nthreshold = \nspeed = 25\nturn_angle = 5 #or it's possible to control turns via motor's speed\n\n# Create an infinite loop\nwhile True:\n    # 2. Read sensor data (sensors 0-7)\n    # center: 3, 4 | left: 0, 1, 2 | right: 5, 6, 7\n\n    # 3. Use if/elif/else to steer the rover\n    # Logic for following the line\n\n    # 4. Handle 'line lost' condition\n    # For example: move forward at minimal speed\n\n    # Tiny delay for stability\n    time.sleep(0.01)\n"}
     ]
   },
   {

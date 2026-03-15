@@ -45,7 +45,7 @@ robot.move_forward_distance(20) # You can also write comments here
 You need to navigate the robot through a specific route to collect geological samples (minerals) at **4 waypoints**. You must use **comments** to label each section of the journey.
     * Example: `# Moving to Point 1`, `# Collecting Sample 2`, `# Returning to base`.
 
-![trajectory](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/trajectory.png?raw=true)
+![trajectory](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/trajectory.jpg?raw=true)
 
 You can refresh your memory of the library functions by revisiting the previous lessons.
 

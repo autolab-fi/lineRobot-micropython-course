@@ -1,7 +1,7 @@
 ---
 index: 21
 module: module_4
-task: python_lists_waypoints
+task: python_lists
 previous: logical_operators
 next: telemetry_reporting
 ---

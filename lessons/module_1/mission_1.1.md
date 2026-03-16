@@ -40,7 +40,7 @@ Let's run a system check to make sure you are connected to the facility. You don
 
 Upload the program to the rover - see the animation below: click the Verify button (Red Arrow), watch the video feed (Blue Box):
 
-![Interface's animation](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/upload.gif?raw=true)
+![Interface's animation](https://api.ondroid.org/media/courses/9/images/module-1/upload.gif)
 
 
 ## Conclusion

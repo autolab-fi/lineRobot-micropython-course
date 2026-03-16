@@ -42,6 +42,15 @@ Upload the program to the rover - see the animation below: click the Verify butt
 
 ![Interface's animation](https://api.ondroid.org/media/courses/9/images/module-1/upload.gif)
 
+## Proceed to the next Mission
+
+To move forward, use the navigation menu at the top of the screen:
+
+![Menu](https://api.ondroid.org/media/courses/9/images/22bebd9fc20c4eab875e7771995460a6.jpg)
+
+1. Click on the current mission name (e.g., 2.6 LOOPS & FUNCTIONS...) in the top bar.
+2. Select the next mission from the drop-down list.
+3. If you've finished a module, you can switch between Modules (1, 2, 3, etc.) using the same top menu to see the full list of topics.
 
 ## Conclusion
 
@@ -49,4 +58,4 @@ System check complete!
 
 You have successfully connected to the platform and verified the communication link. In the next mission, we will introduce you to the rover hardware and analyze how this code actually works.
 
-Proceed to next Mission
+Now proceed to next Mission!

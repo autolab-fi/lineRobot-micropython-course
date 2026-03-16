@@ -25,7 +25,7 @@ To assist the astronauts, we are deploying autonomous **Lunar Terrain Vehicles (
 
 Before you begin coding, take a moment to understand your workspace.
 
-![Interface](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/Interface1.png?raw=true)
+![Interface](https://api.ondroid.org/media/courses/9/images/module-1/Interface1.png)
 
 * **Red Box:** This area contains the **Mission Briefing** (instructions). Read these carefully.
 * **Yellow Box:** This is the **Code Editor**. Here you will write your Python scripts.

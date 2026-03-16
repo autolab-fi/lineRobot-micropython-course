@@ -57,15 +57,19 @@ print(f"Red: {r}, Green: {g}, Blue: {b}")
 ```
 
 ## Assignment
-Mission Control has mapped out a straight testing track containing three distinct geological zones. Your rover must autonomously drive to each zone, scan the surface, and report the RGB values.
+Mission Control has positioned the rover at the start of a straight testing corridor containing colored geological anomalies. 
+
+You must program the rover to act as a **Linear Scanner**: it will take a series of short steps forward, stopping to scan and report the raw RGB values of the surface after each step.
 
 **Requirements:**
-1. Set up the hardware: initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.
-2. Use a `for` loop with the range() function to make the rover perform 5 identical scanning steps.
-3. Inside the loop, command the rover to move forward by 10 cm.
-4. Add a delay after the movement to let the sensor stabilize over the new zone.
-5. Read the color using the `.rgb()` method and print the result using an f-string: `Zone Scan - R:<value> G:<value> B:<value>`
+1. Set up the hardware: initialize the `Robot` and the `tcs3472` color sensor on the I2C bus (`sda=21`, `scl=22`).
+2. Use a `for` loop with the `range` function to make the rover perform 6 identical scanning steps.
+3. Inside the loop:
+* Read the color using the `.rgb()` method and print the result using an f-string: `Scan - R:<value> G:<value> B:<value>`.
+* Сommand the rover to move forward by **10 cm**.
+* Add a `time.sleep(0.5)` delay after the movement to let the sensor stabilize over the ground.
 
+Once your rover completes the scan, look closely at the data printed in your terminal. *Did you notice how the R, G, and B values changed drastically when the rover drove over a colored zone compared to the normal ground?*
 
 ## Conclusion
 Spectrometer online! You have successfully established an I2C connection with a new piece of hardware and extracted raw RGB data from multiple zones.

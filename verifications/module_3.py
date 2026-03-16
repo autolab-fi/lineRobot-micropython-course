@@ -789,7 +789,7 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION     = 60
+    TASK_DURATION     = 80
     CHECKPOINT_RADIUS = 10.0   # cm
     CHECKPOINTS       = [(103, 45), (98, 80)]
     # =========================

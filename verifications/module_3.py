@@ -13,8 +13,8 @@ target_points = {
     'processing_sensor_data': [(85,63),(30,0)],
     'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
-    'simple_line_follower': [(35,30),(30,0)],
-    'logical_operators': [(35,30),(30,0)]
+    'simple_line_follower': [(75,30),(30,0)],
+    'logical_operators': [(75,30),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
     #'move_function':[(50, 50), (30, 0)],
@@ -77,7 +77,7 @@ def intro_to_octoliner(robot, image, td, user_code=None):
 
     image = robot.draw_info(image)
 
-    if not td:
+    if td is None:
         # Check for analog_read(3) or analog_read(4) — filter commented lines
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
@@ -171,7 +171,7 @@ def conditional_logic(robot, image, td, user_code=None):
 
     image = robot.draw_info(image)
 
-    if not td:
+    if td is None:
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
@@ -307,7 +307,7 @@ def processing_sensor_data(robot, image, td, user_code=None):
 
     image = robot.draw_info(image)
 
-    if not td:
+    if td is None:
         td = {
             "start_time": time.time(),
             "end_time": time.time() + TASK_DURATION,
@@ -451,7 +451,7 @@ def arrays_and_elif(robot, image, td, user_code=None):
 
     image = robot.draw_info(image)
 
-    if not td:
+    if td is None:
         lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
@@ -789,9 +789,9 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION     = 180
+    TASK_DURATION     = 90
     CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(80, 30), (105, 60), (60, 90) ]
+    CHECKPOINTS       = [(103, 45), (98, 80)]
     # =========================
 
     result = {
@@ -813,8 +813,7 @@ def simple_line_follower(robot, image, td, user_code=None):
         has_index_1  = "[1]" in active_code
         has_index_6  = "[6]" in active_code
         has_while    = "while True" in active_code
-        has_or       = "or" in active_code
-        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while and has_or
+        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while
 
         missing = []
         if not has_read_all:
@@ -825,8 +824,6 @@ def simple_line_follower(robot, image, td, user_code=None):
             missing.append("scout indices [1] and [6]")
         if not has_while:
             missing.append("while True loop")
-        if not has_or:
-            missing.append("or operator")
 
         td = {
             "start_time": time.time(),
@@ -888,6 +885,14 @@ def simple_line_follower(robot, image, td, user_code=None):
             td["data"]["checkpoints_hit"].append(next_cp)
             td["data"]["checkpoints_remaining"].pop(0)
             text = f"Checkpoint {len(td['data']['checkpoints_hit'])}/{len(CHECKPOINTS)} reached!"
+
+            # early completion — all checkpoints hit
+            if not td["data"]["checkpoints_remaining"]:
+                result["success"] = True
+                result["score"]   = 100
+                result["description"] = f"You are amazing! All {len(CHECKPOINTS)} checkpoints reached | Score: 100"
+                text = "Line following complete!"
+                td["end_time"] = time.time()  # expire task immediately
 
     msg = robot.get_msg()
     if msg is not None:
@@ -958,7 +963,6 @@ def simple_line_follower(robot, image, td, user_code=None):
             text = "Line following complete!"
 
     return image, td, text, result
-
 
 def logical_operators(robot, image, td, user_code=None):
     """

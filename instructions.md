@@ -80,7 +80,7 @@ You can review your course progress on the **Learning Record** page. You can als
 ![Discord icon](https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d80db9971f10a9757c99_Symbol.svg)
 
 
-We keep our Discord channel open: https://discord.gg/McXvdwNr
+We keep our Discord channel open: [https://discord.gg/McXvdwNr](https://discord.gg/McXvdwNr).
 If you run into any issues during the course, feel free to contact us there. You can also ask for hints if you get stuck on an assignment.
 
 ## Problems on the Coding Platform
@@ -88,3 +88,4 @@ If you run into any issues during the course, feel free to contact us there. You
 Click **Feedback Form** next to your profile name in the top right corner.  
 Describe the issue so the team can assist you.
 
+![](images/course-info/feedback-form-ondroid.png)

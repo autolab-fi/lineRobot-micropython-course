@@ -41,6 +41,7 @@ def detect_color_name(r, g, b):
     # Math goes here
     return "Red" # The output
 ```
+
 ## Assignment
 Your task is to upgrade your Linear Scanner from the previous mission. You will create a custom Python function that uses math to convert raw RGB data into a specific color name ("Red", "Green", or "Floor"), and then apply it to your scanning loop.
 
@@ -57,6 +58,7 @@ Your task is to upgrade your Linear Scanner from the previous mission. You will 
 3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function.
 4. Call the function: Inside the loop, after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.
 5. Print: Output the final color name and the raw values using an f-string: `Scan: {color_name} (Raw: R:{r} G:{g} B:{b})`.
+
 
 ## Conclusion
 Congratulations! You have successfully built a color classification algorithm. Your rover can now adapt to the lighting conditions and accurately identify the "Red" and "Green" zones while ignoring the background noise of the lunar floor.

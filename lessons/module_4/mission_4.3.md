@@ -73,6 +73,7 @@ Once your rover completes the scan, look closely at the data printed in your ter
 
 > **Important:** Save your code or keep this tab open! You will use this exact loop as the foundation for your next mission.
 
+
 ## Conclusion
 Spectrometer online! You have successfully established an I2C connection with a new piece of hardware and extracted raw RGB data from multiple zones.
 

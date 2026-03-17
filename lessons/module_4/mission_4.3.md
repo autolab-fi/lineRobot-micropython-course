@@ -71,6 +71,8 @@ You must program the rover to act as a **Linear Scanner**: it will take a series
 
 Once your rover completes the scan, look closely at the data printed in your terminal. *Did you notice how the R, G, and B values changed drastically when the rover drove over a colored zone compared to the normal ground?*
 
+> **Important:** Save your code or keep this tab open! You will use this exact loop as the foundation for your next mission.
+
 ## Conclusion
 Spectrometer online! You have successfully established an I2C connection with a new piece of hardware and extracted raw RGB data from multiple zones.
 

@@ -65,4 +65,4 @@ Merge your systems! Program the rover to follow the track. If it sees a Green zo
 ## Conclusion
 Congratulations! You have just programmed a truly multi-tasking robot. By using a shared I2C bus and a non-blocking LED signal, your rover can navigate complex terrain while simultaneously scanning for scientific anomalies. 
 
-Next up: your robot is finding all these cool anomalies, but how do we save this data so we don't lose it when the power turns off? Get ready for the next mission!
+> **Important:** Save your entire script. In the final mission of this module, we will upgrade this code to turn the rover into a silent, data-gathering probe that generates a massive post-mission report!

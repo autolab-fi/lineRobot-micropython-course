@@ -31,6 +31,8 @@ To find the true color, we calculate what percentage of the total light belongs 
 
 If `r_ratio` is `0.5`, it means 50% of all the light reflecting off the ground is red. This proportion stays the same whether the rover is in bright sunlight or deep shadow!
 
+**The Golden Rule of Normalization:** Because we are dividing by the total, the sum of your ratios (`r_ratio + g_ratio + b_ratio`) will **always equal exactly 1.0 (100%)**.
+
 ### 3. Creating a Custom Function
 We will package this math into a custom **function**. A function is a reusable block of code that takes inputs, processes them, and `returns` an output.
 
@@ -45,7 +47,7 @@ Your task is to upgrade your Linear Scanner from the previous mission. You will 
 **⚠️ WARNING: The Illumination Trap!** The grey lunar floor under the lab lights might reflect more red light than you expect (sometimes over 40% of the total light). 
 * Do not just guess the numbers! 
 * Look at the raw data logs from your Mission 4.3 scan and use a calculator to find the exact `r_ratio` of the floor versus the Red zone. 
-* Set your `if r_ratio > ___` threshold high enough to ignore the floor (e.g., `> 0.5`), but low enough to detect the real Red zone.
+* Set your `if r_ratio > ___` threshold high enough to ignore the floor, but low enough to detect the real Red zone.
 
 **Requirements:**
 1. Set up the hardware: Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.

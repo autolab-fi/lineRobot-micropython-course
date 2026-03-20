@@ -789,7 +789,7 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION     = 80
+    TASK_DURATION     = 90
     CHECKPOINT_RADIUS = 10.0   # cm
     CHECKPOINTS       = [(103, 45), (98, 80)]
     # =========================
@@ -831,6 +831,8 @@ def simple_line_follower(robot, image, td, user_code=None):
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,
+                "completed":             False,
+                "completed_verdict":    False,
                 "checkpoints_hit":       [],
                 "checkpoints_remaining": list(CHECKPOINTS),
                 "flag":                  None,
@@ -886,13 +888,13 @@ def simple_line_follower(robot, image, td, user_code=None):
             td["data"]["checkpoints_remaining"].pop(0)
             text = f"Checkpoint {len(td['data']['checkpoints_hit'])}/{len(CHECKPOINTS)} reached!"
 
-            # early completion — all checkpoints hit
+            # early finish — shorten timer only, verdict handled by timeout block
             if not td["data"]["checkpoints_remaining"]:
-                result["success"] = True
-                result["score"]   = 100
-                result["description"] = f"You are amazing! All {len(CHECKPOINTS)} checkpoints reached | Score: 100"
-                text = "Line following complete!"
-                td["end_time"] = time.time()  # expire task immediately
+                elapsed = time.time() - td["start_time"]
+                if elapsed >= 10.0 and not td["data"]["completed"]:
+                    td["data"]["completed"] = True
+                    td["end_time"] = time.time() + 10.0
+                text = "All checkpoints reached! Finishing..."
 
     msg = robot.get_msg()
     if msg is not None:
@@ -940,7 +942,8 @@ def simple_line_follower(robot, image, td, user_code=None):
                 cv2.circle(image, cp_px, 5, color, -1)
 
     # timeout / final verdict
-    if td["end_time"] - time.time() < 1:
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+        td["data"]["completed_verdict"] = True
         hit   = len(td["data"]["checkpoints_hit"])
         total = len(CHECKPOINTS)
 

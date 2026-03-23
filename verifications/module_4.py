@@ -91,7 +91,6 @@ def python_lists(robot, image, td, user_code=None):
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,
-                "completed":             False,
                 "completed_verdict":     False,
                 "checkpoints_hit":       [],
                 "checkpoints_remaining": list(CHECKPOINTS),
@@ -135,15 +134,6 @@ def python_lists(robot, image, td, user_code=None):
         if dist < CHECKPOINT_RADIUS:
             td["data"]["checkpoints_hit"].append(next_cp)
             td["data"]["checkpoints_remaining"].pop(0)
-
-    if (not td["data"]["checkpoints_remaining"]
-            and td["data"]["code_valid"]
-            and not td["data"]["completed"]):
-        elapsed = time.time() - td["data"]["start_time"]
-        if elapsed >= 10.0:
-            td["data"]["completed"] = True
-            td["end_time"] = time.time() + 10.0
-            text = "All checkpoints reached! Finishing..."
 
     hit_now = len(td["data"]["checkpoints_hit"])
     text = f"Checkpoints reached: {hit_now}/{len(CHECKPOINTS)}"
@@ -279,8 +269,7 @@ def telemetry(robot, image, td, user_code=None):
             td["data"]["msg_keys_found"] = list(keys_found)
             if not missing_keys:
                 td["data"]["msg_valid"] = True
-                td["end_time"]          = time.time() + 10.0
-                text = "Telemetry validated! Finishing..."
+                text = "Telemetry validated!"
             else:
                 text = f"STATUS message missing keys: {', '.join(missing_keys)}"
         elif msg is not None:

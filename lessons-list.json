@@ -195,7 +195,7 @@
         "sn": 21,
         "name": "Python Lists & Waypoints",
         "description": "Use a list and a for loop to navigate a multi-waypoint route.",
-        "template": ""
+        "template": "# Write code here"
       },
       {
         "str_id": "telemetry",
@@ -203,7 +203,7 @@
         "sn": 22,
         "name": "Telemetry Report",
         "description": "Measure movement duration with time.time() and broadcast a STATUS report.",
-        "template": ""
+        "template": "# Write code here"
       },
       {
         "str_id": "color_sensor_basics",
@@ -211,7 +211,7 @@
         "sn": 23,
         "name": "Color Sensor Basics",
         "description": "Initialize the tcs3472 sensor and scan a straight track, printing raw RGB values.",
-        "template": ""
+        "template": "# Write code here"
       },
       {
         "str_id": "color_classification",
@@ -219,7 +219,7 @@
         "sn": 24,
         "name": "Color Classification",
         "description": "Build detect_color_name() using RGB ratio normalization and if/elif classification.",
-        "template": ""
+        "template": "# Write code here"
       },
       {
         "str_id": "multiple_sensors",
@@ -227,7 +227,7 @@
         "sn": 25,
         "name": "Multiple Sensors",
         "description": "Merge line following and color sensing: LED on for Green, stop on Blue.",
-        "template": ""
+        "template": "# Write code here"
       },
       {
         "str_id": "data_logging",
@@ -235,7 +235,7 @@
         "sn": 26,
         "name": "Post-Mission Data Logging",
         "description": "Drive silently for 30 seconds, log color anomalies to a list, then print a formatted report.",
-        "template": ""
+        "template": "# Write code here"
       }
     ]
   },

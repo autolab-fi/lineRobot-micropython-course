@@ -256,7 +256,6 @@ def telemetry(robot, image, td, user_code=None):
 
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
-        return image, td, text, result
 
     if not td["data"]["msg_valid"]:
         msg = robot.get_msg()
@@ -377,7 +376,6 @@ def color_sensor_basics(robot, image, td, user_code=None):
 
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
-        return image, td, text, result
 
     msg = robot.get_msg()
     if msg is not None:
@@ -487,7 +485,6 @@ def color_classification(robot, image, td, user_code=None):
 
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
-        return image, td, text, result
 
     msg = robot.get_msg()
     if msg is not None:
@@ -541,7 +538,7 @@ def multiple_sensors(robot, image, td, user_code=None):
     Stop confirmed via MQTT + robot stationary near blue zone for 1s.
     """
 
-    TASK_DURATION      = 30
+    TASK_DURATION      = 20
     GREEN_ZONE_CENTER  = (75, 32)
     GREEN_ZONE_SIZE    = 10
     BLUE_ZONE_CENTER   = (100, 55)
@@ -755,7 +752,7 @@ def data_logging(robot, image, td, user_code=None):
     Verification window 60s covers mission + report burst.
     """
 
-    TASK_DURATION  = 60
+    TASK_DURATION  = 40
     VALID_COLORS   = {"Red", "Green", "Blue", "Floor", "Unknown"}
     START_MSG      = "Mission Start!"
     REPORT_END_MSG = "End of transmission"

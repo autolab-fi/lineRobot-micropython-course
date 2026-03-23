@@ -195,7 +195,7 @@
         "sn": 21,
         "name": "Python Lists & Waypoints",
         "description": "Use a list and a for loop to navigate a multi-waypoint route.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Create your list \n\n# Find the length of the list\ntotal_waypoints = 0 # Replace 0 with the len() function\n\n# Print the report\nprint(\"Mission Control, I have received\", total_waypoints, \"waypoints.\")\n\n# Create your for loop here to execute the route\n"
       },
       {
         "str_id": "telemetry",
@@ -203,7 +203,7 @@
         "sn": 22,
         "name": "Telemetry Report",
         "description": "Measure movement duration with time.time() and broadcast a STATUS report.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Set up your variables and start the stopwatch\n\n# Move the robot\n\n# Stop the stopwatch, calculate duration and speed\n\n# Print the formatted telemetry string\nprint(f\"STATUS:...\")"
       },
       {
         "str_id": "color_sensor_basics",
@@ -211,7 +211,7 @@
         "sn": 23,
         "name": "Color Sensor Basics",
         "description": "Initialize the tcs3472 sensor and scan a straight track, printing raw RGB values.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\n# Initialize the I2C bus and the color sensor\nbus =\ncolor_sensor =\n\n# Create your scanning loop for \n    #Read and print RGB values\n    \n    # Move forward\n\nprint(\"Linear scan complete.\")"
       },
       {
         "str_id": "color_classification",
@@ -219,7 +219,7 @@
         "sn": 24,
         "name": "Color Classification",
         "description": "Build detect_color_name() using RGB ratio normalization and if/elif classification.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\ncolor_sensor = \n\n# --- YOUR CUSTOM FUNCTION ---\ndef detect_color_name(r, g, b):\n    # 1. Calculate the total light\n    total = ___ + ___ + ___\n    \n    # Anti-crash protection (division by zero)\n    if total == 0:\n        return \"Unknown\"\n        \n    # 2. Calculate the ratios (Normalization)\n    r_ratio = ___ / ___\n    g_ratio = ___ / ___\n    b_ratio = ___ / ___\n    \n    # 3. Use logic to find the dominant color\n    # Hint: Remember the warning about the lunar floor!\n    if r_ratio > ___ :\n        return \"Red\"\n    elif ___ > ___ :\n        return \"Green\"\n    else:\n        return \"Floor\"\n\n# --- YOUR SCANNER PROGRAM ---\nprint(\"Starting smart scan...\")\n\n# TODO: Add your range(6) loop from Mission 4.3 here!\n\nprint(\"Smart scan complete.\")"
       },
       {
         "str_id": "multiple_sensors",
@@ -227,7 +227,7 @@
         "sn": 25,
         "name": "Multiple Sensors",
         "description": "Merge line following and color sensing: LED on for Green, stop on Blue.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(245) # Maybe you need change sensitivity\n\ncolor_sensor = tcs3472(bus)\n\nled = machine.Pin(15, machine.Pin.OUT)\nled.value(0)\n\n\n# Custom function from Mission 4.4\ndef detect_color_name(r, g, b):\n\n\nthreshold = 700\nspeed = 30\nturn_speed = 3\n\nlast_color = \"Floor\"\n\nprint(\"Goal: LED on GREEN, Stop on BLUE.\")\n\nwhile True:\n    # Read r, g, b and call your function\n   \n    # Implementr if-else logic for colors\n    if current_color != last_color:\n        # Check for green color\n        if current_color == :\n            \n        # Check for blue color\n        elif :\n            # Stop and break\n\n        # For \"Floor\" color turn off the led\n        elif :\n\n    last_color = current_color\n\n    # Octoliner if-else  logic from Module 3\n    sensor_data = octoliner.analog_read_all()\n   "
       },
       {
         "str_id": "data_logging",
@@ -235,7 +235,7 @@
         "sn": 26,
         "name": "Post-Mission Data Logging",
         "description": "Drive silently for 30 seconds, log color anomalies to a list, then print a formatted report.",
-        "template": "# Write code here"
+        "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(240)\n\ncolor_sensor = tcs3472(bus)\n\n# Сustom color detection function\ndef detect_color_name(r, g, b):\n\n# Setup mission variables\nthreshold = 700\nspeed = 40\nturn_speed = 3\n\nlast_color = \"Floor\"\nanomaly_log # Create list to store mission data\nmission_duration = 15\nstart_time = time.time()\n\nprint(\"Mission Start!\")\n\nwhile True:\n    # Check mission timer\n    if elapsed_time > :\n        # Stop and break\n         \n    # Color Sensing and Logging\n    \n    # Log anomaly if color changes and it's not \"Floor\"\n    if current_color != last_color and current_color != \"Floor\":\n        # Append [name, r, g, b] to the log\n\n    last_color = current_color\n\n    # Line Following Logic\n    \n# Final Report\nprint(\"========\")\nprint(\" Transmitting mission report to Earth\")\nprint(\"========\")\n\n# Print Mission Duration in sec and Total anomalies recorded\n\n# Use a loop to print every anomaly from the list\n\nprint(\"========\")\nprint(\"End of transmission\")"
       }
     ]
   },

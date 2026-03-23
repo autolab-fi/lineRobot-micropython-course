@@ -6,7 +6,7 @@ import re
 import numpy as np
 
 target_points = {
-    'encoders':            [(30, 50), (30, 0)],
+    'python_lists':            [(30, 50), (30, 0)],
     'telemetry':           [(75, 30), (30, 0)],
     'color_sensor_basics': [(128, 98), (0, -30)],
     'color_classification':[(128, 99), (0, -30)],
@@ -15,7 +15,7 @@ target_points = {
 }
 
 block_library_functions = {
-    'encoders':             False,
+    'python_lists':         False,
     'telemetry':            False,
     'color_sensor_basics':  False,
     'color_classification': False,

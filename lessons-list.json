@@ -179,7 +179,64 @@
         "sn": 20,
         "name": "Upgrading Vision (Logical Operators)",
         "description": "Use or/and to combine sensor zones, reduce blind spots, and detect intersections.",
-        "template": "import machine\nfrom time import sleep\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity() # Try different values (0-255)\n\nrobot = Robot()\n\n# 1. Define your variables\nthreshold = \nspeed = 25\nturn_angle = 5 #or it's possible to control turns via motor's speed\n\n# Create an infinite loop\nwhile True:\n    # 2. Read sensor data (sensors 0-7)\n    # center: 3, 4 | left: 0, 1, 2 | right: 5, 6, 7\n\n    # 3. Use if/elif/else to steer the rover\n    # Logic for following the line\n\n    # 4. Handle 'line lost' condition\n    # For example: move forward at minimal speed\n\n    # Tiny delay for stability\n    time.sleep(0.01)\n"}
+        "template": "import machine\nfrom time import sleep\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity() # Try different values (0-255)\n\nrobot = Robot()\n\n# 1. Define your variables\nthreshold = \nspeed = 25\nturn_angle = 5 #or it's possible to control turns via motor's speed\n\n# Create an infinite loop\nwhile True:\n    # 2. Read sensor data (sensors 0-7)\n    # center: 3, 4 | left: 0, 1, 2 | right: 5, 6, 7\n\n    # 3. Use if/elif/else to steer the rover\n    # Logic for following the line\n\n    # 4. Handle 'line lost' condition\n    # For example: move forward at minimal speed\n\n    # Tiny delay for stability\n    time.sleep(0.01)\n"
+      }
+    ]
+  },
+  {
+    "name": "Advanced Sensors & Data",
+    "description": "Combining line following with color sensing, LED feedback, and data logging.",
+    "sn": 4,
+    "str_id": "module_4",
+    "lessons": [
+      {
+        "str_id": "python_lists",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.1.md",
+        "sn": 21,
+        "name": "Python Lists & Waypoints",
+        "description": "Use a list and a for loop to navigate a multi-waypoint route.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Create your route list\nroute = []\n\ntotal_waypoints = len(route)\nprint(\"Mission Control, I have received\", total_waypoints, \"waypoints.\")\n\nfor distance in route:\n    robot.move_forward_distance(distance)\n    robot.turn_right()\n    time.sleep(1)\n"
+      },
+      {
+        "str_id": "telemetry",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.2.md",
+        "sn": 22,
+        "name": "Telemetry Report",
+        "description": "Measure movement duration with time.time() and broadcast a STATUS report.",
+        "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\nrobot_name = \"\"\nis_ready = True\ndistance = 40\n\nstart_time = time.time()\nrobot.move_forward_distance(distance)\nend_time = time.time()\n\nduration = end_time - start_time\nspeed_cm_s = distance / duration\n\nprint(f\"STATUS:name={robot_name};dist={distance};time={duration};speed={speed_cm_s};ready={is_ready}\")\n"
+      },
+      {
+        "str_id": "color_sensor_basics",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.3.md",
+        "sn": 23,
+        "name": "Color Sensor Basics",
+        "description": "Initialize the tcs3472 sensor and scan a straight track, printing raw RGB values.",
+        "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\ncolor_sensor = tcs3472(bus)\n\nfor step in range(6):\n    r, g, b = color_sensor.rgb()\n    print(f\"Scan - R:{r} G:{g} B:{b}\")\n    robot.move_forward_distance(10)\n    time.sleep(0.5)\n\nprint(\"Linear scan complete.\")\n"
+      },
+      {
+        "str_id": "color_classification",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.4.md",
+        "sn": 24,
+        "name": "Color Classification",
+        "description": "Build detect_color_name() using RGB ratio normalization and if/elif classification.",
+        "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\ncolor_sensor = tcs3472(bus)\n\ndef detect_color_name(r, g, b):\n    total = r + g + b\n    if total == 0:\n        return \"Unknown\"\n    r_ratio = r / total\n    g_ratio = g / total\n    b_ratio = b / total\n    # Add your if/elif classification logic here\n\nfor step in range(6):\n    r, g, b = color_sensor.rgb()\n    detected_color = detect_color_name(r, g, b)\n    print(f\"Scan complete: {detected_color} (Raw: R:{r} G:{g} B:{b})\")\n    robot.move_forward_distance(10)\n    time.sleep(0.5)\n\nprint(\"Smart scan complete.\")\n"
+      },
+      {
+        "str_id": "multiple_sensors",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.5.md",
+        "sn": 25,
+        "name": "Multiple Sensors",
+        "description": "Merge line following and color sensing: LED on for Green, stop on Blue.",
+        "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(245)\n\ncolor_sensor = tcs3472(bus)\n\nled = machine.Pin(15, machine.Pin.OUT)\nled.value(0)\n\ndef detect_color_name(r, g, b):\n    total = r + g + b\n    if total == 0:\n        return \"Floor\"\n    r_ratio = r / total\n    g_ratio = g / total\n    b_ratio = b / total\n    # Add your classification logic here\n\nthreshold = 700\nspeed = 30\nturn_speed = 3\nlast_color = \"Floor\"\n\nprint(\"Goal: LED on GREEN, Stop on BLUE.\")\n\nwhile True:\n    r, g, b = color_sensor.rgb()\n    current_color = detect_color_name(r, g, b)\n    print(f\"{current_color} (Raw: R:{r} G:{g} B:{b})\")\n\n    if current_color != last_color:\n        # Add your Green / Blue / Floor logic here\n        pass\n\n    last_color = current_color\n\n    sensor_data = octoliner.analog_read_all()\n    # Add your line-following if/elif block here\n\n    time.sleep(0.01)\n"
+      },
+      {
+        "str_id": "data_logging",
+        "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.6.md",
+        "sn": 26,
+        "name": "Post-Mission Data Logging",
+        "description": "Drive silently for 30 seconds, log color anomalies to a list, then print a formatted report.",
+        "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(240)\n\ncolor_sensor = tcs3472(bus)\n\ndef detect_color_name(r, g, b):\n    total = r + g + b\n    if total == 0:\n        return \"Floor\"\n    r_ratio = r / total\n    g_ratio = g / total\n    b_ratio = b / total\n    # Add your classification logic here\n\nthreshold = 700\nspeed = 30\nturn_speed = 3\nlast_color = \"Floor\"\n\n# Setup memory and timer\nanomaly_log = []\nmission_duration = 30\nstart_time = time.time()\n\nprint(\"Mission Start!\")\n\nwhile True:\n    elapsed_time = time.time() - start_time\n    if elapsed_time > mission_duration:\n        robot.stop()\n        break\n\n    r, g, b = color_sensor.rgb()\n    current_color = detect_color_name(r, g, b)\n\n    # Log anomalies here\n\n    last_color = current_color\n\n    sensor_data = octoliner.analog_read_all()\n    # Add your line-following if/elif block here\n\n    time.sleep(0.01)\n\n# Print your report here\n"
+      }
     ]
   },
   {

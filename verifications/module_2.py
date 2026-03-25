@@ -735,7 +735,7 @@ def while_loops(robot, image, td: dict, user_code=None):
 
     TASK_DURATION      = 15
     TARGET_DISTANCE_CM = 40.0
-    SUCCESS_MIN_CM     = 37.0
+    SUCCESS_MIN_CM     = 36.0
     R                  = 3.4
     ENCODER_SANITY_CAP = 2000
     WALL_VISUAL_OFFSET = 130

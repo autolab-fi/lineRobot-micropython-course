@@ -12,9 +12,7 @@ next: test_drive
 
 Join the Artemis Support Program, familiarize yourself with the Mission Control Interface, and establish a connection with the Lunar Terrain Vehicle (LTV).
 
-![Difficulty: Easy](https://img.shields.io/badge/Easy-green)
-
-<span style="color:green;">Easy</span>
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
 
 ## Introduction
 

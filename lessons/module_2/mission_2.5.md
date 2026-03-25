@@ -43,7 +43,7 @@ robot.stop_motor_right()      # Stops right motor WITHOUT resetting the encoder
 ```
 
 ### Distance and Rotation
-For a wheel with diameter D, one full rotation covers a distance of L = 3.14 * D, where 3.14 is pi value. Our robot's wheels have a diameter of 3.4 cm, so one full rotation is roughly 11 cm.
+For a wheel with diameter D, one full rotation covers a distance of L = 3.14 * D, where 3.14 is pi value. Our robot's wheels have a radius of 3.4 cm, so one full rotation L = 3.14 * 2 * R is roughly 21 cm.
 
 ## Assignment: The Calibration Challenge
 Your task is to find the perfect "pulse" for your robot to make it drive almost exactly one full wheel rotation and calculate the distance traveled.

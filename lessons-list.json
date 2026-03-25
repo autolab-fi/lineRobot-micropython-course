@@ -43,7 +43,7 @@
         "sn": 5,
         "name": "Python Variables & Commands",
         "description": "Introduce variables, arithmetic, and print statements to control and report motion.",
-        "template": "from lineRobot import Robot\n\nrobot = Robot()\n\n# 1. Create variables\n# back_dist = \n# fwd_dist = \n\n# 2. Move using variables\n# (Write your movement commands here)\n\n\n# 3. Calculate and print total distance\n# (Write your calculation and print here)\n"
+        "template": "from lineRobot import Robot\n\nrobot = Robot()\n\n# 1. Create variables\nback_dist = \nfwd_dist = \n\n# 2. Move using variables\n\n\n# 3. Calculate and print total distance\n# (Write your calculation and print here)\n"
       },
       {
         "str_id": "maneuvering",

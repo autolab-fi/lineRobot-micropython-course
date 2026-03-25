@@ -48,22 +48,27 @@ def python_lists(robot, image, td, user_code=None):
     Checkpoints: (130,30), (130,90), (60,90)
     """
 
+    # ===== CONFIGURATION =====
     TASK_DURATION     = 30
-    CHECKPOINT_RADIUS = 10.0
+    CHECKPOINT_RADIUS = 10.0   # cm
     CHECKPOINTS       = [(130, 30), (130, 90), (60, 90)]
+    START_POS_CM      = (75, 30)
+    # =========================
 
+    # ── default result and text ───────────────────────────────────────────────
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
         "score": 100
     }
-
     hit_so_far = 0 if td is None else len(td["data"]["checkpoints_hit"])
     text = f"Checkpoints reached: {hit_so_far}/{len(CHECKPOINTS)}"
 
     image = robot.draw_info(image)
 
+    # ── first-frame initialisation ────────────────────────────────────────────
     if td is None:
+        # ── code validation ───────────────────────────────────────────────────
         lines        = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code  = '\n'.join(active_lines)
@@ -85,6 +90,7 @@ def python_lists(robot, image, td, user_code=None):
         if not has_len_route:       missing.append("len(route)")
         if not has_waypoints_print: missing.append("waypoint count print")
 
+        # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
             "end_time":   time.time() + TASK_DURATION,
@@ -94,6 +100,7 @@ def python_lists(robot, image, td, user_code=None):
                 "completed_verdict":     False,
                 "checkpoints_hit":       [],
                 "checkpoints_remaining": list(CHECKPOINTS),
+                # flag image assets
                 "flag":                  None,
                 "flag_mask":             None,
                 "flag_green":            None,
@@ -102,6 +109,7 @@ def python_lists(robot, image, td, user_code=None):
             }
         }
 
+        # ── flag image loading (dual-path fallback) ───────────────────────────
         try:
             basepath = os.path.abspath(os.path.dirname(__file__))
             filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
@@ -124,9 +132,11 @@ def python_lists(robot, image, td, user_code=None):
             print(f"Flag load error: {e} — falling back to circle markers")
             td["data"]["image_error"] = True
 
+    # ── code invalid notice ───────────────────────────────────────────────────
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
 
+    # ── checkpoint detection ──────────────────────────────────────────────────
     pos = robot.position
     if pos is not None and td["data"]["checkpoints_remaining"]:
         next_cp = td["data"]["checkpoints_remaining"][0]
@@ -135,6 +145,7 @@ def python_lists(robot, image, td, user_code=None):
             td["data"]["checkpoints_hit"].append(next_cp)
             td["data"]["checkpoints_remaining"].pop(0)
 
+    # ── live status text ──────────────────────────────────────────────────────
     hit_now = len(td["data"]["checkpoints_hit"])
     text = f"Checkpoints reached: {hit_now}/{len(CHECKPOINTS)}"
 
@@ -142,6 +153,7 @@ def python_lists(robot, image, td, user_code=None):
     if msg is not None:
         text = f"Message: {msg}"
 
+    # ── overlay drawing ───────────────────────────────────────────────────────
     pos_px = robot.position_px
     if pos is not None and pos_px is not None and pos[0] != 0:
         px_per_cm  = pos_px[0] / pos[0]
@@ -152,6 +164,24 @@ def python_lists(robot, image, td, user_code=None):
         use_flag   = not td["data"]["image_error"] and flag is not None
         hits       = td["data"]["checkpoints_hit"]
 
+        # label style
+        font           = cv2.FONT_HERSHEY_SIMPLEX
+        font_scale     = 0.80
+        thickness      = 2
+        color_text     = (0, 0, 0)
+        label_offset_x = -40
+        label_offset_y = radius_px + 18
+
+        # start point circle + label
+        start_px = (int(START_POS_CM[0] * px_per_cm), int(START_POS_CM[1] * px_per_cm))
+        cv2.circle(image, start_px, radius_px, (200, 200, 200), 1)
+        cv2.circle(image, start_px, 5, (200, 200, 200), -1)
+        cv2.putText(image, f"Start x:{START_POS_CM[0]} y:{START_POS_CM[1]}",
+                    (start_px[0] + label_offset_x, start_px[1] + label_offset_y),
+                    font, font_scale, color_text, thickness, cv2.LINE_AA)
+
+        # checkpoint circles + flag overlays
+        cp_names = ["CP1", "CP2", "CP3"]
         for cp_cm in CHECKPOINTS:
             cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
             hit   = cp_cm in hits
@@ -169,6 +199,14 @@ def python_lists(robot, image, td, user_code=None):
             else:
                 cv2.circle(image, cp_px, 5, (0, 200, 0) if hit else (0, 200, 255), -1)
 
+        # checkpoint coordinate labels
+        for i, cp_cm in enumerate(CHECKPOINTS):
+            cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
+            cv2.putText(image, f"{cp_names[i]} x:{cp_cm[0]} y:{cp_cm[1]}",
+                        (cp_px[0] + label_offset_x, cp_px[1] + label_offset_y),
+                        font, font_scale, color_text, thickness, cv2.LINE_AA)
+
+    # ── timeout / final verdict (fires exactly once) ──────────────────────────
     if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
         td["data"]["completed_verdict"] = True
         hit   = len(td["data"]["checkpoints_hit"])

@@ -166,16 +166,28 @@ def python_lists(robot, image, td, user_code=None):
 
         # label style
         font           = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale     = 0.80
+        font_scale     = 0.90
         thickness      = 2
         color_text     = (0, 0, 0)
-        label_offset_x = -40
+
+        outline_scale     = 0.90
+        outline_thickness = 4
+        color_outline      = (255,255,255)
+
+        label_offset_x = -80
         label_offset_y = radius_px + 18
 
         # start point circle + label
         start_px = (int(START_POS_CM[0] * px_per_cm), int(START_POS_CM[1] * px_per_cm))
         cv2.circle(image, start_px, radius_px, (200, 200, 200), 1)
         cv2.circle(image, start_px, 5, (200, 200, 200), -1)
+
+        #Start outline
+        cv2.putText(image, f"Start x:{START_POS_CM[0]} y:{START_POS_CM[1]}",
+                    (start_px[0] + label_offset_x, start_px[1] + label_offset_y),
+                    font, outline_scale, color_outline, outline_thickness, cv2.LINE_AA)
+
+        #Start label
         cv2.putText(image, f"Start x:{START_POS_CM[0]} y:{START_POS_CM[1]}",
                     (start_px[0] + label_offset_x, start_px[1] + label_offset_y),
                     font, font_scale, color_text, thickness, cv2.LINE_AA)
@@ -199,12 +211,21 @@ def python_lists(robot, image, td, user_code=None):
             else:
                 cv2.circle(image, cp_px, 5, (0, 200, 0) if hit else (0, 200, 255), -1)
 
+        # checkpoint coordinate label outlines
+        for i, cp_cm in enumerate(CHECKPOINTS):
+            cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
+            cv2.putText(image, f"{cp_names[i]} x:{cp_cm[0]} y:{cp_cm[1]}",
+                        (cp_px[0] + label_offset_x, cp_px[1] + label_offset_y),
+                        font, outline_scale, color_outline, outline_thickness, cv2.LINE_AA)
+
         # checkpoint coordinate labels
         for i, cp_cm in enumerate(CHECKPOINTS):
             cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
             cv2.putText(image, f"{cp_names[i]} x:{cp_cm[0]} y:{cp_cm[1]}",
                         (cp_px[0] + label_offset_x, cp_px[1] + label_offset_y),
                         font, font_scale, color_text, thickness, cv2.LINE_AA)
+
+
 
     # ── timeout / final verdict (fires exactly once) ──────────────────────────
     if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):

@@ -41,9 +41,6 @@ This function returns a single decimal number (`float`) representing the exact p
 
 This continuous gradient—smoothly transitioning from `-1.0` to `1.0`- is exactly what we need. This value is our **Error**!
 
-### 3. The Memory Feature
-The Octoliner has a built-in safety mechanism. If the rover completely loses the line (e.g., drives off the track), `track_line()` does not reset to zero. Instead, it **returns the last valid position**. This "memory" prevents the robot from making sudden, dangerous movements when a sensor glitches. Keep this in mind during your scans!
-
 ## Assignment
 Mission Control requires a structural scan of a basaltic fracture (the black line). To prevent the rover from twisting off the track during the scan, the engineering team has provided a skeleton for a `diagnostic_sweep(speed_left, speed_right)` function. 
 

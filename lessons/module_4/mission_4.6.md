@@ -3,7 +3,7 @@ index: 26
 module: module_4
 task: data_logging
 previous: multiple_sensors
-next: module_5
+next: concept_of_error
 ---
 
 # Mission 4.6 Post-Mission Report

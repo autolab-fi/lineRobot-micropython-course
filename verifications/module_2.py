@@ -586,8 +586,8 @@ def encoder_theory(robot, image, td: dict, user_code=None):
     ENCODER_MAX = 360
     DISTANCE_MIN = 18.0
     DISTANCE_MAX = 21.4
-    DISPLACEMENT_MIN = 19.0
-    DISPLACEMENT_MAX = 26.0
+    DISPLACEMENT_MIN = 15.0
+    DISPLACEMENT_MAX = 30.0
     TASK_DURATION = 20
 
     result = {

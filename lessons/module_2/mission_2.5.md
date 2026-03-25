@@ -16,7 +16,7 @@ Until now, the robot seemed to "just know" how far it traveled. But in reality, 
 
 ## Theory
 
-### What is an Encoder?
+### 1. What is an Encoder?
 An encoder is a sensor that measures rotation. In robotics, we commonly use "rotary encoders" - devices that track how far something has rotated.
 
 There are two main types:
@@ -27,7 +27,7 @@ There are two main types:
 
 Our platform is a differential drive robot based on the ESP32 microcontroller and MicroPython. It is specifically equipped with two DC motors with encoders – JGB37-520 178.
 
-### Getting Encoder Values
+### 2. Getting Encoder Values
 We will measure the rotation of the robot's wheels in degrees:
 * Full wheel rotation forward = +360°
 * Full wheel rotation backward = -360°
@@ -42,7 +42,16 @@ robot.stop_motor_left()       # Stops left motor WITHOUT resetting the encoder
 robot.stop_motor_right()      # Stops right motor WITHOUT resetting the encoder
 ```
 
-### Distance and Rotation
+### 3. The `math` Library and Pi (π)
+To calculate real-world distances based on wheel rotation, we need to use the mathematical constant Pi (π). Instead of manually typing `3.14`, Python provides a built-in `math` library that contains the highly precise value of Pi.
+To use it, you must import the library at the top of your script and access it using `math.pi`:
+
+```python
+import math
+print("The value of Pi is:", math.pi)
+```
+
+### 4. Distance and Rotation
 For a wheel with radius, one full rotation covers a distance of L = 3.14 * (2 * R), where 3.14 is pi value and 2 * R is wheels diameter. Our robot's wheels have a radius of 3.4 cm, so one full rotation is roughly 21 cm.
 
 ## Assignment: The Calibration Challenge

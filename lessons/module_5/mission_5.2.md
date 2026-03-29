@@ -47,7 +47,7 @@ If a `NaN` value ever accidentally slips into your motor speed calculations (e.g
 
 **Requirements:**
 1. **Auto-Calibration:** Use `octoliner.optimize_sensitivity_on_black()` in an `if` statement. If it succeeds, print a success message. If it fails, print a warning.
-3. **The Tracking Loop:** Create a `while True:` loop. Inside the loop:
+2. **The Tracking Loop:** Create a `while True:` loop. Inside the loop:
    * Read the `track_line()` position.
    * **Failsafe Check:** First, check `if math.isnan(position):`. If True, stop the motors, print an error, and `break` the loop.
    * **Steering Logic:** If the position is valid (`else:`), use an `if / elif / else` block to check the `position` variable. 

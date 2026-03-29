@@ -23,7 +23,12 @@ Before we jump into the advanced math of Proportional Control, we will use this 
 ### 1. Auto-Calibration
 In the past, we manually set the sensor's threshold using `octoliner.set_sensitivity(245)`. But lighting conditions change. The Octoliner library has a smart function called `optimize_sensitivity_on_black()`. 
 
-If you place the robot over a black line and call this function once at the start of your program, it will automatically test different light levels and find the perfect sensitivity for the current room! It returns `True` if successful.
+If you place the robot over a black line and call this function once at the start of your program, it will automatically test different light levels and find the perfect sensitivity for the current room! It returns `True` if successful. To see exactly what value the sensor chose for us, we can use the `get_sensitivity()` method:
+
+```python
+if octoliner.optimize_sensitivity_on_black():
+    print(f"Calibration successful! Sensitivity: {octoliner.get_sensitivity()}")
+```
 
 ### 2. Thresholding the Error
 Instead of asking "Does Sensor 1 see the line?", we now ask "Is the Error large enough?". 
@@ -44,6 +49,9 @@ You might notice that even when the rover drives off the black line, it rarely t
 What if the rover is moved to a clean, white test track tomorrow? What if an I2C wire momentarily disconnects and the sensor sends blank data? 
 
 If a `NaN` value ever accidentally slips into your motor speed calculations (e.g., `speed + NaN`), the entire Python program will instantly crash, and the robot will require a hard reboot. Catching `NaN` is a mandatory "safety net" in professional robotics. Even if you don't expect to fall, you always wear a parachute!
+
+## Assignment
+You will write an upgraded autonomous line-following program. The rover must auto-calibrate, catch any `NaN` errors, and steer itself using the new Error thresholds.
 
 **Requirements:**
 1. **Auto-Calibration:** Use `octoliner.optimize_sensitivity_on_black()` in an `if` statement. If it succeeds, print a success message. If it fails, print a warning.

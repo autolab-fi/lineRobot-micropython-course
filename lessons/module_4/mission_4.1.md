@@ -63,6 +63,8 @@ for angle in angles:
 ## Assignment
 Mission Control has transmitted a sequence of forward driving distances to navigate a debris field. To successfully avoid the obstacles, the rover must drive the given distance and then immediately turn right 90 degrees after each segment.
 
+![4.1_layout](https://api.ondroid.org/media/courses/9/images/05edeaacfe29483492568ae4356d3a32.png)
+
 **Requirements:**
 1. Create a list named route containing the distance values that help you pass through the obstacles. 
 2. Use the `len()` function to print a message stating how many waypoints are in the route before the movement starts.

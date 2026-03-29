@@ -3,7 +3,7 @@ index: 26
 module: module_4
 task: data_logging
 previous: multiple_sensors
-next: module_5
+next: concept_of_error
 ---
 
 # Mission 4.6 Post-Mission Report
@@ -62,10 +62,16 @@ Upgrade your code from Mission 4.5. Remove the "show-off" features (LEDs and sto
 
 Your rover must drive autonomously for exactly **30 seconds**, memorize all color anomalies in its RAM, and print a formatted summary report when the time is up.
 
-**Task Requirements:**
+**Requirements:**
 1. Setup Memory: Create an empty list.
 2. Setup Timer: Create a variable `mission_duration` set to 30, and record the `start_time`.
 3. Time Check: Inside the `while True` loop, calculate `elapsed_time`. If it exceeds `mission_duration`, stop the robot and `break` the loop.
 4. Silent Logging: If the color changes and is not "Floor", `.append()` the color data `[current_color, r, g, b]` to your list.
 5. Print the Report: At the very bottom of your code (completely outside the loop), write a `for` loop to go through your `anomaly_log` and print a professional mission report!
 
+## Conclusion
+Incredible work! You have successfully transformed your rover from a simple line-following machine into a fully autonomous scientific probe. 
+
+Think about what you just achieved: your robot can now drive independently, track its own mission time, filter out "noise" (like the lunar floor), memorize valuable data using Python lists, and transmit a formatted professional report. This is exactly how real space agencies gather data from other planets!
+
+Take a moment to celebrate this massive milestone. Next stop: Module 5, where we will learn about Proportional Mathematics (P-Controllers).

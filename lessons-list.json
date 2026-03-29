@@ -139,7 +139,7 @@
         "sn": 15,
         "name": "Conditional Logic & Reactive Behavior",
         "description": "Use if/else and break to make the rover react and stop when a line is detected.",
-        "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = \n\n# Define your threshold variable here\n\n\n# Create the detect_line() function\ndef detect_line():\n    \n\n# --- MAIN PROGRAM ---\n\n# Start moving forward at a low speed\n\n\n# Create a for loop that repeats 15 times\n\n    # Call detect_line(), print the result, and add a small sleep\n    \n\n# Stop the robot after the loop finishes\n"
+        "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = \n\noctoliner.set_sensitivity(245) #Maybe you need to adjust sensitivity\n\n# Define your threshold variable here\n\n\n# Create the detect_line() function\ndef detect_line():\n    \n\n# --- MAIN PROGRAM ---\n\n# Start moving forward at a low speed\n\n\n# Create a for loop that repeats 15 times\n\n    # Call detect_line(), print the result, and add a small sleep\n    \n\n# Stop the robot after the loop finishes\n"
       },
       {
         "str_id": "processing_sensor_data",

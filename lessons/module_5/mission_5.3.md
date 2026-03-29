@@ -49,8 +49,8 @@ Write a Proportional Control loop to navigate the track. You will replace your b
 **Requirements:**
 1. **Setup:** Initialize your hardware, including auto-calibration and the `math` library.
 2. **Control Variables:** Before the loop, create two variables:
-   * `base_speed = 25`
-   * `kp = 35` (This is our starting guess for the Proportional Coefficient).
+   * `base_speed = 30`
+   * `kp = 10` (This is our starting guess for the Proportional Coefficient).
 3. **The Loop:** Inside your `while True:` loop:
    * Read the `position` from the sensor.
    * Include the `NaN` Failsafe from the previous mission to protect the software.
@@ -68,3 +68,5 @@ Brilliant! You have successfully implemented a Proportional Controller.
 Look at your code: you replaced complicated logical conditions with pure, elegant mathematics. The rover now makes hundreds of tiny, calculated adjustments per second.
 
 However, you might notice it still isn't *perfect*. Maybe it turns a little too sluggishly, or maybe it shakes a bit on the straightaways. In the next mission, we will learn how engineers **"Tune"** the *K_p* value to achieve flawless movement!
+
+> **Important:** Save your standard P-Controller math. You will need to copy and paste this into your next mission.

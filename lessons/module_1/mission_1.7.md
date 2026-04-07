@@ -12,7 +12,7 @@ next: electric_motors
 
 Create a complex route visiting multiple waypoints and learn how to document your code using comments.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 

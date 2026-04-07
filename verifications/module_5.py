@@ -6,11 +6,11 @@ import numpy as np
 import re
 
 target_points = {
-    'concept_of_error': [(22, 86)],           # Start: x=22, y=86, direction=-30
-    'upgraded_relay_controller': [(40, 30)],   # Start: x=40, y=30
-    'proportional_control': [(40, 30)],        # Start: x=40, y=30
-    'tuning_and_kick': [(40, 30)],             # Start: x=40, y=30
-    'adaptive_speed': [(40, 30)],              # Start: x=40, y=30
+    'concept_of_error': [(22, 86),(0,-30)],           # Start: x=22, y=86, direction=-30
+    'upgraded_relay_controller': [(40, 30), (30, 0)],   # Start: x=40, y=30
+    'proportional_control': [(40, 30),(30, 0)],        # Start: x=40, y=30
+    'tuning_and_kick': [(40, 30),(30, 0)],             # Start: x=40, y=30
+    'adaptive_speed': [(40, 30),(30, 0)],              # Start: x=40, y=30
 }
 
 block_library_functions = {

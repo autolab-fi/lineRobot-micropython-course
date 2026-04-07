@@ -43,7 +43,7 @@ def concept_of_error(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION = 30
+    #TASK_DURATION = 30
     
     # Movement tracking
     MIN_FORWARD_DISTANCE = 25.0  # cm (target is 30cm, allow some tolerance)
@@ -242,7 +242,7 @@ def upgraded_relay_controller(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION = 60
+    #TASK_DURATION = 90 #Just a reference
     
     # Movement tracking
     MIN_MOVEMENT_DISTANCE = 30.0  # cm - should move at least this far
@@ -297,7 +297,7 @@ def upgraded_relay_controller(robot, image, td, user_code=None):
         # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + 60,
+            "end_time":   time.time() + 90,
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,

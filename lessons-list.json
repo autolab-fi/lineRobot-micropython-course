@@ -250,7 +250,8 @@
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.1.md",
                 "sn": 27,
                 "name": "Concept of Error",
-                "description": "# Write code here"
+                "description": "Build a diagnostic sweep function to read and print line position Error values using track_line().",
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\n# Pre-written Diagnostic Protocol\ndef diagnostic_sweep(speed_left, speed_right):\n    print(\"Starting sweep...\")\n    for i in range(5):\n        robot.run_motors_speed(speed_left, speed_right)\n        time.sleep(0.1)\n        robot.stop()\n        \n        # TODO: Read the line position using track_line() and print the Error variable to the terminal\n        \n        time.sleep(0.4)\n        \n    print(\"Returning to center...\")\n    robot.run_motors_speed(-speed_left, -speed_right)\n    time.sleep(0.4)\n    robot.stop()\n    print(\"Sweep complete.\")\n\n# Setup\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\n\n# Mission Sequence (Call the function, move, call again)\n"
             },
             {
                 "str_id": "upgraded_relay_controller",
@@ -258,7 +259,7 @@
                 "sn": 28,
                 "name": "Upgraded Relay Controller",
                 "description": "Build a three-way relay controller with failsafe detection using max(sensor_array) < 700.",
-                "template": "# Write code here"
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n\nwhile True:\n    sensor_array = \n    #print(sensor_array) \n    position = \n\n    # Failsafe Check - if no sensor detects line\n    # TODO: Write an if statement using max() to check if the value is less than 700\n    if :\n        # Print a warning, stop the robot, and break the loop\n   \n    else:\n        # TODO: Use if/elif/else to steer based on the 'position' variable\n\n    time.sleep(0.01)"
             },
             {
                 "str_id": "proportional_control",
@@ -266,22 +267,22 @@
                 "sn": 29,
                 "name": "Proportional Control",
                 "description": "Implement a P-controller using base_speed, kp, and proportional steering calculations.",
-                "template": "# Write code here"
-            },
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n# 1. Control Variables\nbase_speed = \nkp = \n\nprint(\"Starting Proportional Controller...\")\n\nwhile True:\n    sensor_array = \n    # print(sensor_array)\n    position = \n\n    # 2. Strict Failsafe Check from previous mission\n    if :\n        # Print a warning, stop the robot, and break the loop\n        \n    else:\n        # 3. P-Controller Math: Calculate P (kp * position)\n        P = \n        \n        # TODO: Calculate left_speed and right_speed (use int()!) and send it to motors\n        left_speed = \n        right_speed =    \n\n    time.sleep(0.01)"},
             {
                 "str_id": "tuning_and_kick",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.4.md",
                 "sn": 30,
                 "name": "Tuning and Kick",
                 "description": "Add a timed kick maneuver to the P-controller to recover from track difficulties.",
-                "template": "# Write code here"
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n# 1. Control Variables\nbase_speed = \nkp = \n\n# 2. Timer Setup\nlast_kick_time = \n\n\nwhile True:\n    sensor_array = \n    position = \n\n    # 3. Strict Failsafe\n    if :\n        # Print a warning, stop the robot, and break the loop\n\n    # 4. Timer Logic\n    # TODO: Calculate elapsed_time\n    elapsed_time = \n\n    # TODO: Check elapsed_time \n    if :\n        print(\"KICK!\")\n        # TODO: Twist sharply (30, -30), sleep for 0.1s, and reset last_kick_time\n        \n\n    else:\n        # 5. P-Controller Math\n        # TODO: Calculate P, left_speed, right_speed, and send to motors\n        P = \n        left_speed = \n        right_speed = \n        \n    time.sleep(0.01)"
             },
             {
                 "str_id": "adaptive_speed",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.5.md",
                 "sn": 31,
                 "name": "Adaptive Speed",
-                "description": "# Write code here"
+                "description": "Implement adaptive controller",
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n# 1. Control Variables\nkp = \nmax_speed = \nbraking_force = \n\nprint(\"Starting Adaptive Speed Controller...\")\n\nwhile True:\n    sensor_array = \n    position = \n\n    # 2. Strict Failsafe\n    if :\n        # Print a warning, stop the robot, and break the loop\n        \n    else:\n        # 3. Adaptive Math\n        # TODO: Calculate dynamic_speed using max_speed, braking_force, and abs(position)\n        dynamic_speed = \n\n        # 4. P-Controller Math\n        # TODO: Calculate P using kp and position\n        P = \n        \n        # TODO: Calculate left_speed and right_speed using dynamic_speed instead of a base speed and send to motors\n        left_speed = \n        right_speed =        \n\n    time.sleep(0.01)"
             }
         ]
     },

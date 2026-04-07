@@ -266,7 +266,7 @@
                 "sn": 29,
                 "name": "Proportional Control",
                 "description": "Implement a P-controller using base_speed, kp, and proportional steering calculations.",
-                "template": "# Write code here""
+                "template": "# Write code here"
             },
             {
                 "str_id": "tuning_and_kick",

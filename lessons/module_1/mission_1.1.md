@@ -36,7 +36,7 @@ Before you begin coding, take a moment to understand your workspace.
     *Note: Sometimes the video may take time to load, just be patient*
 * **Red Arrow:** The **Verify** button. You will use this to upload your code to the rover.
 
-## Instructions
+## Assignment
 
 Let's run a system check to make sure you are connected to the facility. You don't need to write code yet — just upload the test protocol.
 

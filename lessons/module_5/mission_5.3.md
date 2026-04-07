@@ -11,7 +11,7 @@ next: tuning_and_kick
 ## Objective
 Understand the mathematical concept of Proportional Control and write a P-controller algorithm to smoothly steer the rover based on the continuous Error gradient.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 Your Upgraded Relay Controller in the last mission was smart, but it still wobbled. Why? 

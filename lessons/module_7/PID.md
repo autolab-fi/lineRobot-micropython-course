@@ -10,6 +10,8 @@ So far, we’ve seen how the proportional term reacts to present error and how t
 
 If the robot is correcting too aggressively, the derivative slows things down before it overshoots. This makes the system more stable and less wobbly.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## ![Pid](https://github.com/pranavk-2003/line-robot-curriculum/blob/assignments/images/module_8/pid_f.png?raw=True)
 
 ### The Full PID Formula

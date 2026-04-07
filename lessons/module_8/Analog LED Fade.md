@@ -3,6 +3,8 @@
 ## Lesson objective
 Build confidence using Python loops and timing to repeat LED actions.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Loops let you repeat a block of code without copying the same command over and over. When you pair a loop with a short delay, you can choreograph LED flashes that communicate what the robot just sensed. This lesson practises counting iterations, waiting between flashes, and mapping sensor readings to a visible signal.
 

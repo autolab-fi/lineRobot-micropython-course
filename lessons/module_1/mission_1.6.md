@@ -12,6 +12,8 @@ next: sequential_navigation
 
 Master the robot's steering system by learning standard 90-degree turns and precision turning with specific angles.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In the previous missions, you learned to move forward and backward and how to store data in variables. But a robot that can only move in a straight line is not sufficient for free movement across the field.

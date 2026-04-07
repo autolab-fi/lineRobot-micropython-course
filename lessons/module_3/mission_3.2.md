@@ -11,6 +11,8 @@ next: processing_sensor_data
 ## Objective
 Learn how to use conditional statements (`if/else`) and the `break` command to create reactive behavior, allowing the rover to stop autonomously when a line is detected.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 In the previous mission, you successfully streamed data from the rover's optical sensor. However, the rover merely printed the numbers; it didn't *understand* them. 
 

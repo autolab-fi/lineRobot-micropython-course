@@ -11,6 +11,8 @@ next: color_classification
 ## Objective
 Understand the RGB color model, initialize the TCS34725 color sensor via the I2C interface, and read raw color data from the lunar surface across multiple zones.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Your rover is now fully capable of navigating and reporting its physical status. However, to conduct true scientific research, it needs to analyze the geological composition of the ground. 
 

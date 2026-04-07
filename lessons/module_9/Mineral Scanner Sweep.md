@@ -3,6 +3,8 @@
 ## Lesson Objective
 Navigate to 5 different scanning zones, activate the detection system at each location for 2 seconds to reveal minerals, wait 3 seconds for collection, then proceed to the next zone.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Mission Control has identified 5 mineral-rich zones in your survey area. Your robot must systematically visit each zone, activate its scanner LEDs to reveal what minerals are present, wait for the collection system to gather samples, then move to the next location. This multi-waypoint survey mission requires precise timing and navigation.
 

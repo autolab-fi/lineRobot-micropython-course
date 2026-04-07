@@ -6,6 +6,8 @@ Collect multiple sensor readings in a list, compute summary values, and broadcas
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Robots rarely rely on a single measurement. By storing successive readings in a list we can determine how many samples we have, display them together, and report statistics such as the average. The verification tool listens for three separate `LOG:` messages that must agree with each other, so careful formatting is important.

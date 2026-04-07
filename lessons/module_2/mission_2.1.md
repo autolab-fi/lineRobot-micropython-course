@@ -10,6 +10,8 @@ next: differential_drive
 ## Objective
 Learn about electric motors, gearboxes, and how to manually turn them on and off to reach a specific target.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In Module 1, you learned how to drive the rover using built-in commands. But to truly master robotics, you need to understand the hardware. In this lesson, you will learn about the basic principles of DC motors and see how electrical energy transforms into physical movement!
 
@@ -55,7 +57,7 @@ However, you will not be able to use the built-in robot movement functions. The 
 2. Use `time.sleep()` to wait for the exact amount of time needed to reach the target.
 3. Use `stop()` to stop the motors once the robot is on the point.
 
-![finish_point](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/finish_point.png?raw=true)
+![finish_point](https://api.ondroid.org/media/courses/9/images/a370611599fa40c4b79d1defc99c1472.png)
 
 *Hint: You will need to run the code multiple times, adjusting your `time.sleep()` value until the robot stops exactly on the target!*
 

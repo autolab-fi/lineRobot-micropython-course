@@ -12,6 +12,8 @@ next: electric_motors
 
 Create a complex route visiting multiple waypoints and learn how to document your code using comments.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 
 You have mastered the controls: moving, turning, and using variables. Now, you are ready for your first real navigation.

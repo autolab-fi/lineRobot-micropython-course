@@ -12,6 +12,8 @@ next: maneuvering
 
 Learn to store data using variables, perform basic arithmetic, and use these variables to control the robot and report its status.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In previous missions, you typed specific numbers directly into the command like `robot.move_forward_distance(20)`. This works for simple tasks, but what if your program becomes huge and you need to change that distance in ten different places?

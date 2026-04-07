@@ -26,6 +26,8 @@ This results in a zigzag movement. The robot overcorrects and keeps switching di
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Programming the Line Following Algorithm to use a Relay Controller**
 
 This code will:

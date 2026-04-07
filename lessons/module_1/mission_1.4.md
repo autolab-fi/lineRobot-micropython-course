@@ -12,6 +12,8 @@ next: python_variables_&_commands
 
 Explore functions for moving the robot a specific distance.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In the past two lessons, we've utilized only one function from the lineRobot library. It's now time to introduce additional functions for controlling the robot: moving backward and moving forward, where the parameter is not the number of seconds but the distance.

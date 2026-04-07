@@ -11,6 +11,8 @@ next: reading_multiple_sensors
 ## Objective
 Learn how to use comparison operators, understand Boolean values (`True`/`False`), and encapsulate threshold logic inside a custom Python function.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 In the last mission, you hardcoded a specific number directly into your `if` statement to stop the robot. But what if the lighting conditions in the testing facility change? You would have to hunt through hundreds of lines of code to change that number everywhere! 
 

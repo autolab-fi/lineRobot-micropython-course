@@ -3,6 +3,8 @@
 ## Lesson objective
 Understand how Python dictionaries store related information with named keys.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Dictionaries pair keys with values so you can label the data you gather. They make it easy to keep related facts together, update individual pieces, and look them up by name. In this lesson you will practise building small telemetry dictionaries and turning their contents into readable status summaries.
 

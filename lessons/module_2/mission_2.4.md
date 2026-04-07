@@ -11,6 +11,8 @@ next: encoder_theory
 ## Objective
 Learn how to use **for** loops to create complex movement patterns by using the loop counter variable.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 In the last mission, you created a function. You could call that function 4 times to drive in a square. But what if you need to repeat an action 100 times? Or what if you want each movement to be slightly faster or longer than the previous one?
 

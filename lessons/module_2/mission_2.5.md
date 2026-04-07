@@ -11,6 +11,8 @@ next: while_loops
 ## Objective
 Learn about encoders and their purpose in precise robot movement.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 Until now, the robot seemed to "just know" how far it traveled. But in reality, it was counting invisible pulses. In this lesson, we will bypass the "smart" library functions and look at the raw feedback from the wheels. By using manual motor control, we can see exactly how the sensors react to every move.
 

@@ -10,6 +10,8 @@ next: for_loops
 ## Objective
 Learn what a function is and how to create your own custom functions in MicroPython.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In programming, a **function** is a named, reusable block of code that performs a specific task. You can think of it as a recipe or a mini-program inside your main program. 
 

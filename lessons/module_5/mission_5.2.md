@@ -9,7 +9,7 @@ next: proportional_control
 # Mission 5.2 Upgraded Relay Controller
 
 ## Objective
-Learn how to use the sensor's auto-calibration feature and build an upgraded Relay (Bang-Bang) controller using the continuous Error variable and a `NaN` failsafe.
+Learn how to build an upgraded Relay (Bang-Bang) controller using the continuous Error variable, and implement a robust Failsafe using raw analog data.
 
 ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
@@ -18,57 +18,60 @@ In Module 3, you built a Relay Controller by checking multiple individual sensor
 
 Now that we have the `track_line()` function, which gives us a single continuous Error value from `-1.0` to `1.0`, writing that same controller becomes incredibly simple. 
 
-Before we jump into the advanced math of Proportional Control, we will use this Error value to rewrite our Bang-Bang logic. We will also let the robot automatically calibrate its own "eyes"!
+Before we jump into the advanced math of Proportional Control, we will use this Error value to rewrite our Bang-Bang logic. We will also build a safety net to prevent the robot from driving blindly if it loses the track!
 
 ## Theory
 
-### 1. Auto-Calibration
-In the past, we manually set the sensor's threshold using `octoliner.set_sensitivity(245)`. But lighting conditions change. The Octoliner library has a smart function called `optimize_sensitivity_on_black()`. 
+### 1. The "Memory" Feature of `track_line()`
+The `track_line()` function has a feature: **Memory**. 
+If the rover takes a corner too fast and the line completely disappears from all sensors, `track_line()` doesn't just output `0.0`. It remembers the *last known position* (e.g., `1.0` if it drove off to the right) and continues to return that value. 
 
-If you place the robot over a black line and call this function once at the start of your program, it will automatically test different light levels and find the perfect sensitivity for the current room! It returns `True` if successful. To see exactly what value the sensor chose for us, we can use the `get_sensitivity()` method:
+This prevents the robot from suddenly stopping or jerking, but it creates a new problem: if the robot is lifted into the air or completely loses the track, it will blindly spin in circles forever, thinking the line is still there!
+
+### 2. The Failsafe & the `max()` Function
+To prevent blind driving, we need a Failsafe. We cannot trust `track_line()` if the robot is completely off the track. Instead, we must look at the raw analog data. 
+
+You already know how to read the raw light levels of all 8 sensors:
+```python
+sensor_array = octoliner.analog_read_all()
+```
+This gives us a list of 8 numbers (from `0` to `1023`). But how do we quickly check if any of these sensors see the black line?
+
+We can use Python's built-in `max()` function! It looks through a list and finds the highest number:
 
 ```python
-if octoliner.optimize_sensitivity_on_black():
-    print(f"Calibration successful! Sensitivity: {octoliner.get_sensitivity()}")
+# If the list is [100, 150, 800, 120, 90]
+highest_value = max(sensor_array) # Returns 800
 ```
 
-### 2. Thresholding the Error
+If the highest value in our sensor array is less than 700, it means even the "darkest" spot the sensor sees is still too bright. The robot is completely blind! We must trigger an Emergency Stop.
+
+### 3. Thresholding the Error
 Instead of asking "Does Sensor 1 see the line?", we now ask "Is the Error large enough?". 
 We can create "zones" using simple math thresholds:
 * If `position < -0.15`: The line is too far left. We need to steer left.
 * If `position > 0.15`: The line is too far right. We need to steer right.
 * `else`: The line is somewhere near the center (`0.0`). Drive straight!
 
-### 3. The `NaN` Failsafe
-If the robot is lifted into the air or completely loses the track on a blank surface, `track_line()` will return a special value called `NaN` (Not a Number). 
-
-To detect this, we use the `math.isnan(position)` function. It asks the computer a simple question: *"Is this variable Not a Number?"* and returns a Boolean (`True` or `False`). If it returns `True`, it means our sensor is completely blind.
-
-**But wait, do we need this on our lunar map?**
-You might notice that even when the rover drives off the black line, it rarely triggers a `NaN` error. Why? Because the lunar surface map is filled with dark craters and shadows. The infrared sensors see a dark crater and get confused, interpreting it as the edge of the line (returning a valid number like `1.0` instead of `NaN`).
-
-**So why do we still check for it?** Because of **Robust Engineering**. 
-What if the rover is moved to a clean, white test track tomorrow? What if an I2C wire momentarily disconnects and the sensor sends blank data? 
-
-If a `NaN` value ever accidentally slips into your motor speed calculations (e.g., `speed + NaN`), the entire Python program will instantly crash, and the robot will require a hard reboot. Catching `NaN` is a mandatory "safety net" in professional robotics. Even if you don't expect to fall, you always wear a parachute!
-
 ## Assignment
-You will write an upgraded autonomous line-following program. The rover must auto-calibrate, catch any `NaN` errors, and steer itself using the new Error thresholds.
+You will write an upgraded autonomous line-following program. The rover must use raw analog data to catch tracking errors and steer itself using the new Error thresholds.
 
 **Requirements:**
-1. **Auto-Calibration:** Use `octoliner.optimize_sensitivity_on_black()` in an `if` statement. If it succeeds, print a success message. If it fails, print a warning.
+1. **Setup:** Make sure your sensitivity is set manually using `octoliner.set_sensitivity()`.
 2. **The Tracking Loop:** Create a `while True:` loop. Inside the loop:
-   * Read the `track_line()` position.
-   * **Failsafe Check:** First, check `if math.isnan(position):`. If True, stop the motors, print an error, and `break` the loop.
-   * **Steering Logic:** If the position is valid (`else:`), use an `if / elif / else` block to check the `position` variable. 
-     * If `< -0.3`: Turn Left (e.g., Left: `5`, Right: `25`)
-     * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `5`)
-     * Otherwise: Drive Straight 
-Watch how much cleaner your steering logic has become.
+   * Read the raw data with `octoliner.analog_read_all()`
+   * Read the position
+3. **Failsafe Check:** First, check `if max(sensor_array) < 700:`. If True, print a critical error message, stop the motors, and `break` the loop.
+4. **Steering Logic:** If the line is successfully detected (`else:`), use an `if / elif / else` block to check the `position` variable:
+   * If `< -0.3`: Turn Left (e.g., Left: `5`, Right: `25`)
+   * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `5`)
+   * Otherwise: Drive Straight (e.g., `20`, `20`)
+
+Watch how much cleaner your steering logic has become!
 
 ## Conclusion
 Mission accomplished! You have successfully modernized your autonomous control system.
 
-By using auto-calibration, your rover is now adaptable to new environments. By using the Error value for steering, you reduced a massive block of sensor checks into just three clean lines of logic. And with the `NaN` failsafe, your software is protected from crashes.
+By using the raw analog data for your failsafe, your software is protected from driving blindly in circles. By using the Error value for steering, you reduced a massive block of individual sensor checks into just three clean lines of logic. 
 
-However, the rover still wobbles because it uses hard turns. In the next mission, we will finally use the Error value to calculate exactly *how hard* the robot needs to turn. Get ready for the Proportional Controller!
+However, the rover still wobbles because it uses hard, fixed-speed turns. In the next mission, we will finally use the Error value to calculate exactly *how hard* the robot needs to turn. Get ready for the Proportional Controller!

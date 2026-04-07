@@ -24,8 +24,8 @@ Today, we are activating the rover's primary optical system: the Octoliner senso
 The robot is equipped with an 8-channel line sensor connected via the I2C interface. 
 
 These sensors operate by emitting infrared light downward and detecting how much of it bounces back:
-* **White Surfaces:** A light surface reflects a significant amount of IR light back to the sensor. The sensor's circuitry registers this strong reflection as a **low** numerical value.
-* **Black Surfaces:** A dark surface absorbs most of the infrared light, resulting in a much lower reflection. The sensor detects very little reflection, which triggers a **high** numerical value in our system.
+* **White Surfaces:** A light surface reflects a significant amount of IR light back to the sensor. The sensor's circuitry registers this strong reflection as a **low** numerical value (around 50-80).
+* **Black Surfaces:** A dark surface absorbs most of the infrared light, resulting in a much lower reflection. The sensor detects very little reflection, which triggers a **high** numerical value in our system (around 800-1000).
 
 ![IR Sensor Working](https://github.com/pranavk-2003/line-robot-curriculum/blob/assignments/images/module_7/IR's.png?raw=True)
 
@@ -59,7 +59,7 @@ Notice the `set_sensitivity(245)` command at the end of the setup. This adjusts 
 ### 3. Reading the Central Sensor
 While the Octoliner has an array of 8 sensors (indexed from 0 to 7), looking at all of them at once can be overwhelming. For now, we will focus solely on Sensor 3, which is located near the center of the rover.
 
-You can get the numerical value from this specific sensor using the `analog_read(index)` function.
+You can get the numerical value from this specific sensor using the `analog_read(index)` function, it returns analog value (0-1023).
 
 ## Assignment
 Your task is to activate the optical array and stream data from the central sensor back to Mission Control. Do not initiate any movement commands.

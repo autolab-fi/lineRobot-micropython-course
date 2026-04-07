@@ -32,7 +32,7 @@ To turn this small decimal Error into a strong motor command, we must amplify it
 ### 2. The Math of Steering
 The formula for a Proportional Controller is beautiful in its simplicity. 
 
-First, we calculate the required steering power *P* using our coefficient *K_p$*: **P = K_p * Error**
+First, we calculate the required steering power *P* using our coefficient *K_p*: **P = K_p * Error**
 
 Next, we apply this steering power to the wheels. To turn smoothly, we *add P* to the left motor and *subtract P* from the right motor.
 * **`left_speed = base_speed + P`**
@@ -55,7 +55,7 @@ Write a Proportional Control loop to navigate the track. You will replace your b
    * `kp = 10` (This is our starting guess for the Proportional Coefficient).
 3. **The Loop:** Inside your `while True:` loop:
    * Read the `position` from the sensor.
-   * Include the `NaN` Failsafe from the previous mission to protect the software.
+   * Include the Failsafe from the previous mission to protect the software.
    * If the data is valid (`else:`), perform the P-Controller math:
      * Calculate `P` by multiplying `kp` and `position`.
      * Calculate `left_speed` and `right_speed`. *(Note: Wrap your final math in `int()` like this: `int(base_speed + P)` to ensure the motor function receives whole numbers).*

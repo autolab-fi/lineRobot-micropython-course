@@ -60,8 +60,8 @@ Try experimenting with extreme parameters and observe how the rover reacts:
 Change one variable at a time, run the code, and discover your ultimate racing setup!
 
 ## Conclusion
-Module Complete! Congratulations, Commander. 
+Incredible engineering! You have successfully stress-tested an autonomous control system. 
 
-You have transformed a clumsy, wobbling robot into a highly tuned, responsive, and blazing-fast autonomous machine. You mastered Control Theory (Error and P-Controllers), implemented safety protocols (`NaN` Failsafes), and applied real-world driving logic (Adaptive Speed). 
+By observing the recovery after the Software Kick, you saw firsthand how mathematical formulas translate into physical resilience. You now know how to diagnose understeering and oversteering, and how to find the optimal $K_p$.
 
-You are no longer just coding; you are Engineering. Take a moment to watch your rover race around the track—you earned it!
+Your rover is now incredibly stable. In our final mission of this module, we will make it *fast* by introducing Adaptive Speed!

@@ -32,7 +32,7 @@ To truly test if your *K_p* is tuned perfectly, the robot must be able to recove
 
 Since we cannot physically kick the rover in the simulation, we will program a **Software Kick**. Using the `time.time()` stopwatch logic you learned in Module 4, we will force the robot to violently twist to the side for a split second every 5 seconds. 
 
-If your *K_p* is tuned well, the P-Controller will instantly recognize the massive Error and snap the robot back onto the line. If it's tuned poorly, the kick will permanently derail the rover!
+If your *K_p* is tuned well, the P-Controller will instantly recognize the massive Error and snap the robot back onto the line. If it's tuned poorly, the kick will permanently derail the rover, triggering your Failsafe and stopping the program.
 
 ## Assignment
 Your task is to integrate a 5-second interval timer into your P-Controller. When the timer triggers, apply a sharp motor movement, then let the P-Controller recover.
@@ -42,7 +42,7 @@ Your task is to integrate a 5-second interval timer into your P-Controller. When
 2. **The Timer Setup:** Before the `while True:` loop, create a variable `last_kick_time = time.time()` to start your stopwatch.
 3. **The Kick Logic:** Inside your loop, before calculating the Proportional Math, calculate the `elapsed_time`.
    * Use an `if` statement to check if the elapsed time is greater than `5` seconds.
-   * If true: Print `"KICK!"`, force the motors to twist sharply (e.g., `robot.run_motors_speed(40, -40)`), pause for `0.15` seconds to let the physical twist happen, and finally **reset** your `last_kick_time` to the current time!
+   * If true: Print `"KICK!"`, force the motors to twist sharply (e.g., `robot.run_motors_speed(30, -30)`), pause for `0.1` seconds to let the physical twist happen, and finally **reset** your `last_kick_time` to the current time!
 4. **The P-Controller:** If it's not time to kick (`else:`), perform your standard Proportional math and steer the rover.
 5. **The Tuning Challenge:** Run the code. Observe how the rover handles the kicks. Adjust your `kp` variable up or down until the rover drives smoothly AND successfully recovers from every kick!
 

@@ -11,7 +11,7 @@ next: defining_functions
 ## Objective
 Learn about Differential Drive kinematics and examine the main challenges related to manual motor control using raw PWM values.
 
-![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
 
 ## Introduction
 In the previous mission, you learned how electric motors work and how to turn them on using percentage speeds. But how does the robot actually steer? In this lesson, we will study the kinematics of the robot and learn how to control each wheel independently using raw hardware signals.

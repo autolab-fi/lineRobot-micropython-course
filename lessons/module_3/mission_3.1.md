@@ -11,6 +11,8 @@ next: conditional_logic_reactive
 ## Objective
 Understand the working principle of Infrared (IR) line sensors, establish an I2C connection, and read data from a single central sensor.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Welcome back, Recruit! Up to this point, your rover has been driving "blind," relying entirely on internal motor encoders to estimate its position. But the lunar surface is unpredictable. To achieve true autonomy, the rover needs "eyes" to observe the ground beneath it.
 

@@ -11,6 +11,8 @@ next: telemetry_reporting
 ## Objective
 Create Python lists, determine their size using `len()`, and use a `for` loop to execute a multi-step navigation route.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Welcome to Module 4, Recruit! 
 In the previous module, you encountered arrays when reading data from the Octoliner sensor using `octoliner.analog_read_all()`. You learned that an array (or list) can hold multiple numbers at once. 

@@ -3,6 +3,8 @@
 ## Lesson objective
 Understand how Python lists store ordered data and practise turning list decisions into LED feedback.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Lists are Python's flexible containers for ordered values. They let you group readings, configuration numbers, or status text so the items stay in sequence. Once you can gather data in a list and access positions by index, you can reuse the same pattern for sensors, LED patterns, or any other structured information.
 

@@ -11,6 +11,8 @@ next: simple_line_follower
 ## Objective
 Learn the basics of GPIO (General Purpose Input/Output) and control the rover's onboard LED to provide physical visual feedback during a geological scan.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In the previous mission, your rover successfully scanned the lunar surface and reported the location of basaltic mineral veins to the terminal. However, in the harsh environment of the Moon, Mission Control cannot always stare at a computer screen. 
 

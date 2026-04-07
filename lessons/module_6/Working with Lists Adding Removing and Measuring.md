@@ -6,6 +6,8 @@ Practise modifying mixed-type lists using `append()`, `pop()`, and `del`, then p
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Lists can store any combination of values: strings for names, integers for speeds, floats for voltages, and booleans for readiness flags. Changing the list while the program runs is a powerful way to keep track of robot state. In this lesson we will adjust a list and report both its contents and its length to confirm the operations.

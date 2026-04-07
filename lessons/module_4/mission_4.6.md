@@ -11,6 +11,8 @@ next: concept_of_error
 ## Objective
 Transform the rover into a silent data-collection probe. It must drive autonomously for 30 seconds, memorize all color anomalies in its RAM, and print a formatted summary report when the mission ends.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In Mission 4.5, your rover reacted to anomalies in real-time. But deep space probes operate differently: they collect data silently to save power, store it in their memory, and transmit a giant data log back to Earth only when the scanning run is complete. 
 

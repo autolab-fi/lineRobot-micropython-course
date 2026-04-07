@@ -4,6 +4,8 @@
 
 Here you can test different functions of the robot. The robot will execute your code for up to 20 seconds.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Robot Description
 
 This is a differential drive robot based on the ESP32 microcontroller and MicroPython.

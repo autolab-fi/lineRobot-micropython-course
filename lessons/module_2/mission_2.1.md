@@ -1,4 +1,3 @@
-<img width="751" height="640" alt="image" src="https://github.com/user-attachments/assets/fea3742f-3cc1-45ee-9b0c-d26b03912014" />---
 index: 8
 module: module_2
 task: electric_motors

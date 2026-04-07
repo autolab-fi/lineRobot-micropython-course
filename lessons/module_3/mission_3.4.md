@@ -11,7 +11,7 @@ next: led_feedback_system
 ## Objective
 Learn how to read all 8 sensors at once using arrays, extract specific data using indices, and use `elif` statements to determine the line's position.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 Until now, you have been reading a single sensor using `analog_read(index)`. But to follow a path, the rover needs full spatial awareness to know if the line is drifting to the left or to the right.

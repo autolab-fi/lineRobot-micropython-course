@@ -89,7 +89,7 @@ def concept_of_error(robot, image, td, user_code=None):
         # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + 30,
+            "end_time":   time.time() + 10,
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,

@@ -38,7 +38,7 @@ Here is what happens:
 
 Think of it this way: `Robot()` is the factory, and `robot` is the specific machine that rolled off the assembly line. We will send all our commands to this `robot`.
 
-## Instructions
+## Assignment
 
 Now, let's bring this object to life.
 

@@ -1,3 +1,4 @@
+---
 index: 8
 module: module_2
 task: electric_motors

@@ -11,7 +11,7 @@ next: telemetry_reporting
 ## Objective
 Create Python lists, determine their size using `len()`, and use a `for` loop to execute a multi-step navigation route.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 Welcome to Module 4, Recruit! 

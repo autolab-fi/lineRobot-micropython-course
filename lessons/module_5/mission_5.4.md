@@ -11,7 +11,7 @@ next: adaptive_speed
 ## Objective
 Understand the effects of the Proportional Coefficient (*K_p*) on system stability, tune it for optimal performance, and implement a "Software Kick" to test the controller's recovery capabilities.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)
 
 ## Introduction
 In the last mission, you built a working Proportional Controller. But as you probably noticed, guessing the *K_p* value (like `10`) doesn't always result in a perfect ride. 

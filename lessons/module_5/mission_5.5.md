@@ -11,7 +11,7 @@ next: module_6_intro
 ## Objective
 Make the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)
 
 ## Introduction
 Your Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. 

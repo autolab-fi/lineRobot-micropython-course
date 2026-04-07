@@ -11,7 +11,7 @@ next: failsafe_protocols
 ## Objective
 Understand the limitations of a Relay (Bang-Bang) controller and introduce the concept of "Error" as a continuous gradient using the advanced `track_line()` function.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 Welcome to Module 5, Recruit!

@@ -12,6 +12,8 @@ next: license_to_drive
 
 Understand the concept of a "Robot Object" and execute your first movement code.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In this lesson, you will initiate the robot's movement. But before we push the button, we need to understand *who* receives our commands.
@@ -36,7 +38,7 @@ Here is what happens:
 
 Think of it this way: `Robot()` is the factory, and `robot` is the specific machine that rolled off the assembly line. We will send all our commands to this `robot`.
 
-## Instructions
+## Assignment
 
 Now, let's bring this object to life.
 

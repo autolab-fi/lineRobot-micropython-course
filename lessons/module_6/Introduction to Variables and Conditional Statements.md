@@ -6,6 +6,8 @@ Learn how to declare and use variables in programming, and apply conditional log
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Variables are essential in microcontroller programming for storing information like sensor readings, motor speeds, and system states. In robot programming, we use conditional statements to make decisions based on these variables, creating intelligent behavior.

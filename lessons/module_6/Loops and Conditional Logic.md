@@ -6,6 +6,8 @@ Learn how to repeat actions using `for` and `while` loops.
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Loops are essential for microcontrollers perform repeated actions. Using loops saves you from writing the same code over and over, making your programs more efficient and easier to maintain.

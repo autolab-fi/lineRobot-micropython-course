@@ -3,6 +3,8 @@
 ## Lesson objective
 Interpret a target coordinate on a mapped grid, drive the robot to that point, confirm arrival, and publish a navigation log that includes the mineral found in Lesson 2.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Mission Control now transmits exact `(x, y)` coordinates on the exploration map. Your rover must read the grid, plot a route, and verify when it reaches the destination. When you arrive, you will report both the final position and the mineral the scanner detected earlier.
 

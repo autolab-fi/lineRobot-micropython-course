@@ -11,6 +11,8 @@ next: color_sensor_basics
 ## Objective
 Learn how to track real-world execution time, perform mathematical operations to calculate the robot's actual speed, and construct structured telemetry reports using Python f-strings.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 Welcome back to Mission Control! While your rover executes its routes, it must constantly report its status and sensor data back to the base—a process known as **telemetry**.
 

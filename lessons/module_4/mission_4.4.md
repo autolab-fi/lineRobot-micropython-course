@@ -11,6 +11,8 @@ next: multiple_sensors
 ## Objective
 Learn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Introduction
 In the previous mission, your rover successfully scanned the terrain and printed raw RGB (Red, Green, Blue) values. However, raw numbers are hard for humans to read, and even harder for a robot to use for making decisions. 
 

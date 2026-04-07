@@ -6,6 +6,8 @@ Understand how to use arrays to store and analyze sensor data.
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Arrays allow you to store multiple values under one name. For robotics applications, arrays are perfect for handling multiple sensor readings, storing historical data, or tracking patterns over time. Instead of creating separate variables for each measurement, arrays group them together, making it easier to loop through and analyze data.

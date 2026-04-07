@@ -1,4 +1,4 @@
----
+<img width="751" height="640" alt="image" src="https://github.com/user-attachments/assets/fea3742f-3cc1-45ee-9b0c-d26b03912014" />---
 index: 8
 module: module_2
 task: electric_motors
@@ -10,7 +10,7 @@ next: differential_drive
 ## Objective
 Learn about electric motors, gearboxes, and how to manually turn them on and off to reach a specific target.
 
-![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
 In Module 1, you learned how to drive the rover using built-in commands. But to truly master robotics, you need to understand the hardware. In this lesson, you will learn about the basic principles of DC motors and see how electrical energy transforms into physical movement!

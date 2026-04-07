@@ -525,7 +525,7 @@ def for_loops(robot, image, td: dict, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 60,
             "data": {
                 "code_valid": code_valid,
             },
@@ -616,7 +616,7 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 20,
             "data": {
                 "code_valid": len(missing) == 0,
                 "missing": missing,
@@ -759,7 +759,7 @@ def while_loops(robot, image, td: dict, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 15,
             "start_position": None,
             "wall_px": None,
             "data": {

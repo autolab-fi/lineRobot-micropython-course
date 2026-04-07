@@ -86,7 +86,7 @@ def intro_to_octoliner(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 10,
             "data": {
                 "code_valid": code_valid,
                 "sensor_3": None,
@@ -188,7 +188,7 @@ def conditional_logic(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 20,
             "data": {
                 "code_valid": code_valid,
                 "missing": missing,
@@ -310,7 +310,7 @@ def processing_sensor_data(robot, image, td, user_code=None):
     if td is None:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 20,
             "data": {
                 "total_readings": 0,
                 "detections_above_threshold": 0,
@@ -473,7 +473,7 @@ def arrays_and_elif(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 20,
             "data": {
                 "code_valid": code_valid,
                 "missing": missing,
@@ -597,7 +597,7 @@ def led_feedback(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
+            "end_time": time.time() + 30,
             "data": {
                 "code_valid":    code_valid,
                 "missing":       missing,
@@ -827,7 +827,7 @@ def simple_line_follower(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 90,
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,
@@ -1016,7 +1016,7 @@ def logical_operators(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 90,
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,

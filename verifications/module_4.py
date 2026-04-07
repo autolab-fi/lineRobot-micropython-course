@@ -93,7 +93,7 @@ def python_lists(robot, image, td, user_code=None):
         # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 30,
             "data": {
                 "code_valid":            code_valid,
                 "missing":               missing,
@@ -299,7 +299,7 @@ def telemetry(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 20,
             "data": {
                 "code_valid":        code_valid,
                 "missing":           missing,
@@ -423,7 +423,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 20,
             "data": {
                 "code_valid":        code_valid,
                 "missing":           missing,
@@ -532,7 +532,7 @@ def color_classification(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 20,
             "data": {
                 "code_valid":        code_valid,
                 "missing":           missing,
@@ -657,7 +657,7 @@ def multiple_sensors(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 20,
             "data": {
                 "code_valid":        code_valid,
                 "missing":           missing,
@@ -880,7 +880,7 @@ def data_logging(robot, image, td, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + TASK_DURATION,
+            "end_time":   time.time() + 40,
             "data": {
                 "code_valid":        code_valid,
                 "missing":           missing,

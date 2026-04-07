@@ -11,6 +11,8 @@ next: data_logging
 ## Objective
 Combine the Octoliner and the Color Sensor in a single program. The rover must autonomously follow a black line while simultaneously scanning the ground, using an LED to signal anomalies without stopping.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Up until now, your rover has been doing one job at a time: either following a line blindly or scanning colors while driving straight. Real Lunar rovers perform multiple tasks simultaneously. 
 

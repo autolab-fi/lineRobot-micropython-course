@@ -11,6 +11,8 @@ next: python_lists
 ## Objective
 Learn how to use `or` and `and` logical operators to combine multiple conditions, eliminating blind spots and detecting complex track features like intersections.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In the previous mission, your rover successfully drove itself! However, relying on only three "scout" sensors has a major flaw: **blind spots**. If the track has a sharp turn, the line might slip between the scouts, causing the rover to lose the path. 
 

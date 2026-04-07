@@ -6,6 +6,8 @@ Calculate mission travel time using distance and speed, then publish it in an MQ
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Mission control dashboards need to know how long the robot will take to travel to a checkpoint. By dividing a known distance by the current speed, we can estimate the travel time and broadcast it as a `MISSION:` message. This lesson shows how to perform the calculation, round it to a readable value, and send the result for verification.

@@ -12,6 +12,8 @@ next: directional_movement
 
 Understand the structure of a Python robotics program and write your own code to control the robot.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In this lesson, we are granting you the driver's license. Today, you will be writing the program on your own without the instructor's help. However, first, let's cover some important programming concepts that will help you control the robot effectively.

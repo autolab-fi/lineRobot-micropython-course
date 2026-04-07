@@ -3,6 +3,8 @@
 ## Lesson Objective
 Program the robot to systematically explore and reveal a fog-covered terrain map by executing a repeatable movement pattern that uncovers at least 60% of the hidden surface.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Mission Control provides a partially obscured map—only areas the robot physically visits will be revealed. Your task is to write a sequence of movements that can be repeated to efficiently survey the landing zone, uncovering more than half the terrain without manually controlling each step.
 

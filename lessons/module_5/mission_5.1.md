@@ -11,6 +11,8 @@ next: failsafe_protocols
 ## Objective
 Understand the limitations of a Relay (Bang-Bang) controller and introduce the concept of "Error" as a continuous gradient using the advanced `track_line()` function.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Welcome to Module 5, Recruit!
 In Module 3, you built your first autonomous line follower. It successfully navigated the track, but the ride wasn't exactly smooth. The rover wobbled back and forth aggressively. That algorithm is known as a **Relay Controller** (or "Bang-Bang").

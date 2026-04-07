@@ -11,6 +11,8 @@ next: logical_operators
 ## Objective
 Combine your spatial logic (`elif`) with motor commands to build a Relay (Bang-Bang) controller, allowing the rover to autonomously follow a line.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 You have successfully built a system that scans the ground, extracts specific data points, and reacts using LEDs. But the Artemis rover cannot rely on Mission Control to steer it manually based on blinking lights. 
 

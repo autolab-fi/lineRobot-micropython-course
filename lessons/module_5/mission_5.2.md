@@ -11,6 +11,8 @@ next: proportional_control
 ## Objective
 Learn how to use the sensor's auto-calibration feature and build an upgraded Relay (Bang-Bang) controller using the continuous Error variable and a `NaN` failsafe.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 In Module 3, you built a Relay Controller by checking multiple individual sensors (Index 1, 3, 6) to decide whether to turn left or right. It worked, but the code was long and complex.
 

@@ -11,6 +11,8 @@ next: intro_to_octoliner
 ## Objective
 Understand the fundamental logic of **While Loops** compared to For Loops, and use active sensor monitoring to stop a robot with precision.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 Imagine walking towards a wall with your eyes closed. You decide to take exactly 10 steps.
 * If your steps are too long, you hit the wall.

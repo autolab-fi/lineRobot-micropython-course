@@ -6,6 +6,8 @@ Declare variables of multiple types and publish them in a single MQTT-style stat
 
 ---
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## **Introduction**
 
 Robots often send compact updates about their status to a control dashboard. MicroPython variables let us store the information we want to broadcast—such as the robot name, speed, battery voltage, and readiness flag. In this lesson we will gather those values and format them into one line that begins with `STATUS:` so it can be parsed by the checker.

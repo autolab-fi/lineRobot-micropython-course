@@ -12,6 +12,8 @@ next: license_to_drive
 
 Understand the concept of a "Robot Object" and execute your first movement code.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 
 In this lesson, you will initiate the robot's movement. But before we push the button, we need to understand *who* receives our commands.

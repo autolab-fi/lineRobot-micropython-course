@@ -3,6 +3,8 @@
 ## Lesson objective
 Make the rover dock with the charging station and report the charging status.
 
+![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
+
 ## Introduction
 After a long exploration mission, your rover needs to recharge. In this lesson, you will implement an auto-docking sequence that guides the robot backward to find its charging station. The robot will continuously monitor its charging status and stop when it successfully makes contact with the charging pads.
 

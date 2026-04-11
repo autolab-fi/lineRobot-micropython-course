@@ -3,7 +3,7 @@ index: 31
 module: module_5
 task: adaptive_speed
 previous: tuning_and_kick
-next: module_6_intro
+next: art_of_debugging
 ---
 
 # Mission 5.5 Adaptive Speed 

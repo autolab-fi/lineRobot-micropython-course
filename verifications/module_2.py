@@ -578,7 +578,7 @@ def for_loops(robot, image, td: dict, user_code=None):
 
 # 2.5 encoder theory
 
-def encoder_theory(robot, image, td: dict, user_code=None):
+def encoder_theory(robot, frame, td, user_code=None):
     """Verification function for encoder theory task.
     Checks: math import, encoder resets, math.pi, printed encoder value 310-360°,
     printed distance in expected range, AND physical displacement matches.
@@ -644,11 +644,11 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
     # ===== 2. STATE LOCK =====
     if td["data"].get("completed", False):
-        image = robot.draw_info(frame)
-        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+        frame = robot.draw_info(frame)
+        return frame, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
 
     # ===== 3. DRAW OVERLAY =====
-    image = robot.draw_info(frame)
+    frame = robot.draw_info(frame)
 
     # ===== 4. CODE VALIDATION CHECK =====
     if not td["data"]["code_valid"]:
@@ -764,11 +764,11 @@ def encoder_theory(robot, image, td: dict, user_code=None):
         td["data"]["final_result"] = result
         td["data"]["final_text"] = text
 
-    return image, td, text, result
+    return frame, td, text, result
 
 # 2.6 while loops
 
-def while_loops(robot, image, td: dict, user_code=None):
+def while_loops(robot, frame, td, user_code=None):
     """
     Verification: Don't Hit the Wall
     - Wall hit determined by physical displacement (OpenCV)
@@ -793,7 +793,7 @@ def while_loops(robot, image, td: dict, user_code=None):
     }
     text = "Waiting..."
 
-    image = robot.draw_info(image)
+    frame = robot.draw_info(frame)
 
     if td is None:
         lines = user_code.split('\n') if user_code else []
@@ -857,7 +857,7 @@ def while_loops(robot, image, td: dict, user_code=None):
     # draw wall line
     if td["wall_px"] is not None:
         wall_color = (0, 0, 255) if td["data"]["wall_hit"] else (0, 0, 0)
-        cv2.line(image, (td["wall_px"], 0), (td["wall_px"], image.shape[0]), wall_color, 3)
+        cv2.line(frame, (td["wall_px"], 0), (td["wall_px"], frame.shape[0]), wall_color, 3)
 
     # timeout / final verdict
     if time.time() > td["end_time"]:
@@ -898,4 +898,4 @@ def while_loops(robot, image, td: dict, user_code=None):
                                      f"Final displacement: {peak_disp:.1f}cm | Score: 100")
             text = "Stopped in the zone!"
 
-    return image, td, text, result
+    return frame, td, text, result

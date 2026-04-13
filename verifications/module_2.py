@@ -614,7 +614,7 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
     # ===== 1. FIRST-RUN INITIALIZATION =====
     if not td:
-        lines = code.split('\n') if code else []
+        lines = user_code.split('\n') if user_code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
 
@@ -765,7 +765,6 @@ def encoder_theory(robot, image, td: dict, user_code=None):
         td["data"]["final_text"] = text
 
     return image, td, text, result
-
 
 # 2.6 while loops
 

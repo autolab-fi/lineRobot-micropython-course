@@ -579,17 +579,32 @@ def for_loops(robot, image, td: dict, user_code=None):
 # 2.5 encoder theory
 
 def encoder_theory(robot, image, td: dict, user_code=None):
-    """Verification: encoder value 310-360°, distance calculation, physical displacement match."""
+    """Verification function for encoder theory task.
+    Checks: math import, encoder resets, math.pi, printed encoder value 310-360°,
+    printed distance in expected range, AND physical displacement matches.
 
-    WHEEL_RADIUS = 3.4
-    ENCODER_MIN = 310
-    ENCODER_MAX = 360
-    DISTANCE_MIN = 18.0
-    DISTANCE_MAX = 21.4
-    DISPLACEMENT_MIN = 15.0
-    DISPLACEMENT_MAX = 30.0
-    TASK_DURATION = 20
+    UPDATED: New wheel radius = 3.21cm (changed from 3.4cm)
+    """
 
+    # ===== CONFIGURATION =====
+    WHEEL_RADIUS = 3.21     # NEW: updated wheel radius in cm (was 3.4)
+    ENCODER_MIN = 310       # minimum acceptable encoder degrees
+    ENCODER_MAX = 360       # maximum acceptable encoder degrees
+
+    # Recalculated based on new radius:
+    # Min: (310/360) * 2 * π * 3.21 = ~17.36 cm
+    # Max: (360/360) * 2 * π * 3.21 = ~20.17 cm
+    DISTANCE_MIN = 17.0     # NEW: (310/360) * 2 * π * 3.21 ≈ 17.36 cm (allow some tolerance)
+    DISTANCE_MAX = 20.5     # NEW: (360/360) * 2 * π * 3.21 ≈ 20.17 cm (allow some tolerance)
+
+    # Physical displacement bounds (slightly wider tolerance for measurement error)
+    DISPLACEMENT_MIN = 16.5 # NEW: OpenCV physical measurement lower bound
+    DISPLACEMENT_MAX = 21.0 # NEW: OpenCV physical measurement upper bound
+
+    TASK_DURATION = 20      # seconds
+    # =========================
+
+    # ===== 0. INITIAL RESULT TEMPLATE =====
     result = {
         "success": True,
         "description": "You are amazing! The Robot has completed the assignment",
@@ -597,10 +612,9 @@ def encoder_theory(robot, image, td: dict, user_code=None):
     }
     text = "Reading encoder data..."
 
-    image = robot.draw_info(image)
-
+    # ===== 1. FIRST-RUN INITIALIZATION =====
     if not td:
-        lines = user_code.split('\n') if user_code else []
+        lines = code.split('\n') if code else []
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
 
@@ -616,8 +630,9 @@ def encoder_theory(robot, image, td: dict, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 20,
+            "end_time": time.time() + TASK_DURATION,
             "data": {
+                "completed": False,
                 "code_valid": len(missing) == 0,
                 "missing": missing,
                 "encoder_left": None,
@@ -627,17 +642,30 @@ def encoder_theory(robot, image, td: dict, user_code=None):
             }
         }
 
+    # ===== 2. STATE LOCK =====
+    if td["data"].get("completed", False):
+        image = robot.draw_info(frame)
+        return image, td, td["data"].get("final_text", text), td["data"].get("final_result", result)
+
+    # ===== 3. DRAW OVERLAY =====
+    image = robot.draw_info(frame)
+
+    # ===== 4. CODE VALIDATION CHECK =====
     if not td["data"]["code_valid"]:
         text = f"Missing: {', '.join(td['data']['missing'])}"
 
-    # track physical displacement
+    # ===== 5. TRACK PHYSICAL DISPLACEMENT =====
+    # Always track regardless of code validity
     pos = robot.position
     if pos is not None:
         if td["data"]["start_position"] is None:
             td["data"]["start_position"] = pos
         td["data"]["end_position"] = pos
 
-    # parse MQTT messages
+    # ===== 6. PARSE MQTT MESSAGES =====
+    # Matches student template print format:
+    # print("Encoder degrees left:", left_deg)
+    # print("Distance in cm:", distance)
     msg = robot.get_msg()
     if msg is not None:
         text = f"Received: {msg}"
@@ -649,22 +677,29 @@ def encoder_theory(robot, image, td: dict, user_code=None):
         except (ValueError, IndexError):
             pass
 
+    # Show live readings on overlay
     if td["data"]["encoder_left"] is not None:
         text = (f"Left: {td['data']['encoder_left']:.0f}° "
                 f"Dist: {td['data']['distance'] or 0:.2f}cm")
 
-    # timeout / final verdict
-    if td["end_time"] - time.time() < 1:
+    # ===== 7. TIMEOUT / FINAL EVALUATION =====
+    # All failure cases handled here — completed=True always set before success=False
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed", False):
+        td["data"]["completed"] = True
+
         if not td["data"]["code_valid"]:
-            result["success"] = False
+            result["success"] = False  # safe — completed=True set above
             result["score"] = 0
             result["description"] = f"Missing required elements: {', '.join(td['data']['missing'])} | Score: 0"
             text = "Code validation failed."
+
         else:
             left = td["data"]["encoder_left"]
             distance = td["data"]["distance"]
             start = td["data"]["start_position"]
             end = td["data"]["end_position"]
+
+            # Cross-check: expected distance from encoder using correct formula
             expected = (left / 360) * (2 * math.pi * WHEEL_RADIUS) if left else None
 
             if left is None:
@@ -672,6 +707,7 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                 result["score"] = 0
                 result["description"] = "No encoder data received | Score: 0"
                 text = "No encoder data received."
+
             elif not (ENCODER_MIN <= left <= ENCODER_MAX):
                 result["success"] = False
                 result["score"] = 0
@@ -681,24 +717,28 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                     f"(need {ENCODER_MIN}-{ENCODER_MAX}°) | Score: 0"
                 )
                 text = "Encoder value out of range."
+
             elif distance is None:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = "No distance calculation received | Score: 0"
                 text = "Distance not printed."
+
             elif distance < DISTANCE_MIN or distance > DISTANCE_MAX:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = (
                     f"Distance out of range: {distance:.2f}cm "
-                    f"(expected {DISTANCE_MIN}-{DISTANCE_MAX}cm based on R={WHEEL_RADIUS}cm) | Score: 0"
+                    f"(expected {DISTANCE_MIN:.1f}-{DISTANCE_MAX:.1f}cm based on R={WHEEL_RADIUS}cm) | Score: 0"
                 )
                 text = "Distance calculation incorrect."
+
             elif start is None or end is None:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = "Robot not detected in camera frame | Score: 0"
                 text = "Robot not detected."
+
             else:
                 displacement = robot.delta_points(start, end)
                 if displacement < DISPLACEMENT_MIN or displacement > DISPLACEMENT_MAX:
@@ -721,6 +761,9 @@ def encoder_theory(robot, image, td: dict, user_code=None):
                     )
                     text = "Encoder task complete!"
 
+        td["data"]["final_result"] = result
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -731,14 +774,16 @@ def while_loops(robot, image, td: dict, user_code=None):
     Verification: Don't Hit the Wall
     - Wall hit determined by physical displacement (OpenCV)
     - Score determined by encoder-derived distance
+
+    UPDATED: New wheel radius = 3.21cm (changed from 3.4cm)
     """
 
     TASK_DURATION      = 15
-    TARGET_DISTANCE_CM = 40.0
-    SUCCESS_MIN_CM     = 36.0
-    R                  = 3.4
+    TARGET_DISTANCE_CM = 20.0
+    SUCCESS_MIN_CM     = 18.0
+    R                  = 3.21  # NEW: Updated wheel radius (was 3.4)
     ENCODER_SANITY_CAP = 2000
-    WALL_VISUAL_OFFSET = 130
+    WALL_VISUAL_OFFSET = 150
     BANNED_FUNCTIONS   = ["move_forward", "move_backward", "move_forward_distance",
                           "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
 
@@ -759,7 +804,7 @@ def while_loops(robot, image, td: dict, user_code=None):
 
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 15,
+            "end_time": time.time() + TASK_DURATION,
             "start_position": None,
             "wall_px": None,
             "data": {

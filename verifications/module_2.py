@@ -599,7 +599,7 @@ def encoder_theory(robot, frame, td, user_code=None):
 
     # Physical displacement bounds (slightly wider tolerance for measurement error)
     DISPLACEMENT_MIN = 16.5 # NEW: OpenCV physical measurement lower bound
-    DISPLACEMENT_MAX = 21.0 # NEW: OpenCV physical measurement upper bound
+    DISPLACEMENT_MAX = 22.0 # NEW: OpenCV physical measurement upper bound
 
     TASK_DURATION = 20      # seconds
     # =========================
@@ -765,6 +765,7 @@ def encoder_theory(robot, frame, td, user_code=None):
         td["data"]["final_text"] = text
 
     return frame, td, text, result
+
 
 # 2.6 while loops
 

@@ -6,9 +6,9 @@ import numpy as np
 import ast
 
 target_points = {
-    'art_of_debugging': [(50, 94), (0, 30)],           # Start: x=50, y=94, direction=30°
+    'art_of_debugging': [(50, 94), (30, 0)],           # Start: x=50, y=94, direction=30°
     'hardware_safety_net': [(60, 40), (0, 0)],         # Start: x=60, y=40, direction=0° (spins in place)
-    'code_clinic': [(50, 30), (30, 0)],                # Start: x=50, y=30, direction=0°
+    'code_clinic': [(50, 30), (30, 0)],                # Start: x=50, y=30, direction=30°
 }
 
 block_library_functions = {

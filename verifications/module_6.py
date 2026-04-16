@@ -72,9 +72,9 @@ def art_of_debugging(robot, frame, td, user_code=None):
             bug_categories.append('SYNTAX')
 
         # Bug 2: NameError - print(sensor) should be print(sensor_array)
-        has_sensor_print = 'print(sensor)' in active_code
-        has_sensor_array_print = 'print(sensor_array)' in active_code
-        if has_sensor_print or not has_sensor_array_print:
+        # Only flag as bug if the WRONG pattern exists
+        has_wrong_print = 'print(sensor)' in active_code
+        if has_wrong_print:
             bugs_remaining.append('runtime_name')
             bug_categories.append('RUNTIME')
 

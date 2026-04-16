@@ -1,27 +1,20 @@
-import ast
 import cv2
+import math
 import time
-import re
+import os
+import numpy as np
 import ast
 
 target_points = {
-    'hello_mqtt_variables': [(30, 50), (0, -200)],
-    'mission_time_report': [(30, 50), (0, -200)],
-    'sensor_log_summary': [(30, 50), (0, -200)],
-    'list_operations_check': [(30, 50), (0, -200)],
-    'introduction_to_variables_and_conditional_statements': [(30, 50), (0, -200)],
-    'loops_and_conditional_logic': [(65, 50), (30, 0)],
-    'array_and_processing_data': [(30, 50), (30, 0)],
+    'art_of_debugging': [(50, 94), (0, 30)],           # Start: x=50, y=94, direction=30°
+    'hardware_safety_net': [(60, 40), (0, 0)],         # Start: x=60, y=40, direction=0° (spins in place)
+    'code_clinic': [(50, 30), (30, 0)],                # Start: x=50, y=30, direction=0°
 }
 
 block_library_functions = {
-    'hello_mqtt_variables': False,
-    'mission_time_report': False,
-    'sensor_log_summary': False,
-    'list_operations_check': False,
-    'introduction_to_variables_and_conditional_statements': False,
-    'loops_and_conditional_logic': False,
-    'array_and_processing_data': False,
+    'art_of_debugging': False,
+    'hardware_safety_net': False,
+    'code_clinic': False,
 }
 
 
@@ -35,604 +28,703 @@ def get_target_points(task):
     return target_points.get(task, [])
 
 
-def hello_mqtt_variables(robot, image, td, user_code=None):
-    result = {
-        "success": True,  # Changed to True to keep running
-        "description": "Awaiting STATUS message...",
-        "score": 0,
-    }
-    text = "Listening for STATUS message..."
-    image = robot.draw_info(image)
+# ============================================================================
+# Task 6.1: The Art of Debugging
+# ============================================================================
+def art_of_debugging(robot, frame, td, user_code=None):
+    """
+    Verification for lesson: The Art of Debugging — 6.1
+    Start: x=50, y=94, dir=30°
+    Checkpoints: (105, 60), (80, 30)
+    """
 
-    if not td:
-        td = {
-            "end_time": time.time() + 10,
-            "data": {
-                "validated": False,
-                "error": "No STATUS message received yet.",
-                "messages": [],
-            },
-            "finished": False,
-            "finish_time": None,
-        }
+    # ===== CONFIGURATION =====
+    MIN_MOVEMENT_DISTANCE = 30.0  # cm
+    CHECKPOINT_RADIUS = 10.0  # cm
+    CHECKPOINTS = [(105, 60), (80, 30)]
+    # =========================
 
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        if msg.startswith("STATUS:"):
-            payload = msg[len("STATUS:") :]
-            parts = payload.split(";")
-            if len(parts) == 4:
-                values = {}
-                for part in parts:
-                    if "=" not in part:
-                        td["data"]["error"] = "Each STATUS field must contain an '=' sign."
-                        break
-                    key, value = part.split("=", 1)
-                    values[key.strip()] = value.strip()
-                else:
-                    try:
-                        name = values["name"]
-                        speed = int(values["speed"])
-                        battery = float(values["battery"])
-                        ready_value = values["ready"]
-                        if ready_value not in {"True", "False"}:
-                            raise ValueError("Ready must be True or False.")
-                    except KeyError as missing:
-                        td["data"]["error"] = f"Missing field: {missing.args[0]}"
-                    except ValueError as exc:
-                        td["data"]["error"] = str(exc)
-                    else:
-                        if not name:
-                            td["data"]["error"] = "Robot name must not be empty."
-                        elif not (1 <= speed <= 200):
-                            td["data"]["error"] = "Speed must be an integer between 1 and 200 cm/s."
-                        elif not (0.0 < battery < 20.0):
-                            td["data"]["error"] = "Battery voltage must be between 0 and 20 volts."
-                        else:
-                            td["data"]["validated"] = True
-                            td["data"]["error"] = ""
-            else:
-                td["data"]["error"] = "STATUS message must contain four fields separated by semicolons."
-        else:
-            td["data"]["error"] = "Message must start with 'STATUS:'."
-
-    # Display current status on screen
-    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
-                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
-                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    
-    if td["data"]["error"]:
-        cv2.putText(image, f"Error: {td['data']['error']}", 
-                    (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-
-    # Only mark as finished once
-    if not td.get("finished", False):
-        if td["data"]["validated"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update({
-                "success": True,
-                "description": "STATUS message validated successfully!",
-                "score": 100,
-            })
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get("error", "No valid STATUS message received.")
-            text = "Verification failed."
-        else:
-            # Keep running
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        # Show result for 3 seconds before ending
-        if time.time() - td["finish_time"] >= 3:
-            # Actually end by setting success to final state
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
-    return image, td, text, result
-
-
-def mission_time_report(robot, image, td, user_code=None):
-    result = {
-        "success": True,  # Changed to True to keep running
-        "description": "Awaiting mission report...",
-        "score": 0,
-    }
-    text = "Listening for mission report..."
-    image = robot.draw_info(image)
-
-    if not td:
-        td = {
-            "end_time": time.time() + 10,
-            "data": {
-                "validated": False,
-                "error": "No mission report received yet.",
-                "messages": [],
-            },
-            "finished": False,
-            "finish_time": None,
-        }
-
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        if msg.startswith("MISSION:"):
-            payload = msg[len("MISSION:") :]
-            parts = payload.split(";")
-            expected_order = ["distance", "speed", "time"]
-            if len(parts) == 3:
-                values = {}
-                for expected, part in zip(expected_order, parts):
-                    if "=" not in part:
-                        td["data"]["error"] = "Each mission field must contain an '=' sign."
-                        break
-                    key, value = part.split("=", 1)
-                    key = key.strip()
-                    if key != expected:
-                        td["data"]["error"] = "Mission fields must appear as distance, speed, time."
-                        break
-                    values[key] = value.strip()
-                else:
-                    try:
-                        if values["distance"] != "120cm":
-                            raise ValueError("Distance must be 120cm.")
-                        if values["speed"] != "18.0cm/s":
-                            raise ValueError("Speed must be 18.0cm/s.")
-                        if not values["time"].endswith("s"):
-                            raise ValueError("Time field must end with 's'.")
-                        time_value = float(values["time"][:-1])
-                    except ValueError as exc:
-                        td["data"]["error"] = str(exc)
-                    else:
-                        expected_time = 120 / 18.0
-                        if abs(time_value - expected_time) <= 0.05:
-                            td["data"]["validated"] = True
-                            td["data"]["error"] = ""
-                        else:
-                            td["data"]["error"] = "Computed time is outside the allowed tolerance."
-            else:
-                td["data"]["error"] = "Mission report must contain three fields."
-        else:
-            td["data"]["error"] = "Message must start with 'MISSION:'."
-
-    # Display current status on screen
-    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
-                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
-                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    
-    if td["data"]["error"]:
-        cv2.putText(image, f"Error: {td['data']['error']}", 
-                    (20, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-
-    # Only mark as finished once
-    if not td.get("finished", False):
-        if td["data"]["validated"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update({
-                "success": True,
-                "description": "Mission report validated successfully!",
-                "score": 100,
-            })
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get("error", "No valid mission report received.")
-            text = "Verification failed."
-        else:
-            # Keep running
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        # Show result for 3 seconds before ending
-        if time.time() - td["finish_time"] >= 3:
-            # Actually end by setting success to final state
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
-    return image, td, text, result
-
-
-def sensor_log_summary(robot, image, td, user_code=None):
-    result = {
-        "success": True,  # Changed to True to keep running
-        "description": "Awaiting LOG messages...",
-        "score": 0,
-    }
-    text = "Listening for sensor log messages..."
-    image = robot.draw_info(image)
-
-    if not td:
-        td = {
-            "end_time": time.time() + 12,
-            "data": {
-                "count": None,
-                "values": None,
-                "average": None,
-                "validated": False,
-                "error": "Waiting for LOG:COUNT, LOG:VALUES, and LOG:AVERAGE messages.",
-                "messages": [],
-            },
-            "finished": False,
-            "finish_time": None,
-        }
-
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        if msg.startswith("LOG:COUNT="):
-            try:
-                td["data"]["count"] = int(msg.split("=", 1)[1])
-            except ValueError:
-                td["data"]["error"] = "LOG:COUNT must contain an integer."
-        elif msg.startswith("LOG:VALUES="):
-            values_part = msg.split("=", 1)[1]
-            if values_part:
-                try:
-                    values = [int(v.strip()) for v in values_part.split(",")]
-                except ValueError:
-                    td["data"]["error"] = "LOG:VALUES must contain integers separated by commas."
-                else:
-                    td["data"]["values"] = values
-            else:
-                td["data"]["error"] = "LOG:VALUES must list at least one value."
-        elif msg.startswith("LOG:AVERAGE="):
-            try:
-                td["data"]["average"] = float(msg.split("=", 1)[1])
-            except ValueError:
-                td["data"]["error"] = "LOG:AVERAGE must contain a number."
-
-        if all(td["data"][key] is not None for key in ("count", "values", "average")):
-            values = td["data"]["values"]
-            if td["data"]["count"] != len(values):
-                td["data"]["error"] = "Count does not match the number of values provided."
-            elif len(values) == 0:
-                td["data"]["error"] = "Provide at least one sensor value."
-            else:
-                average = sum(values) / len(values)
-                if abs(average - td["data"]["average"]) <= 0.05:
-                    td["data"]["validated"] = True
-                    td["data"]["error"] = ""
-                else:
-                    td["data"]["error"] = "Reported average does not match the values provided."
-
-    # Display current status on screen
-    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
-                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
-                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    
-    # Show received data status
-    status_y = 120
-    if td["data"]["count"] is not None:
-        cv2.putText(image, f"COUNT: {td['data']['count']}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-    if td["data"]["values"] is not None:
-        cv2.putText(image, f"VALUES: {len(td['data']['values'])} received", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-    if td["data"]["average"] is not None:
-        cv2.putText(image, f"AVERAGE: {td['data']['average']}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-    
-    if td["data"]["error"] and not td["data"]["validated"]:
-        cv2.putText(image, f"Error: {td['data']['error']}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-
-    # Only mark as finished once
-    if not td.get("finished", False):
-        if td["data"]["validated"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update({
-                "success": True,
-                "description": "Sensor log summary validated successfully!",
-                "score": 100,
-            })
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get("error", "Sensor log messages were incomplete.")
-            text = "Verification failed."
-        else:
-            # Keep running
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        # Show result for 3 seconds before ending
-        if time.time() - td["finish_time"] >= 3:
-            # Actually end by setting success to final state
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
-    return image, td, text, result
-
-def list_operations_check(robot, image, td, user_code=None):
-    result = {
-        "success": True,  # Changed to True to keep running
-        "description": "Awaiting LIST messages...",
-        "score": 0,
-    }
-    text = "Listening for list messages..."
-    image = robot.draw_info(image)
-
-    if not td:
-        td = {
-            "end_time": time.time() + 12,
-            "data": {
-                "items": None,
-                "length": None,
-                "validated": False,
-                "error": "Waiting for LIST:items and LIST:length messages.",
-                "messages": [],
-            },
-            "finished": False,
-            "finish_time": None,
-        }
-
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        text = f"Received: {msg}"
-        if msg.startswith("LIST:items="):
-            payload = msg.split("=", 1)[1].strip()
-            try:
-                parsed_items = ast.literal_eval(payload)
-            except (ValueError, SyntaxError):
-                td["data"]["error"] = "Unable to parse LIST:items payload as a Python list."
-            else:
-                if not isinstance(parsed_items, list):
-                    td["data"]["error"] = "LIST:items payload must represent a list."
-                elif len(parsed_items) < 3:
-                    td["data"]["error"] = "List must contain at least three items."
-                elif len({type(item) for item in parsed_items}) < 2:
-                    td["data"]["error"] = "List must contain at least two different data types."
-                else:
-                    td["data"]["items"] = parsed_items
-                    td["data"]["error"] = ""
-        elif msg.startswith("LIST:length="):
-            try:
-                td["data"]["length"] = int(msg.split("=", 1)[1])
-            except ValueError:
-                td["data"]["error"] = "LIST:length must contain an integer."
-
-        if td["data"]["items"] is not None and td["data"]["length"] is not None:
-            if len(td["data"]["items"]) == td["data"]["length"]:
-                td["data"]["validated"] = True
-                td["data"]["error"] = ""
-            else:
-                td["data"]["error"] = "LIST:length does not match the number of items provided."
-
-    # Display current status on screen
-    cv2.putText(image, f"Messages received: {len(td['data']['messages'])}", 
-                (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    cv2.putText(image, f"Time remaining: {td['end_time'] - time.time():.1f}s", 
-                (20, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-    
-    # Show received data status
-    status_y = 120
-    if td["data"]["items"] is not None:
-        item_preview = str(td["data"]["items"])[:50] + "..." if len(str(td["data"]["items"])) > 50 else str(td["data"]["items"])
-        cv2.putText(image, f"ITEMS: {item_preview}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-        # Show item count and types
-        types_in_list = {type(item).__name__ for item in td["data"]["items"]}
-        cv2.putText(image, f"Types: {', '.join(types_in_list)}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-    
-    if td["data"]["length"] is not None:
-        cv2.putText(image, f"LENGTH: {td['data']['length']}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        status_y += 25
-    
-    if td["data"]["error"] and not td["data"]["validated"]:
-        # Word wrap error message if too long
-        error_msg = td["data"]["error"]
-        if len(error_msg) > 60:
-            error_msg = error_msg[:60] + "..."
-        cv2.putText(image, f"Error: {error_msg}", 
-                    (20, status_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
-
-    # Only mark as finished once
-    if not td.get("finished", False):
-        if td["data"]["validated"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result.update({
-                "success": True,
-                "description": "List operations validated successfully!",
-                "score": 100,
-            })
-            text = "Verification successful!"
-        elif time.time() > td["end_time"]:
-            td["finished"] = True
-            td["finish_time"] = time.time()
-            result["success"] = False
-            result["description"] = td["data"].get("error", "List messages were incomplete.")
-            text = "Verification failed."
-        else:
-            # Keep running
-            result["success"] = True
-            result["description"] = td["data"].get("error", result["description"])
-    else:
-        # Show result for 3 seconds before ending
-        if time.time() - td["finish_time"] >= 3:
-            # Actually end by setting success to final state
-            if td["data"]["validated"]:
-                result["success"] = True
-                result["score"] = 100
-            else:
-                result["success"] = False
-                result["score"] = 0
-
-    return image, td, text, result
-
-
-def introduction_to_variables_and_conditional_statements(robot, image, td, user_code=None):
-    """Check that at least one sensor is reported as ON LINE within the allotted time."""
+    # ── default result and text ───────────────────────────────────────────────
     result = {
         "success": True,
-        "description": "Waiting for sensor messages...",
-        "score": 100,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
     }
-    text = "Verifying..."
-    image = robot.draw_info(image)
-    if not td:
+    text = "Debugging mission running..."
+
+    frame = robot.draw_info(frame)
+
+    # ── first-frame initialisation ────────────────────────────────────────────
+    if td is None:
+        # ── code validation ───────────────────────────────────────────────────
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        # Bug detection (progressive hints)
+        bugs_remaining = []
+        bug_categories = []
+
+        # Bug 1: Missing colon after while True
+        has_while_colon = 'while True:' in active_code
+        if not has_while_colon:
+            bugs_remaining.append('syntax_colon')
+            bug_categories.append('SYNTAX')
+
+        # Bug 2: NameError - print(sensor) should be print(sensor_array)
+        has_sensor_print = 'print(sensor)' in active_code
+        has_sensor_array_print = 'print(sensor_array)' in active_code
+        if has_sensor_print or not has_sensor_array_print:
+            bugs_remaining.append('runtime_name')
+            bug_categories.append('RUNTIME')
+
+        # Bug 3: Failsafe max(sensor_array) < (not >)
+        has_correct_failsafe = 'max(sensor_array) <' in active_code
+        has_wrong_failsafe = 'max(sensor_array) >' in active_code
+        if has_wrong_failsafe or not has_correct_failsafe:
+            bugs_remaining.append('logic_threshold')
+            bug_categories.append('LOGIC')
+
+        # Bug 4: P calculation - kp * position (not +)
+        has_correct_p = 'kp * position' in active_code or 'position * kp' in active_code
+        has_wrong_p = 'kp + position' in active_code
+        if has_wrong_p or not has_correct_p:
+            bugs_remaining.append('logic_calculation')
+            bug_categories.append('LOGIC')
+
+        # Bug 5: Left motor differential - base_speed - P
+        has_correct_left = 'base_speed - P' in active_code
+        has_wrong_left = 'base_speed + P' in active_code
+        left_motor_assignments = active_code.count('base_speed + P')
+        if left_motor_assignments > 1 or not has_correct_left:
+            bugs_remaining.append('logic_steering')
+            bug_categories.append('LOGIC')
+
+        # Bug 6: Method typo - run_motors_speed (not run_motor_speed)
+        has_correct_method = 'run_motors_speed' in active_code
+        has_wrong_method = 'run_motor_speed' in active_code and not has_correct_method
+        if has_wrong_method or not has_correct_method:
+            bugs_remaining.append('runtime_method')
+            bug_categories.append('RUNTIME')
+
+        bugs_fixed = 6 - len(bugs_remaining)
+        code_valid = len(bugs_remaining) == 0
+
+        # Build category summary
+        syntax_count = bug_categories.count('SYNTAX')
+        runtime_count = bug_categories.count('RUNTIME')
+        logic_count = bug_categories.count('LOGIC')
+        
+        category_summary = []
+        if syntax_count > 0:
+            category_summary.append(f'SYNTAX ({syntax_count})')
+        if runtime_count > 0:
+            category_summary.append(f'RUNTIME ({runtime_count})')
+        if logic_count > 0:
+            category_summary.append(f'LOGIC ({logic_count})')
+
+        # ── td state init ─────────────────────────────────────────────────────
         td = {
-            "end_time": time.time() + 10,
+            "start_time": time.time(),
+            "end_time": time.time() + 60,
             "data": {
-                "sensors_on_line": set(),
-                "messages": [],
-                "result_displayed": False,
-            },
+                "code_valid": code_valid,
+                "bugs_remaining": len(bugs_remaining),
+                "bugs_fixed": bugs_fixed,
+                "category_summary": ', '.join(category_summary),
+                "completed_verdict": False,
+                
+                "start_position": None,
+                "max_distance_moved": 0.0,
+                
+                "checkpoints_hit": [],
+                "checkpoints_remaining": list(CHECKPOINTS),
+                
+                "flag": None,
+                "flag_mask": None,
+                "flag_green": None,
+                "flag_green_mask": None,
+                "image_error": False,
+            }
         }
 
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        for sensor_num in range(8):
-            if f"SENSOR {sensor_num} ON LINE" in msg.upper():
-                td["data"]["sensors_on_line"].add(sensor_num)
+        # ── load checkpoint flag images ───────────────────────────────────────
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "flag_finish.jpg")
+            flag = cv2.imread(filepath)
+            if flag is None:
+                raise FileNotFoundError(f"flag_finish.jpg not found")
+            flag = cv2.resize(flag, (int(flag.shape[1] / 3), int(flag.shape[0] / 3)))
+            mask = cv2.bitwise_not(cv2.inRange(flag,
+                                               np.array([0, 240, 0]),
+                                               np.array([50, 255, 50])))
+            td["data"]["flag"] = flag
+            td["data"]["flag_mask"] = mask
+            flag_green = flag.copy()
+            flag_green[mask > 0] = (0, 200, 0)
+            td["data"]["flag_green"] = flag_green
+            td["data"]["flag_green_mask"] = mask
+        except Exception as e:
+            print(f"Flag load error: {e}")
+            td["data"]["image_error"] = True
 
-    if time.time() > td["end_time"] and not td["data"]["result_displayed"]:
-        td["data"]["result_displayed"] = True
-        if td["data"]["sensors_on_line"]:
-            detected = ", ".join(str(s) for s in sorted(td["data"]["sensors_on_line"]))
-            result["description"] = f"Assignment passed!"
-            text = "Verification successful!"
+    # ── progressive hints display ─────────────────────────────────────────────
+    if td["data"]["bugs_remaining"] > 0:
+        text = (f"🐛 Bugs remaining: {td['data']['bugs_remaining']}/6 | "
+                f"Types: {td['data']['category_summary']}")
+
+    # ── position tracking ─────────────────────────────────────────────────────
+    pos = robot.position
+    if pos is not None:
+        if td["data"]["start_position"] is None:
+            td["data"]["start_position"] = pos
         else:
-            result.update({
-                "success": False,
-                "description": "Assignment failed!",
-                "score": 0,
-            })
-            text = "Verification failed."
-    return image, td, text, result
+            dx = pos[0] - td["data"]["start_position"][0]
+            dy = pos[1] - td["data"]["start_position"][1]
+            dist = math.sqrt(dx**2 + dy**2)
+            if dist > td["data"]["max_distance_moved"]:
+                td["data"]["max_distance_moved"] = dist
 
+    # ── checkpoint detection (sequential) ─────────────────────────────────────
+    if pos is not None and td["data"]["checkpoints_remaining"]:
+        next_cp = td["data"]["checkpoints_remaining"][0]
+        dist = math.sqrt((pos[0] - next_cp[0])**2 + (pos[1] - next_cp[1])**2)
+        if dist < CHECKPOINT_RADIUS:
+            td["data"]["checkpoints_hit"].append(next_cp)
+            td["data"]["checkpoints_remaining"].pop(0)
 
-def loops_and_conditional_logic(robot, image, td, user_code=None):
-    result = {
-        "success": True,
-        "description": "Collecting sensor data...",
-        "score": 100,
-    }
-    text = "Verifying sensor values..."
-    image = robot.draw_info(image)
-    if not td:
-        td = {
-            "end_time": time.time() + 15,
-            "data": {
-                "sensor_values": {},
-                "sensors_above_threshold": set(),
-                "messages": [],
-                "verification_complete": False,
-            },
-        }
+    # ── live status text ──────────────────────────────────────────────────────
+    if not td["data"].get("completed_verdict"):
+        distance = td["data"]["max_distance_moved"]
+        checkpoints_hit = len(td["data"]["checkpoints_hit"])
+        total_checkpoints = len(CHECKPOINTS)
+        
+        if td["data"]["code_valid"]:
+            text = f"Distance: {distance:.1f}cm, Checkpoints: {checkpoints_hit}/{total_checkpoints}"
+        elif distance > 0:
+            text = (f"🐛 Bugs: {td['data']['bugs_remaining']}/6 ({td['data']['category_summary']}) | "
+                   f"Distance: {distance:.1f}cm, Checkpoints: {checkpoints_hit}/{total_checkpoints}")
 
-    msg = robot.get_msg()
-    if msg is not None:
-        td["data"]["messages"].append(msg)
-        if "Sensor" in msg and ":" in msg:
-            try:
-                parts = msg.split(":")
-                if len(parts) == 2:
-                    sensor_part = parts[0].strip()
-                    value_part = parts[1].strip()
-                    sensor_num = int(sensor_part.replace("Sensor", "").strip())
-                    sensor_val = int(value_part)
-                    td["data"]["sensor_values"][sensor_num] = sensor_val
-                    if sensor_val > 200:
-                        td["data"]["sensors_above_threshold"].add(sensor_num)
-            except Exception:
-                pass
+    # ── overlay drawing (checkpoints with flags) ──────────────────────────────
+    pos_px = robot.position_px
+    if pos is not None and pos_px is not None and pos[0] != 0:
+        px_per_cm = pos_px[0] / pos[0]
+        radius_px = int(CHECKPOINT_RADIUS * px_per_cm)
+        flag = td["data"]["flag"]
+        flag_mask = td["data"]["flag_mask"]
+        flag_green = td["data"]["flag_green"]
+        use_flag = not td["data"]["image_error"] and flag is not None
+        hits = td["data"]["checkpoints_hit"]
 
-    if time.time() > td["end_time"] and not td["data"]["verification_complete"]:
-        td["data"]["verification_complete"] = True
-        sensors_above = len(td["data"]["sensors_above_threshold"])
-        if sensors_above >= 2:
-            text = "Verification complete!"
-        else:
-            result.update({
-                "success": False,
-                "description": "No sensors detected on Line." if sensors_above == 0 else "Assignment Failed",
-                "score": 0,
-            })
-            text = "Verification complete!"
-    return image, td, text, result
+        for cp_cm in CHECKPOINTS:
+            cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
+            hit = cp_cm in hits
+            cv2.circle(frame, cp_px, radius_px, (0, 200, 0) if hit else (0, 200, 255), 1)
+            
+            if use_flag:
+                draw_flag = flag_green if hit else flag
+                half_w = draw_flag.shape[1] // 2
+                half_h = draw_flag.shape[0] // 2
+                r0 = cp_px[1] - half_h
+                r1 = cp_px[1] + (draw_flag.shape[0] - half_h)
+                c0 = cp_px[0] - half_w
+                c1 = cp_px[0] + (draw_flag.shape[1] - half_w)
+                if 0 <= r0 and r1 < frame.shape[0] and 0 <= c0 and c1 < frame.shape[1]:
+                    cv2.copyTo(draw_flag, flag_mask, frame[r0:r1, c0:c1])
+            else:
+                cv2.circle(frame, cp_px, 5, (0, 200, 0) if hit else (0, 200, 255), -1)
 
-
-def array_and_processing_data(robot, image, td, user_code=None):
-    result = {
-        "success": True,
-        "description": "Checking for values above 200...",
-        "score": 100,
-    }
-    text = "Verifying..."
-    image = robot.draw_info(image)
-    if not td:
-        td = {
-            "end_time": time.time() + 15,
-            "data": {
-                "values_above_200": 0,
-                "total_values": 0,
-            },
-        }
-
-    msg = robot.get_msg()
-    if msg is not None:
-        numbers = re.findall(r"\d+", msg)
-        for num_str in numbers:
-            try:
-                value = int(num_str)
-            except ValueError:
-                continue
-            if 0 <= value <= 1023:
-                td["data"]["total_values"] += 1
-                if value > 200:
-                    td["data"]["values_above_200"] += 1
-
-    if time.time() > td["end_time"]:
-        if td["data"]["values_above_200"] >= 2:
-            text = "Verification complete!"
+    # ── timeout / final verdict (fires exactly once) ──────────────────────────
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+        td["data"]["completed_verdict"] = True
+        
+        distance_moved = td["data"]["max_distance_moved"]
+        checkpoints_hit = len(td["data"]["checkpoints_hit"])
+        total_checkpoints = len(CHECKPOINTS)
+        all_checkpoints = checkpoints_hit == total_checkpoints
+        
+        if td["data"]["code_valid"] and all_checkpoints:
+            result["success"] = True
+            result["score"] = 100
             result["description"] = (
-                f"Assignment passed!"
-                f"out of {td['data']['total_values']} total values"
+                f"All bugs fixed! Perfect debugging. "
+                f"Checkpoints: {checkpoints_hit}/{total_checkpoints} | Score: 100"
             )
+            text = "All bugs fixed! Mission complete!"
+        
+        elif checkpoints_hit >= 1 and distance_moved >= MIN_MOVEMENT_DISTANCE:
+            result["success"] = True
+            result["score"] = 85
+            result["description"] = (
+                f"Good debugging! Distance: {distance_moved:.1f}cm, "
+                f"Checkpoints: {checkpoints_hit}/{total_checkpoints} | Score: 85"
+            )
+            text = "Most bugs fixed, good progress!"
+        
+        elif td["data"]["bugs_fixed"] > 0:
+            partial_score = int((td["data"]["bugs_fixed"] / 6) * 50)
+            result["success"] = False
+            result["score"] = partial_score
+            result["description"] = (
+                f"Fixed {td['data']['bugs_fixed']}/6 bugs, but robot didn't complete lap. "
+                f"Distance: {distance_moved:.1f}cm | Score: {partial_score}"
+            )
+            text = f"Fixed {td['data']['bugs_fixed']}/6 bugs. Keep debugging!"
+        
         else:
-            result.update({
-                "success": False,
-                "description": "Assignment Failed!",
-                "score": 0,
-            })
-            text = "Verification complete!"
-    return image, td, text, result
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "No bugs fixed. Review the code carefully! | Score: 0"
+            text = "Start debugging! Find and fix the 6 bugs."
+
+    return frame, td, text, result
+
+
+# ============================================================================
+# Task 6.2: The Hardware Safety Net
+# ============================================================================
+def hardware_safety_net(robot, frame, td, user_code=None):
+    """
+    Verification for lesson: The Hardware Safety Net — 6.2
+    Start: x=60, y=40, dir=0°
+    No checkpoints (robot spins in place)
+    """
+
+    # ===== CONFIGURATION =====
+    MIN_ROTATION = 10.0  # cm - robot must move (spinning counts)
+    EXPECTED_SCANS = 10
+    MIN_SCANS_SUCCESS = 9
+    # =========================
+
+    # ── default result and text ───────────────────────────────────────────────
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Processing scans..."
+
+    frame = robot.draw_info(frame)
+
+    # ── first-frame initialisation ────────────────────────────────────────────
+    if td is None:
+        # ── code validation ───────────────────────────────────────────────────
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+
+        missing = []
+        
+        has_try = 'try:' in active_code
+        if not has_try:
+            missing.append('try: block')
+        
+        has_except_zero = 'except ZeroDivisionError' in active_code
+        if not has_except_zero:
+            missing.append('except ZeroDivisionError:')
+        
+        has_error_print = 'CRITICAL' in active_code or 'Sensor Blind' in active_code
+        if not has_error_print:
+            missing.append('error warning message')
+        
+        has_return_unknown = 'return "Unknown"' in active_code or "return 'Unknown'" in active_code
+        if not has_return_unknown:
+            missing.append('return "Unknown"')
+        
+        code_valid = len(missing) == 0
+
+        # ── td state init ─────────────────────────────────────────────────────
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 30,
+            "data": {
+                "code_valid": code_valid,
+                "missing": missing,
+                "completed_verdict": False,
+                
+                "start_position": None,
+                "max_distance_moved": 0.0,
+                
+                "scans_received": 0,
+                "sector_messages": [],
+                "analysis_messages": [],
+                "unknown_detections": 0,
+                "completion_message": False,
+            }
+        }
+
+    # ── code invalid notice ───────────────────────────────────────────────────
+    if not td["data"]["code_valid"]:
+        text = f"Missing: {', '.join(td['data']['missing'])}"
+
+    # ── position tracking ─────────────────────────────────────────────────────
+    pos = robot.position
+    if pos is not None:
+        if td["data"]["start_position"] is None:
+            td["data"]["start_position"] = pos
+        else:
+            dx = pos[0] - td["data"]["start_position"][0]
+            dy = pos[1] - td["data"]["start_position"][1]
+            dist = math.sqrt(dx**2 + dy**2)
+            if dist > td["data"]["max_distance_moved"]:
+                td["data"]["max_distance_moved"] = dist
+
+    # ── MQTT message parsing ──────────────────────────────────────────────────
+    msg = robot.get_msg()
+    if msg is not None:
+        if "Sector #" in msg:
+            td["data"]["sector_messages"].append(msg)
+            td["data"]["scans_received"] += 1
+        
+        elif "ANALYSIS:" in msg:
+            td["data"]["analysis_messages"].append(msg)
+            if "Unknown" in msg:
+                td["data"]["unknown_detections"] += 1
+        
+        elif "Survey Complete" in msg or "Complete" in msg:
+            td["data"]["completion_message"] = True
+
+    # ── live status text ──────────────────────────────────────────────────────
+    if not td["data"].get("completed_verdict"):
+        scans = td["data"]["scans_received"]
+        unknowns = td["data"]["unknown_detections"]
+        
+        if td["data"]["code_valid"]:
+            text = f"Scans: {scans}/{EXPECTED_SCANS}, Shadow zones handled: {unknowns}/4"
+        else:
+            text = f"Fix code first! Missing: {', '.join(td['data']['missing'][:2])}..."
+
+    # ── timeout / final verdict (fires exactly once) ──────────────────────────
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+        td["data"]["completed_verdict"] = True
+        
+        distance_moved = td["data"]["max_distance_moved"]
+        scans_received = td["data"]["scans_received"]
+        unknown_count = td["data"]["unknown_detections"]
+        
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"Code missing try-except: {', '.join(td['data']['missing'])} | Score: 0"
+            )
+            text = "Implement try-except block first!"
+        
+        elif scans_received >= EXPECTED_SCANS and unknown_count >= 3:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = (
+                f"Perfect! Processed {scans_received} scans, "
+                f"handled {unknown_count}/4 shadow zones gracefully. "
+                f"No crashes! | Score: 100"
+            )
+            text = "All scans completed! Safety net working!"
+        
+        elif scans_received >= MIN_SCANS_SUCCESS and unknown_count >= 2:
+            result["success"] = True
+            result["score"] = 85
+            result["description"] = (
+                f"Good! Processed {scans_received}/{EXPECTED_SCANS} scans, "
+                f"handled {unknown_count} shadow zones. | Score: 85"
+            )
+            text = "Try-except working! Almost all scans completed."
+        
+        elif scans_received >= MIN_SCANS_SUCCESS:
+            result["success"] = True
+            result["score"] = 70
+            result["description"] = (
+                f"Scans completed ({scans_received}), but only {unknown_count}/4 "
+                f"shadow zones returned 'Unknown'. Check try-except implementation. | Score: 70"
+            )
+            text = "Code runs, but error handling might be incomplete."
+        
+        elif scans_received > 5:
+            result["success"] = False
+            result["score"] = 50
+            result["description"] = (
+                f"Robot processed {scans_received}/{EXPECTED_SCANS} scans, "
+                f"but task incomplete. Did program crash on (0,0,0)? | Score: 50"
+            )
+            text = "Partial execution. Likely crashed on shadow zone."
+        
+        else:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"Robot moved {distance_moved:.1f}cm, only {scans_received} scans received. "
+                f"Code crashed early - add try-except! | Score: 0"
+            )
+            text = "Task failed. Code likely crashed on first (0,0,0)."
+
+    return frame, td, text, result
+
+
+# ============================================================================
+# Task 6.3: Code Clinic (Refactoring)
+# ============================================================================
+def code_clinic(robot, frame, td, user_code=None):
+    """
+    Verification for lesson: Code Clinic (Refactoring) — 6.3
+    Start: x=50, y=30, dir=0°
+    Checkpoints: (105, 60), (60, 90), (80, 30)
+    """
+
+    # ===== CONFIGURATION =====
+    MIN_MOVEMENT_DISTANCE = 30.0  # cm
+    CHECKPOINT_RADIUS = 10.0  # cm
+    CHECKPOINTS = [(105, 60), (60, 90), (80, 30)]
+    # =========================
+
+    # ── default result and text ───────────────────────────────────────────────
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Refactoring mission running..."
+
+    frame = robot.draw_info(frame)
+
+    # ── first-frame initialisation ────────────────────────────────────────────
+    if td is None:
+        # ── AST-based code validation ─────────────────────────────────────────
+        missing = []
+        code_valid = False
+        
+        try:
+            tree = ast.parse(user_code)
+            
+            # Find UPPERCASE constants
+            constants = set()
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Assign):
+                    for target in node.targets:
+                        if isinstance(target, ast.Name) and target.id.isupper():
+                            constants.add(target.id)
+            
+            # Check required constants
+            if 'SENSITIVITY' not in constants:
+                missing.append('SENSITIVITY constant')
+            if not any(c in constants for c in ['LINE_LIMIT', 'LINE_THRESHOLD']):
+                missing.append('LINE_LIMIT constant')
+            if 'BASE_SPEED' not in constants:
+                missing.append('BASE_SPEED constant')
+            if not any(c in constants for c in ['KP', 'Kp']):
+                missing.append('KP constant')
+            
+            # Find functions with properties
+            functions = {}
+            for node in ast.walk(tree):
+                if isinstance(node, ast.FunctionDef):
+                    has_try = any(isinstance(n, ast.Try) for n in ast.walk(node))
+                    params = [arg.arg for arg in node.args.args]
+                    
+                    functions[node.name] = {
+                        'has_try_except': has_try,
+                        'params': params
+                    }
+            
+            # Check required functions
+            if 'get_mineral_color' not in functions:
+                missing.append('get_mineral_color() function')
+            elif not functions['get_mineral_color']['has_try_except']:
+                missing.append('try-except in get_mineral_color()')
+            
+            if 'calculate_steering' not in functions:
+                missing.append('calculate_steering() function')
+            
+            if 'apply_movement' not in functions:
+                missing.append('apply_movement() function')
+            
+            code_valid = len(missing) == 0
+            
+        except SyntaxError as e:
+            missing.append(f'syntax error at line {e.lineno}')
+            code_valid = False
+
+        # ── td state init ─────────────────────────────────────────────────────
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 60,
+            "data": {
+                "code_valid": code_valid,
+                "missing": missing,
+                "completed_verdict": False,
+                
+                "start_position": None,
+                "max_distance_moved": 0.0,
+                
+                "checkpoints_hit": [],
+                "checkpoints_remaining": list(CHECKPOINTS),
+                
+                "minerals_detected": [],
+                
+                "flag": None,
+                "flag_mask": None,
+                "flag_green": None,
+                "flag_green_mask": None,
+                "image_error": False,
+            }
+        }
+
+        # ── load checkpoint flag images ───────────────────────────────────────
+        try:
+            basepath = os.path.abspath(os.path.dirname(__file__))
+            filepath = os.path.join(basepath, "auto_tests", "images", "flag_finish.jpg")
+            if not os.path.exists(filepath):
+                filepath = os.path.join(basepath, "images", "flag_finish.jpg")
+            
+            flag = cv2.imread(filepath)
+            if flag is None:
+                raise FileNotFoundError(f"flag_finish.jpg not found")
+            
+            flag = cv2.resize(flag, (int(flag.shape[1] / 3), int(flag.shape[0] / 3)))
+            mask = cv2.bitwise_not(cv2.inRange(flag,
+                                               np.array([0, 240, 0]),
+                                               np.array([50, 255, 50])))
+            td["data"]["flag"] = flag
+            td["data"]["flag_mask"] = mask
+            
+            flag_green = flag.copy()
+            flag_green[mask > 0] = (0, 200, 0)
+            td["data"]["flag_green"] = flag_green
+            td["data"]["flag_green_mask"] = mask
+        except Exception as e:
+            print(f"Flag load error: {e}")
+            td["data"]["image_error"] = True
+
+    # ── code invalid notice ───────────────────────────────────────────────────
+    if not td["data"]["code_valid"]:
+        text = f"Missing refactoring: {', '.join(td['data']['missing'][:3])}..."
+
+    # ── position tracking ─────────────────────────────────────────────────────
+    pos = robot.position
+    if pos is not None:
+        if td["data"]["start_position"] is None:
+            td["data"]["start_position"] = pos
+        else:
+            dx = pos[0] - td["data"]["start_position"][0]
+            dy = pos[1] - td["data"]["start_position"][1]
+            dist = math.sqrt(dx**2 + dy**2)
+            if dist > td["data"]["max_distance_moved"]:
+                td["data"]["max_distance_moved"] = dist
+
+    # ── checkpoint detection (sequential) ─────────────────────────────────────
+    if pos is not None and td["data"]["checkpoints_remaining"]:
+        next_cp = td["data"]["checkpoints_remaining"][0]
+        dist = math.sqrt((pos[0] - next_cp[0])**2 + (pos[1] - next_cp[1])**2)
+        if dist < CHECKPOINT_RADIUS:
+            td["data"]["checkpoints_hit"].append(next_cp)
+            td["data"]["checkpoints_remaining"].pop(0)
+
+    # ── MQTT message parsing ──────────────────────────────────────────────────
+    msg = robot.get_msg()
+    if msg is not None:
+        if "Mineral Detected" in msg or "mineral" in msg.lower():
+            if msg not in td["data"]["minerals_detected"]:
+                td["data"]["minerals_detected"].append(msg)
+
+    # ── live status text ──────────────────────────────────────────────────────
+    if not td["data"].get("completed_verdict"):
+        distance = td["data"]["max_distance_moved"]
+        checkpoints_hit = len(td["data"]["checkpoints_hit"])
+        total_checkpoints = len(CHECKPOINTS)
+        minerals = len(td["data"]["minerals_detected"])
+        
+        if td["data"]["code_valid"]:
+            text = (f"Distance: {distance:.1f}cm, Checkpoints: {checkpoints_hit}/{total_checkpoints}, "
+                   f"Minerals: {minerals}")
+        else:
+            text = f"Refactor code first! Missing: {', '.join(td['data']['missing'][:2])}..."
+
+    # ── overlay drawing (checkpoints with flags) ──────────────────────────────
+    pos_px = robot.position_px
+    if pos is not None and pos_px is not None and pos[0] != 0:
+        px_per_cm = pos_px[0] / pos[0]
+        radius_px = int(CHECKPOINT_RADIUS * px_per_cm)
+        
+        flag = td["data"]["flag"]
+        flag_mask = td["data"]["flag_mask"]
+        flag_green = td["data"]["flag_green"]
+        use_flag = not td["data"]["image_error"] and flag is not None
+        hits = td["data"]["checkpoints_hit"]
+
+        for cp_cm in CHECKPOINTS:
+            cp_px = (int(cp_cm[0] * px_per_cm), int(cp_cm[1] * px_per_cm))
+            hit = cp_cm in hits
+            
+            cv2.circle(frame, cp_px, radius_px, (0, 200, 0) if hit else (0, 200, 255), 1)
+            
+            if use_flag:
+                draw_flag = flag_green if hit else flag
+                half_w = draw_flag.shape[1] // 2
+                half_h = draw_flag.shape[0] // 2
+                r0 = cp_px[1] - half_h
+                r1 = cp_px[1] + (draw_flag.shape[0] - half_h)
+                c0 = cp_px[0] - half_w
+                c1 = cp_px[0] + (draw_flag.shape[1] - half_w)
+                
+                if 0 <= r0 and r1 < frame.shape[0] and 0 <= c0 and c1 < frame.shape[1]:
+                    cv2.copyTo(draw_flag, flag_mask, frame[r0:r1, c0:c1])
+            else:
+                cv2.circle(frame, cp_px, 5, (0, 200, 0) if hit else (0, 200, 255), -1)
+
+    # ── timeout / final verdict (fires exactly once) ──────────────────────────
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+        td["data"]["completed_verdict"] = True
+        
+        distance_moved = td["data"]["max_distance_moved"]
+        robot_moved = distance_moved >= MIN_MOVEMENT_DISTANCE
+        checkpoints_hit = len(td["data"]["checkpoints_hit"])
+        total_checkpoints = len(CHECKPOINTS)
+        all_checkpoints = checkpoints_hit == total_checkpoints
+        minerals_found = len(td["data"]["minerals_detected"])
+        
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = (
+                f"Code not refactored: {', '.join(td['data']['missing'])} | Score: 0"
+            )
+            text = "Complete refactoring requirements first!"
+        
+        elif all_checkpoints and minerals_found >= 1:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = (
+                f"Perfect refactoring! Clean code, all checkpoints hit, "
+                f"{minerals_found} minerals detected! | Score: 100"
+            )
+            text = "Clean code works perfectly!"
+        
+        elif checkpoints_hit >= 2 and robot_moved:
+            result["success"] = True
+            result["score"] = 85
+            result["description"] = (
+                f"Good refactoring! Checkpoints: {checkpoints_hit}/{total_checkpoints}, "
+                f"Minerals: {minerals_found} | Score: 85"
+            )
+            text = "Refactored code working well!"
+        
+        elif robot_moved:
+            result["success"] = True
+            result["score"] = 70
+            result["description"] = (
+                f"Code refactored, robot moved {distance_moved:.1f}cm, "
+                f"but only {checkpoints_hit}/{total_checkpoints} checkpoints | Score: 70"
+            )
+            text = "Refactoring complete, navigation needs tuning."
+        
+        else:
+            result["success"] = False
+            result["score"] = 30
+            result["description"] = (
+                f"Code refactored, but robot barely moved ({distance_moved:.1f}cm). "
+                f"Check for bugs! | Score: 30"
+            )
+            text = "Refactoring done, but code has bugs."
+
+    return frame, td, text, result

@@ -287,16 +287,48 @@
         ]
     },
     {
-        "name": "Sandbox and robot info",
-        "description": "Getting familiar with the platform and learning how to control the robot.",
+        "name": "Debugging & Code Quality",
+        "description": "Master debugging techniques, exception handling, and code refactoring.",
         "sn": 6,
         "str_id": "module_6",
+        "lessons": [
+            {
+                "str_id": "art_of_debugging",
+                "name": "The Art of Debugging",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.1.md",
+                "sn": 32,
+                "description": "Find and fix 6 bugs in broken P-controller code using systematic debugging techniques.",
+                "template": "import time\nfrom lineRobot import Robot\n\nrobot = Robot()\noctoliner = robot.octoliner\n\nbase_speed = 40\nkp = 15\n\nwhile True  # Bug 1: Missing colon\n    sensor_array = octoliner.analog_read_all()\n    print(sensor)  # Bug 2: NameError - should be sensor_array\n    \n    if max(sensor_array) > 700:  # Bug 3: Wrong operator - should be <\n        robot.stop()\n        print(\"End of line detected!\")\n        break\n    \n    position = octoliner.track_line()\n    P = kp + position  # Bug 4: Wrong operator - should be *\n    \n    left_speed = base_speed + P   # Bug 5: Wrong sign - should be -\n    right_speed = base_speed + P\n    \n    robot.run_motor_speed(left_speed, right_speed)  # Bug 6: Typo - should be run_motors_speed\n    time.sleep(0.01)"
+            },
+            {
+                "str_id": "hardware_safety_net",
+                "name": "The Hardware Safety Net",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.2.md",
+                "sn": 33,
+                "description": "Implement try-except blocks to handle sensor errors gracefully without crashing.",
+                "template": "import time\nfrom lineRobot import Robot\nrobot = Robot()\n\ndef detect_color_name(r, g, b):\n    total = r + g + b\n\n    # TODO: Protect the math below with try-except ZeroDivisionError\n    # If an error occurs, print a warning and return \"Unknown\"\n\n    r_ratio = r / total\n    g_ratio = g / total\n\n    if r_ratio > 0.4:\n        return \"Red\"\n    elif g_ratio > 0.4:\n        return \"Green\"\n    else:\n        return \"Floor\"\n\n# Simulated scans with injected \"Shadow Zones\" (0,0,0)\nscans = [(140, 30, 30), (0, 0, 0), (50, 150, 50), (0, 0, 0), (0, 0, 0), \n         (60, 60, 60), (150, 40, 40), (0, 0, 0), (40, 140, 40), (70, 70, 70)]\n\nscan_num = 1\nfor r, g, b in scans:\n    robot.run_motors_speed(25, -25)\n    time.sleep(0.2)\n    robot.stop()\n\n    print(f\"Sector #{scan_num} | RGB: ({r},{g},{b})\")\n\n    # The program will crash here on the first (0,0,0) glitch!\n    color = detect_color_name(r, g, b)\n    time.sleep(0.1)\n    print(f\"ANALYSIS: {color}\\n\")\n    scan_num += 1\n\nprint(\"Survey Complete\")"
+            },
+            {
+                "str_id": "code_clinic",
+                "name": "Code Clinic (Refactoring)",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.3.md",
+                "sn": 34,
+                "description": "Refactor spaghetti code into clean, modular functions with proper naming conventions.",
+                "template": "import time\nfrom lineRobot import Robot\n\nrobot = Robot()\nt = robot.tcs3472\no = robot.octoliner\n\n# TODO: Replace these cryptic variable names with descriptive UPPERCASE constants\ns = 240\nlim = 700\nv = 30\nk = 12\n\n# TODO: Create three functions:\n# 1. get_mineral_color() - with try-except for ZeroDivisionError\n# 2. calculate_steering() - returns correction value\n# 3. apply_movement(correction) - controls motors\n\nwhile True:\n    a = o.analog_read_all()\n    \n    if max(a) < lim:\n        robot.stop()\n        print(\"End\")\n        break\n    \n    t.integration_time(s)\n    r, g, b = t.rgb()\n    tot = r + g + b\n    \n    if tot > 0:\n        if r / tot > 0.5:\n            print(\"Red mineral!\")\n        elif g / tot > 0.5:\n            print(\"Green mineral!\")\n    \n    pos = o.track_line()\n    c = k * pos\n    l = v - c\n    rt = v + c\n    robot.run_motors_speed(l, rt)\n    time.sleep(0.01)"
+            }
+        ]
+    },
+    {
+        "name": "Sandbox",
+        "description": "Experiment freely with the robot in an open environment.",
+        "sn": 7,
+        "str_id": "module_7",
         "lessons": [
             {
                 "str_id": "sandbox",
                 "name": "Sandbox",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_10/sandbox.md",
-                "sn": 34,
+                "sn": 35,
                 "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
                 "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
             }

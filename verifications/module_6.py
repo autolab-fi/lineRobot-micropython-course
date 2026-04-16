@@ -475,7 +475,7 @@ def code_clinic(robot, frame, td, user_code=None):
     # ===== CONFIGURATION =====
     MIN_MOVEMENT_DISTANCE = 30.0  # cm
     CHECKPOINT_RADIUS = 10.0  # cm
-    CHECKPOINTS = [(105, 60), (60, 90), (80, 30)]
+    CHECKPOINTS = [(80, 30), (105, 60), (60, 90) ]  # Full lap
     # =========================
 
     # ── default result and text ───────────────────────────────────────────────

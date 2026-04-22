@@ -203,22 +203,6 @@
                 "name": "Color Classification",
                 "description": "Build detect_color_name() using RGB ratio normalization and if/elif classification.",
                 "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\ncolor_sensor = \n\n# --- YOUR CUSTOM FUNCTION ---\ndef detect_color_name(r, g, b):\n    # 1. Calculate the total light\n    total = ___ + ___ + ___\n    \n    # Anti-crash protection (division by zero)\n    if total == 0:\n        return \"Unknown\"\n        \n    # 2. Calculate the ratios (Normalization)\n    r_ratio = ___ / ___\n    g_ratio = ___ / ___\n    b_ratio = ___ / ___\n    \n    # 3. Use logic to find the dominant color\n    # Hint: Remember the warning about the lunar floor!\n    if r_ratio > ___ :\n        return \"Red\"\n    elif ___ > ___ :\n        return \"Green\"\n    else:\n        return \"Floor\"\n\n# --- YOUR SCANNER PROGRAM ---\nprint(\"Starting smart scan...\")\n\n# TODO: Add your range(6) loop from Mission 4.3 here!\n\nprint(\"Smart scan complete.\")"
-            },
-            {
-                "str_id": "multiple_sensors",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.5.md",
-                "sn": 25,
-                "name": "Multiple Sensors",
-                "description": "Merge line following and color sensing: LED on for Green, stop on Blue.",
-                "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(245) # Maybe you need change sensitivity\n\ncolor_sensor = tcs3472(bus)\n\nled = machine.Pin(15, machine.Pin.OUT)\nled.value(0)\n\n\n# Custom function from Mission 4.4\ndef detect_color_name(r, g, b):\n\n\nthreshold = 700\nspeed = 30\nturn_speed = 3\n\nlast_color = \"Floor\"\n\nprint(\"Goal: LED on GREEN, Stop on BLUE.\")\n\nwhile True:\n    # Read r, g, b and call your function\n   \n    # Implementr if-else logic for colors\n    if current_color != last_color:\n        # Check for green color\n        if current_color == :\n            \n        # Check for blue color\n        elif :\n            # Stop and break\n\n        # For \"Floor\" color turn off the led\n        elif :\n\n    last_color = current_color\n\n    # Octoliner if-else  logic from Module 3\n    sensor_data = octoliner.analog_read_all()\n   "
-            },
-            {
-                "str_id": "data_logging",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.6.md",
-                "sn": 26,
-                "name": "Post-Mission Data Logging",
-                "description": "Drive silently for 30 seconds, log color anomalies to a list, then print a formatted report.",
-                "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\noctoliner = Octoliner()\noctoliner.begin(bus)\noctoliner.set_sensitivity(240)\n\ncolor_sensor = tcs3472(bus)\n\n# \u0421ustom color detection function\ndef detect_color_name(r, g, b):\n\n# Setup mission variables\nthreshold = 700\nspeed = 40\nturn_speed = 3\n\nlast_color = \"Floor\"\nanomaly_log # Create list to store mission data\nmission_duration = 15\nstart_time = time.time()\n\nprint(\"Mission Start!\")\n\nwhile True:\n    # Check mission timer\n    if elapsed_time > :\n        # Stop and break\n         \n    # Color Sensing and Logging\n    \n    # Log anomaly if color changes and it's not \"Floor\"\n    if current_color != last_color and current_color != \"Floor\":\n        # Append [name, r, g, b] to the log\n\n    last_color = current_color\n\n    # Line Following Logic\n    \n# Final Report\nprint(\"========\")\nprint(\" Transmitting mission report to Earth\")\nprint(\"========\")\n\n# Print Mission Duration in sec and Total anomalies recorded\n\n# Use a loop to print every anomaly from the list\n\nprint(\"========\")\nprint(\"End of transmission\")"
             }
         ]
     },

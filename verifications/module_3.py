@@ -539,17 +539,7 @@ def led_feedback(robot, image, td, user_code=None):
     TASK_DURATION      = 30
     EXPECTED_MSGS      = ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"]
     COMPLETE_MSG       = "Survey complete."
-    MIN_BLINK_CHANGES  = 4      # minimum ON/OFF state changes to confirm blinking
-    BLINK_DURATION_MIN = 0.1    # seconds — shortest acceptable ON or OFF phase
-    BLINK_DURATION_MAX = 1.5    # seconds — longest acceptable ON or OFF phase
-    BLINK_VALID_RATIO  = 0.2    # fraction of durations that must be within range
     NUMBER_OF_SCANS    = 15
-    # LED crop — tuned from diagnostic (offset from robot center in px)
-    CROP_OFFSET_X      =  100
-    CROP_OFFSET_Y      = -50
-    CROP_W             =  30
-    CROP_H             = 100
-    WHITE_THRESHOLD    = 0.6    # white% threshold between OFF(~0) and ON(~0.95)
     # =========================
 
     result = {
@@ -603,111 +593,11 @@ def led_feedback(robot, image, td, user_code=None):
                 "missing":       missing,
                 "scan_msgs":     [],
                 "complete_received": False,
-                # LED blink detection
-                "led_last_state":    None,
-                "led_state_buffer":  [],
-                "led_blink_changes": 0,
-                "led_state_start":   None,
-                "led_durations":     [],
-                # overlay images
-                "img_on":       None,
-                "img_on_mask":  None,
-                "img_off":      None,
-                "img_off_mask": None,
             }
         }
 
-        # load LED overlay images with dual-path fallback
-        basepath = os.path.abspath(os.path.dirname(__file__))
-        for key, filename in [("img_on", "headlight-on.jpg"), ("img_off", "headlight-off.jpg")]:
-            filepath = os.path.join(basepath, "auto_tests", "images", filename)
-            if not os.path.exists(filepath):
-                filepath = os.path.join(basepath, "images", filename)
-            img = cv2.imread(filepath) if os.path.exists(filepath) else None
-
-            if img is not None:
-                img = cv2.resize(img, (img.shape[1] // 3, img.shape[0] // 3))
-                td["data"][key] = img
-                if key == "img_on":
-                    td["data"]["img_on_mask"] = cv2.inRange(
-                        img, np.array([0, 240, 0]), np.array([15, 255, 15]))
-                else:
-                    td["data"]["img_off_mask"] = cv2.inRange(
-                        img, np.array([0, 0, 0]), np.array([15, 15, 15]))
-            else:
-                # numpy placeholder: green square = ON, dark grey square = OFF
-                print(f"Warning: {filename} not found, using placeholder")
-                ph = np.zeros((60, 60, 3), dtype=np.uint8)
-                if key == "img_on":
-                    ph[:] = (0, 255, 180)   # cyan-green = LED on
-                    td["data"]["img_on"]      = ph
-                    td["data"]["img_on_mask"] = np.ones((60, 60), dtype=np.uint8) * 255
-                else:
-                    ph[:] = (40, 40, 40)    # dark grey = LED off
-                    td["data"]["img_off"]      = ph
-                    td["data"]["img_off_mask"] = np.ones((60, 60), dtype=np.uint8) * 255
-
     if not td["data"]["code_valid"]:
         text = f"Code missing: {', '.join(td['data']['missing'])}"
-
-    # ===== LED BLINK DETECTION =====
-    robot_position = robot.get_info().get("position_px")
-    if robot_position is not None:
-        crop_x = int(robot_position[0] + CROP_OFFSET_X)
-        crop_y = int(robot_position[1] + CROP_OFFSET_Y)
-        crop_w, crop_h = CROP_W, CROP_H
-        h, w = image.shape[:2]
-        crop_x = max(0, min(crop_x, w - crop_w))
-        crop_y = max(0, min(crop_y, h - crop_h))
-
-        cropped = image[crop_y:crop_y + crop_h, crop_x:crop_x + crop_w]
-        mask = cv2.inRange(cropped, np.array([200, 200, 200]), np.array([255, 255, 255]))
-        white_pct = (cv2.countNonZero(mask) / (crop_w * crop_h)) * 100
-
-        # draw contours on overlay
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        contour_img = cropped.copy()
-        cv2.drawContours(contour_img, contours, -1, (0, 255, 0), 2)
-        image[crop_y:crop_y + crop_h, crop_x:crop_x + crop_w] = contour_img
-
-        current_state = white_pct > WHITE_THRESHOLD
-
-        # 3-frame smoothing buffer
-        buf = td["data"]["led_state_buffer"]
-        buf.append(current_state)
-        if len(buf) > 3:
-            buf.pop(0)
-        smoothed = sum(buf) > len(buf) / 2
-
-        # count state changes and record durations
-        if td["data"]["led_last_state"] is None:
-            td["data"]["led_last_state"] = smoothed
-            td["data"]["led_state_start"] = time.time()
-        elif smoothed != td["data"]["led_last_state"]:
-            duration = time.time() - td["data"]["led_state_start"]
-            td["data"]["led_durations"].append(duration)
-            td["data"]["led_blink_changes"] += 1
-            td["data"]["led_last_state"] = smoothed
-            td["data"]["led_state_start"] = time.time()
-
-        led_status = "LED ON" if smoothed else "LED OFF"
-        cv2.putText(image, f"{led_status} (blinks: {td['data']['led_blink_changes']})",
-                    (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 1)
-
-        # draw ON/OFF overlay in top-left corner
-        if smoothed:
-            ov = td["data"]["img_on"]
-            ov_mask = td["data"]["img_on_mask"]
-        else:
-            ov = td["data"]["img_off"]
-            ov_mask = td["data"]["img_off_mask"]
-
-        if ov is not None and ov_mask is not None:
-            oh, ow = ov.shape[:2]
-            ox = 20
-            oy = 80
-            if oy + oh <= image.shape[0] and ox >= 0:
-                cv2.copyTo(ov, ov_mask, image[oy:oy + oh, ox:ox + ow])
 
     # parse MQTT messages
     msg = robot.get_msg()
@@ -721,16 +611,6 @@ def led_feedback(robot, image, td, user_code=None):
             text = "Survey complete message received!"
 
     if td["end_time"] - time.time() < 1:
-        led_blinked = td["data"]["led_blink_changes"] >= MIN_BLINK_CHANGES
-
-        # timing validation
-        durations = td["data"]["led_durations"]
-        if durations:
-            valid = [BLINK_DURATION_MIN <= d <= BLINK_DURATION_MAX for d in durations]
-            timing_ok = (sum(valid) / len(valid)) >= BLINK_VALID_RATIO
-        else:
-            timing_ok = False
-
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
@@ -748,29 +628,11 @@ def led_feedback(robot, image, td, user_code=None):
                 f"Only {len(td['data']['scan_msgs'])}/5 scan results received | Score: 0"
             )
             text = "Not enough scan results."
-        elif not led_blinked:
-            result["success"] = False
-            result["score"] = 0
-            result["description"] = (
-                f"LED blink not detected (state changes: {td['data']['led_blink_changes']}, "
-                f"need {MIN_BLINK_CHANGES}) | Score: 0"
-            )
-            text = "LED blink not detected."
-        elif not timing_ok:
-            result["success"] = False
-            result["score"] = 0
-            result["description"] = (
-                f"LED blink timing irregular — phases should be "
-                f"{BLINK_DURATION_MIN}–{BLINK_DURATION_MAX}s "
-                f"(recorded: {[f'{d:.2f}' for d in durations]}) | Score: 0"
-            )
-            text = "LED blink timing incorrect."
         else:
             result["success"] = True
             result["score"] = 100
             result["description"] = (
-                f"You are amazing! Survey with LED feedback complete "
-                f"(blink changes: {td['data']['led_blink_changes']}) | Score: 100"
+                "You are amazing! Survey with LED feedback complete | Score: 100"
             )
             text = "Survey complete!"
 

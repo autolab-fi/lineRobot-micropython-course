@@ -37,6 +37,8 @@ If your *K_p* is tuned well, the P-Controller will instantly recognize the massi
 ## Assignment
 Your task is to integrate a 5-second interval timer into your P-Controller. When the timer triggers, apply a sharp motor movement, then let the P-Controller recover.
 
+**Verification note:** The automated check for this mission runs for about `30` seconds and expects the robot to keep moving while producing at least `2` visible `"KICK!"` events during that window.
+
 **Requirements:**
 1. **Setup:** Use your P-Controller code from Mission 5.3.
 2. **The Timer Setup:** Before the `while True:` loop, create a variable `last_kick_time = time.time()` to start your stopwatch.

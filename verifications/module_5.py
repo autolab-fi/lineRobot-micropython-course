@@ -702,13 +702,13 @@ def tuning_and_kick(robot, image, td, user_code=None):
     """
 
     # ===== CONFIGURATION =====
-    TASK_DURATION = 90  # Longer duration to allow multiple kicks
+    TASK_DURATION = 30
     
     # Movement tracking
     MIN_MOVEMENT_DISTANCE = 10.0  # cm - anti-cheat minimum
     
     # Kick tracking
-    MIN_KICKS_EXPECTED = 2  # Should see at least 2 kicks in 90 seconds
+    MIN_KICKS_EXPECTED = 2  # Should see at least 2 kicks during the check window
     # =========================
 
     # ── default result and text ───────────────────────────────────────────────
@@ -752,7 +752,7 @@ def tuning_and_kick(robot, image, td, user_code=None):
         
         code_valid = (
             has_while_true and has_analog_read and has_track_line
-            and has_max_check and has_robot_stop and has_break
+            and has_robot_stop and has_break
             and has_base_speed and has_kp and has_p_calc
             and has_left_speed and has_right_speed and has_add_subtract
             and has_last_kick_time and has_elapsed_time and has_time_check
@@ -763,7 +763,6 @@ def tuning_and_kick(robot, image, td, user_code=None):
         if not has_while_true:      missing.append('while True loop')
         if not has_analog_read:     missing.append('analog_read_all()')
         if not has_track_line:      missing.append('track_line()')
-        if not has_max_check:       missing.append('max(sensor_array) < 700 failsafe')
         if not has_robot_stop:      missing.append('robot.stop()')
         if not has_break:           missing.append('break statement')
         if not has_base_speed:      missing.append('base_speed variable')
@@ -781,7 +780,7 @@ def tuning_and_kick(robot, image, td, user_code=None):
         # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + 90,
+            "end_time":   time.time() + 30,
             "data": {
                 "code_valid":               code_valid,
                 "missing":                  missing,

@@ -873,8 +873,6 @@ def tuning_and_kick(robot, image, td, user_code=None):
             td["data"]["kick_messages"].append(msg)
         if "Problem" in msg:
             td["data"]["early_finish_reason"] = "Problem"
-        elif "MPY: soft reboot" in msg:
-            td["data"]["early_finish_reason"] = "MPY: soft reboot"
 
     # ── live status text ──────────────────────────────────────────────────────
     if not td["data"].get("completed_verdict"):

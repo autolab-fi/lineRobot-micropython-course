@@ -719,6 +719,54 @@ def tuning_and_kick(robot, image, td, user_code=None):
     }
     text = "Waiting for messages..."
 
+    def apply_verdict(result, td, ended_early=False):
+        distance_moved = td["data"]["max_distance_moved"]
+        kick_count = td["data"]["kick_count"]
+        robot_moved = distance_moved >= MIN_MOVEMENT_DISTANCE
+        has_kicks = kick_count >= MIN_KICKS_EXPECTED
+        early_reason = td["data"].get("early_finish_reason")
+
+        if robot_moved and has_kicks:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = f"Perfect! P-controller with kicks working. Distance: {distance_moved:.1f}cm, Kicks: {kick_count} | Score: 100"
+            return f"Mission complete! Distance: {distance_moved:.1f}cm, Kicks: {kick_count}"
+
+        if robot_moved and kick_count >= 1:
+            result["success"] = False
+            result["score"] = 80
+            if ended_early and early_reason:
+                result["description"] = f"Good! Robot moved {distance_moved:.1f}cm with {kick_count} kick(s), expected {MIN_KICKS_EXPECTED}+ before early stop ({early_reason}) | Score: 80"
+                return f"Good work, but attempt ended early after {kick_count} kick(s): {early_reason}"
+            result["description"] = f"Good! Robot moved {distance_moved:.1f}cm with {kick_count} kick(s), expected {MIN_KICKS_EXPECTED}+ | Score: 80"
+            return f"Good work, but expected more kicks over {TASK_DURATION}s."
+
+        if robot_moved:
+            result["success"] = False
+            result["score"] = 60
+            if ended_early and early_reason:
+                result["description"] = f"Robot moved {distance_moved:.1f}cm but no KICK messages detected before early stop ({early_reason}). Check timer logic. | Score: 60"
+                return f"P-controller works but attempt ended early before a kick: {early_reason}"
+            result["description"] = f"Robot moved {distance_moved:.1f}cm but no KICK messages detected. Check timer logic. | Score: 60"
+            return "P-controller works but kick timer not triggering."
+
+        if kick_count > 0:
+            result["success"] = False
+            result["score"] = 40
+            if ended_early and early_reason:
+                result["description"] = f"{kick_count} kicks detected but robot barely moved ({distance_moved:.1f}cm) before early stop ({early_reason}) | Score: 40"
+                return f"Kick timer works but robot not moving properly before early stop: {early_reason}"
+            result["description"] = f"{kick_count} kicks detected but robot barely moved ({distance_moved:.1f}cm) | Score: 40"
+            return "Kick timer works but robot not moving properly."
+
+        result["success"] = False
+        result["score"] = 0
+        if ended_early and early_reason:
+            result["description"] = f"Task incomplete. Kicks: {kick_count}, Distance: {distance_moved:.1f}cm. Attempt ended early: {early_reason} | Score: 0"
+            return f"Task incomplete. Attempt ended early: {early_reason}"
+        result["description"] = f"Task incomplete. Kicks: {kick_count}, Distance: {distance_moved:.1f}cm | Score: 0"
+        return "Task incomplete. Check code execution."
+
     image = robot.draw_info(image)
 
     # ── first-frame initialisation ────────────────────────────────────────────
@@ -794,6 +842,7 @@ def tuning_and_kick(robot, image, td, user_code=None):
                 "last_message":             None,
                 "kick_count":               0,
                 "kick_messages":            [],
+                "early_finish_reason":      None,
             }
         }
 
@@ -822,6 +871,10 @@ def tuning_and_kick(robot, image, td, user_code=None):
         if "KICK" in msg:
             td["data"]["kick_count"] += 1
             td["data"]["kick_messages"].append(msg)
+        if "Problem" in msg:
+            td["data"]["early_finish_reason"] = "Problem"
+        elif "MPY: soft reboot" in msg:
+            td["data"]["early_finish_reason"] = "MPY: soft reboot"
 
     # ── live status text ──────────────────────────────────────────────────────
     if not td["data"].get("completed_verdict"):
@@ -834,8 +887,10 @@ def tuning_and_kick(robot, image, td, user_code=None):
         if distance > 0:
             text = f"Last message: {td['data']['last_message']} | Distance: {distance:.1f}cm, Kicks: {kick_count}"
 
+    ended_early = td["data"].get("early_finish_reason") is not None
+
     # ── timeout / final verdict (fires exactly once) ──────────────────────────
-    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+    if (td["end_time"] - time.time() < 1 or ended_early) and not td["data"].get("completed_verdict"):
         td["data"]["completed_verdict"] = True
         
         if not td["data"]["code_valid"]:
@@ -845,46 +900,7 @@ def tuning_and_kick(robot, image, td, user_code=None):
             text = "Code validation failed."
         
         else:
-            # Evaluate mission performance
-            distance_moved = td["data"]["max_distance_moved"]
-            kick_count = td["data"]["kick_count"]
-            robot_moved = distance_moved >= MIN_MOVEMENT_DISTANCE
-            has_kicks = kick_count >= MIN_KICKS_EXPECTED
-            
-            # Success criteria
-            if robot_moved and has_kicks:
-                result["success"]     = True
-                result["score"]       = 100
-                result["description"] = f"Perfect! P-controller with kicks working. Distance: {distance_moved:.1f}cm, Kicks: {kick_count} | Score: 100"
-                text = f"Mission complete! Distance: {distance_moved:.1f}cm, Kicks: {kick_count}"
-            
-            elif robot_moved and kick_count >= 1:
-                # Robot moved and at least one kick detected
-                result["success"]     = False
-                result["score"]       = 80
-                result["description"] = f"Good! Robot moved {distance_moved:.1f}cm with {kick_count} kick(s), expected {MIN_KICKS_EXPECTED}+ | Score: 80"
-                text = f"Good work, but expected more kicks over {TASK_DURATION}s."
-            
-            elif robot_moved:
-                # Robot moved but no kicks detected
-                result["success"]     = False
-                result["score"]       = 60
-                result["description"] = f"Robot moved {distance_moved:.1f}cm but no KICK messages detected. Check timer logic. | Score: 60"
-                text = f"P-controller works but kick timer not triggering."
-            
-            elif kick_count > 0:
-                # Kicks detected but robot didn't move much
-                result["success"]     = False
-                result["score"]       = 40
-                result["description"] = f"{kick_count} kicks detected but robot barely moved ({distance_moved:.1f}cm) | Score: 40"
-                text = "Kick timer works but robot not moving properly."
-            
-            else:
-                # Nothing happened
-                result["success"]     = False
-                result["score"]       = 0
-                result["description"] = f"Task incomplete. Kicks: {kick_count}, Distance: {distance_moved:.1f}cm | Score: 0"
-                text = "Task incomplete. Check code execution."
+            text = apply_verdict(result, td, ended_early=ended_early)
 
     return image, td, text, result
 

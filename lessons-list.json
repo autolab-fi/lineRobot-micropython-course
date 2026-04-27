@@ -285,21 +285,5 @@
                 "template": "import time\nfrom lineRobot import Robot\n\nrobot = Robot()\nt = robot.tcs3472\no = robot.octoliner\n\n# TODO: Replace these cryptic variable names with descriptive UPPERCASE constants\ns = 240\nlim = 700\nv = 30\nk = 12\n\n# TODO: Create three functions:\n# 1. get_mineral_color() - with try-except for ZeroDivisionError\n# 2. calculate_steering() - returns correction value\n# 3. apply_movement(correction) - controls motors\n\nwhile True:\n    a = o.analog_read_all()\n    \n    if max(a) < lim:\n        robot.stop()\n        print(\"End\")\n        break\n    \n    t.integration_time(s)\n    r, g, b = t.rgb()\n    tot = r + g + b\n    \n    if tot > 0:\n        if r / tot > 0.5:\n            print(\"Red mineral!\")\n        elif g / tot > 0.5:\n            print(\"Green mineral!\")\n    \n    pos = o.track_line()\n    c = k * pos\n    l = v - c\n    rt = v + c\n    robot.run_motors_speed(l, rt)\n    time.sleep(0.01)"
             }
         ]
-    },
-    {
-        "name": "Sandbox",
-        "description": "Experiment freely with the robot in an open environment.",
-        "sn": 7,
-        "str_id": "module_7",
-        "lessons": [
-            {
-                "str_id": "sandbox",
-                "name": "Sandbox",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_10/sandbox.md",
-                "sn": 35,
-                "description": "Introduction to the platform, listing all peripherals, describing what we will be working with, and outlining any restrictions on libraries and tag words.",
-                "template": "from lineRobot import Robot\n\n\nrobot = Robot()\nprint(\"Turning left\")\nrobot.turn_left_angle(45)\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)\nprint(\"Turning right\")\nrobot.turn_right()\nprint(\"Moving forward\")\nrobot.move_forward_distance(20)"
-            }
-        ]
     }
 ]

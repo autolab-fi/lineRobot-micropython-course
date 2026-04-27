@@ -51,10 +51,10 @@ octoliner = Octoliner()
 octoliner.begin(i2c)
 
 # Set sensor sensitivity (0-255)
-octoliner.set_sensitivity(245)
+octoliner.set_sensitivity(240)
 ```
 
-Notice the `set_sensitivity(245)` command at the end of the setup. This adjusts how strongly the sensor reacts to infrared light on a scale from 0 to 255; you might need to tweak this number depending on the ambient lighting in your testing facility to get clear readings.
+Notice the `set_sensitivity(240)` command at the end of the setup. This adjusts how strongly the sensor reacts to infrared light on a scale from 0 to 255; you might need to tweak this number depending on the ambient lighting in your testing facility to get clear readings.
 
 ### 3. Reading the Central Sensor
 While the Octoliner has an array of 8 sensors (indexed from 0 to 7), looking at all of them at once can be overwhelming. For now, we will focus solely on Sensor 3, which is located near the center of the rover.

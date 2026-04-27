@@ -54,7 +54,7 @@ speed = 30
 MY_BLACK_THRESHOLD = 100
 
 # Set sensor sensitivity
-octoliner.set_sensitivity(230)
+octoliner.set_sensitivity(240)
 
 while True:
     # Read all sensor values

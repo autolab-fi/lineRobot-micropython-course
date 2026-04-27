@@ -128,7 +128,7 @@ import time
 i2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)
 octoliner = Octoliner()
 octoliner.begin(i2c)
-octoliner.set_sensitivity(245)
+octoliner.set_sensitivity(240)
 robot = Robot()
 
 # 1. Create three arrays to store 8 sensor readings each

@@ -40,7 +40,7 @@ octoliner.begin(i2c)
 # Test sensor connection
 # print("I2C devices found:", i2c.scan())
 
-sensi = 255
+sensi = 240
 
 # Set sensitivity
 octoliner.set_sensitivity(sensi)

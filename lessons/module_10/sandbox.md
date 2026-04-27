@@ -48,7 +48,7 @@ octoliner = Octoliner()
 
 # Initialize Octoliner with the I2C interface
 octoliner.begin(i2c)
-octoliner.set_sensitivity(230)
+octoliner.set_sensitivity(240)
 
 for i in range(20):
     # Read raw sensor values

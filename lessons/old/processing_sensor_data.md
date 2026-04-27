@@ -31,7 +31,7 @@ Most evaluation parameters (position tolerance, sensor threshold, time limit, et
 ## Testing
 
 Tested with:
-- Sensor sensitivity: `243`
+- Sensor sensitivity: `240`
 - Sensor trigger threshold: `900`
 
 ## Example Student Code
@@ -53,7 +53,7 @@ octoliner.begin(i2c)
 
 robot = Robot()
 
-sensi = 243
+sensi = 240
 threshold = 900
 dist = 1
 speed = 50  # Percentage

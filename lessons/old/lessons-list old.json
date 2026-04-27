@@ -115,7 +115,7 @@
         "sn": 13,
         "name": "While Loops",
         "description": "Active monitoring and conditional stopping logic.",
-        "template": "# All imports that you need\n\nrobot = \nD = 3.4\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
+        "template": "# All imports that you need\n\nrobot = \nD = 3.21\nTarget_cm = 20\n\n# Calculate Target\n# target = ...\n\n# Reset Encoders\n\n# Run motors with low speed (values for each motor can be different)\nrobot.run_motor_left()\nrobot.run_motor_right()\n\n# The Active Loop\n#while  robot.encoder_degrees.... < ___:\n    # Print the encoder data to see the progress\n    \n    # Small delay to let the processor send the print message \n    time.sleep(0.02)\n\n# This code only runs AFTER the loop finishes (Target Reached)\nrobot.stop_motor_left()\nrobot.stop_motor_right()\n\nprint(\"Target reached! Target was\", target)\n#print(\"Final value:\", robot.encoder_degrees....)"
       }
     ]
   },
@@ -155,7 +155,7 @@
         "sn": 17,
         "name": "Arrays and Spatial Logic",
         "description": "Read all 8 sensors, extract scout indices, and use elif to classify line position.",
-        "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\nrobot = Robot()\n\n# Define your threshold\n\n# Create a for loop (5 iterations)\n\n    \n    # Move forward by 5 cm and wait a moment to settle (0.5s)\n    # Read the full array of sensors into a variable\n    \n    # Extract the three \"scout\" values by their index\n    left_scout = \n    center_scout = \n    right_scout = \n    \n    # Use conditional logic to determine where the mineral vein is and print the result\n    \nprint(\"Survey complete.\")\n"
+        "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(240)\nrobot = Robot()\n\n# Define your threshold\n\n# Create a for loop (5 iterations)\n\n    \n    # Move forward by 5 cm and wait a moment to settle (0.5s)\n    # Read the full array of sensors into a variable\n    \n    # Extract the three \"scout\" values by their index\n    left_scout = \n    center_scout = \n    right_scout = \n    \n    # Use conditional logic to determine where the mineral vein is and print the result\n    \nprint(\"Survey complete.\")\n"
       },
       {
         "str_id": "led_feedback",

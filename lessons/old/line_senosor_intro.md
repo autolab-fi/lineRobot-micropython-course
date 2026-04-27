@@ -69,7 +69,7 @@ octoliner = Octoliner()
 
 # Initialize Octoliner with the I2C interface
 octoliner.begin(i2c)
-octoliner.set_sensitivity(245)  # Adjust sensitivity if needed
+octoliner.set_sensitivity(240)  # Adjust sensitivity if needed
 
 while True:
     # Read data from the only one sensor

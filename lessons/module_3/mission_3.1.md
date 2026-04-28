@@ -27,7 +27,7 @@ These sensors operate by emitting infrared light downward and detecting how much
 * **White Surfaces:** A light surface reflects a significant amount of IR light back to the sensor. The sensor's circuitry registers this strong reflection as a **low** numerical value (around 50-80).
 * **Black Surfaces:** A dark surface absorbs most of the infrared light, resulting in a much lower reflection. The sensor detects very little reflection, which triggers a **high** numerical value in our system (around 800-1000).
 
-![IR Sensor Working](https://github.com/pranavk-2003/line-robot-curriculum/blob/assignments/images/module_7/IR's.png?raw=True)
+![IR Sensor Working](https://api.ondroid.org/media/courses/9/images/123f8500dcc54d8cbe40bdb87dc43ada.png)
 
 This sharp difference in values is what allows the robot to differentiate between a black track and the surrounding floor.
 

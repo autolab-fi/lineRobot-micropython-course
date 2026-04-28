@@ -68,7 +68,7 @@ Mission Control has transmitted a sequence of forward driving distances to navig
 ![4.1_layout](https://api.ondroid.org/media/courses/9/images/05edeaacfe29483492568ae4356d3a32.png)
 
 **Requirements:**
-1. Create a list named route containing the distance values that help you pass through the obstacles. 
+1. Create a list named `route` containing the distance values that help you pass through the obstacles. 
 2. Use the `len()` function to print a message stating how many waypoints are in the route before the movement starts.
 3. Create a `for` loop to iterate through the route list.
 4. Inside the loop, command the robot to move forward by the current list value using `robot.move_forward_distance(dist)`, followed by a standard right turn using `robot.turn_right()`  and a short `time.sleep()`

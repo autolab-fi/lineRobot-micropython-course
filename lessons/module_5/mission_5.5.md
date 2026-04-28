@@ -45,9 +45,10 @@ Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
    * `braking_force = 45`
 3. **Adaptive Math:** Inside the loop, before calculating `P`:
    * Calculate `dynamic_speed` using the formula with `abs(position)`.
-4. **The P-Controller:** * Calculate `P` as usual (`kp * position`).
+4. **The P-Controller:**
+   * Calculate `P` as usual (`kp * position`).
    * Calculate `left_speed` and `right_speed` using your new `dynamic_speed` instead of a fixed base speed. Don't forget to use `int()`!
-5. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**
+6. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**
 
 **The Tuning Challenge (Optional):**
 Once your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. 
@@ -62,6 +63,6 @@ Change one variable at a time, run the code, and discover your ultimate racing s
 ## Conclusion
 Incredible engineering! You have successfully stress-tested an autonomous control system. 
 
-By observing the recovery after the Software Kick, you saw firsthand how mathematical formulas translate into physical resilience. You now know how to diagnose understeering and oversteering, and how to find the optimal $K_p$.
+By observing the recovery after the Software Kick, you saw firsthand how mathematical formulas translate into physical resilience. You now know how to diagnose understeering and oversteering, and how to find the optimal K_p.
 
 Your rover is now incredibly stable. In our final mission of this module, we will make it *fast* by introducing Adaptive Speed!

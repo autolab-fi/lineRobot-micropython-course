@@ -178,7 +178,7 @@
                 "sn": 21,
                 "name": "Python Lists & Waypoints",
                 "description": "Use a list and a for loop to navigate a multi-waypoint route.",
-                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Create your list \n\n# Find the length of the list\ntotal_waypoints = 0 # Replace 0 with the len() function\n\n# Print the report\nprint(\"Mission Control, I have received\", total_waypoints, \"waypoints.\")\n\n# Create your for loop here to execute the route\n"
+                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Create your list \nroute = \n\n# Find the length of the list\ntotal_waypoints = 0 # Replace 0 with the len() function\n\n# Print the report\nprint(\"Mission Control, I have received\", total_waypoints, \"waypoints.\")\n\n# Create your for loop here to execute the route\n"
             },
             {
                 "str_id": "telemetry",

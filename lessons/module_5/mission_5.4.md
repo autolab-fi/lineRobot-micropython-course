@@ -39,6 +39,8 @@ Your task is to integrate a 5-second interval timer into your P-Controller. When
 
 **Verification note:** The automated check for this mission runs for about `30` seconds and expects the robot to keep moving while producing at least `2` visible `"KICK!"` events during that window.
 
+**Important note about `print()`:** Avoid printing debug values like motor speeds inside the fast `while True` loop. Too many messages can overflow the worker message buffer, and then the verification may miss your `"KICK!"` events even if your timer logic is correct.
+
 **Requirements:**
 1. **Setup:** Use your P-Controller code from Mission 5.3.
 2. **The Timer Setup:** Before the `while True:` loop, create a variable `last_kick_time = time.time()` to start your stopwatch.

@@ -79,7 +79,7 @@ Write a program that makes the robot turn approximately **180 degrees** by creat
 **Requirements:**
 * **Do not** use built-in navigation functions (like `turn_left`, `turn_right`, or `move_forward_distance`).
 * Define a custom function.
-* Inside your function, use manual motor control methods (`run_motors_speed` or raw PWM) and `time.sleep()`.
+* Inside your function, delete *pass* (it's just a placeholder in empty functions) in the templete and then write your code: use manual motor control methods (`run_motors_speed` or raw PWM) and `time.sleep()`.
 * Call your function at the end of the script to execute the maneuver.
 
 

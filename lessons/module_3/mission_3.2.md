@@ -55,7 +55,7 @@ Write a reactive program where the robot drives forward, searches for a dark lin
 **Requirements:**
 1. Import the necessary libraries. 
 2. Initialize your `Robot` object and the `Octoliner` sensor (remember to set the I2C pins `scl=machine.Pin(22), sda=machine.Pin(21)`).
-3. Set the rover in motion forward at a low speed (e.g., 30%). *Hint: Moving too fast will cause the rover to skip over the line before the sensor can react!*
+3. Set the rover in motion forward at a low speed (e.g., 20%). *Hint: Moving too fast will cause the rover to skip over the line before the sensor can react!*
 4. Create a continuous monitoring cycle (`while True:` loop) that constantly reads the value of **Sensor 3** and print values. Add a small delay inside the loop to prevent processor overload.
 5. Implement conditional logic (`if` statement) inside your loop:
     * The exact moment the sensor's value indicating the black line (e.g. > 200 - we'll discuss it in the next lesson), your program must cut power to the motors.

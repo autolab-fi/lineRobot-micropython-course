@@ -91,7 +91,7 @@
                 "sn": 10,
                 "name": "Defining Functions",
                 "description": "Creating reusable code blocks for movement.",
-                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Define your function here\ndef move_square():\n    pass\n\n# Call your function\n# move_square()"
+                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Define your function here\ndef turn_180():\n    pass\n\n# Call your function\n# turn_180()"
             },
             {
                 "str_id": "for_loops",
@@ -131,14 +131,14 @@
                 "sn": 15,
                 "name": "Conditional Logic & Reactive Behavior",
                 "description": "Use if/else and break to make the rover react and stop when a line is detected.",
-                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\n# Initialize Hardware\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = \n\noctoliner.set_sensitivity(240)\n\nrobot.run_motors_speed(20, 20)\n\n# Create While loop\nwhile :\n    \n    # Implement conditional logic\n    if  ___ > 200:\n        \n    time.sleep(0.05)\n\nprint(\"Target found. Rover stopped.\")"},
+                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\n# Initialize Hardware\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = \n\noctoliner.set_sensitivity(240)\n\nrobot.run_motors_speed(20, 20)\n\n# Create While loop\nwhile :\n    \n    # print(sensor_3)\n    # Implement conditional logic\n    if  ___ > 200:\n        \n    time.sleep(0.05)\n\nprint(\"Target found. Rover stopped.\")"},
             {
                 "str_id": "processing_sensor_data",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.3.md",
                 "sn": 16,
                 "name": "Processing Sensor Data",
                 "description": "Apply comparison operators and booleans, then wrap threshold checks in a function.",
-                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\nrobot = Robot()\n\n# Define global variables and set sensitivity\nsensi = \nthreshold = \ndist = \noctoliner.set_sensitivity(sensi)\n\n# Define the detect_line function with parameters\ndef detect_line(distance, threshold):\n    found_minerals = False\n    \n    # Create a for loop (15 iterations)\n    \n        # Move robot forward by 'distance'\n    \n          print(\"Sensor 3 :\", sensor_3, \"Found geological layers!\")\n        \n       # Add a small delay (0.1s)\n        \n\n# Call the function here and pass your variables\n"
+                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(240)\n\nrobot = Robot()\n\n# Define global variables \nthreshold = \ndist = \n\n# Define the detect_line function with parameters\ndef detect_line(distance, threshold):\n    found_minerals = False\n    \n    # Create a for loop (15 iterations)\n    \n        # Move robot forward by 'distance'\n    \n          print(\"Sensor 3 :\", sensor_3, \"Found geological layers!\")\n        \n       # Add a small delay (0.1s)\n        \n\n# Call the function here and pass your variables\n"
             },
             {
                 "str_id": "arrays_and_elif",

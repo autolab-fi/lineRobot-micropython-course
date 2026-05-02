@@ -14,7 +14,7 @@ Learn how to use **for** loops to create complex movement patterns by using the 
 ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
-In the last mission, you created a function. You could call that function 4 times to drive in a square. But what if you need to repeat an action 100 times? Or what if you want each movement to be slightly faster or longer than the previous one?
+In the last mission, you created a function. If our goal was to drive in a square, we could achieve it by calling that previous function four times. But what if you need to repeat an action 100 times? Or what if you want each movement to be slightly faster or longer than the previous one?
 
 This is where **For Loops** shine. They don't just repeat code; they provide a **counter**—a variable that updates itself automatically on every "lap" of the loop.
 

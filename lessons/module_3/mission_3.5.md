@@ -50,7 +50,7 @@ indicator_led.off() # Stops voltage, turning the LED OFF
 ```
 
 ## Assignment
-Upgrade your step-by-step geological scanner. Create a custom function that blinks the LED, and call it whenever the rover detects a mineral vein in any of its zones.
+Upgrade your step-by-step geological scanner from previos mission. Create a custom function that blinks the LED, and call it whenever the rover detects a mineral vein in any of its zones.
 
 ## Conclusion
 Outstanding engineering! You now understand how GPIO works and how to manipulate external hardware.

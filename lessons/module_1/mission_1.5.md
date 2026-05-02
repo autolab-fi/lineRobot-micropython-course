@@ -53,7 +53,7 @@ robot.move_forward_distance(step)
 ```
 
 ### 4. The `print()` function
-Robots need to talk back to us. The `print()` command writes text to the console (the output window). You can print text and variables together by separating them with commas.
+Robots need to talk back to us. The `print()` command writes text to the Robot MQTT log - next to the robot in the video. You can print text and variables together by separating them with commas.
 
 ```python
 dist = 100

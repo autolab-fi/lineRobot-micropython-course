@@ -25,8 +25,9 @@ In the previous lesson, you gained insight into **functions** and **parameters**
 **robot.move_forward_distance(dist)** - A function for moving the robot forward by the number of centimeters specified by the parameter **dist**.
 **robot.move_backward_distance(dist)** - A function for moving the robot backward by the number of centimeters specified by the parameter **dist**.
 
-Robot directions
-![robot_directions](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/robot_directions.png?raw=true)
+Robot directions:
+
+![robot_directions](https://api.ondroid.org/media/courses/9/images/module-1/robot_directions.png)
 
 ## Assignment
 

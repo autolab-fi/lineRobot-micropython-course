@@ -272,7 +272,7 @@ def upgraded_relay_controller(robot, image, td, user_code=None):
         has_while_true      = 'while True' in active_code
         has_analog_read     = 'analog_read_all()' in active_code
         has_track_line      = 'track_line()' in active_code
-        has_max_check       = 'max(' in active_code and '< 700' in active_code
+        has_max_check       = 'max(' in active_code and '< 500' in active_code
         has_robot_stop      = 'robot.stop()' in active_code
         has_break           = 'break' in active_code
         has_left_threshold  = '< -0.3' in active_code or '<-0.3' in active_code
@@ -288,7 +288,7 @@ def upgraded_relay_controller(robot, image, td, user_code=None):
         if not has_while_true:      missing.append('while True loop')
         if not has_analog_read:     missing.append('analog_read_all()')
         if not has_track_line:      missing.append('track_line()')
-        if not has_max_check:       missing.append('max(sensor_array) < 700 failsafe')
+        if not has_max_check:       missing.append('max(sensor_array) < 500 failsafe')
         if not has_robot_stop:      missing.append('robot.stop()')
         if not has_break:           missing.append('break statement')
         if not has_left_threshold:  missing.append('left threshold (< -0.3)')
@@ -503,7 +503,7 @@ def proportional_control(robot, image, td, user_code=None):
         has_while_true      = 'while True' in active_code
         has_analog_read     = 'analog_read_all()' in active_code
         has_track_line      = 'track_line()' in active_code
-        has_max_check       = 'max(' in active_code and '< 700' in active_code
+        has_max_check       = 'max(' in active_code and '< 500' in active_code
         has_robot_stop      = 'robot.stop()' in active_code
         has_break           = 'break' in active_code
         
@@ -526,7 +526,7 @@ def proportional_control(robot, image, td, user_code=None):
         if not has_while_true:      missing.append('while True loop')
         if not has_analog_read:     missing.append('analog_read_all()')
         if not has_track_line:      missing.append('track_line()')
-        if not has_max_check:       missing.append('max(sensor_array) < 700 failsafe')
+        if not has_max_check:       missing.append('max(sensor_array) < 500 failsafe')
         if not has_robot_stop:      missing.append('robot.stop()')
         if not has_break:           missing.append('break statement')
         if not has_base_speed:      missing.append('base_speed variable')
@@ -779,7 +779,7 @@ def tuning_and_kick(robot, image, td, user_code=None):
         has_while_true      = 'while True' in active_code
         has_analog_read     = 'analog_read_all()' in active_code
         has_track_line      = 'track_line()' in active_code
-        has_max_check       = 'max(' in active_code and '< 700' in active_code
+        has_max_check       = 'max(' in active_code and '< 500' in active_code
         has_robot_stop      = 'robot.stop()' in active_code
         has_break           = 'break' in active_code
         
@@ -944,7 +944,7 @@ def adaptive_speed(robot, image, td, user_code=None):
         has_while_true      = 'while True' in active_code
         has_analog_read     = 'analog_read_all()' in active_code
         has_track_line      = 'track_line()' in active_code
-        has_max_check       = 'max(' in active_code and '< 700' in active_code
+        has_max_check       = 'max(' in active_code and '< 500' in active_code
         has_robot_stop      = 'robot.stop()' in active_code
         has_break           = 'break' in active_code
         
@@ -979,7 +979,7 @@ def adaptive_speed(robot, image, td, user_code=None):
         if not has_while_true:      missing.append('while True loop')
         if not has_analog_read:     missing.append('analog_read_all()')
         if not has_track_line:      missing.append('track_line()')
-        if not has_max_check:       missing.append('max(sensor_array) < 700 failsafe')
+        if not has_max_check:       missing.append('max(sensor_array) < 500 failsafe')
         if not has_robot_stop:      missing.append('robot.stop()')
         if not has_break:           missing.append('break statement')
         if not has_kp:              missing.append('kp variable')

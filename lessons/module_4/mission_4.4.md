@@ -56,10 +56,10 @@ Your task is to upgrade your Linear Scanner from the previous mission. You will 
 1. Set up the hardware: Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.
 2. Complete the `detect_color_name(r, g, b)` function:
     * Math: Calculate the `total` light, and then divide each color by the total to find `r_ratio`, `g_ratio`, and `b_ratio`.
-    * Logic: Fill in the `if/elif` statements. *Hint: A good starting point for a dominant color is `0.3` (30%). For example, if it's red, `r_ratio` should be `> 0.3`.
-3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function.
-4. Call the function: Inside the loop, after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.
-5. Print: Output the final color name and the raw values using an f-string: `Scan complete: {color_name} (Raw: R:{r} G:{g} B:{b})`.
+    * Logic: Fill in the `if/elif` statements. *Hint: A good starting point for a dominant color is `0.45` (45%). For example, if it's red, `r_ratio` should be `> 0.45`.
+3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function, add small changes inside the loop:
+    * Call the function: after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.
+    * Print: Output the final color name and the raw values using an f-string: `Scan - {color_name} (Raw: R:{r} G:{g} B:{b})`.
 
 
 ## Conclusion

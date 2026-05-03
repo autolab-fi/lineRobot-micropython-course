@@ -547,7 +547,7 @@ def color_classification(robot, image, td, user_code=None):
 
     msg = robot.get_msg()
     if msg is not None:
-        match = re.search(r'Scan complete: (\w+) \(Raw: R:(\d+) G:(\d+) B:(\d+)\)', msg)
+        match = re.search(r'Scan - (\w+) \(Raw: R:(\d+) G:(\d+) B:(\d+)\)', msg)
         if match:
             color_name = match.group(1)
             r, g, b    = int(match.group(2)), int(match.group(3)), int(match.group(4))

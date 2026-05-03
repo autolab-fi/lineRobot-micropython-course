@@ -30,8 +30,8 @@ Because the corrections are sharp and abrupt, a Relay controller usually results
 ### 2. Steering Logic
 To make the robot follow the track, we must think about *why* a specific sensor sees the line and *how* to fix it:
 * If the **Center Scout** (Index 3) sees the line, we are perfectly aligned → **Drive Straight** (`speed, speed`).
-* If the **Left Scout** (Index 1) sees the line, it means the rover has drifted too far to the *right* → **Steer Left** by slowing down the left motor (`turn_speed, speed`).
-* If the **Right Scout** (Index 6) sees the line, it means the rover has drifted too far to the *left* → **Steer Right** by slowing down the right motor (`speed, turn_speed`).
+* If the **Left Scout** (Index 6) sees the line, it means the rover has drifted too far to the *right* → **Steer Left** by slowing down the left motor (`turn_speed, speed`).
+* If the **Right Scout** (Index 1) sees the line, it means the rover has drifted too far to the *left* → **Steer Right** by slowing down the right motor (`speed, turn_speed`).
 
 ## Assignment
 Write an autonomous line-following algorithm using your scout sensors and `elif` logic. The rover must navigate a straight section of the track and pass through the checkpoints.
@@ -40,7 +40,7 @@ Write an autonomous line-following algorithm using your scout sensors and `elif`
 1. **Setup:** Define the variables: `threshold`, `speed`, `turn`.
 2. **Continuous Loop:** The rover must drive continuously. Use an infinite `while True:` loop.
 3. **Read Data:** Inside the loop, read octoliner and extract your three scouts (index 1, 3/4, and 6) into variables.
-4. **Steering Logic (`if/elif/else`):** 
+4. **Steering Logic (`if/elif/else`):** use different speed for motors OR turn movment *turn_left_angle()*.
 5. **Stability:** Add a tiny delay at the end of the loop.
 
 *Hint*: in the loop, it's better to print sensor's data in order to understand what values should be set as a treshhold and sensitivity.

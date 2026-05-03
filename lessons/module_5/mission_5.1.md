@@ -37,9 +37,9 @@ position = octoliner.track_line()
 ```
 
 This function returns a single decimal number (`float`) representing the exact position of the line:
-* **`-1.0`**: The line is far to the **left** (under sensor 0).
+* **`-1.0`**: The line is far to the **left** (under sensor 7).
 * **`0.0`**: The line is perfectly in the **center**.
-* **`1.0`**: The line is far to the **right** (under sensor 7).
+* **`1.0`**: The line is far to the **right** (under sensor 1).
 
 This continuous gradient—smoothly transitioning from `-1.0` to `1.0`- is exactly what we need. This value is our **Error**!
 

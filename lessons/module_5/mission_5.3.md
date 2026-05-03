@@ -25,7 +25,7 @@ This natural driving logic is called a **Proportional Controller (P-Controller)*
 
 ### 1. The Amplification Problem
 Our `track_line()` function gives us an Error value from `-1.0` to `1.0`. 
-If the rover's base speed is `25`, and the Error is `0.5`, what happens if we just add the Error to the speed? The new speed becomes `25.5`. That tiny difference will not turn the robot at all!
+If the rover's base speed is `25`, and the Error is `0.5`, what happens if we just add the Error to the speed? The new speed becomes `25.5`. That tiny difference will not turn the robot at all.
 
 To turn this small decimal Error into a strong motor command, we must amplify it by multiplying it by a constant number. In control theory, this amplifier is called the **Proportional Coefficient**, or *K_p*.
 

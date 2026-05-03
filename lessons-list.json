@@ -225,8 +225,8 @@
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.2.md",
                 "sn": 28,
                 "name": "Upgraded Relay Controller",
-                "description": "Build a three-way relay controller with failsafe detection using max(sensor_array) < 700.",
-                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n\nwhile True:\n    sensor_array = \n    #print(sensor_array) \n    position = \n\n    # Failsafe Check - if no sensor detects line\n    # TODO: Write an if statement using max() to check if the value is less than 700\n    if :\n        # Print a warning, stop the robot, and break the loop\n   \n    else:\n        # TODO: Use if/elif/else to steer based on the 'position' variable\n\n    time.sleep(0.01)"
+                "description": "Build a three-way relay controller with failsafe detection using max(sensor_array) < 500.",
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(240) # Maybe you will need to adjust the value \n\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    #print(sensor_array) \n    position = \n\n    # Failsafe Check - if no sensor detects line\n    # TODO: Write an if statement using max() to check if the value is less than 500\n    if :\n        # Print a warning, stop the robot, and break the loop\n   \n    else:\n        # TODO: Use if/elif/else to steer based on the 'position' variable\n\n    time.sleep(0.01)"
             },
             {
                 "str_id": "proportional_control",

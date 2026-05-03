@@ -27,8 +27,8 @@ In Python, an array is enclosed in square brackets `[]`. Every item inside has a
 
 
 ```python
-#          [Sens0, Sens1, Sens2, Sens3, Sens4, Sens5, Sens6, Sens7]
-data_array = [245,   240,   210,    85,    90,   240,   245,   250]
+#            [0,    1,   2,  3,  4,   5,   6,   7]
+data_array = [245, 240, 210, 85, 90, 240, 245, 250]
 
 # You can extract a specific number by putting its index in brackets:
 center_value = data_array[3] # This extracts '85'
@@ -38,16 +38,27 @@ center_value = data_array[3] # This extracts '85'
 
 The Octoliner sensor array consists of 8 sensors, each providing an analog value that indicates the intensity of reflected IR light.
 
+Each sensor has a fixed index, printed directly on the board:
+
+![IR Sensor view](https://api.ondroid.org/media/courses/9/images/902a6a0968614aec98f73c425f8a831d.jpg)
+
+When we look at the robot from above (as in our camera view):
+
+- **Left** side of the robot → sensors 7, 6, 5
+- **Center** → sensors 4 and 3
+- **Right** side → sensors 2, 1, 0 
+
 ![IR Sensor Logic](https://github.com/pranavk-2003/line-robot-curriculum/blob/assignments/images/module_7/IR_sensor_array.png?raw=True)
 
+How we controle movments:
 - **Central sensors (3 & 4)** → Move straight
-- **Left sensors (0,1,2)** → Guide right turns
-- **Right sensors (5,6,7)** → Guide left turns
+- **Rigrt sensors (0,1,2)** → Guide right turns
+- **Left sensors (5,6,7)** → Guide left turns
 
 To check an entire zone, we would normally need to check all three of its sensors. However, to keep our very first navigation program simple, we will pick just **one specific sensor from each zone** to act as our primary "scout":
-* **Left Scout:** Index 1
+* **Right Scout:** Index 1
 * **Center Scout:** Index 3
-* **Right Scout:** Index 6
+* **Left Scout:** Index 6
 
 ### 3. The `elif` Statement
 To check multiple conditions in a specific order, we use the `elif` (Else If) statement. 

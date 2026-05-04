@@ -73,9 +73,9 @@ def navigation(robot, image, td: dict, user_code):
     if not td:
         td = {
             "start_time": time.time(),
-            "end_time": time.time() + 40,
+            "end_time": time.time() + 30,
             "data": {},
-            "delta": 5,
+            "delta": 4,
             "reached_point": False
         }
 
@@ -87,19 +87,17 @@ def navigation(robot, image, td: dict, user_code):
 
     if not td["data"] and robot:
         route = [
+            {'forward': 20, 'backward': 0},
+            [{'left': 45, 'right': 0}],
             {'forward': 40, 'backward': 0},
-            [{'left': 90, 'right': 0}],
+            [{'left': 0, 'right': 45}],
             {'forward': 20, 'backward': 0},
             [{'left': 0, 'right': 90}],
             {'forward': 40, 'backward': 0},
-            [{'left': 0, 'right': 90}],
-            {'forward': 20, 'backward': 0},
-            [{'left': 90, 'right': 0}],
-            {'forward': 20, 'backward': 0}
         ]
 
         td["data"]['targets'] = calculate_target_point(robot, route)
-        td["data"]['delta'] = 5
+        td["data"]['delta'] = 4
         td["data"]['reached_point'] = False
 
         # Load single mineral image
@@ -128,7 +126,7 @@ def navigation(robot, image, td: dict, user_code):
             td["data"]["mask"] = mask
         
         # Track which checkpoints are still visible
-        td["data"]["checkpoint_visible"] = [True] * 5
+        td["data"]["checkpoint_visible"] = [True] * 4
         
         td["data"]['coordinates'] = [
             (robot.cm_to_pixel(x), robot.cm_to_pixel(y)) for x, y in td["data"]['targets']
@@ -177,7 +175,7 @@ def navigation(robot, image, td: dict, user_code):
     if td["data"].get('reached_point') or time_up:
         if not style_ok and result["success"]:
             result.update({"success": False, "score": 0, 
-                           "description": "Task failed. Use variables (e.g., dist = 20) and at least 2 comments (#) in your code.."})
+                           "description": "Task failed. Use variables (e.g., dist = 20) and at least 2 comments (#) in your code."})
 
     # Draw minerals at checkpoint locations with masking
     if td["data"] and td["data"]["mineral"] is not None and td["data"]["mask"] is not None:

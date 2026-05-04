@@ -3,7 +3,7 @@ index: 35
 module: module_11
 task: navigation
 previous: code_clinic
-next: square_loop
+next: perimeter
 ---
 # Task 1 Navigation
 ## Objective

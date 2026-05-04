@@ -8,10 +8,12 @@ import re
 
 target_points = {
     'navigation': [(30, 70), (30, 0)],
+    'perimeter': [(50, 50), (30, 0)]
 }
 
 block_library_functions = {
     'navigation': False,
+    'perimeter': False,
 }
 
 def get_block_library_functions(task):
@@ -58,6 +60,21 @@ def calculate_target_point(rb, targets):
     res.reverse()
     return res
 
+def draw_trajectory(image, points, color, width, restore):
+    """Function for drawing point trajectory"""
+    prev_point = None
+    for point in points:
+        cv2.circle(image, point, width, color, -1)
+        if restore and prev_point is not None and math.sqrt(
+                (prev_point[0] - point[0]) ** 2 + (prev_point[1] - point[1]) ** 2) > 1:
+            restore_trajectory(image, prev_point, point, color, int(width * 2))
+        prev_point = point
+
+def restore_trajectory(image, prev_point, point, color, width):
+    """Function for restoring trajectory if robot was not recognized"""
+    cv2.line(image, prev_point, point, color, width)
+
+# Task 1: Navigation
 
 def navigation(robot, image, td: dict, user_code): 
     """Test for task 1 navigation"""
@@ -196,5 +213,81 @@ def navigation(robot, image, td: dict, user_code):
                     x - xmin >= 0 and x + xmax <= image.shape[1]):
                     # Use cv2.copyTo to apply mask (only non-black pixels)
                     cv2.copyTo(mineral, mask, image[y - ymin:y + ymax, x - xmin:x + xmax])
+
+    return image, td, text, result
+
+# Task 2: Perimeter
+
+def perimeter(robot, image, td: dict, user_code=None):
+    """Test for task 2 perimeter"""
+
+    TASK_DURATION = 45
+    TRAJECTORY_COLOR = (255, 0, 0)
+    TRAJECTORY_WIDTH = 3
+
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Not recognized"
+
+    image = robot.draw_info(image)
+
+    if not td:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        code_valid = 'for' in active_code
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + 45,
+            "data": {
+                "code_valid": code_valid,
+            },
+            "trajectory": []
+        }
+
+    if not td["data"]["code_valid"]:
+        text = "No for loop detected in code"
+
+    # trajectory tracking
+    info = robot.get_info()
+    robot_position_px = info["position_px"]
+    robot_position = info["position"]
+
+    MIN_DIST_PX = 5   # only record a new point if robot moved at least this many pixels
+
+    if robot_position is not None:
+        if len(td["trajectory"]) == 0:
+            td["trajectory"].append(robot_position_px)
+        else:
+            last = td["trajectory"][-1]
+            dx = robot_position_px[0] - last[0]
+            dy = robot_position_px[1] - last[1]
+            if (dx**2 + dy**2) ** 0.5 >= MIN_DIST_PX:
+                td["trajectory"].append(robot_position_px)
+        text = f'Robot position: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
+
+    if len(td["trajectory"]) > 0:
+        draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
+
+    msg = robot.get_msg()
+    if msg is not None:
+        text = f"Message received: {msg}"
+
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "No for loop found in code | Score: 0"
+            text = "No for loop detected."
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
+            text = "Trajectory complete!"
 
     return image, td, text, result

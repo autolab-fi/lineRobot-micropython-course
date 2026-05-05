@@ -5,17 +5,21 @@ import os
 import numpy as np
 import re
 
+import ast
+
 
 target_points = {
     'navigation': [(30, 70), (30, 0)],
     'perimeter': [(50, 50), (30, 0)],
     'visual_telemetry': [(50, 60), (30, 0)],
+    'adaptive_racing': [(80, 30), (-30, 0)],
 }
 
 block_library_functions = {
     'navigation': False,
     'perimeter': False,
     'visual_telemetry': False,
+    'adaptive_racing': False,
 }
 
 def get_block_library_functions(task):
@@ -401,3 +405,131 @@ def visual_telemetry(robot, image, td: dict, user_code):
             text = "Telemetry signal complete!"
 
     return image, td, text, result
+
+
+
+def adaptive_racing(robot, frame, td: dict, user_code):
+    """
+    Verification for Mission 11.4: Code Clinic (Adaptive Racing)
+    Students must fix 5 bugs:
+    1. SyntaxError (missing colon)
+    2. Missing 'import time'
+    3. Empty set_sensitivity()
+    4. analog_read_all() -> track_line()
+    5. time.sleep(5) -> time.sleep(0.05)
+    """
+    # ===== CONFIGURATION =====
+    TASK_DURATION = 40.0  # seconds
+    MIN_MOVEMENT_DISTANCE = 30.0  # cm
+    # =========================
+
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Analyzing code for bugs..."
+
+    frame = robot.draw_info(frame)
+
+    # ── First-frame initialization ────────────────────────────────────────────
+    if td is None:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        
+        # 1. Syntax check
+        syntax_ok = True
+        try:
+            ast.parse(active_code)
+        except SyntaxError:
+            syntax_ok = False
+
+        # Regex and keyword checks
+        has_time_import = bool(re.search(r'import\s+time', active_code))
+        has_sensitivity = bool(re.search(r'set_sensitivity\(\s*[^)]+\s*\)', active_code))
+        has_track_line = 'track_line(' in active_code
+        has_good_sleep = bool(re.search(r'time\.sleep\(\s*0?\.[0-9]+\s*\)', active_code))
+
+        code_valid = syntax_ok and has_time_import and has_sensitivity and has_track_line and has_good_sleep
+
+        # Quest-like bug names (No spoilers!)
+        missing = []
+        if not syntax_ok:
+            missing.append("The Syntax Bug")
+        if not has_time_import:
+            missing.append("The Import Bug")
+        if not has_sensitivity:
+            missing.append("The Setup Bug")
+        if not has_track_line:
+            missing.append("The Array Bug")
+        if not has_good_sleep:
+            missing.append("The Coma Bug")
+
+        info = robot.get_info()
+        start_pos = info.get("position")
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "data": {
+                "code_valid": code_valid,
+                "missing": missing,
+                "completed_verdict": False,
+                "start_position": start_pos,
+                "max_distance_moved": 0.0
+            }
+        }
+
+    # ── Position tracking ─────────────────────────────────────────────────────
+    pos = robot.get_info().get("position")
+    if pos is not None:
+        if td["data"]["start_position"] is None:
+            td["data"]["start_position"] = pos
+        else:
+            dx = pos[0] - td["data"]["start_position"][0]
+            dy = pos[1] - td["data"]["start_position"][1]
+            dist = math.sqrt(dx**2 + dy**2)
+            if dist > td["data"]["max_distance_moved"]:
+                td["data"]["max_distance_moved"] = dist
+
+    # ── Live status text ──────────────────────────────────────────────────────
+    if not td["data"].get("completed_verdict"):
+        distance = td["data"]["max_distance_moved"]
+        
+        if td["data"]["code_valid"]:
+            # Сообщение об устранении багов висит только пока робот на старте (проехал меньше 2 см)
+            if distance < 2.0:
+                text = "All bugs fixed! Launching rover..."
+            else:
+                # Дальше спамится только аккуратная дистанция
+                text = f"Racing... Distance: {distance:.1f} cm"
+        else:
+            # Если есть баги, показываем интригующие названия (максимум 2 за раз, чтобы не ломать UI)
+            text = f"Bugs remaining: {', '.join(td['data']['missing'][:2])}..."
+
+    # ── Timeout / Final verdict ───────────────────────────────────────────────
+    if td["end_time"] - time.time() < 1 and not td["data"].get("completed_verdict"):
+        td["data"]["completed_verdict"] = True
+        
+        distance_moved = td["data"]["max_distance_moved"]
+        robot_moved = distance_moved >= MIN_MOVEMENT_DISTANCE
+        
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            # Интригующее финальное сообщение без явных подсказок
+            result["description"] = f"Mission Failed. Unresolved issues: {', '.join(td['data']['missing'])} | Score: 0"
+            text = "Code contains bugs!"
+            
+        elif not robot_moved:
+            result["success"] = False
+            result["score"] = 20
+            result["description"] = f"Code fixed, but robot barely moved ({distance_moved:.1f}cm). Check logic! | Score: 20"
+            text = "Robot failed to navigate."
+            
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! All bugs fixed and racing complete | Score: 100"
+            text = "Exam Complete!"

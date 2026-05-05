@@ -9,6 +9,8 @@ next: debugging
 ## Objective
 Demonstrate your ability to combine `while True` loops, conditional logic, sensor reading, and GPIO hardware control.
 
+![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
+
 ## Assignment
 Your rover is approaching a dangerous lunar crevasse (represented by a black line). It must drive forward cautiously, detect the edge, execute an emergency stop, and send a visual confirmation signal back to the base using its onboard LED.
 

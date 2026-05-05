@@ -227,7 +227,7 @@ def navigation(robot, image, td: dict, user_code):
 def perimeter(robot, image, td: dict, user_code=None):
     """Test for task 2 perimeter"""
 
-    TASK_DURATION = 45
+    TASK_DURATION = 25
     TRAJECTORY_COLOR = (255, 0, 0)
     TRAJECTORY_WIDTH = 3
 

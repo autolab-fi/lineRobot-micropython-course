@@ -418,7 +418,6 @@ def visual_telemetry(robot, image, td: dict, user_code):
         dy_start = current_pos[1] - td["data"]["start_pos"][1]
         dist_moved = math.sqrt(dx_start**2 + dy_start**2)
 
-        # Запоминаем самую дальнюю точку, куда он уехал
         if dist_moved > td["data"]["max_dist_moved"]:
             td["data"]["max_dist_moved"] = dist_moved
 
@@ -448,7 +447,7 @@ def visual_telemetry(robot, image, td: dict, user_code):
         elif td["data"]["max_dist_moved"] > MAX_ALLOWED_DISTANCE:
             result["success"] = False
             result["score"] = 0
-            result["description"] = f"Task failed: Robot missed the line and overran ({td['data']['max_dist_moved']:.1f}cm)!"
+            result["description"] = f"Task failed: Robot missed the line!"
             text = "Emergency stop failed."
             
         elif not td["data"]["has_stopped"]:

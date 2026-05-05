@@ -341,7 +341,7 @@ def perimeter(robot, image, td: dict, user_code=None):
 def visual_telemetry(robot, image, td: dict, user_code):
     """Test for task 3: visual telemetry"""
 
-    TASK_DURATION = 35 
+    TASK_DURATION = 30 
     
     result = {
         "success": True,
@@ -360,7 +360,12 @@ def visual_telemetry(robot, image, td: dict, user_code):
         has_while = 'while' in active_code
         has_break = 'break' in active_code
         has_pin15 = '15' in active_code and 'Pin' in active_code
-        has_led_toggle = '.on()' in active_code and '.off()' in active_code
+        
+        # Поддерживаем и .on()/.off(), и .value(1)/.value(0)
+        has_on_off = '.on()' in active_code and '.off()' in active_code
+        has_value = '.value(1)' in active_code and '.value(0)' in active_code
+        has_led_toggle = has_on_off or has_value
+        
         has_stop = 'stop(' in active_code or 'speed(0' in active_code
         
         has_sensor_idx = bool(re.search(r'[\[\(][34][\]\)]', active_code))
@@ -380,7 +385,7 @@ def visual_telemetry(robot, image, td: dict, user_code):
         elif not has_stop:
             fail_reason = "Missing command to stop the motors (e.g., robot.stop())."
         elif not has_led_toggle:
-            fail_reason = "LED is not blinking (missing .on() or .off())."
+            fail_reason = "LED is not blinking (missing .on()/.off() or .value(1)/.value(0))."
 
         info = robot.get_info()
         start_pos = info["position"] if info["position"] else [0, 0]
@@ -418,7 +423,8 @@ def visual_telemetry(robot, image, td: dict, user_code):
 
         if dist_moved > 3.0:
             td["data"]["was_moving"] = True
-            text = "Robot is scanning for the crevasse."
+            if td["data"]["code_valid"]:
+                text = "Robot is scanning for the crevasse."
         
         if td["data"]["was_moving"] and dist_frame < 0.05:
             td["data"]["has_stopped"] = True
@@ -442,7 +448,6 @@ def visual_telemetry(robot, image, td: dict, user_code):
             text = "Telemetry signal complete!"
 
     return image, td, text, result
-
 
 
 def adaptive_racing(robot, frame, td: dict, user_code):

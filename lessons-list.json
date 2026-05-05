@@ -285,45 +285,5 @@
                 "template": "import time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\n\nr = Robot()\nb = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\no = Octoliner()\no.begin(b)\no.set_sensitivity(240)\nt = tcs3472(b)\n\nv = 20\nk = 15\nlast = \"Floor\"\nline = 500\n\nprint(\"Starting Spaghetti Mission\")\n\nwhile True:\n    # Sensor 1 logic\n    sa = o.analog_read_all()\n    print(sa)\n    if max(sa) < line:\n        r.stop()\n        break\n    \n    # Navigation\n    p = o.track_line()\n    res = k * p\n    \n    # Sensor 2 logic\n    cr, cg, cb = t.rgb()\n    tot = cr + cg + cb\n    \n    # Dangerous math!\n    rr = cr / tot\n    gr = cg / tot\n    br = cb / tot\n    \n    c = \"Floor\"\n    if rr > 0.5:\n        c = \"Red\"\n    elif gr > 0.4:\n        c = \"Green\"\n    elif br > 0.4:\n        c = \"Blue\"\n    \n    if c != last and c != \"Floor\":\n        print(\"Found mineral:\", c)\n        last = c\n\n    # Output to motors\n    m1 = int(v + res)\n    m2 = int(v - res)\n    r.run_motors_speed(m1, m2)\n    \n    time.sleep(0.05)"
             }
         ]
-    },
-    {
-        "name": "Examination",
-        "description": "Prove your skills. Apply navigation, active monitoring, and debugging techniques to pass the final rover certification.",
-        "sn": 11,
-        "str_id": "module_11",
-        "lessons": [
-            {
-                "str_id": "navigation",
-                "name": "Navigation",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_1.md",
-                "sn": 35,
-                "description": "Navigate the rover through a sequential path to verify basic movement capabilities.",
-                "template": "# Write code here"
-            },
-            {
-                "str_id": "perimeter",
-                "name": "Perimeter",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_2.md",
-                "sn": 36,
-                "description": "Use loops to automate a repetitive perimeter patrol.",
-                "template": "# Write code here"
-            },
-            {
-                "str_id": "visual_telemetry",
-                "name": "Visual Telemetry",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_3.md",
-                "sn": 37,
-                "description": "Combine loops, conditional logic, and sensor reading to execute an emergency stop and signal with an LED.",
-                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\n# 1. Hardware Setup\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\n\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\n\nled = machine.Pin(15, machine.Pin.OUT)\n\n# 2. Movment and active monitoring\nwhile True:\n    \n    \n    # 3. Emergency Stop \n    if __ > __ or __ > __: \n        \n        \n    time.sleep(0.05)\n\n# 5. Visual Signal\nfor i in range():\n    pass # replace it with led functionality"
-            },
-            {
-                "str_id": "adaptive_racing",
-                "name": "Adaptive Racing",
-                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_4.md",
-                "sn": 38,
-                "description": "Act as a Senior Engineer to find and fix 5 bugs in an advanced adaptive speed controller.",
-                "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nimport machine\n\n# Configuration Variables\nmax_vel = 70\nbrake_f = 45\nk_prop = 35\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\n\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity() \n\nprint(\"Starting Adaptive Racing Controller...\")\n\nwhile True\n    \n    position = octoliner.analog_read_all()\n    \n    # --- ADAPTIVE SPEED MATH (THIS BLOCK IS CORRECT) ---\n    dynamic_speed = max_vel - (brake_f * abs(position))\n    P = k_prop * position\n    \n    left_wheel = dynamic_speed + P\n    right_wheel = dynamic_speed - P\n    # -----------------------------------------------------------------\n    \n    robot.run_motors_speed(left_wheel, right_wheel)\n    \n    time.sleep(5)"
-            }
-        ]
     }
 ]

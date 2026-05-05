@@ -11,6 +11,8 @@ next: module_7_intro
 ## Objective
 Learn the principles of "Clean Code" by refactoring a messy, unreadable script into a modular, professional program.
 
+![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)
+
 ## Introduction
 In the previous missions, you learned how to find bugs and handle errors. But did you notice that finding a bug in a messy program is much harder than in a clean one?
 

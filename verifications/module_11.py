@@ -224,11 +224,127 @@ def navigation(robot, image, td: dict, user_code):
 
 # Task 2: Perimeter
 
+import time
+import ast
+
+def perimeter(robot, image, td: dict, user_code=None):
+    """Test for task 2 perimeter"""
+
+    TASK_DURATION = 30  
+    TRAJECTORY_COLOR = (255, 0, 0)
+    TRAJECTORY_WIDTH = 3
+
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Analyzing code..."
+
+    image = robot.draw_info(image)
+
+    if not td:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        
+        syntax_ok = True
+        has_for_loop = False
+        try:
+            tree = ast.parse(active_code)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.For):
+                    has_for_loop = True
+        except SyntaxError:
+            syntax_ok = False
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "data": {
+                "syntax_ok": syntax_ok,
+                "has_for_loop": has_for_loop,
+                "total_distance": 0.0,
+                "last_pos": None,
+                "completed_verdict": False
+            },
+            "trajectory": []
+        }
+
+    if not td["data"]["syntax_ok"]:
+        text = "Syntax/Indentation Error!"
+    elif not td["data"]["has_for_loop"]:
+        text = "No 'for' loop detected!"
+
+    info = robot.get_info()
+    robot_position_px = info["position_px"]
+    robot_position = info["position"]
+
+    MIN_DIST_PX = 5
+
+    if robot_position is not None:
+        if td["data"]["last_pos"] is not None:
+            dx = robot_position[0] - td["data"]["last_pos"][0]
+            dy = robot_position[1] - td["data"]["last_pos"][1]
+            dist = (dx**2 + dy**2)**0.5
+            td["data"]["total_distance"] += dist
+        td["data"]["last_pos"] = robot_position
+
+        if len(td["trajectory"]) == 0:
+            td["trajectory"].append(robot_position_px)
+        else:
+            last = td["trajectory"][-1]
+            dx_px = robot_position_px[0] - last[0]
+            dy_px = robot_position_px[1] - last[1]
+            if (dx_px**2 + dy_px**2) ** 0.5 >= MIN_DIST_PX:
+                td["trajectory"].append(robot_position_px)
+        
+        if td["data"]["syntax_ok"] and td["data"]["has_for_loop"]:
+            text = f'Dist: {td["data"]["total_distance"]:0.1f} cm | Pos: x: {robot_position[0]:0.1f} y: {robot_position[1]:0.1f}'
+
+    if len(td["trajectory"]) > 0:
+        try:
+            draw_trajectory(image, td["trajectory"], TRAJECTORY_COLOR, TRAJECTORY_WIDTH, True)
+        except NameError:
+            pass
+
+    if td["end_time"] - time.time() < 1 and not td["data"]["completed_verdict"]:
+        td["data"]["completed_verdict"] = True
+        
+        total_dist = td["data"]["total_distance"]
+        
+        if not td["data"]["syntax_ok"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Mission Failed: Syntax or Indentation Error. Check your spaces! | Score: 0"
+            text = "Syntax Error"
+            
+        elif not td["data"]["has_for_loop"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Mission Failed: You must use a 'for' loop to automate the patrol! | Score: 0"
+            text = "Missing loop"
+            
+        elif total_dist < 100.0:
+            result["success"] = False
+            result["score"] = 20
+            result["description"] = f"Mission Failed: Perimeter incomplete! Traveled only {total_dist:.1f}cm out of ~120cm. | Score: 20"
+            text = "Incomplete perimeter"
+            
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! Perimeter patrol complete! | Score: 100"
+            text = "Task completed!"
+
+    return image, td, text, result
+
+# Task 3: Led
+
 def visual_telemetry(robot, image, td: dict, user_code):
     """Test for task 3: visual telemetry"""
 
     TASK_DURATION = 30 
-    # Дистанция, после которой считается, что робот пропустил линию и улетел
     MAX_ALLOWED_DISTANCE = 60.0 
     
     result = {
@@ -285,7 +401,7 @@ def visual_telemetry(robot, image, td: dict, user_code):
                 "fail_reason": fail_reason,
                 "start_pos": start_pos,
                 "last_pos": start_pos, 
-                "max_dist_moved": 0.0, # Добавили трекинг пробега
+                "max_dist_moved": 0.0, 
                 "has_stopped": False,
                 "was_moving": False
             }
@@ -329,7 +445,6 @@ def visual_telemetry(robot, image, td: dict, user_code):
             result["description"] = f'Task failed: {td["data"]["fail_reason"]}'
             text = "Task failed."
             
-        # Проверяем, не перелетел ли он линию
         elif td["data"]["max_dist_moved"] > MAX_ALLOWED_DISTANCE:
             result["success"] = False
             result["score"] = 0
@@ -349,120 +464,6 @@ def visual_telemetry(robot, image, td: dict, user_code):
             text = "Telemetry signal complete!"
 
     return image, td, text, result
-
-# Task 3: Led
-
-def visual_telemetry(robot, image, td: dict, user_code):
-    """Test for task 3: visual telemetry"""
-
-    TASK_DURATION = 30 
-    
-    result = {
-        "success": True,
-        "description": "You are amazing! The Robot has completed the assignment",
-        "score": 100
-    }
-    text = "Initializing..." 
-    
-    image = robot.draw_info(image)
-
-    if not td:
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        
-        has_while = 'while' in active_code
-        has_break = 'break' in active_code
-        has_pin15 = '15' in active_code and 'Pin' in active_code
-        
-        # Поддерживаем и .on()/.off(), и .value(1)/.value(0)
-        has_on_off = '.on()' in active_code and '.off()' in active_code
-        has_value = '.value(1)' in active_code and '.value(0)' in active_code
-        has_led_toggle = has_on_off or has_value
-        
-        has_stop = 'stop(' in active_code or 'speed(0' in active_code
-        
-        has_sensor_idx = bool(re.search(r'[\[\(][34][\]\)]', active_code))
-        
-        code_valid = (has_while and has_break and has_pin15 and 
-                      has_led_toggle and has_stop and has_sensor_idx)
-
-        fail_reason = ""
-        if not has_pin15:
-            fail_reason = "LED on Pin 15 is not configured correctly."
-        elif not has_while:
-            fail_reason = "Missing 'while' loop for active monitoring."
-        elif not has_sensor_idx:
-            fail_reason = "You must check the central sensors (Index 3 or 4)."
-        elif not has_break:
-            fail_reason = "Missing 'break' statement to exit the loop."
-        elif not has_stop:
-            fail_reason = "Missing command to stop the motors (e.g., robot.stop())."
-        elif not has_led_toggle:
-            fail_reason = "LED is not blinking (missing .on()/.off() or .value(1)/.value(0))."
-
-        info = robot.get_info()
-        start_pos = info["position"] if info["position"] else [0, 0]
-
-        td = {
-            "start_time": time.time(),
-            "end_time": time.time() + TASK_DURATION,
-            "data": {
-                "code_valid": code_valid,
-                "fail_reason": fail_reason,
-                "start_pos": start_pos,
-                "last_pos": start_pos, 
-                "has_stopped": False,
-                "was_moving": False
-            }
-        }
-
-    if not td["data"]["code_valid"]:
-        text = f'Code Error: {td["data"]["fail_reason"]}'
-
-    info = robot.get_info()
-    current_pos = info.get("position")
-
-    if current_pos is not None:
-        dx_start = current_pos[0] - td["data"]["start_pos"][0]
-        dy_start = current_pos[1] - td["data"]["start_pos"][1]
-        dist_moved = math.sqrt(dx_start**2 + dy_start**2)
-
-        last_pos = td["data"]["last_pos"]
-        dx_frame = current_pos[0] - last_pos[0]
-        dy_frame = current_pos[1] - last_pos[1]
-        dist_frame = math.sqrt(dx_frame**2 + dy_frame**2)
-        
-        td["data"]["last_pos"] = current_pos
-
-        if dist_moved > 3.0:
-            td["data"]["was_moving"] = True
-            if td["data"]["code_valid"]:
-                text = "Robot is scanning for the crevasse."
-        
-        if td["data"]["was_moving"] and dist_frame < 0.05:
-            td["data"]["has_stopped"] = True
-
-    # timeout / final verdict
-    if td["end_time"] - time.time() < 1:
-        if not td["data"]["code_valid"]:
-            result["success"] = False
-            result["score"] = 0
-            result["description"] = f'Task failed: {td["data"]["fail_reason"]}'
-            text = "Task failed."
-        elif not td["data"]["has_stopped"]:
-            result["success"] = False
-            result["score"] = 0
-            result["description"] = "Task failed: Robot did not stop at the line."
-            text = "Emergency stop failed."
-        else:
-            result["success"] = True
-            result["score"] = 100
-            result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
-            text = "Telemetry signal complete!"
-
-    return image, td, text, result
-
 
 def adaptive_racing(robot, frame, td: dict, user_code):
     """

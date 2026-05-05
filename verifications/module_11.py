@@ -345,7 +345,7 @@ def visual_telemetry(robot, image, td: dict, user_code):
     """Test for task 3: visual telemetry"""
 
     TASK_DURATION = 30 
-    MAX_ALLOWED_DISTANCE = 60.0 
+    MAX_ALLOWED_DISTANCE = 40.0 
     
     result = {
         "success": True,

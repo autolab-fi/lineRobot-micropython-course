@@ -298,7 +298,7 @@
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_1.md",
                 "sn": 35,
                 "description": "Navigate the rover through a sequential path to verify basic movement capabilities.",
-                "template": ""
+                "template": "# Write code here"
             },
             {
                 "str_id": "perimeter",
@@ -306,7 +306,7 @@
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_2.md",
                 "sn": 36,
                 "description": "Use loops to automate a repetitive perimeter patrol.",
-                "template": ""
+                "template": "# Write code here"
             },
             {
                 "str_id": "visual_telemetry",

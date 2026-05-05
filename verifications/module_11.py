@@ -494,7 +494,7 @@ def adaptive_racing(robot, frame, td: dict, user_code):
         active_lines = [line.split('#')[0] for line in lines]
         active_code = '\n'.join(active_lines)
         
-        # 1. Syntax check
+        # Syntax check
         syntax_ok = True
         try:
             ast.parse(active_code)
@@ -509,7 +509,7 @@ def adaptive_racing(robot, frame, td: dict, user_code):
 
         code_valid = syntax_ok and has_time_import and has_sensitivity and has_track_line and has_good_sleep
 
-        # Quest-like bug names (No spoilers!)
+        # Quest-like bug names
         missing = []
         if not syntax_ok:
             missing.append("The Syntax Bug")
@@ -554,14 +554,11 @@ def adaptive_racing(robot, frame, td: dict, user_code):
         distance = td["data"]["max_distance_moved"]
         
         if td["data"]["code_valid"]:
-            # Сообщение об устранении багов висит только пока робот на старте (проехал меньше 2 см)
             if distance < 2.0:
                 text = "All bugs fixed! Launching rover..."
             else:
-                # Дальше спамится только аккуратная дистанция
                 text = f"Racing... Distance: {distance:.1f} cm"
         else:
-            # Если есть баги, показываем интригующие названия (максимум 2 за раз, чтобы не ломать UI)
             text = f"Bugs remaining: {', '.join(td['data']['missing'][:2])}..."
 
     # ── Timeout / Final verdict ───────────────────────────────────────────────
@@ -574,7 +571,6 @@ def adaptive_racing(robot, frame, td: dict, user_code):
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
-            # Интригующее финальное сообщение без явных подсказок
             result["description"] = f"Mission Failed. Unresolved issues: {', '.join(td['data']['missing'])} | Score: 0"
             text = "Code contains bugs!"
             
@@ -589,3 +585,5 @@ def adaptive_racing(robot, frame, td: dict, user_code):
             result["score"] = 100
             result["description"] = "You are amazing! All bugs fixed and racing complete | Score: 100"
             text = "Exam Complete!"
+    
+    return frame, td, text, result

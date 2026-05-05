@@ -8,12 +8,14 @@ import re
 
 target_points = {
     'navigation': [(30, 70), (30, 0)],
-    'perimeter': [(50, 50), (30, 0)]
+    'perimeter': [(50, 50), (30, 0)],
+    'visual_telemetry': [(50, 60), (30, 0)],
 }
 
 block_library_functions = {
     'navigation': False,
     'perimeter': False,
+    'visual_telemetry': False,
 }
 
 def get_block_library_functions(task):
@@ -289,5 +291,113 @@ def perimeter(robot, image, td: dict, user_code=None):
             result["score"] = 100
             result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
             text = "Trajectory complete!"
+
+    return image, td, text, result
+
+
+# Task 3: Led
+
+def visual_telemetry(robot, image, td: dict, user_code):
+    """Test for task 3: visual telemetry"""
+
+    TASK_DURATION = 35 
+    
+    result = {
+        "success": True,
+        "description": "You are amazing! The Robot has completed the assignment",
+        "score": 100
+    }
+    text = "Initializing..." 
+    
+    image = robot.draw_info(image)
+
+    if not td:
+        lines = user_code.split('\n') if user_code else []
+        active_lines = [line.split('#')[0] for line in lines]
+        active_code = '\n'.join(active_lines)
+        
+        has_while = 'while' in active_code
+        has_break = 'break' in active_code
+        has_pin15 = '15' in active_code and 'Pin' in active_code
+        has_led_toggle = '.on()' in active_code and '.off()' in active_code
+        has_stop = 'stop(' in active_code or 'speed(0' in active_code
+        
+        has_sensor_idx = bool(re.search(r'[\[\(][34][\]\)]', active_code))
+        
+        code_valid = (has_while and has_break and has_pin15 and 
+                      has_led_toggle and has_stop and has_sensor_idx)
+
+        fail_reason = ""
+        if not has_pin15:
+            fail_reason = "LED on Pin 15 is not configured correctly."
+        elif not has_while:
+            fail_reason = "Missing 'while' loop for active monitoring."
+        elif not has_sensor_idx:
+            fail_reason = "You must check the central sensors (Index 3 or 4)."
+        elif not has_break:
+            fail_reason = "Missing 'break' statement to exit the loop."
+        elif not has_stop:
+            fail_reason = "Missing command to stop the motors (e.g., robot.stop())."
+        elif not has_led_toggle:
+            fail_reason = "LED is not blinking (missing .on() or .off())."
+
+        info = robot.get_info()
+        start_pos = info["position"] if info["position"] else [0, 0]
+
+        td = {
+            "start_time": time.time(),
+            "end_time": time.time() + TASK_DURATION,
+            "data": {
+                "code_valid": code_valid,
+                "fail_reason": fail_reason,
+                "start_pos": start_pos,
+                "last_pos": start_pos, 
+                "has_stopped": False,
+                "was_moving": False
+            }
+        }
+
+    if not td["data"]["code_valid"]:
+        text = f'Code Error: {td["data"]["fail_reason"]}'
+
+    info = robot.get_info()
+    current_pos = info.get("position")
+
+    if current_pos is not None:
+        dx_start = current_pos[0] - td["data"]["start_pos"][0]
+        dy_start = current_pos[1] - td["data"]["start_pos"][1]
+        dist_moved = math.sqrt(dx_start**2 + dy_start**2)
+
+        last_pos = td["data"]["last_pos"]
+        dx_frame = current_pos[0] - last_pos[0]
+        dy_frame = current_pos[1] - last_pos[1]
+        dist_frame = math.sqrt(dx_frame**2 + dy_frame**2)
+        
+        td["data"]["last_pos"] = current_pos
+
+        if dist_moved > 3.0:
+            td["data"]["was_moving"] = True
+            text = "Robot is scanning for the crevasse."
+        
+        if td["data"]["was_moving"] and dist_frame < 0.05:
+            td["data"]["has_stopped"] = True
+
+    # timeout / final verdict
+    if td["end_time"] - time.time() < 1:
+        if not td["data"]["code_valid"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = f'Task failed: {td["data"]["fail_reason"]}'
+            text = "Task failed."
+        elif not td["data"]["has_stopped"]:
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Task failed: Robot did not stop at the line."
+            text = "Emergency stop failed."
+        else:
+            result["success"] = True
+            result["score"] = 100
+            result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
+            text = "Telemetry signal complete!"
 
     return image, td, text, result

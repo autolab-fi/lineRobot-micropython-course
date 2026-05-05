@@ -12,7 +12,7 @@ Demonstrate your ability to optimize code and execute repetitive geometric maneu
 ![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
 
 ## Assignment
-Mission Control requires the rover to map a perfect square zone on the lunar surface. The side of the square perimeter is exactly **30 cm**. 
+Mission Control requires the rover to map a square zone on the lunar surface. The side of the square perimeter is exactly **30 cm** and use the right direction to turn. 
 
 While you could write the movement and turning commands four separate times, a professional engineer writes efficient code. You must automate this process.
 

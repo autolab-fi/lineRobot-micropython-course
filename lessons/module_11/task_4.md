@@ -8,6 +8,7 @@ next:
 # Task 4 Adaptive Racing
 ## Objective
 Demonstrate your ability to debug faulty logic, fix syntax errors, and organize code.
+
 ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)
 
 ## Assignment

@@ -14,7 +14,7 @@ Demonstrate your ability to navigate a custom route by sequentially combining di
 ## Assignment
 Your rover must navigate a specific route to collect geological samples at **4 waypoints**. A map with the exact distances and turning angles: 
 
-![Task1](https://api.ondroid.org/media/courses/9/images/9f8ef19d0f004618b74d169dd78f0ef1.png)
+![Task1](https://api.ondroid.org/media/courses/9/images/8a55ed8e67c64926989b056f3b73ada0.jpg)
 
 **Requirements:**
 1. **Movement:** Write a sequential program using `robot.move_forward_distance()` and the precision turning functions (`turn_right_angle()` or `turn_left_angle()`) to reach all 4 waypoints.

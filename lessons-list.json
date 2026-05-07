@@ -314,7 +314,7 @@
                 "sn": 37,
                 "name": "Task 3 Visual Telemetry",
                 "description": "Monitor the line sensor in a while loop, stop at the edge, and blink the LED.",
-                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\nrobot = Robot()\n\n# Initialize I2C, Octoliner, and LED here\n\n# Write your monitoring loop here\n"
+                "template": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\n# 1. Hardware Setup\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\n\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\n\nled = machine.Pin(15, machine.Pin.OUT)\n\n# 2. Movment and active monitoring\nwhile True:\n    \n    \n    # 3. Emergency Stop \n    if __ > __ or __ > __: \n        \n        \n    time.sleep(0.05)\n\n# 5. Visual Signal\nfor i in range():\n    pass # replace it with led functionality"
             },
             {
                 "str_id": "adaptive_racing",
@@ -322,7 +322,7 @@
                 "sn": 38,
                 "name": "Task 4 Adaptive Racing",
                 "description": "Fix the broken adaptive speed controller and organize the code for final racing.",
-                "template": "import time\nimport machine\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\n\n# Fix the broken program here\n"
+                "template": "from lineRobot import Robot\nfrom octoliner import Octoliner\nimport machine\n\n# Configuration Variables\nmax_vel = 70\nbrake_f = 45\nk_prop = 35\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\n\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity() \n\nprint(\"Starting Adaptive Racing Controller...\")\n\nwhile True\n    \n    position = octoliner.analog_read_all()\n    \n    # --- ADAPTIVE SPEED MATH (THIS BLOCK IS CORRECT) ---\n    dynamic_speed = max_vel - (brake_f * abs(position))\n    P = k_prop * position\n    \n    left_wheel = dynamic_speed + P\n    right_wheel = dynamic_speed - P\n    # -----------------------------------------------------------------\n    \n    robot.run_motors_speed(left_wheel, right_wheel)\n    \n    time.sleep(5)"
             }
         ]
     }

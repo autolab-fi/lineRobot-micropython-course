@@ -285,5 +285,45 @@
                 "template": "import time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\nfrom tcs3472 import tcs3472\nimport machine\n\nr = Robot()\nb = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\no = Octoliner()\no.begin(b)\no.set_sensitivity(240)\nt = tcs3472(b)\n\nv = 20\nk = 15\nlast = \"Floor\"\nline = 500\n\nprint(\"Starting Spaghetti Mission\")\n\nwhile True:\n    # Sensor 1 logic\n    sa = o.analog_read_all()\n    print(sa)\n    if max(sa) < line:\n        r.stop()\n        break\n    \n    # Navigation\n    p = o.track_line()\n    res = k * p\n    \n    # Sensor 2 logic\n    cr, cg, cb = t.rgb()\n    tot = cr + cg + cb\n    \n    # Dangerous math!\n    rr = cr / tot\n    gr = cg / tot\n    br = cb / tot\n    \n    c = \"Floor\"\n    if rr > 0.5:\n        c = \"Red\"\n    elif gr > 0.4:\n        c = \"Green\"\n    elif br > 0.4:\n        c = \"Blue\"\n    \n    if c != last and c != \"Floor\":\n        print(\"Found mineral:\", c)\n        last = c\n\n    # Output to motors\n    m1 = int(v + res)\n    m2 = int(v - res)\n    r.run_motors_speed(m1, m2)\n    \n    time.sleep(0.05)"
             }
         ]
+    },
+    {
+        "name": "Final Skills Assessment",
+        "description": "Cumulative tasks covering navigation, loops, sensor monitoring, and debugging.",
+        "sn": 11,
+        "str_id": "module_11",
+        "lessons": [
+            {
+                "str_id": "navigation",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_1.md",
+                "sn": 35,
+                "name": "Task 1 Navigation",
+                "description": "Navigate a waypoint route using distance movement, angle turns, variables, and comments.",
+                "template": "from lineRobot import Robot\n\nrobot = Robot()\n\n# Define your distances and angles here\n\n# Write your navigation program here\n"
+            },
+            {
+                "str_id": "perimeter",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_2.md",
+                "sn": 36,
+                "name": "Task 2 Perimeter",
+                "description": "Use a for loop to drive a square perimeter efficiently.",
+                "template": "from lineRobot import Robot\n\nrobot = Robot()\n\nside_length = 30\n\n# Repeat the move-and-turn pattern 4 times\n"
+            },
+            {
+                "str_id": "visual_telemetry",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_3.md",
+                "sn": 37,
+                "name": "Task 3 Visual Telemetry",
+                "description": "Monitor the line sensor in a while loop, stop at the edge, and blink the LED.",
+                "template": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\nrobot = Robot()\n\n# Initialize I2C, Octoliner, and LED here\n\n# Write your monitoring loop here\n"
+            },
+            {
+                "str_id": "adaptive_racing",
+                "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_4.md",
+                "sn": 38,
+                "name": "Task 4 Adaptive Racing",
+                "description": "Fix the broken adaptive speed controller and organize the code for final racing.",
+                "template": "import time\nimport machine\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\n\n# Fix the broken program here\n"
+            }
+        ]
     }
 ]

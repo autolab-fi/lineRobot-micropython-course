@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "course": "LineRobotMicroPython",
+  "world": "hamk-line-arena-v1",
+  "robot": "moon-rover-v1",
+  "generatedMetadata": "generated/task-metadata.json",
+  "tasks": {
+    "test_drive": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "program-finished" }, { "type": "minimum-distance", "valueCm": 20 }]
+    },
+    "license_to_drive": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "program-finished" }, { "type": "minimum-distance", "valueCm": 20 }]
+    },
+    "directional_movement": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "forward-and-backward-motion" }, { "type": "program-finished" }]
+    },
+    "maneuvering": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "turn-command" }, { "type": "program-finished" }]
+    },
+    "electric_motors": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "motor-command-range", "minimumPercent": 1, "maximumPercent": 100 }, { "type": "robot-stopped" }]
+    },
+    "differential_drive": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "independent-wheel-control" }, { "type": "robot-stopped" }]
+    },
+    "encoder_theory": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "encoder-motion" }, { "type": "program-finished" }]
+    },
+    "intro_to_octoliner": {
+      "mode": "simulation-only",
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    }
+  }
+}

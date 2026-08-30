@@ -1,0 +1,853 @@
+{
+  "schemaVersion": 1,
+  "coordinateTransform": "xM=xCm/100; yM=arenaHeightM-yCm/100; heading=atan2(-dy,dx)",
+  "arenaHeightM": 1.0,
+  "tasks": {
+    "adaptive_racing": {
+      "module": "module_11",
+      "verificationFile": "verifications/module_11.py",
+      "physicalStart": {
+        "xCm": 80,
+        "yCm": 30,
+        "direction": [
+          -30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.8,
+        "yM": 0.7,
+        "headingRad": -3.141592654
+      },
+      "blockLibraryFunctions": false
+    },
+    "adaptive_speed": {
+      "module": "module_5",
+      "verificationFile": "verifications/module_5.py",
+      "physicalStart": {
+        "xCm": 40,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "arrays_and_elif": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 70,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.7,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "art_of_debugging": {
+      "module": "module_6",
+      "verificationFile": "verifications/module_6.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 94,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.06,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "basic_line_follower": {
+      "module": null,
+      "verificationFile": "verifications/module_7.py",
+      "physicalStart": {
+        "xCm": 25,
+        "yCm": 85,
+        "direction": [
+          0,
+          -200
+        ]
+      },
+      "initialPose": {
+        "xM": 0.25,
+        "yM": 0.15,
+        "headingRad": 1.570796327
+      },
+      "blockLibraryFunctions": false
+    },
+    "code_clinic": {
+      "module": "module_6",
+      "verificationFile": "verifications/module_6.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "color_classification": {
+      "module": "module_4",
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 128,
+        "yCm": 99,
+        "direction": [
+          0,
+          -30
+        ]
+      },
+      "initialPose": {
+        "xM": 1.28,
+        "yM": 0.01,
+        "headingRad": 1.570796327
+      },
+      "blockLibraryFunctions": false
+    },
+    "color_sensor_basics": {
+      "module": "module_4",
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 128,
+        "yCm": 98,
+        "direction": [
+          0,
+          -30
+        ]
+      },
+      "initialPose": {
+        "xM": 1.28,
+        "yM": 0.02,
+        "headingRad": 1.570796327
+      },
+      "blockLibraryFunctions": false
+    },
+    "concept_of_error": {
+      "module": "module_5",
+      "verificationFile": "verifications/module_5.py",
+      "physicalStart": {
+        "xCm": 22,
+        "yCm": 86,
+        "direction": [
+          0,
+          -30
+        ]
+      },
+      "initialPose": {
+        "xM": 0.22,
+        "yM": 0.14,
+        "headingRad": 1.570796327
+      },
+      "blockLibraryFunctions": false
+    },
+    "conditional_logic": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 80,
+        "yCm": 60,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.8,
+        "yM": 0.4,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "data_logging": {
+      "module": null,
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 45,
+        "yCm": 29,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.45,
+        "yM": 0.71,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "defining_functions": {
+      "module": "module_2",
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "differential_drive": {
+      "module": "module_2",
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "directional_movement": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 80,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.8,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "docking": {
+      "module": null,
+      "verificationFile": "verifications/module_9.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 61,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.39,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "electric_motors": {
+      "module": "module_2",
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "encoder_theory": {
+      "module": "module_2",
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "fog_of_war_survey": {
+      "module": null,
+      "verificationFile": "verifications/module_9.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "for_loops": {
+      "module": "module_2",
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "hardware_safety_net": {
+      "module": "module_6",
+      "verificationFile": "verifications/module_6.py",
+      "physicalStart": {
+        "xCm": 60,
+        "yCm": 40,
+        "direction": [
+          0,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.6,
+        "yM": 0.6,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "intro_to_octoliner": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 100,
+        "yCm": 60,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 1.0,
+        "yM": 0.4,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "led_feedback": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 70,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.7,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "license_to_drive": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 35,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.35,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "line_sensor_leds": {
+      "module": null,
+      "verificationFile": "verifications/module_8.py",
+      "physicalStart": {
+        "xCm": 45,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.45,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "logical_operators": {
+      "module": null,
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 75,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.75,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "maneuvering": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 35,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.35,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "miniral_scanner_sweep": {
+      "module": null,
+      "verificationFile": "verifications/module_9.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "multiple_sensors": {
+      "module": null,
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 45,
+        "yCm": 29,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.45,
+        "yM": 0.71,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "navigation": {
+      "module": "module_11",
+      "verificationFile": "verifications/module_11.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 70,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.3,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "perimeter": {
+      "module": "module_11",
+      "verificationFile": "verifications/module_11.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "pi": {
+      "module": null,
+      "verificationFile": "verifications/module_7.py",
+      "physicalStart": {
+        "xCm": 100,
+        "yCm": 25,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 1.0,
+        "yM": 0.75,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "pid": {
+      "module": null,
+      "verificationFile": "verifications/module_7.py",
+      "physicalStart": {
+        "xCm": 100,
+        "yCm": 25,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 1.0,
+        "yM": 0.75,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "processing_sensor_data": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 85,
+        "yCm": 63,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.85,
+        "yM": 0.37,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "proportional_control": {
+      "module": "module_5",
+      "verificationFile": "verifications/module_5.py",
+      "physicalStart": {
+        "xCm": 40,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "python_lists": {
+      "module": "module_4",
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 75,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.75,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "python_variables_commands": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 80,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.8,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "sandbox": {
+      "module": "module_0",
+      "verificationFile": "verifications/module_0.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "sequential_navigation": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 35,
+        "yCm": 60,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.35,
+        "yM": 0.4,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "simple_line_follower": {
+      "module": "module_3",
+      "verificationFile": "verifications/module_3.py",
+      "physicalStart": {
+        "xCm": 75,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.75,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": true
+    },
+    "telemetry": {
+      "module": "module_4",
+      "verificationFile": "verifications/module_4.py",
+      "physicalStart": {
+        "xCm": 75,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.75,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "telemetry_heartbeat_health": {
+      "module": null,
+      "verificationFile": "verifications/module_8.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "test_drive": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 35,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.35,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "tuning_and_kick": {
+      "module": "module_5",
+      "verificationFile": "verifications/module_5.py",
+      "physicalStart": {
+        "xCm": 40,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "upgraded_relay_controller": {
+      "module": "module_5",
+      "verificationFile": "verifications/module_5.py",
+      "physicalStart": {
+        "xCm": 40,
+        "yCm": 30,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.7,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "visual_telemetry": {
+      "module": "module_11",
+      "verificationFile": "verifications/module_11.py",
+      "physicalStart": {
+        "xCm": 50,
+        "yCm": 60,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.5,
+        "yM": 0.4,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "welcome": {
+      "module": "module_1",
+      "verificationFile": "verifications/module_1.py",
+      "physicalStart": {
+        "xCm": 35,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.35,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    },
+    "while_loops": {
+      "module": null,
+      "verificationFile": "verifications/module_2.py",
+      "physicalStart": {
+        "xCm": 30,
+        "yCm": 50,
+        "direction": [
+          30,
+          0
+        ]
+      },
+      "initialPose": {
+        "xM": 0.3,
+        "yM": 0.5,
+        "headingRad": -0.0
+      },
+      "blockLibraryFunctions": false
+    }
+  }
+}

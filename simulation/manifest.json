@@ -45,6 +45,10 @@
     "conditional_logic": {
       "mode": "simulation-and-lab",
       "checks": [{ "type": "source-code", "requiredMethods": ["analog_read", "run_motors_speed", "stop"], "requiredFeatures": ["while-loop", "if-statement", "break-statement", "print"] }, { "type": "sensor-read", "sensor": "octoliner" }, { "type": "wheel-drive", "minimumDurationSec": 0.1, "maximumDurationSec": 5, "maximumHeadingDeviationDeg": 5, "requireForward": true }, { "type": "line-detected-stop", "minimumDistanceCm": 1 }, { "type": "stdout-regex", "pattern": "(?:^|\\n)Target found\\. Rover stopped\\.(?:\\n|$)" }, { "type": "robot-stopped" }, { "type": "program-finished" }]
+    },
+    "processing_sensor_data": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "source-code", "requiredMethods": ["move_forward_distance", "analog_read", "set_sensitivity"], "requiredFeatures": ["int-assignment", "for-loop", "if-statement", "print"], "requiredFunctions": [{ "name": "detect_line", "parameterCounts": [2, 3] }], "requiredFunctionCalls": ["detect_line"] }, { "type": "repeated-move-distance", "distanceCm": 1, "count": 15, "toleranceCm": 0.2 }, { "type": "octoliner-scan", "channels": [3, 4], "minimumReadsPerChannel": 15, "threshold": 900, "minimumDetections": 2, "outputText": "Found geological layers!" }, { "type": "program-finished" }]
     }
   }
 }

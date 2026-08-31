@@ -35,3 +35,11 @@ check requires a `while`/`if`/`break` structure, real Octoliner reads, forward
 wheel motion, the assignment's success output, and a stop command issued while
 the simulated sensor array is physically over the line. An immediate or
 unconditional stop therefore does not pass.
+
+`processing_sensor_data` accepts both the two-parameter `detect_line(distance,
+threshold)` signature documented in the lesson and the three-parameter
+`detect_line(sensitivity, distance, threshold)` signature used by the current
+trusted reference solution. The reference uses threshold 900 while the physical
+verifier accepts readings above 800; this discrepancy should be resolved in the
+course content. The simulator currently emits 960 for line and 100 for floor so
+that the published reference remains executable while preserving both thresholds.

@@ -29,3 +29,9 @@ The `electric_motors` finish target is derived from the physical verifier's
 That maps to simulator `(x=0.50m, y=0.80m)` after flipping the camera Y axis.
 Its current 18 cm simulation tolerance includes provisional motor-response error;
 the physical verifier remains stricter at 10 cm.
+
+`conditional_logic` is the first `simulation-and-lab` sensor task. Its browser
+check requires a `while`/`if`/`break` structure, real Octoliner reads, forward
+wheel motion, the assignment's success output, and a stop command issued while
+the simulated sensor array is physically over the line. An immediate or
+unconditional stop therefore does not pass.

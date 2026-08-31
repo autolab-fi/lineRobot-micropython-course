@@ -10,3 +10,9 @@ to metres; direction vectors become simulator headings.
 
 Reference solutions are not stored here or sent to students. They may be used by
 trusted compatibility tests, identified only by task id and source hash.
+
+The first module uses exact declarative command checks where the wording requires
+a specific duration, distance, order, or turn angle. Signed values follow the
+simulator convention: positive distance/angle means forward/left; negative means
+backward/right. `non-literal-turn-angle` mirrors the physical verifier's code-style
+rule and rejects a numeric literal passed directly to the precision-turn method.

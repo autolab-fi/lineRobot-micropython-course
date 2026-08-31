@@ -7,19 +7,19 @@
   "tasks": {
     "test_drive": {
       "mode": "simulation-only",
-      "checks": [{ "type": "program-finished" }, { "type": "minimum-distance", "valueCm": 20 }]
+      "checks": [{ "type": "program-finished" }, { "type": "move-time-sequence", "steps": [{ "direction": 1, "durationSec": 3, "toleranceSec": 0.1 }] }]
     },
     "license_to_drive": {
       "mode": "simulation-only",
-      "checks": [{ "type": "program-finished" }, { "type": "minimum-distance", "valueCm": 20 }]
+      "checks": [{ "type": "program-finished" }, { "type": "move-time-sequence", "steps": [{ "direction": 1, "durationSec": 5, "toleranceSec": 0.1 }] }]
     },
     "directional_movement": {
       "mode": "simulation-only",
-      "checks": [{ "type": "forward-and-backward-motion" }, { "type": "program-finished" }]
+      "checks": [{ "type": "program-finished" }, { "type": "move-distance-sequence", "steps": [{ "distanceCm": -35, "toleranceCm": 0.5 }, { "distanceCm": 20, "toleranceCm": 0.5 }] }]
     },
     "maneuvering": {
       "mode": "simulation-only",
-      "checks": [{ "type": "turn-command" }, { "type": "program-finished" }]
+      "checks": [{ "type": "program-finished" }, { "type": "turn-sequence", "steps": [{ "angleDeg": -90, "toleranceDeg": 1 }, { "angleDeg": 90, "toleranceDeg": 1 }, { "angleDeg": 145, "toleranceDeg": 1 }] }, { "type": "non-literal-turn-angle", "direction": "left" }]
     },
     "electric_motors": {
       "mode": "simulation-only",

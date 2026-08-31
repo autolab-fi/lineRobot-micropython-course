@@ -16,3 +16,7 @@ a specific duration, distance, order, or turn angle. Signed values follow the
 simulator convention: positive distance/angle means forward/left; negative means
 backward/right. `non-literal-turn-angle` mirrors the physical verifier's code-style
 rule and rejects a numeric literal passed directly to the precision-turn method.
+
+Manual motor tasks additionally use source requirements to mirror the physical
+verifiers' allowed APIs. Wheel-drive checks validate simulated duration and heading;
+encoder checks use executed API events and stdout values, not source text alone.

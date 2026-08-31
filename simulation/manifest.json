@@ -3,6 +3,7 @@
   "course": "LineRobotMicroPython",
   "world": "hamk-line-arena-v1",
   "robot": "moon-rover-v1",
+  "exercise": "first-move-v1",
   "generatedMetadata": "generated/task-metadata.json",
   "tasks": {
     "test_drive": {

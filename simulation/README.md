@@ -2,6 +2,9 @@
 
 `manifest.json` contains course-owned simulation modes and checks. Physical
 verification remains in `verifications/` and is executed only by the lab worker.
+`course-info.json` publishes the generated browser configuration URL through
+`simulationManifestUrl`; the course frontend can therefore discover simulation
+support without embedding task IDs or checks in its own source.
 
 `generated/task-metadata.json` is derived from verifier `target_points`. Generate
 it from the sibling `browser-robot-sim` repository with `npm run course:extract`.

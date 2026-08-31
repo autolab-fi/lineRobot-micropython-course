@@ -7,5 +7,6 @@
     "imageBig":"https://api.ondroid.org/media/courses/9/images/course-info/hamk-big.jpg",
     "workload":"3 ECTS",
     "requirements":"No previous programming or robotics knowledge is required.",
-    "programmingLanguage": "python"
+    "programmingLanguage": "python",
+    "simulationManifestUrl": "https://ondroid-simulator-dev.pages.dev/courses/hamk-line/simulation-config.json"
 }

@@ -20,3 +20,9 @@ rule and rejects a numeric literal passed directly to the precision-turn method.
 Manual motor tasks additionally use source requirements to mirror the physical
 verifiers' allowed APIs. Wheel-drive checks validate simulated duration and heading;
 encoder checks use executed API events and stdout values, not source text alone.
+
+The `electric_motors` finish target is derived from the physical verifier's
+`(row=400, column=1000)` point using the 3000 x 2000 arena raster at 2 px/mm.
+That maps to simulator `(x=0.50m, y=0.80m)` after flipping the camera Y axis.
+Its current 18 cm simulation tolerance includes provisional motor-response error;
+the physical verifier remains stricter at 10 cm.

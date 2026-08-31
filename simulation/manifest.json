@@ -27,7 +27,7 @@
     },
     "electric_motors": {
       "mode": "simulation-only",
-      "checks": [{ "type": "source-code", "requiredMethods": ["run_motors_speed", "stop"], "forbiddenMethods": ["turn_left", "turn_right", "move_forward_distance", "move_backward_distance", "move_forward_seconds", "move_backward_seconds"] }, { "type": "wheel-drive", "minimumDurationSec": 0.1, "maximumDurationSec": 8, "requireForward": true }, { "type": "motor-command-range", "minimumPercent": 1, "maximumPercent": 100 }, { "type": "robot-stopped" }, { "type": "program-finished" }]
+      "checks": [{ "type": "source-code", "requiredMethods": ["run_motors_speed", "stop"], "forbiddenMethods": ["turn_left", "turn_right", "move_forward_distance", "move_backward_distance", "move_forward_seconds", "move_backward_seconds"] }, { "type": "wheel-drive", "minimumDurationSec": 0.1, "maximumDurationSec": 8, "requireForward": true }, { "type": "final-position", "xM": 0.5, "yM": 0.8, "toleranceM": 0.18 }, { "type": "motor-command-range", "minimumPercent": 1, "maximumPercent": 100 }, { "type": "robot-stopped" }, { "type": "program-finished" }]
     },
     "differential_drive": {
       "mode": "simulation-only",

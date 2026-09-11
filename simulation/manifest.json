@@ -49,6 +49,62 @@
     "processing_sensor_data": {
       "mode": "simulation-and-lab",
       "checks": [{ "type": "source-code", "requiredMethods": ["move_forward_distance", "analog_read", "set_sensitivity"], "requiredFeatures": ["int-assignment", "for-loop", "if-statement", "print"], "requiredFunctions": [{ "name": "detect_line", "parameterCounts": [2, 3] }], "requiredFunctionCalls": ["detect_line"] }, { "type": "repeated-move-distance", "distanceCm": 1, "count": 15, "toleranceCm": 0.2 }, { "type": "octoliner-scan", "channels": [3, 4], "minimumReadsPerChannel": 15, "threshold": 900, "minimumDetections": 2, "outputText": "Found geological layers!" }, { "type": "program-finished" }]
+    },
+    "sequential_navigation": {
+      "mode": "simulation-only",
+      "checks": [
+        { "type": "source-code", "minimumCommentCount": 3 },
+        { "type": "navigation-sequence", "steps": [
+          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "turn", "angleDeg": 90 },
+          { "type": "move-distance", "distanceCm": 25 },
+          { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 25 }
+        ] },
+        { "type": "program-finished" }
+      ]
+    },
+    "for_loops": {
+      "mode": "simulation-only",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right_angle", "stop"], "requiredFeatures": ["for-loop"] },
+        { "type": "navigation-sequence", "steps": [
+          { "type": "move-distance", "distanceCm": 60 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 55 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 50 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 45 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 40 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 35 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 30 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 25 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 20 }, { "type": "turn", "angleDeg": -90 },
+          { "type": "move-distance", "distanceCm": 15 }, { "type": "turn", "angleDeg": -90 }
+        ] },
+        { "type": "robot-stopped" },
+        { "type": "program-finished" }
+      ]
+    },
+    "arrays_and_elif": {
+      "mode": "simulation-and-lab",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["move_forward_distance", "analog_read_all"], "requiredFeatures": ["for-loop", "if-statement", "elif-statement", "print"], "requiredIndexAccesses": [1, 3, 6] },
+        { "type": "repeated-move-distance", "distanceCm": 5, "count": 5, "toleranceCm": 0.3 },
+        { "type": "sensor-read", "sensor": "octoliner" },
+        { "type": "stdout-lines", "allowed": ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"], "minimumMatches": 5, "required": ["Survey complete."] },
+        { "type": "program-finished" }
+      ]
+    },
+    "led_feedback": {
+      "mode": "simulation-and-lab",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["move_forward_distance", "analog_read_all"], "requiredFeatures": ["for-loop", "if-statement", "elif-statement", "print"], "requiredIndexAccesses": [1, 3, 6], "minimumFunctionDefinitions": 1, "requireCalledDefinedFunction": true, "requiredFunctionMethods": ["on", "off"] },
+        { "type": "sensor-read", "sensor": "octoliner" },
+        { "type": "gpio-pulse-sequence", "pin": 15, "minimumPulses": 1, "minimumOnDurationSec": 0.1 },
+        { "type": "stdout-lines", "allowed": ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"], "minimumMatches": 5, "required": ["Survey complete."] },
+        { "type": "program-finished" }
+      ]
     }
   }
 }

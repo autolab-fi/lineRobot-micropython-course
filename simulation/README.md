@@ -43,3 +43,12 @@ trusted reference solution. The reference uses threshold 900 while the physical
 verifier accepts readings above 800; this discrepancy should be resolved in the
 course content. The simulator currently emits 960 for line and 100 for floor so
 that the published reference remains executable while preserving both thresholds.
+
+The manifest currently enables 15 tasks. The September 2026 expansion adds
+`sequential_navigation`, `for_loops`, `arrays_and_elif`, and `led_feedback`.
+Their trusted references pass the browser checks. `defining_functions` remains
+disabled: its lesson and physical verifier require a 180-degree manual turn, but
+the trusted reference produces about 94 degrees in the calibrated simulator and
+none of the 12 historically accepted submissions reaches the required 170–190
+degree interval. Resolve the physical/simulator calibration and update the trusted
+reference before enabling that task.

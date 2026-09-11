@@ -44,12 +44,16 @@ verifier accepts readings above 800; this discrepancy should be resolved in the
 course content. The simulator currently emits 960 for line and 100 for floor so
 that the published reference remains executable while preserving both thresholds.
 
-The manifest currently enables 20 tasks. The September 2026 expansions add
+The manifest currently enables 21 tasks. The September 2026 expansions add
 `sequential_navigation`, `for_loops`, `arrays_and_elif`, `led_feedback`,
 `simple_line_follower`, `python_lists`, `telemetry`, and
 `color_sensor_basics`, plus the introductory `welcome` system check. Their
 trusted references (or, for `welcome`, its published starter template) pass the
 browser checks.
+
+`sandbox` is available as an optional, ungraded simulation workspace. It accepts
+any supported Python program that finishes successfully and enforces the
+lesson's documented 20-second virtual execution limit.
 `defining_functions` remains
 disabled: its lesson and physical verifier require a 180-degree manual turn, but
 the trusted reference produces about 94 degrees in the calibrated simulator and

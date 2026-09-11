@@ -6,6 +6,11 @@
   "exercise": "first-move-v1",
   "generatedMetadata": "generated/task-metadata.json",
   "tasks": {
+    "sandbox": {
+      "mode": "simulation-optional",
+      "timeoutSec": 20,
+      "checks": [{ "type": "program-finished" }]
+    },
     "welcome": {
       "mode": "simulation-only",
       "checks": [{ "type": "program-finished" }]

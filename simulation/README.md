@@ -44,10 +44,12 @@ verifier accepts readings above 800; this discrepancy should be resolved in the
 course content. The simulator currently emits 960 for line and 100 for floor so
 that the published reference remains executable while preserving both thresholds.
 
-The manifest currently enables 19 tasks. The September 2026 expansions add
+The manifest currently enables 20 tasks. The September 2026 expansions add
 `sequential_navigation`, `for_loops`, `arrays_and_elif`, `led_feedback`,
 `simple_line_follower`, `python_lists`, `telemetry`, and
-`color_sensor_basics`. Their trusted references pass the browser checks.
+`color_sensor_basics`, plus the introductory `welcome` system check. Their
+trusted references (or, for `welcome`, its published starter template) pass the
+browser checks.
 `defining_functions` remains
 disabled: its lesson and physical verifier require a 180-degree manual turn, but
 the trusted reference produces about 94 degrees in the calibrated simulator and
@@ -60,6 +62,12 @@ coordinate is not a valid simulated body centre. `color_sensor_basics` uses this
 for a 8 cm inward offset: the physical start marker is only 2 cm from the arena
 edge, which would place most of the 20.7 cm simulated chassis outside the world.
 The heading and scanning corridor are unchanged.
+
+`license_to_drive` starts 15 cm farther west in the simulator. Its physical
+verifier grades the requested five-second duration, while the provisional browser
+speed would otherwise place the rover footprint beyond the east edge before the
+command finishes. Keep this task-local offset until browser and physical wheel
+speeds are calibrated from the same measured run.
 
 `color_classification` also remains disabled. The lesson and physical verifier
 require output beginning with `Scan -`, while the current trusted reference emits

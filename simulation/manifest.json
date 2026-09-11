@@ -105,6 +105,43 @@
         { "type": "stdout-lines", "allowed": ["Vein: Center", "Vein: Left", "Vein: Right", "No minerals"], "minimumMatches": 5, "required": ["Survey complete."] },
         { "type": "program-finished" }
       ]
+    },
+    "simple_line_follower": {
+      "mode": "simulation-and-lab",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["analog_read_all"], "requiredAnyMethods": [["run_motors_speed", "turn_left_angle", "turn_right_angle"]], "requiredFeatures": ["while-true-loop", "if-statement", "elif-statement"], "requiredIndexAccesses": [1, 3, 6] },
+        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 5 },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 1.03, "yM": 0.55 }, { "xM": 0.98, "yM": 0.20 }], "toleranceM": 0.10, "stopProgramOnPass": true },
+        { "type": "program-finished" }
+      ]
+    },
+    "python_lists": {
+      "mode": "simulation-only",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right"], "requiredFeatures": ["list-assignment", "for-loop", "print"], "requiredFunctionCalls": ["len"], "requiredVariableNames": ["route"], "requiredLoopIterableNames": ["route"] },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 1.30, "yM": 0.70 }, { "xM": 1.30, "yM": 0.10 }, { "xM": 0.60, "yM": 0.10 }], "toleranceM": 0.10 },
+        { "type": "program-finished" }
+      ]
+    },
+    "telemetry": {
+      "mode": "simulation-only",
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["move_forward_distance"], "requiredFeatures": ["string-assignment", "boolean-assignment", "division", "f-string", "print"], "requiredVariableNames": ["robot_name", "is_ready", "duration", "speed_cm_s"], "requiredMethodCallCounts": { "time": 2 } },
+        { "type": "move-distance-sequence", "steps": [{ "distanceCm": 40, "toleranceCm": 0.5 }] },
+        { "type": "stdout-regex", "pattern": "(?:^|\\n)STATUS:name=[^;\\n]+;dist=40(?:\\.0+)?;time=(?!0(?:\\.0+)?(?:;|$))[^;\\n]+;speed=(?!0(?:\\.0+)?(?:;|$))[^;\\n]+;ready=True(?:\\n|$)" },
+        { "type": "program-finished" }
+      ]
+    },
+    "color_sensor_basics": {
+      "mode": "simulation-and-lab",
+      "initialPose": { "xM": 1.28, "yM": 0.10, "headingRad": 1.570796327 },
+      "checks": [
+        { "type": "source-code", "requiredMethods": ["rgb", "move_forward_distance"], "requiredFeatures": ["for-loop", "f-string", "print"], "requiredRangeArguments": [6] },
+        { "type": "repeated-move-distance", "distanceCm": 10, "count": 6, "toleranceCm": 0.3 },
+        { "type": "sensor-read", "sensor": "color", "minimumReads": 6 },
+        { "type": "color-rgb-scan", "minimumScans": 6, "minimumDistinctColors": 2 },
+        { "type": "program-finished" }
+      ]
     }
   }
 }

@@ -3,7 +3,7 @@ index: 14
 module: module_3
 task: intro_to_octoliner
 previous: while_loops
-next: conditional_logic_reactive
+next: conditional_logic
 ---
 
 # Mission 3.1 Introduction to Octoliner Sensor
@@ -59,7 +59,7 @@ Notice the `set_sensitivity(240)` command at the end of the setup. This adjusts 
 ### 3. Reading the Central Sensor
 While the Octoliner has an array of 8 sensors (indexed from 0 to 7), looking at all of them at once can be overwhelming. For now, we will focus solely on Sensor 3, which is located near the center of the rover.
 
-You can get the numerical value from this specific sensor using the `analog_read(index)` function, it returns analog value (0-1023).
+You can get the numerical value from this specific sensor using the `analog_read(index)` function. It returns an analog value from 0 to 1023.
 
 ## Assignment
 Your task is to activate the optical array and stream data from the central sensor back to Mission Control. Do not initiate any movement commands.
@@ -69,7 +69,7 @@ Your task is to activate the optical array and stream data from the central sens
 2. Initialize the I2C connection and the `octoliner` object using the code snippet provided in the theory section.
 3. Read and print the value of Sensor 3.
 
-*Experiment:* Try to move your robot and observe how the printed numbers differ compared to an another surface!
+*Experiment:* Move the robot by hand and observe how the printed values differ on another surface.
 
 ## Conclusion
 Sensor array online! You have successfully established an I2C connection and retrieved raw optical data from the rover. You should now clearly see how the numerical values change depending on the surface.

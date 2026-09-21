@@ -30,7 +30,7 @@ That maps to simulator `(x=0.50m, y=0.80m)` after flipping the camera Y axis.
 Its current 18 cm simulation tolerance includes provisional motor-response error;
 the physical verifier remains stricter at 10 cm.
 
-`conditional_logic` is the first `simulation-and-lab` sensor task. Its browser
+`conditional_logic` is a `simulation-and-lab` sensor task. Its browser
 check requires a `while`/`if`/`break` structure, real Octoliner reads, forward
 wheel motion, the assignment's success output, and a stop command issued while
 the simulated sensor array is physically over the line. An immediate or
@@ -44,22 +44,18 @@ verifier accepts readings above 800; this discrepancy should be resolved in the
 course content. The simulator currently emits 960 for line and 100 for floor so
 that the published reference remains executable while preserving both thresholds.
 
-The manifest currently enables 21 tasks. The September 2026 expansions add
-`sequential_navigation`, `for_loops`, `arrays_and_elif`, `led_feedback`,
-`simple_line_follower`, `python_lists`, `telemetry`, and
-`color_sensor_basics`, plus the introductory `welcome` system check. Their
-trusted references (or, for `welcome`, its published starter template) pass the
-browser checks.
+The manifest exposes all 35 active lessons in `lessons-list.json`. Every active lesson uses
+`simulation-and-lab`: the browser run is formative, the physical lab is always
+available, and only a successful physical verification completes the lesson.
+Simulator success is not a prerequisite for lab admission.
 
-`sandbox` is available as an optional, ungraded simulation workspace. It accepts
-any supported Python program that finishes successfully and enforces the
-lesson's documented 20-second virtual execution limit.
-`defining_functions` remains
-disabled: its lesson and physical verifier require a 180-degree manual turn, but
-the trusted reference produces about 94 degrees in the calibrated simulator and
-none of the 12 historically accepted submissions reaches the required 170–190
-degree interval. Resolve the physical/simulator calibration and update the trusted
-reference before enabling that task.
+The original 21 simulator tasks retain their detailed behavioral checks. Newly
+exposed advanced tasks use baseline runtime/sensor checks until their exact
+browser checks are calibrated against trusted physical runs. Physical verification
+therefore remains the authoritative assessment for every lesson.
+
+Mission 2.6 (`while_loops`) remains intentionally excluded because its physical
+behavior is not reliable enough for student use.
 
 Tasks may declare an `initialPose` override when the verifier's detected marker
 coordinate is not a valid simulated body centre. `color_sensor_basics` uses this
@@ -73,6 +69,6 @@ speed would otherwise place the rover footprint beyond the east edge before the
 command finishes. Keep this task-local offset until browser and physical wheel
 speeds are calibrated from the same measured run.
 
-`color_classification` also remains disabled. The lesson and physical verifier
-require output beginning with `Scan -`, while the current trusted reference emits
-`Scan complete:`. Correct and revalidate the reference before exposing the task.
+`color_classification` is available for formative simulation, but its exact
+browser grading remains provisional because the lesson/physical verifier output
+prefix and the current trusted reference still differ.

@@ -2,7 +2,7 @@
 index: 6
 module: module_1
 task: maneuvering
-previous: python_variables_&_commands
+previous: python_variables_commands
 next: sequential_navigation
 ---
 
@@ -51,8 +51,8 @@ robot.turn_left_angle(turn_angle)
 ## Assignment
 
 It's time to test the steering mechanism. You need to perform a sequence of maneuvers using both standard commands and variables.
-Write code for the robot to **turn right, then turn left, and finally turn left again for 145 degree**.
+Write code for the robot to **turn right, then turn left, and finally turn left again by 145 degrees**.
 
 ## Conclusion
 
-Congratulations! Now you can move the robot in any directions! This skill will prove very useful for you in the next lesson.
+Congratulations! Now you can move the robot in any direction! This skill will prove very useful in the next lesson.

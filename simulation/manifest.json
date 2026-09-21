@@ -7,49 +7,53 @@
   "generatedMetadata": "generated/task-metadata.json",
   "tasks": {
     "sandbox": {
-      "mode": "simulation-optional",
+      "mode": "simulation-and-lab",
       "timeoutSec": 20,
       "checks": [{ "type": "program-finished" }]
     },
     "welcome": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "program-finished" }]
     },
     "test_drive": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "program-finished" }, { "type": "move-time-sequence", "steps": [{ "direction": 1, "durationSec": 3, "toleranceSec": 0.1 }] }]
     },
     "license_to_drive": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "initialPose": { "xM": 0.20, "yM": 0.50, "headingRad": 0 },
       "checks": [{ "type": "program-finished" }, { "type": "move-time-sequence", "steps": [{ "direction": 1, "durationSec": 5, "toleranceSec": 0.1 }] }]
     },
     "directional_movement": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "program-finished" }, { "type": "move-distance-sequence", "steps": [{ "distanceCm": -35, "toleranceCm": 0.5 }, { "distanceCm": 20, "toleranceCm": 0.5 }] }]
     },
     "maneuvering": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "program-finished" }, { "type": "turn-sequence", "steps": [{ "angleDeg": -90, "toleranceDeg": 1 }, { "angleDeg": 90, "toleranceDeg": 1 }, { "angleDeg": 145, "toleranceDeg": 1 }] }, { "type": "non-literal-turn-angle", "direction": "left" }]
     },
     "python_variables_commands": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "program-finished" }, { "type": "move-distance-sequence", "steps": [{ "distanceCm": -20.5, "toleranceCm": 0.5 }, { "distanceCm": 15, "toleranceCm": 0.5 }] }, { "type": "source-code", "requiredFeatures": ["float-assignment", "int-assignment", "addition", "print"] }, { "type": "stdout-regex", "pattern": "(?:^|\\n)Total distance:\\s*35\\.5\\s+cm(?:\\n|$)" }]
     },
     "electric_motors": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "source-code", "requiredMethods": ["run_motors_speed", "stop"], "forbiddenMethods": ["turn_left", "turn_right", "move_forward_distance", "move_backward_distance", "move_forward_seconds", "move_backward_seconds"] }, { "type": "wheel-drive", "minimumDurationSec": 0.1, "maximumDurationSec": 8, "requireForward": true }, { "type": "final-position", "xM": 0.5, "yM": 0.8, "toleranceM": 0.18 }, { "type": "motor-command-range", "minimumPercent": 1, "maximumPercent": 100 }, { "type": "robot-stopped" }, { "type": "program-finished" }]
     },
     "differential_drive": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "source-code", "requiredMethods": ["run_motor_left", "run_motor_right", "stop"], "forbiddenMethods": ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds", "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"] }, { "type": "wheel-drive", "minimumDurationSec": 2.9, "maximumDurationSec": 3.1, "maximumHeadingDeviationDeg": 10, "requireForward": true }, { "type": "robot-stopped" }, { "type": "program-finished" }]
     },
+    "defining_functions": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
     "encoder_theory": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "source-code", "requiredMethods": ["reset_left_encoder", "reset_right_encoder", "run_motor_left", "run_motor_right", "stop_motor_left", "stop_motor_right", "encoder_degrees_left"], "forbiddenMethods": ["stop"], "requiredFeatures": ["math-import", "math-pi", "print"] }, { "type": "wheel-drive", "requireForward": true }, { "type": "encoder-range", "side": "left", "minimumDeg": 310, "maximumDeg": 360 }, { "type": "encoder-distance-output", "side": "left", "label": "Distance in cm:", "wheelRadiusCm": 3.21, "toleranceCm": 0.25 }, { "type": "stdout-regex", "pattern": "(?:^|\\n)Encoder degrees left:\\s*(?:3[12]\\d|3[3-5]\\d|360)(?:\\n|$)" }, { "type": "travelled-distance-range", "minimumCm": 16.5, "maximumCm": 22 }, { "type": "robot-stopped" }, { "type": "program-finished" }]
     },
     "intro_to_octoliner": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
     },
     "conditional_logic": {
@@ -61,7 +65,7 @@
       "checks": [{ "type": "source-code", "requiredMethods": ["move_forward_distance", "analog_read", "set_sensitivity"], "requiredFeatures": ["int-assignment", "for-loop", "if-statement", "print"], "requiredFunctions": [{ "name": "detect_line", "parameterCounts": [2, 3] }], "requiredFunctionCalls": ["detect_line"] }, { "type": "repeated-move-distance", "distanceCm": 1, "count": 15, "toleranceCm": 0.2 }, { "type": "octoliner-scan", "channels": [3, 4], "minimumReadsPerChannel": 15, "threshold": 900, "minimumDetections": 2, "outputText": "Found geological layers!" }, { "type": "program-finished" }]
     },
     "sequential_navigation": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "minimumCommentCount": 3 },
         { "type": "navigation-sequence", "steps": [
@@ -77,7 +81,7 @@
       ]
     },
     "for_loops": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right_angle", "stop"], "requiredFeatures": ["for-loop"] },
         { "type": "navigation-sequence", "steps": [
@@ -126,7 +130,7 @@
       ]
     },
     "python_lists": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right"], "requiredFeatures": ["list-assignment", "for-loop", "print"], "requiredFunctionCalls": ["len"], "requiredVariableNames": ["route"], "requiredLoopIterableNames": ["route"] },
         { "type": "ordered-checkpoints", "points": [{ "xM": 1.30, "yM": 0.70 }, { "xM": 1.30, "yM": 0.10 }, { "xM": 0.60, "yM": 0.10 }], "toleranceM": 0.10 },
@@ -134,7 +138,7 @@
       ]
     },
     "telemetry": {
-      "mode": "simulation-only",
+      "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "requiredMethods": ["move_forward_distance"], "requiredFeatures": ["string-assignment", "boolean-assignment", "division", "f-string", "print"], "requiredVariableNames": ["robot_name", "is_ready", "duration", "speed_cm_s"], "requiredMethodCallCounts": { "time": 2 } },
         { "type": "move-distance-sequence", "steps": [{ "distanceCm": 40, "toleranceCm": 0.5 }] },
@@ -152,6 +156,66 @@
         { "type": "color-rgb-scan", "minimumScans": 6, "minimumDistinctColors": 2 },
         { "type": "program-finished" }
       ]
+    },
+    "color_classification": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
+    "concept_of_error": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
+    "upgraded_relay_controller": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    },
+    "proportional_control": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    },
+    "tuning_and_kick": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    },
+    "adaptive_speed": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    },
+    "art_of_debugging": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
+    "hardware_safety_net": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "program-finished" }]
+    },
+    "code_clinic": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "program-finished" }]
+    },
+    "navigation": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
+    "perimeter": {
+      "mode": "simulation-and-lab",
+      "checks": [{ "type": "program-finished" }]
+    },
+    "visual_telemetry": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+    },
+    "adaptive_racing": {
+      "mode": "simulation-and-lab",
+      "timeoutSec": 20,
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
     }
   }
 }

@@ -49,10 +49,10 @@ The manifest exposes all 35 active lessons in `lessons-list.json`. Every active 
 available, and only a successful physical verification completes the lesson.
 Simulator success is not a prerequisite for lab admission.
 
-The original 21 simulator tasks retain their detailed behavioral checks. Newly
-exposed advanced tasks use baseline runtime/sensor checks until their exact
-browser checks are calibrated against trusted physical runs. Physical verification
-therefore remains the authoritative assessment for every lesson.
+All 35 simulator tasks have assignment-specific checks. The advanced line,
+debugging, and capstone tasks validate source structure together with observable
+sensor, movement, route, GPIO, and output behavior. Physical verification remains
+the authoritative assessment for every lesson.
 
 Mission 2.6 (`while_loops`) remains intentionally excluded because its physical
 behavior is not reliable enough for student use.
@@ -69,6 +69,6 @@ speed would otherwise place the rover footprint beyond the east edge before the
 command finishes. Keep this task-local offset until browser and physical wheel
 speeds are calibrated from the same measured run.
 
-`color_classification` is available for formative simulation, but its exact
-browser grading remains provisional because the lesson/physical verifier output
-prefix and the current trusted reference still differ.
+`color_classification` starts on the simulator's color corridor. Its checker
+correlates all six printed classifications and raw RGB values with the actual
+simulated sensor events, so formatted hard-coded output does not pass.

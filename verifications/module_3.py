@@ -129,8 +129,8 @@ def intro_to_octoliner(robot, image, td, user_code=None):
         elif not got_sensor_data:
             result["success"] = False
             result["score"] = 0
-            result["description"] = "Timeout: No sensor readings received | Score: 0"
-            text = "No readings received."
+            result["description"] = "No printed sensor value received. Print the value returned by analog_read(3) or analog_read(4). | Score: 0"
+            text = "No printed sensor value received."
         else:
             result["success"] = True
             result["score"] = 100

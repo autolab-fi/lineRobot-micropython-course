@@ -14,6 +14,13 @@ to metres; direction vectors become simulator headings.
 Reference solutions are not stored here or sent to students. They may be used by
 trusted compatibility tests, identified only by task id and source hash.
 
+`intro_to_octoliner` requires a real Octoliner read and a printed integer sensor
+value (0–1023), matching the lesson's read-and-print requirement. Both a bare
+number and labelled output such as `Sensor value: 960` are accepted. A read
+without output fails with an explicit instruction to print the value. This is
+an output-format check; it does not prove that the printed number came from the
+sensor. Physical verification retains its existing timing and grading logic.
+
 The first module uses exact declarative command checks where the wording requires
 a specific duration, distance, order, or turn angle. Signed values follow the
 simulator convention: positive distance/angle means forward/left; negative means

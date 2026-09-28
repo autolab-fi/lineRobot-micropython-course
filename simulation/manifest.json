@@ -66,7 +66,7 @@
     },
     "intro_to_octoliner": {
       "mode": "simulation-and-lab",
-      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "program-finished" }]
+      "checks": [{ "type": "sensor-read", "sensor": "octoliner" }, { "type": "stdout-regex", "pattern": "(?:^|[^\\w.\\-])(?:102[0-3]|10[01][0-9]|[1-9][0-9]{0,2}|0)(?=$|[^\\w.])", "failureMessage": "Print the sensor value returned by octoliner.analog_read(3) or octoliner.analog_read(4). Reading the sensor without printing its value is not enough." }, { "type": "program-finished" }]
     },
     "conditional_logic": {
       "mode": "simulation-and-lab",

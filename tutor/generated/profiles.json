@@ -134,7 +134,7 @@
           "lesson": "0f3fd30e6e49ade1e4024b5d8162a890e0d5fee6d02730ccbec252acdba0144d",
           "template": "5cee2cc17e54fa1ffef1f40f981dd49e53d547086438be305794eb0ea1777da9",
           "reference": "37a48fa8980953093421034821da155f6eca25f30589868fca51e35d53591031",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "a07713885f5c3ce4a61f584d4dcf0b9df5c85ea9b4a0102eaed99620182ea31a"
         }
       },
@@ -194,7 +194,7 @@
           "lesson": "271cc96b8de99bf7b1da52789bccb5aaa17e9e34fe615b40e756525f5536e683",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "9a01ced5bb405fbecf83b5f8f9e028580f99199d8eef1869217a09edd46017af",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "d56a784ca7fda772258b5e72174d66e9ffe23d09f4f487dc20f71cb03d61a87e"
         }
       },
@@ -254,7 +254,7 @@
           "lesson": "8455f07a37fedbc6f03b024b8f86a67f754d3f3ae66fdd217d271827e681b786",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "cc854f6c9e983cf5c2631c1cf15c61674cf00f9cc753d610d617bde7f9ff438d",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "15c98ef8f34e9062a0b388e5e1d622cec92e82d41104dca1b315f7eb26ecae03"
         }
       },
@@ -317,7 +317,7 @@
           "lesson": "c4557a1c358be270856630e6bc3f546b2fad96dea2dcf9beaed62d93eb5333c9",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "3f6337d39bdaeb885c9096154bcfe23448097d74875d49d9f389584ee7b7d4db",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "db28db95755854b58cf5e7b477ead483f741d4a188ee29eb5f1a277ddba5e463"
         }
       },
@@ -393,7 +393,7 @@
           "lesson": "50d3a8e1841839680631c56fedb9a1117724b9037d92ed0e5a1647032d9d83dc",
           "template": "94184280c584574f994c7a701b640f16ae9571692ffa686617a1214a1af77c1a",
           "reference": "e1b92fbf4892c8d3135f73a8739025f4cef64838e0a40dd9e035a52d957724c9",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "ecc0253836534335b7963d30151a67c0c7ca35f21a2ab26a1bbb7ae4cd2ee769"
         }
       },
@@ -464,7 +464,7 @@
           "lesson": "d2a2e61287ed4d30295be372f7c6e9f8615f5d3e3fa4bc1ad67fac409453a409",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "7d48a252ad5d8e79b5b4d39a405fb1019ae49030b41616207188088284daf8a4",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "42805d4725907e8fff7a0b8b8d73df3de663eff36208aad61c3687082d161da5"
         }
       },
@@ -551,7 +551,7 @@
           "lesson": "3f796fffeaedce8f5c2f62a5557a3ee6fc4cb4553f61891423f4cfd7e1499e4b",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "fd3b75a71aa0abfdda6a8b0f43592f22d543658eb7a2af8d654725f0649e2067",
-          "checker": "1709d2410cf476e944f1a9929567bd04d5b159fd21aad949042e5a9f24321c33",
+          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
           "simulation": "dc46faa19171e018bda108679a53fe61dec67fe686ae9e6ed79e4175d5385623"
         }
       },
@@ -724,9 +724,9 @@
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_2.py"
     },
     "defining_functions": {
-      "assignment_full_text": "---\nindex: 10\nmodule: module_2\ntask: defining_functions\nprevious: differential_drive\nnext: for_loops\n---\n# Mission 2.3 Defining Functions\n\n## Objective\nLearn what a function is and how to create your own custom functions in MicroPython.\n\n![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)\n\n## Introduction\nIn programming, a **function** is a named, reusable block of code that performs a specific task. You can think of it as a recipe or a mini-program inside your main program. \n\nWe have already used built-in functions created by other programmers, such as `print()`, `time.sleep()`, or `robot.run_motors_speed()`. But what if you need a specific maneuver that doesn't exist in the library? In this lesson, you will learn how to write your very own custom functions!\n\n## Theory\n\n### 1. Why Use Functions?\nImagine you need the robot to perform a special \"dance\" maneuver multiple times. Writing the individual motor commands, sleep times, and stop commands over and over makes your code huge and hard to read. By grouping these commands into a custom function, you can perform the whole dance later with just one short line of code.\n\n### 2. Creating a Function (`def`)\nIn Python, you define a function using the `def` keyword, followed by the function's name and parentheses. \n\nHere is an example of a function that makes the robot move forward and then wait:\n\n```python\nfrom lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Defining the function\ndef move_forward_and_wait():\n    robot.run_motors_speed(50, 50)\n    time.sleep(2)\n    robot.stop()\n    time.sleep(1)\n\n# Calling the function\nmove_forward_and_wait()\n```\n\n**Notice two important things:**\n* **Indentation:** The code inside the function is indented (shifted to the right). This tells Python which commands belong inside the function.\n* **Defining vs Calling:** Defining a function doesn't run it automatically. You have to **call** it by writing its name with parentheses (like `move_forward_and_wait()`) at the bottom of your script to actually execute the code!\n\n### 3. Adding Parameters\nFunctions become even more powerful when you give them **parameters** (inputs). This allows the function to behave differently depending on the values you pass to it.\n\n```python\ndef custom_move_forward(speed, seconds):\n    robot.run_motors_speed(speed, speed)\n    time.sleep(seconds)\n    robot.stop()\n        \n# Now you can use it with any speed and time!\ncustom_move_forward(60, 3)  # Moves at 60% speed for 3 seconds\ncustom_move_forward(100, 1) # Moves at 100% speed for 1 second\n```\n\n### 4. Returning Values\nSome functions perform an action (like moving), while others calculate something and **return** a result back to you using the `return` keyword.\n\n```python\ndef add_numbers(num1, num2):\n    result = num1 + num2\n    return result\n\ntotal = add_numbers(5, 10) # The variable 'total' will store the number 15\n```\n\n## Assignment\nWrite a program that makes the robot turn approximately **180 degrees** by creating your own custom function.\n\n**Requirements:**\n* **Do not** use built-in navigation functions (like `turn_left`, `turn_right`, or `move_forward_distance`).\n* Define a custom function.\n* Inside your function, delete *pass* (it's just a placeholder in empty functions) in the templete and then write your code: use manual motor control methods (`run_motors_speed` or raw PWM) and `time.sleep()`.\n* Call your function at the end of the script to execute the maneuver.\n\n\n**Hint:** Because our robot uses a differential drive, it can rotate on the spot. To do this, one wheel must spin forward while the other spins backward at the same time!\n\n## Conclusion\nCongratulations! You are no longer just a driver; you are now extending the robot's core software. Custom functions are the building blocks of advanced programming. Next up, we will learn how to repeat these functions automatically!",
+      "assignment_full_text": "---\nindex: 10\nmodule: module_2\ntask: defining_functions\nprevious: differential_drive\nnext: for_loops\n---\n# Mission 2.3 Defining Functions\n\n## Objective\nLearn what a function is and how to create your own custom functions in MicroPython.\n\n![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)\n\n## Introduction\nIn programming, a **function** is a named, reusable block of code that performs a specific task. You can think of it as a recipe or a mini-program inside your main program. \n\nWe have already used built-in functions created by other programmers, such as `print()`, `time.sleep()`, or `robot.run_motors_speed()`. But what if you need a specific maneuver that doesn't exist in the library? In this lesson, you will learn how to write your very own custom functions!\n\n## Theory\n\n### 1. Why Use Functions?\nImagine you need the robot to perform a special \"dance\" maneuver multiple times. Writing the individual motor commands, sleep times, and stop commands over and over makes your code huge and hard to read. By grouping these commands into a custom function, you can perform the whole dance later with just one short line of code.\n\n### 2. Creating a Function (`def`)\nIn Python, you define a function using the `def` keyword, followed by the function's name and parentheses. \n\nHere is an example of a function that makes the robot move forward and then wait:\n\n```python\nfrom lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# Defining the function\ndef move_forward_and_wait():\n    robot.run_motors_speed(50, 50)\n    time.sleep(2)\n    robot.stop()\n    time.sleep(1)\n\n# Calling the function\nmove_forward_and_wait()\n```\n\n**Notice two important things:**\n* **Indentation:** The code inside the function is indented (shifted to the right). This tells Python which commands belong inside the function.\n* **Defining vs Calling:** Defining a function doesn't run it automatically. You have to **call** it by writing its name with parentheses (like `move_forward_and_wait()`) at the bottom of your script to actually execute the code!\n\n### 3. Adding Parameters\nFunctions become even more powerful when you give them **parameters** (inputs). This allows the function to behave differently depending on the values you pass to it.\n\n```python\ndef custom_move_forward(speed, seconds):\n    robot.run_motors_speed(speed, speed)\n    time.sleep(seconds)\n    robot.stop()\n        \n# Now you can use it with any speed and time!\ncustom_move_forward(60, 3)  # Moves at 60% speed for 3 seconds\ncustom_move_forward(100, 1) # Moves at 100% speed for 1 second\n```\n\n### 4. Returning Values\nSome functions perform an action (like moving), while others calculate something and **return** a result back to you using the `return` keyword.\n\n```python\ndef add_numbers(num1, num2):\n    result = num1 + num2\n    return result\n\ntotal = add_numbers(5, 10) # The variable 'total' will store the number 15\n```\n\n## Assignment\nWrite a program that makes the robot turn approximately **180 degrees** by creating your own custom function.\n\n**Requirements:**\n* **Do not** use built-in navigation functions (like `turn_left`, `turn_right`, or `move_forward_distance`).\n* Define a custom function.\n* Inside your function, delete *pass* (it's just a placeholder in empty functions) in the templete and then write your code: use manual motor control methods (`run_motors_speed` or raw PWM) and `time.sleep()`.\n* Call your function at the end of the script to execute the maneuver.\n\n\n**Hint:** Because our robot uses a differential drive, it can rotate on the spot. To do this, one wheel must spin forward while the other spins backward at the same time!\n\n## Conclusion\nCongratulations! You are no longer just a driver; you are now extending the robot's core software. Custom functions are the building blocks of advanced programming. Next up, we will learn how to repeat these functions automatically!\nTune the duration using the camera: change one parameter at a time, then check the final heading after the robot stops. The physical rover and simulator can need different durations even with the same motor commands.\n",
       "assignment_summary": "--- index: 10 module: module_2 task: defining_functions previous: differential_drive next: for_loops --- # Mission 2.3 Defining Functions ## Objective Learn what a function is and how to create your own custom functions in MicroPython. ![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green) ## Introduction In programming, a **function** is a named, reusable block of code that performs a specific task. You can think of it as a recipe or a mini-program inside your main program. We have already used built-in functions created by other programmers, such as `print()`, `time.sleep()`, or `robot.run_motors_speed()`. But what if you need a specific maneuver that doesn't exist in the library? In this lesson, you will learn how to write your very own custom functions! ## Theory ### 1. Why Use Functions? Imagine you need the robot to perform a special \"dance\" maneuver multiple times. Writing the individual motor commands, sleep times, and stop commands over and over makes your code huge and hard to read. By grouping these commands into a custom function, you can perform the whole dance later with just one short line of code. ### 2. Creating a Function (`def`) In Python, you define a function using the `def` keyword, followed by the function's name and parentheses. Here is an example of a function that makes the robot move forward and then wait: **Notice two important things:** * **Indentation:** The code inside the function is indented (shifted to the right). This tells Python which commands belong inside the function. * **Defining vs Calling:** Defining a function doesn't run it automatically. You have to **call** it by writing its name with parentheses (like `move_forward_and_wait()`) at the bottom of your script to actually execute the code! ### 3. Adding Parameters Functions become even more powerful when you give them **parameters** (inputs). This allows the function to behave differently depending on the values you pass to it. ### 4. Returning Values Some fun",
-      "reference_solution_text": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\ndef turn_around():\n    robot.run_motors_speed(50, -50)\n    time.sleep(0.7)\n    robot.stop()\n\nturn_around()\n",
+      "reference_solution_text": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\ndef turn_around():\n    robot.run_motors_speed(50, -50)\n    time.sleep(0.63)\n    robot.stop()\n\nturn_around()\n",
       "verification_summary": "Test: Robot must turn 180 degrees using a defined function.\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
@@ -781,9 +781,12 @@
           "full reference solution",
           "raw checker implementation",
           "hidden test thresholds"
-        ]
+        ],
+        "calibration_policy": "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
       },
-      "common_mistakes": [],
+      "common_mistakes": [
+        "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
+      ],
       "repo_refs": {
         "context_manifest_schema": 1,
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
@@ -791,12 +794,14 @@
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_2/defining_functions_reference.py",
         "guidance_updated": "2026-10-08",
         "source_sha256": {
-          "lesson": "64c22520c2ee671bfb5030e7b120f5e020945c528347f98d63520e461359e4f9",
+          "lesson": "c0daab95f775510fea2112d2b3957ea318f8af0a3ce0d103fb3e1841e3f80e9b",
           "template": "7f171a6553debc000c562b9f0c5d031d48e33302519277d13d804d40006dc45a",
-          "reference": "1491d07f106eb340f35facb4f669259433b965a3458ee5f4c5e3220e60f4dff7",
+          "reference": "756a18e0baa11f6e72cb25a09e638ebd2dc0d6d6ae8b63b4931dba103dfaff61",
           "checker": "1d2ee59deaf74b41ad93ec4c1e759a7d431abf42650adc6cf7452c8f70ca98f5",
-          "simulation": "1f503223790fa7a85c7504eaae39b05ec2f450037546fd53b3f11627a7881cd2"
-        }
+          "simulation": "1f503223790fa7a85c7504eaae39b05ec2f450037546fd53b3f11627a7881cd2",
+          "simulation_reference": "1491d07f106eb340f35facb4f669259433b965a3458ee5f4c5e3220e60f4dff7"
+        },
+        "simulation_reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_2/defining_functions_simulation.py"
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_2.py"
     },
@@ -1119,7 +1124,7 @@
           "lesson": "bcc3777662055cdc87b769053e8752e78054d7c77393ca265c5dc81ca901394c",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "e29850b05248a178f671e3dbf3eda03278bbef573b77d82fea86492d61a7f4a9",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
           "simulation": "63c18d572c53aeb1cf0ceb4b3bf88e285296ffa70cebb9582c378f1e12505f98"
         }
       },
@@ -1210,7 +1215,7 @@
           "lesson": "de7c68b2631b681bc9780a13e2ef4bb05b224be837fbe75c27b3cdfe4c0c273a",
           "template": "7a46ce110ab5480c6e37a831e7071d123e7ab92739edc268c8223178037c5aa4",
           "reference": "40769d7e32d41f9259c7cb51823fff77422a46dc4d4fe3ccec86c9abbe2d635c",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
           "simulation": "0f3f871b39d5d42015a399cb6151c72574f6cc9ef0272c3bed1ee80f5f6db16e"
         }
       },
@@ -1317,7 +1322,7 @@
           "lesson": "b81ef4112f38dd880c88e75bfeb59da8f8a9cac8834f4b71a49470a69dc577ed",
           "template": "54194137fed66b8d29755871685bd54ba0ebbba80ede393e789ae7090486828d",
           "reference": "b7b5dfb540565f89799612754b0830f024e036350f4d9fd60595cda9279ca8ae",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
           "simulation": "d3beb1a8d31b2f9b04a728ae56973a0c7f214dab298e498a138bad3bc3059e7a"
         }
       },
@@ -1417,7 +1422,7 @@
           "lesson": "9185470c8a94c90eb43770daaa16e8119defdac47c542bbec1dab027cb7d46f9",
           "template": "83a94b85f7ccf8d0c7f39d7c730577bd2e51b0aefe12f48383cbc43c8e41380b",
           "reference": "187eee7af0e1ae48ac16e973af29610b38154fddf805155e46cdacc41b4a7993",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
           "simulation": "7b4a33894a6533fd14c7cea7ae355ae4e4870af7bc5c45e5847dfbcd2260e28b"
         }
       },
@@ -1524,37 +1529,37 @@
           "lesson": "838720d2937ce4783c9acffb73cf3d6ac8ae94c6d7f22706be421d728cf564d8",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "927b7d35550bbe067f577abc898e5f7c1ea5ba97f9ecfc988487376d662d6248",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
           "simulation": "4bb31b9334fe7a07143321b692981af96bd87cecdf0e00d82086c835b70c6ad0"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_3.py"
     },
     "simple_line_follower": {
-      "assignment_full_text": "---\nindex: 19\nmodule: module_3\ntask: simple_line_follower\nprevious: led_feedback\nnext: logical_operators\n---\n\n# Mission 3.6 Simple Line Follower\n\n## Objective\nCombine your spatial logic (`elif`) with motor commands to build a Relay (Bang-Bang) controller, allowing the rover to autonomously follow a line.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nYou have successfully built a system that scans the ground, extracts specific data points, and reacts using LEDs. But the Artemis rover cannot rely on Mission Control to steer it manually based on blinking lights. \n\nIt is time to close the loop. In this mission, we will replace the LED warning signals with actual steering commands. Your rover is about to drive itself!\n\n## Theory\n\n### 1. The Relay Controller (Bang-Bang)\nThe algorithm you are about to build is called a **Relay Controller** (also known as a Bang-Bang controller). It is the simplest type of automated control system. \n\nIt does not care *how far* the robot is from the center of the line; it only knows binary states: Left, Right, or Center. \n\nBecause the corrections are sharp and abrupt, a Relay controller usually results in a wobbling, zigzag movement along the line.\n\n### 2. Steering Logic\nTo make the robot follow the track, we must think about *why* a specific sensor sees the line and *how* to fix it:\n* If the **Center Scout** (Index 3) sees the line, we are perfectly aligned → **Drive Straight** (`speed, speed`).\n* If the **Left Scout** (Index 6) sees the line, it means the rover has drifted too far to the *right* → **Steer Left** by slowing down the left motor (`turn_speed, speed`).\n* If the **Right Scout** (Index 1) sees the line, it means the rover has drifted too far to the *left* → **Steer Right** by slowing down the right motor (`speed, turn_speed`).\n\n## Assignment\nWrite an autonomous line-following algorithm using your scout sensors and `elif` logic. The rover must navigate a straight section of the track and pass through the checkpoints.\n\n**Requirements:**\n1. **Setup:** Define the variables: `threshold`, `speed`, `turn`.\n2. **Continuous Loop:** The rover must drive continuously. Use an infinite `while True:` loop.\n3. **Read Data:** Inside the loop, read octoliner and extract your three scouts (index 1, 3/4, and 6) into variables.\n4. **Steering Logic (`if/elif/else`):** use different speed for motors OR turn movment *turn_left_angle()*.\n5. **Stability:** Add a tiny delay at the end of the loop.\n\n*Hint*: in the loop, it's better to print sensor's data in order to understand what values should be set as a treshhold and sensitivity.\n\n## Conclusion\nCongratulations! You have just programmed your first autonomous robot. \n\nWatch how it navigates the track. You will notice the characteristic \"wobble\" of the Relay controller as it bounces between its left and right sensors. \n\n**Wait, did the rover lose the line on a sharp turn?** Because we are only using 3 \"scout\" sensors, there are blind spots between them! If the line slips under Sensor 2 or Sensor 4, the rover won't see it. In our next and final mission of the module, we will learn how to activate all 8 sensors at once to fix this blind spot!\n",
-      "assignment_summary": "--- index: 19 module: module_3 task: simple_line_follower previous: led_feedback next: logical_operators --- # Mission 3.6 Simple Line Follower ## Objective Combine your spatial logic (`elif`) with motor commands to build a Relay (Bang-Bang) controller, allowing the rover to autonomously follow a line. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction You have successfully built a system that scans the ground, extracts specific data points, and reacts using LEDs. But the Artemis rover cannot rely on Mission Control to steer it manually based on blinking lights. It is time to close the loop. In this mission, we will replace the LED warning signals with actual steering commands. Your rover is about to drive itself! ## Theory ### 1. The Relay Controller (Bang-Bang) The algorithm you are about to build is called a **Relay Controller** (also known as a Bang-Bang controller). It is the simplest type of automated control system. It does not care *how far* the robot is from the center of the line; it only knows binary states: Left, Right, or Center. Because the corrections are sharp and abrupt, a Relay controller usually results in a wobbling, zigzag movement along the line. ### 2. Steering Logic To make the robot follow the track, we must think about *why* a specific sensor sees the line and *how* to fix it: * If the **Center Scout** (Index 3) sees the line, we are perfectly aligned → **Drive Straight** (`speed, speed`). * If the **Left Scout** (Index 6) sees the line, it means the rover has drifted too far to the *right* → **Steer Left** by slowing down the left motor (`turn_speed, speed`). * If the **Right Scout** (Index 1) sees the line, it means the rover has drifted too far to the *left* → **Steer Right** by slowing down the right motor (`speed, turn_speed`). ## Assignment Write an autonomous line-following algorithm using your scout sensors and `elif` logic. The rover must navigate a straight section of the track and pass th",
-      "reference_solution_text": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\nrobot = Robot()\n\nthreshold = 700\nspeed = 15\nturn_speed = 5\n\nwhile True:\n    sensor_data  = octoliner.analog_read_all()\n    left_scout   = sensor_data[6]\n    center_scout = sensor_data[3]\n    right_scout  = sensor_data[1]\n\n    if center_scout > threshold:\n        robot.run_motors_speed(speed, speed)\n        print(\"straight\")\n    elif left_scout > threshold:\n        robot.turn_left_angle(5)\n        print(\"left\")\n    elif right_scout > threshold:\n        robot.turn_right_angle(5)\n        print(\"right\")\n    else:\n        robot.run_motors_speed(15, 15)\n        print(\"looking for a line\")\n\n    time.sleep(0.05)\n",
-      "verification_summary": "Verification for lesson: Simple Line Follower\nStudents must:\n- Use analog_read_all() and extract scouts at indices 1 and 6\n- Use if/elif/else steering logic\n- Drive continuously through checkpoints in a while True loop\nCheckpoint detection via robot position (OpenCV).\nFlag overlays drawn at each checkpoint, turning green when hit.\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "assignment_full_text": "---\nindex: 19\nmodule: module_3\ntask: simple_line_follower\nprevious: led_feedback\nnext: python_lists\n---\n\n# Mission 3.6 Simple Line Follower\n\n## Objective\nGuide the Artemis rover using `if/elif/else` and motor speeds to follow a short, nearly straight section of the line. This is your first relay controller: it chooses between driving straight, steering left and steering right.\n\nStarting settings: `sensitivity = 243`, `threshold = 700`, `speed = 15`, `turn_speed = 3`.\nSensitivity configures the Octoliner (0–255); the threshold is compared with its readings.\n\n## Three sensor zones\nThe starter code combines the eight readings into three zones. Facing forward, indices 5–7 are left, 3–4 are center and 0–2 are right. `max(a, b, c)` returns the largest reading: a zone detects the line when any of its sensors sees it. Keep these supplied expressions unchanged while implementing steering.\n\n## Assignment\nComplete the three marked steering branches in the starter code:\n\n- Center sees the line: set both wheel speeds to `speed`.\n- Left sees the line: slow the left wheel to `turn_speed`, keeping the right at `speed`.\n- Right sees the line: keep the left wheel at `speed`, slowing the right to `turn_speed`.\n\nUse the supplied `run_motors_speed()` call. Do not add angle turns: the loop should keep reading the sensor while steering. Pass the two checkpoints on the short section; the checker ends the run after both are reached.\n\nThe starter code also handles brief gaps in detection. It remembers the previous wheel speeds, then stops after 15 consecutive readings without a line. You do not need to implement this part. If it stops immediately, inspect the sensor readings and starting position rather than increasing the timeout.\n\n## Starter code\n\n```python\nimport machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(243)\nrobot = Robot()\n\nthreshold = 700\nspeed = 15\nturn_speed = 3\nleft_speed = speed\nright_speed = speed\nlost_samples = 0\nlost_limit = 15\n\nwhile True:\n    sensor_data = octoliner.analog_read_all()\n    left_scout = max(sensor_data[5], sensor_data[6], sensor_data[7])\n    center_scout = max(sensor_data[3], sensor_data[4])\n    right_scout = max(sensor_data[0], sensor_data[1], sensor_data[2])\n\n    if center_scout > threshold:\n        left_speed, right_speed = 0, 0  # TODO: drive straight\n        lost_samples = 0\n    elif left_scout > threshold:\n        left_speed, right_speed = 0, 0  # TODO: steer left\n        lost_samples = 0\n    elif right_scout > threshold:\n        left_speed, right_speed = 0, 0  # TODO: steer right\n        lost_samples = 0\n    else:\n        lost_samples += 1\n        if lost_samples >= lost_limit:\n            robot.stop()\n            print(\"Line lost. Stop and check the starting position.\")\n            break\n\n    robot.run_motors_speed(left_speed, right_speed)\n    time.sleep(0.02)\n```\n\n## Next step\nYou have closed the control loop: the Artemis rover reads the ground and changes its steering without waiting for Mission Control. Later, `track_line()` will combine all eight sensor readings into a signed position estimate for more precise controllers.\n",
+      "assignment_summary": "--- index: 19 module: module_3 task: simple_line_follower previous: led_feedback next: python_lists --- # Mission 3.6 Simple Line Follower ## Objective Guide the Artemis rover using `if/elif/else` and motor speeds to follow a short, nearly straight section of the line. This is your first relay controller: it chooses between driving straight, steering left and steering right. Starting settings: `sensitivity = 243`, `threshold = 700`, `speed = 15`, `turn_speed = 3`. Sensitivity configures the Octoliner (0–255); the threshold is compared with its readings. ## Three sensor zones The starter code combines the eight readings into three zones. Facing forward, indices 5–7 are left, 3–4 are center and 0–2 are right. `max(a, b, c)` returns the largest reading: a zone detects the line when any of its sensors sees it. Keep these supplied expressions unchanged while implementing steering. ## Assignment Complete the three marked steering branches in the starter code: - Center sees the line: set both wheel speeds to `speed`. - Left sees the line: slow the left wheel to `turn_speed`, keeping the right at `speed`. - Right sees the line: keep the left wheel at `speed`, slowing the right to `turn_speed`. Use the supplied `run_motors_speed()` call. Do not add angle turns: the loop should keep reading the sensor while steering. Pass the two checkpoints on the short section; the checker ends the run after both are reached. The starter code also handles brief gaps in detection. It remembers the previous wheel speeds, then stops after 15 consecutive readings without a line. You do not need to implement this part. If it stops immediately, inspect the sensor readings and starting position rather than increasing the timeout. ## Starter code ## Next step You have closed the control loop: the Artemis rover reads the ground and changes its steering without waiting for Mission Control. Later, `track_line()` will combine all eight sensor readings into a signed position estimate for more precise co",
+      "reference_solution_text": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(243)\nrobot = Robot()\n\nthreshold = 700\nspeed = 15\nturn_speed = 3\nleft_speed = speed\nright_speed = speed\nlost_samples = 0\nlost_limit = 15\n\nwhile True:\n    sensor_data = octoliner.analog_read_all()\n    left_scout = max(sensor_data[5], sensor_data[6], sensor_data[7])\n    center_scout = max(sensor_data[3], sensor_data[4])\n    right_scout = max(sensor_data[0], sensor_data[1], sensor_data[2])\n\n    if center_scout > threshold:\n        left_speed, right_speed = speed, speed\n        lost_samples = 0\n    elif left_scout > threshold:\n        left_speed, right_speed = turn_speed, speed\n        lost_samples = 0\n    elif right_scout > threshold:\n        left_speed, right_speed = speed, turn_speed\n        lost_samples = 0\n    else:\n        lost_samples += 1\n        if lost_samples >= lost_limit:\n            robot.stop()\n            print(\"Line lost. Stop and check the starting position.\")\n            break\n\n    robot.run_motors_speed(left_speed, right_speed)\n    time.sleep(0.02)\n",
+      "verification_summary": "Verification for lesson: Simple Line Follower\nStudents must:\n- Use analog_read_all() and group readings into left, center and right zones\n- Use if/elif/else steering logic\n- Drive continuously through checkpoints in a while True loop\nCheckpoint detection via robot position (OpenCV).\nFlag overlays drawn at each checkpoint, turning green when hit.\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
-          "xCm": 75,
-          "yCm": 30,
+          "xCm": 104,
+          "yCm": 40,
           "direction": [
-            30,
-            0
+            0,
+            30
           ]
         },
         "physical_checker_constants": {
           "TASK_DURATION": 90,
-          "CHECKPOINT_RADIUS": 10.0,
+          "CHECKPOINT_RADIUS": 4.0,
           "CHECKPOINTS": [
             [
-              103,
-              45
+              104,
+              52
             ],
             [
-              98,
-              80
+              103,
+              64
             ]
           ]
         },
@@ -1566,20 +1571,13 @@
             ],
             "requiredAnyMethods": [
               [
-                "run_motors_speed",
-                "turn_left_angle",
-                "turn_right_angle"
+                "run_motors_speed"
               ]
             ],
             "requiredFeatures": [
               "while-true-loop",
               "if-statement",
               "elif-statement"
-            ],
-            "requiredIndexAccesses": [
-              1,
-              3,
-              6
             ]
           },
           {
@@ -1591,15 +1589,15 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 1.03,
-                "yM": 0.55
+                "xM": 1.04,
+                "yM": 0.48
               },
               {
-                "xM": 0.98,
-                "yM": 0.2
+                "xM": 1.03,
+                "yM": 0.36
               }
             ],
-            "toleranceM": 0.1,
+            "toleranceM": 0.04,
             "stopProgramOnPass": true
           },
           {
@@ -1609,7 +1607,13 @@
         "physical_validation": {
           "status": "pending"
         },
-        "starting_parameters": {},
+        "starting_parameters": {
+          "sensitivity": 243,
+          "threshold": 700,
+          "speed": 15,
+          "turn_speed": 3,
+          "lost_limit": 15
+        },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
         "simulator_limitations": "Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.",
@@ -1619,7 +1623,11 @@
           "hidden test thresholds"
         ]
       },
-      "common_mistakes": [],
+      "common_mistakes": [
+        "Use the supplied three-zone sensor grouping. Individual scout channels have blind spots.",
+        "Steer with differential wheel speeds while reading the sensor; do not add blocking angle turns.",
+        "Keep the supplied short line-loss stop. A failed reset or immediate line loss is not proof of incorrect steering code."
+      ],
       "repo_refs": {
         "context_manifest_schema": 1,
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
@@ -1627,11 +1635,11 @@
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_3/simple_line_follower_reference.py",
         "guidance_updated": "2026-10-08",
         "source_sha256": {
-          "lesson": "61220090481d009899b6578eed0975354d96caf1e7a41e62a72673fe63fef207",
-          "template": "4acc57aeb668156f87ff1726f243a71856d33cf0adb95bc1b3f785b913772681",
-          "reference": "6ff38489c0754d9379c41846a76cf3189b9ddba1a4b0316ad08597e99d30cd2e",
-          "checker": "b88b75ab8c2f9d23e7645bb327ab6568929c3bfa1209bd465c7e8ebe3b7f12a2",
-          "simulation": "45c5878a1b6035d28360af7450791f0798c7dbe187296873ab7bd2fe4266d3f3"
+          "lesson": "a52ce565d249e74d28365e9ca5db0cbad1a9bb3486ded9937d03c68393deb92f",
+          "template": "7c81475bbc491005570631404da2cad43de835cd5a4fc9baeabdabf369819cbf",
+          "reference": "b4213714a0eba0e56fd562dae2bd37d13320fed54705b3477c39fb73d3634e08",
+          "checker": "a9281504d4cfdd955d6f93480f56d2024114df0b38a034f535fde7ccae771d78",
+          "simulation": "a76cfd0a35976fdb665056bb39151e60d2724d9561b222adc0e68eb9b5a81026"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_3.py"
@@ -2242,7 +2250,7 @@
     "proportional_control": {
       "assignment_full_text": "---\nindex: 29\nmodule: module_5\ntask: proportional_control\nprevious: upgraded_relay_controller\nnext: adaptive_speed\n---\n\n# Mission 5.3 Proportional Control Logic\n\n## Objective\nUnderstand the mathematical concept of Proportional Control and write a P-controller algorithm to smoothly steer the rover based on the continuous Error gradient.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nYour Upgraded Relay Controller in the last mission was smart, but it still wobbled. Why? \nBecause it still turned at a *fixed* speed, regardless of the situation. Whether the rover drifted 2 millimeters or 5 centimeters off the line, it applied the exact same turning force. \n\nImagine driving a car on a highway. If you drift slightly from the center of your lane, you don't instantly yank the steering wheel all the way to the side! You make a *small* correction. If you drift significantly, you make a *larger* correction.\n\nThis natural driving logic is called a **Proportional Controller (P-Controller)**. The steering correction is directly proportional to the size of the error. Now we will teach rover to drive like a professional.\n\n## Theory\n\n### 1. The Amplification Problem\nOur `track_line()` function gives us an Error value from `-1.0` to `1.0`. \nIf the rover's base speed is `25`, and the Error is `0.5`, what happens if we just add the Error to the speed? The new speed becomes `25.5`. That tiny difference will not turn the robot at all.\n\nTo turn this small decimal Error into a strong motor command, we must amplify it by multiplying it by a constant number. In control theory, this amplifier is called the **Proportional Coefficient**, or *K_p*.\n\n### 2. The Math of Steering\nThe formula for a Proportional Controller is beautiful in its simplicity. \n\nFirst, we calculate the required steering power *P* using our coefficient *K_p*: **P = K_p * Error**\n\nNext, we apply this steering power to the wheels. To turn smoothly, we *add P* to the left motor and *subtract P* from the right motor.\n* **`left_speed = base_speed + P`**\n* **`right_speed = base_speed - P`**\n\n**Let's test the math:** Imagine the line drifts to the right (Error = `0.5`). Let's say our *K_p* is `30`, and `base_speed` is `25`.\n1. Calculate Power: P = 30 * 0.5 = 15\n2. Left Motor: 25 + 15 = 40\n3. Right Motor: 25 - 15 = 10\n\nBecause the left wheel is now spinning at `40` and the right wheel at `10`, the rover smoothly arcs to the right, perfectly bringing the line back to the center! If the Error was smaller (e.g., `0.1`), the speed difference would be much smaller, resulting in a gentle, almost invisible correction.\n\n## Assignment\nWrite a Proportional Control loop to navigate the track. You will replace your bulky `if/elif/else` steering blocks with just three elegant lines of mathematical code.\n\n**Requirements:**\n1. **Setup:** Initialize your hardware, including auto-calibration and the `math` library.\n2. **Control Variables:** Before the loop, create two variables:\n   * `base_speed = 30`\n   * `kp = 10` (This is our starting guess for the Proportional Coefficient).\n3. **The Loop:** Inside your `while True:` loop:\n   * Read the `position` from the sensor.\n   * Include the Failsafe from the previous mission to protect the software.\n   * If the data is valid (`else:`), perform the P-Controller math:\n     * Calculate `P` by multiplying `kp` and `position`.\n     * Calculate `left_speed` and `right_speed`. *(Note: Wrap your final math in `int()` like this: `int(base_speed + P)` to ensure the motor function receives whole numbers).*\n     * Send the speeds to the motors using `run_motors_speed()`.\n   * Keep the `time.sleep(0.05)` delay.\n\nExecute the code! Watch closely. The rover should navigate the track much smoother than before, automatically adjusting its turn sharpness.\n\n## Conclusion\nBrilliant! You have successfully implemented a Proportional Controller. \n\nLook at your code: you replaced complicated logical conditions with pure, elegant mathematics. The rover now makes hundreds of tiny, calculated adjustments per second.\n\nHowever, you might notice it still isn't *perfect*. Maybe it turns a little too sluggishly, or maybe it shakes a bit on the straightaways. In the next mission, we will learn how engineers **\"Tune\"** the *K_p* value to achieve flawless movement!\n\n> **Important:** Save your standard P-Controller math. You will need to copy and paste this into your next mission.\n",
       "assignment_summary": "--- index: 29 module: module_5 task: proportional_control previous: upgraded_relay_controller next: adaptive_speed --- # Mission 5.3 Proportional Control Logic ## Objective Understand the mathematical concept of Proportional Control and write a P-controller algorithm to smoothly steer the rover based on the continuous Error gradient. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction Your Upgraded Relay Controller in the last mission was smart, but it still wobbled. Why? Because it still turned at a *fixed* speed, regardless of the situation. Whether the rover drifted 2 millimeters or 5 centimeters off the line, it applied the exact same turning force. Imagine driving a car on a highway. If you drift slightly from the center of your lane, you don't instantly yank the steering wheel all the way to the side! You make a *small* correction. If you drift significantly, you make a *larger* correction. This natural driving logic is called a **Proportional Controller (P-Controller)**. The steering correction is directly proportional to the size of the error. Now we will teach rover to drive like a professional. ## Theory ### 1. The Amplification Problem Our `track_line()` function gives us an Error value from `-1.0` to `1.0`. If the rover's base speed is `25`, and the Error is `0.5`, what happens if we just add the Error to the speed? The new speed becomes `25.5`. That tiny difference will not turn the robot at all. To turn this small decimal Error into a strong motor command, we must amplify it by multiplying it by a constant number. In control theory, this amplifier is called the **Proportional Coefficient**, or *K_p*. ### 2. The Math of Steering The formula for a Proportional Controller is beautiful in its simplicity. First, we calculate the required steering power *P* using our coefficient *K_p*: **P = K_p * Error** Next, we apply this steering power to the wheels. To turn smoothly, we *add P* to the left motor and *subtract P* ",
-      "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nbase_speed = 30\nkp = 20\n\nprint(\"Starting P-controller...\")\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        # P-Controller Math\n        P = kp * position\n        left_speed = int(base_speed + P)\n        right_speed = int(base_speed - P)\n        \n        # Send to motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
+      "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nbase_speed = 30\nkp = 20\n\nprint(\"Starting P-controller...\")\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        # P-Controller Math\n        P = kp * position\n        left_speed = int(base_speed + P)\n        right_speed = int(base_speed - P)\n\n        # Send to motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
       "verification_summary": "Verification for lesson: Proportional Control — 5.3\nStart: x=40, y=30\nCheckpoints: (105, 60), (60, 90), (80, 30) - required in order\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
@@ -2350,7 +2358,7 @@
         "source_sha256": {
           "lesson": "7b107ab62f66c991c95d748bac191b85ee439bd697a930a7e35a9dde4f2dfc1f",
           "template": "5bd2d64dc497b8ebb6d50f56849d25ab77a7f5838ea7a843be239acd8f9499cd",
-          "reference": "f7711a3f9d0315aa1bbe8c739c18d50858ea896061a3bc0e37de2c4a358e308c",
+          "reference": "7eead302fe23a3446ac5b7b16a1bedf42ff3133597f414e39f1fa2d4fca77a21",
           "checker": "65083ad6c644e1179e46f55017456169e05b2c05909f534532faffbc7afad788",
           "simulation": "8af8704e97c4ec2dc204c8b7abbff0d7fdc233068b4c38ee46e98daa7a243704"
         }

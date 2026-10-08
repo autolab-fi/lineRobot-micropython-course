@@ -13,7 +13,7 @@ target_points = {
     'processing_sensor_data': [(85,63),(30,0)],
     'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
-    'simple_line_follower': [(75,30),(30,0)],
+    'simple_line_follower': [(104,40),(0,30)],
     'logical_operators': [(75,30),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
@@ -665,17 +665,20 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
     Verification for lesson: Simple Line Follower
     Students must:
-    - Use analog_read_all() and extract scouts at indices 1 and 6
+    - Use analog_read_all() and group readings into left, center and right zones
     - Use if/elif/else steering logic
     - Drive continuously through checkpoints in a while True loop
     Checkpoint detection via robot position (OpenCV).
     Flag overlays drawn at each checkpoint, turning green when hit.
     """
 
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
+
     # ===== CONFIGURATION =====
     TASK_DURATION     = 90
-    CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(103, 45), (98, 80)]
+    CHECKPOINT_RADIUS = 4.0   # cm
+    CHECKPOINTS       = [(104, 52), (103, 64)]
     # =========================
 
     result = {
@@ -694,18 +697,17 @@ def simple_line_follower(robot, image, td, user_code=None):
 
         has_read_all = "analog_read_all()" in active_code
         has_elif     = "elif" in active_code
-        has_index_1  = "[1]" in active_code
-        has_index_6  = "[6]" in active_code
+        has_motor_speed = "run_motors_speed(" in active_code
         has_while    = "while True" in active_code
-        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while
+        code_valid   = has_read_all and has_elif and has_motor_speed and has_while
 
         missing = []
         if not has_read_all:
             missing.append("analog_read_all()")
         if not has_elif:
             missing.append("elif statement")
-        if not (has_index_1 and has_index_6):
-            missing.append("scout indices [1] and [6]")
+        if not has_motor_speed:
+            missing.append("run_motors_speed()")
         if not has_while:
             missing.append("while True loop")
 
@@ -774,10 +776,9 @@ def simple_line_follower(robot, image, td, user_code=None):
 
             # early finish — shorten timer only, verdict handled by timeout block
             if not td["data"]["checkpoints_remaining"]:
-                elapsed = time.time() - td["start_time"]
-                if elapsed >= 10.0 and not td["data"]["completed"]:
+                if not td["data"]["completed"]:
                     td["data"]["completed"] = True
-                    td["end_time"] = time.time() + 10.0
+                    td["end_time"] = time.time()
                 text = "All checkpoints reached! Finishing..."
 
     msg = robot.get_msg()
@@ -849,6 +850,9 @@ def simple_line_follower(robot, image, td, user_code=None):
             result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
             text = "Line following complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
     return image, td, text, result
 
 def logical_operators(robot, image, td, user_code=None):

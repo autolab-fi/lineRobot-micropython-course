@@ -385,7 +385,10 @@ def sequential_navigation(robot, image, td: dict, user_code):
                           description="Cannot measure the robot tag. Please retry when the camera view is clear.")
             return image, td, "Waiting for a valid camera tag", result
         td["data"]['targets'] = targets
-        td["data"]['delta'] = 4
+        # HAMK's measured multi-turn route accumulated about 6 camera-cm
+        # of cross-track error (21998). Use a fixed, bounded tolerance;
+        # never widen it after each checkpoint.
+        td["data"]['delta'] = 6
         td["data"]['reached_point'] = False
 
         # Load single mineral image

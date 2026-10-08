@@ -135,11 +135,52 @@
     "simple_line_follower": {
       "mode": "simulation-and-lab",
       "checks": [
-        { "type": "source-code", "requiredMethods": ["analog_read_all"], "requiredAnyMethods": [["run_motors_speed", "turn_left_angle", "turn_right_angle"]], "requiredFeatures": ["while-true-loop", "if-statement", "elif-statement"], "requiredIndexAccesses": [1, 3, 6] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 5 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 1.03, "yM": 0.55 }, { "xM": 0.98, "yM": 0.20 }], "toleranceM": 0.10, "stopProgramOnPass": true },
-        { "type": "program-finished" }
-      ]
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "analog_read_all"
+          ],
+          "requiredAnyMethods": [
+            [
+              "run_motors_speed"
+            ]
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "if-statement",
+            "elif-statement"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 5
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.04,
+              "yM": 0.48
+            },
+            {
+              "xM": 1.03,
+              "yM": 0.36
+            }
+          ],
+          "toleranceM": 0.04,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
+      ],
+      "timeoutSec": 90,
+      "initialPose": {
+        "xM": 1.05,
+        "yM": 0.6,
+        "headingRad": -1.570796327
+      }
     },
     "python_lists": {
       "mode": "simulation-and-lab",

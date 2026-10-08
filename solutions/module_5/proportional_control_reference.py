@@ -30,7 +30,7 @@ while True:
         P = kp * position
         left_speed = int(base_speed + P)
         right_speed = int(base_speed - P)
-        
+
         # Send to motors
         robot.run_motors_speed(left_speed, right_speed)
 

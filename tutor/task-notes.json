@@ -106,8 +106,12 @@
       "physicalValidation": {
         "status": "pending"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
+      ],
+      "parameters": {},
+      "simulationReference": "solutions/module_2/defining_functions_simulation.py",
+      "calibrationPolicy": "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
     },
     "for_loops": {
       "reference": "solutions/module_2/for_loops_reference.py",
@@ -160,8 +164,18 @@
       "physicalValidation": {
         "status": "pending"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Use the supplied three-zone sensor grouping. Individual scout channels have blind spots.",
+        "Steer with differential wheel speeds while reading the sensor; do not add blocking angle turns.",
+        "Keep the supplied short line-loss stop. A failed reset or immediate line loss is not proof of incorrect steering code."
+      ],
+      "parameters": {
+        "sensitivity": 243,
+        "threshold": 700,
+        "speed": 15,
+        "turn_speed": 3,
+        "lost_limit": 15
+      }
     },
     "python_lists": {
       "reference": "solutions/module_4/python_lists_reference.py",

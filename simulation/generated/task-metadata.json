@@ -619,16 +619,16 @@
       "module": "module_4",
       "verificationFile": "verifications/module_4.py",
       "physicalStart": {
-        "xCm": 75,
-        "yCm": 30,
+        "xCm": 65,
+        "yCm": 45,
         "direction": [
           30,
           0
         ]
       },
       "initialPose": {
-        "xM": 0.75,
-        "yM": 0.7,
+        "xM": 0.65,
+        "yM": 0.55,
         "headingRad": -0.0
       },
       "blockLibraryFunctions": false

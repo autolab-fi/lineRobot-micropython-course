@@ -80,3 +80,5 @@ distance = (encoder_degrees / 360) * (2 * math.pi * radius)
 Congratulations! You have successfully calibrated your system and bridged the gap between raw sensor data and real-world measurements.
 
 By reading the encoders directly, you've seen that the robot is no longer just "guessing" time—it is actually measuring its physical displacement. Understanding this feedback loop is what separates a simple toy from a precise autonomous machine. In the next mission, we will use While Loops to make the robot monitor these values automatically and stop exactly at a target distance!
+
+After stopping both motors, allow a short settling time (for example, `time.sleep(0.3)`) before reading the final angles. Print both the left and right encoder values. Tune the pulse separately in the simulator and on the physical rover.

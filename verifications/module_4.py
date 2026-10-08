@@ -6,7 +6,7 @@ import re
 import numpy as np
 
 target_points = {
-    'python_lists':        [(75, 30), (30, 0)],
+    'python_lists':        [(65, 45), (30, 0)],
     'telemetry':           [(75, 30), (30, 0)],
     'color_sensor_basics': [(128, 98), (0, -30)],
     'color_classification':[(128, 99), (0, -30)],
@@ -44,15 +44,18 @@ def get_target_points(task):
 def python_lists(robot, image, td, user_code=None):
     """
     Verification for lesson: Python Lists (Waypoints) — 4.1
-    Start: x=75, y=30, direction x=30, y=0
-    Checkpoints: (130,30), (130,90), (60,90)
+    Start: x=65, y=45, direction x=30, y=0
+    Checkpoints: (100,45), (100,75), (65,75)
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     # ===== CONFIGURATION =====
     TASK_DURATION     = 30
     CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(130, 30), (130, 90), (60, 90)]
-    START_POS_CM      = (75, 30)
+    CHECKPOINTS       = [(100, 45), (100, 75), (65, 75)]
+    START_POS_CM      = (65, 45)
     # =========================
 
     # ── default result and text ───────────────────────────────────────────────
@@ -248,6 +251,10 @@ def python_lists(robot, image, td, user_code=None):
             result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
             text = "Route complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -260,6 +267,9 @@ def telemetry(robot, image, td, user_code=None):
     Verification for lesson: Telemetry — 4.2
     Start: x=75, y=30, direction x=30, y=0
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION  = 20
     START_POS_CM   = (75, 30)
@@ -372,6 +382,10 @@ def telemetry(robot, image, td, user_code=None):
             result["description"] = "Telemetry report received with all required fields | Score: 100"
             text = "Telemetry complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -384,6 +398,9 @@ def color_sensor_basics(robot, image, td, user_code=None):
     Verification for lesson: Color Sensor Basics — 4.3
     Start: x=128, y=98, direction x=0, y=-30
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION   = 20
     MIN_VALID_SCANS = 5
@@ -471,6 +488,10 @@ def color_sensor_basics(robot, image, td, user_code=None):
             result["description"] = f"Color scan complete! {valid} valid zones reported | Score: 100"
             text = "Scan complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -483,6 +504,9 @@ def color_classification(robot, image, td, user_code=None):
     Verification for lesson: Color Classification — 4.4
     Start: x=128, y=99, direction x=0, y=-30
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION   = 20
     MIN_VALID_SCANS = 5
@@ -581,6 +605,10 @@ def color_classification(robot, image, td, user_code=None):
             result["score"]       = 100
             result["description"] = f"Smart scan complete! {valid} zones classified | Score: 100"
             text = "Smart scan complete!"
+
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 

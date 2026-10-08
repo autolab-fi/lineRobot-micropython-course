@@ -8,7 +8,7 @@ robot.reset_left_encoder()
 robot.reset_right_encoder()
 robot.run_motor_left(550)
 robot.run_motor_right(550)
-time.sleep(0.6)
+time.sleep(0.8)
 robot.stop_motor_left()
 robot.stop_motor_right()
 # Let the wheels finish coasting before reading both counters.

@@ -5,7 +5,10 @@
       "reference": "solutions/module_1/test_drive_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21993,
+        "referenceSha256": "9a01ced5bb405fbecf83b5f8f9e028580f99199d8eef1869217a09edd46017af"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -14,7 +17,10 @@
       "reference": "solutions/module_1/license_to_drive_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21997,
+        "referenceSha256": "cc854f6c9e983cf5c2631c1cf15c61674cf00f9cc753d610d617bde7f9ff438d"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -23,7 +29,10 @@
       "reference": "solutions/module_1/maneuvering_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21996,
+        "referenceSha256": "7d48a252ad5d8e79b5b4d39a405fb1019ae49030b41616207188088284daf8a4"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -41,7 +50,10 @@
       "reference": "solutions/module_1/welcome_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21992,
+        "referenceSha256": "37a48fa8980953093421034821da155f6eca25f30589868fca51e35d53591031"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -50,7 +62,10 @@
       "reference": "solutions/module_1/directional_movement_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21994,
+        "referenceSha256": "3f6337d39bdaeb885c9096154bcfe23448097d74875d49d9f389584ee7b7d4db"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -68,7 +83,10 @@
       "reference": "solutions/module_1/python_variables_commands_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 21995,
+        "referenceSha256": "e1b92fbf4892c8d3135f73a8739025f4cef64838e0a40dd9e035a52d957724c9"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -104,7 +122,10 @@
       "reference": "solutions/module_2/defining_functions_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 22000,
+        "referenceSha256": "756a18e0baa11f6e72cb25a09e638ebd2dc0d6d6ae8b63b4931dba103dfaff61"
       },
       "commonMistakes": [
         "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
@@ -117,7 +138,10 @@
       "reference": "solutions/module_2/for_loops_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 22001,
+        "referenceSha256": "9a30a0899e3045b18df16dc8518706bd26cbd96e7c6f316106930c48c212a008"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -126,10 +150,17 @@
       "reference": "solutions/module_2/encoder_theory_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-08",
+        "submissionId": 22003,
+        "referenceSha256": "10b923abeea5ff1886bd496c2408a502a0fd9e6412bb4fbc90a801d13c10a4c7"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Tune raw PWM and pulse duration separately for the physical HAMK rover and simulator. Stop both motors without resetting the encoders, wait briefly for coasting to finish, then print both final angles and the calculated distance. Do not copy a timed pulse between environments as a guaranteed value."
+      ],
+      "parameters": {},
+      "simulationReference": "solutions/module_2/encoder_theory_simulation.py",
+      "calibrationPolicy": "Tune raw PWM and pulse duration separately for the physical HAMK rover and simulator. Stop both motors without resetting the encoders, wait briefly for coasting to finish, then print both final angles and the calculated distance. Do not copy a timed pulse between environments as a guaranteed value."
     },
     "conditional_logic": {
       "reference": "solutions/module_3/conditional_logic_reference.py",
@@ -181,10 +212,17 @@
       "reference": "solutions/module_4/python_lists_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "pending",
+        "reason": "Shorter route awaits hardware retest after original route missed two checkpoints in submission 22005."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "route_cm": [
+          35,
+          30,
+          35
+        ]
+      }
     },
     "telemetry": {
       "reference": "solutions/module_4/telemetry_reference.py",

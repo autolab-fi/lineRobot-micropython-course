@@ -186,7 +186,7 @@
       "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right"], "requiredFeatures": ["list-assignment", "for-loop", "print"], "requiredFunctionCalls": ["len"], "requiredVariableNames": ["route"], "requiredLoopIterableNames": ["route"] },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 1.30, "yM": 0.70 }, { "xM": 1.30, "yM": 0.10 }, { "xM": 0.60, "yM": 0.10 }], "toleranceM": 0.10 },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 1.00, "yM": 0.55 }, { "xM": 1.00, "yM": 0.25 }, { "xM": 0.65, "yM": 0.25 }], "toleranceM": 0.10 },
         { "type": "program-finished" }
       ]
     },

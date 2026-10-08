@@ -213,6 +213,9 @@ import ast
 def perimeter(robot, image, td: dict, user_code=None):
     """Test for task 2 perimeter"""
 
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
+
     TASK_DURATION = 30  
     TRAJECTORY_COLOR = (255, 0, 0)
     TRAJECTORY_WIDTH = 3
@@ -319,6 +322,10 @@ def perimeter(robot, image, td: dict, user_code=None):
             result["score"] = 100
             result["description"] = "You are amazing! Perimeter patrol complete! | Score: 100"
             text = "Task completed!"
+
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 
@@ -457,6 +464,9 @@ def adaptive_racing(robot, frame, td: dict, user_code):
     4. analog_read_all() -> track_line()
     5. time.sleep(5) -> time.sleep(0.05)
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return frame, td, td["data"]["final_text"], td["data"]["final_result"].copy()
     # ===== CONFIGURATION =====
     TASK_DURATION = 40.0  # seconds
     MIN_MOVEMENT_DISTANCE = 30.0  # cm
@@ -569,4 +579,8 @@ def adaptive_racing(robot, frame, td: dict, user_code):
             result["description"] = "You are amazing! All bugs fixed and racing complete | Score: 100"
             text = "Exam Complete!"
     
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return frame, td, text, result

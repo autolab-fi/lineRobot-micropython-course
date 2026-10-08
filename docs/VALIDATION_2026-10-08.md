@@ -2,7 +2,7 @@
 
 Scope: preserve the lunar / Artemis narrative and transfer applicable Metropolia technical fixes. Remove Tuning and Kick from the course while retaining student submission history. Target: 34 tasks including Sandbox.
 
-The candidate branch is `validation/hamk-course-20261008`. Course main, backend lesson publication, and the production simulator have not yet been updated. Hardware currently uses candidate grader revision `19cbc83`; subsequent grader changes listed below await deployment and physical tests. Firmware and calibration are unchanged during this audit.
+The candidate branch is `validation/hamk-course-20261008`. Course main, backend lesson publication, and the production simulator have not yet been updated. Hardware tests used candidate grader revision `19cbc83`. At the user's requested pause, the worker's course 9 graders were restored to published revision `ca88ac2` (46 files, all 11 modules imported successfully). Candidate `feb06f6` contains the latest fixes and must be deployed explicitly before resuming its physical tests. Firmware and calibration are unchanged during this audit.
 
 ## Confirmed checks
 
@@ -69,3 +69,11 @@ The candidate branch is `validation/hamk-course-20261008`. Course main, backend 
 5. Repeat relevant positive and negative cases. Publish main, refresh course 9, verify Tuning and Kick is inactive with history preserved, and publish the matching simulator bundle.
 
 Operational scripts, logs and submission evidence are in `/root/git-images/artifacts/hamk-course-audit-20261008/`. Charging and maintenance state must be checked there before resuming physical work.
+
+## Pause and docking handoff
+
+The user requested saving and pushing the work and leaving further charging attempts to the existing automatic docking service. Manual motion has stopped. `AutoCharge` workflow `charge-device-13` was restored with its existing 20-minute schedule and the maintenance lease was released (`RESTORED True`). No firmware, persistent docking parameters, worker source or calibration coefficients were changed.
+
+Repeated dock attempts, a temporary +0.6 cm approach offset, a 120 ms reverse pulse and a temporary -4 degree approach heading did not establish sustained charging. The robot is physically at the dock; last manual pose was approximately (12.99,58.30), heading 2.68 degrees. Stop was acknowledged. Later read-only samples showed battery 23.08 V and charger input 21.0–21.4 V. An earlier short-lived stable-charge confirmation did not persist. Do not treat `dock_detected` or a truthy charging field alone as evidence of restored charging.
+
+Before resuming: obtain fresh voltage/camera/queue state, acquire a new maintenance lease when needed, and suspend automatic docking only for supervised tests. The former lease is released and must not be reused. Physical validation is incomplete: 9 passed, 2 need retests, 23 untested in this audit. Main and production lessons/simulator remain unchanged; changes are stored on validation branches.

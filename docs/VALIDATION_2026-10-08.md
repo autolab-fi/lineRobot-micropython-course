@@ -8,6 +8,7 @@ The candidate branch is `validation/hamk-course-20261008`. Course main, backend 
 
 - Simulator curriculum: all 34 tasks, 136 reference/renamed/empty/output-only cases passed after the compact Python Lists route update.
 - Simulator unit tests: 56 passed.
+- Simulator UI tests: all 17 scenarios passed across the full run (16 passing) and a targeted rerun after updating the stale Python Lists/Simple follower examples (1 passing).
 - Physical grader unit/replay tests: 45 passed, including failures remaining failures on later frames.
 - Nine task references passed ordinary hardware submissions, including completed processing and video availability. The reference hashes and submission IDs are recorded in `tutor/task-notes.json`.
 

@@ -2,7 +2,7 @@
 index: 31
 module: module_5
 task: adaptive_speed
-previous: tuning_and_kick
+previous: proportional_control
 next: art_of_debugging
 ---
 
@@ -61,8 +61,6 @@ Try experimenting with extreme parameters and observe how the rover reacts:
 Change one variable at a time, run the code, and discover your ultimate racing setup!
 
 ## Conclusion
-Incredible engineering! You have successfully stress-tested an autonomous control system. 
+Your lunar rover now adjusts its speed to the shape of the track. It slows down when the line is far from the centre of the sensor array and speeds up when the line is centred.
 
-By observing the recovery after the Software Kick, you saw firsthand how mathematical formulas translate into physical resilience. You now know how to diagnose understeering and oversteering, and how to find the optimal K_p.
-
-Your rover is now incredibly stable. In our final mission of this module, we will make it *fast* by introducing Adaptive Speed!
+Next, you will practise diagnosing and correcting errors in rover programs.

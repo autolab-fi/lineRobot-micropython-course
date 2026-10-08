@@ -3,7 +3,7 @@ index: 29
 module: module_5
 task: proportional_control
 previous: upgraded_relay_controller
-next: tuning_and_kick
+next: adaptive_speed
 ---
 
 # Mission 5.3 Proportional Control Logic

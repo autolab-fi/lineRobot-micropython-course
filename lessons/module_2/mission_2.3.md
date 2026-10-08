@@ -87,3 +87,4 @@ Write a program that makes the robot turn approximately **180 degrees** by creat
 
 ## Conclusion
 Congratulations! You are no longer just a driver; you are now extending the robot's core software. Custom functions are the building blocks of advanced programming. Next up, we will learn how to repeat these functions automatically!
+Tune the duration using the camera: change one parameter at a time, then check the final heading after the robot stops. The physical rover and simulator can need different durations even with the same motor commands.

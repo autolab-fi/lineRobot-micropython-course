@@ -4,6 +4,7 @@ import time
 import os
 import numpy as np
 import re
+import ast
 
 target_points = {
     'electric_motors': [(30, 50), (30, 0)],
@@ -428,21 +429,33 @@ def defining_functions(robot, image, td: dict, user_code=None):
     text = "Waiting..."
 
     image = robot.draw_info(image)
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     if not td:
         banned = ["turn_left", "turn_right", "move_forward_distance",
                   "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        found_banned = [f for f in banned if f in active_code]
+        try:
+            tree = ast.parse(user_code or "")
+            methods = {node.func.attr for node in ast.walk(tree)
+                       if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)}
+            definitions = {node.name for node in tree.body if isinstance(node, ast.FunctionDef)}
+            calls = {node.func.id for statement in tree.body if not isinstance(statement, ast.FunctionDef)
+                     for node in ast.walk(statement)
+                     if isinstance(node, ast.Call) and isinstance(node.func, ast.Name)}
+            valid_function = bool(definitions & calls)
+            valid_motors = ('run_motors_speed' in methods or {'run_motor_left', 'run_motor_right'}.issubset(methods)) and 'stop' in methods
+        except SyntaxError:
+            methods = set()
+            valid_function = valid_motors = False
+        found_banned = sorted(method for method in methods if any(method.startswith(name) for name in banned))
 
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "target_ang": None,  # set lazily once robot is detected
             "data": {
-                "code_valid": len(found_banned) == 0,
+                "code_valid": len(found_banned) == 0 and valid_function and valid_motors,
                 "banned_found": found_banned,
             }
         }
@@ -452,7 +465,7 @@ def defining_functions(robot, image, td: dict, user_code=None):
     if ang is not None and td["target_ang"] is None:
         td["target_ang"] = ang + 180 if ang < 180 else ang - 180
 
-    delta_ang = abs(ang - td["target_ang"]) if ang is not None and td["target_ang"] is not None else None
+    delta_ang = abs((ang - td["target_ang"] + 180) % 360 - 180) if ang is not None and td["target_ang"] is not None else None
 
     if not td["data"]["code_valid"]:
         text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
@@ -478,14 +491,14 @@ def defining_functions(robot, image, td: dict, user_code=None):
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
-            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            result["description"] = "Define and call a function using manual motor control and stop(); high-level navigation is not allowed | Score: 0"
             text = "Banned functions detected."
         elif delta_ang is None:
             result["success"] = False
             result["score"] = 0
             result["description"] = "Robot not detected in camera frame | Score: 0"
             text = "Robot not detected."
-        elif delta_ang < 10:
+        elif delta_ang < 10 and time.time() - td["data"].get("confirm_start", time.time()) >= 1.0:
             result["success"] = True
             result["score"] = 100
             result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
@@ -495,6 +508,9 @@ def defining_functions(robot, image, td: dict, user_code=None):
             result["score"] = 0
             result["description"] = f"Robot did not turn 180 degrees. Final error: {delta_ang:0.0f}° | Score: 0"
             text = "Failed to reach target angle."
+
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 
@@ -583,19 +599,17 @@ def encoder_theory(robot, frame, td, user_code=None):
     Checks: math import, encoder resets, math.pi, printed encoder value 310-360°,
     printed distance in expected range, AND physical displacement matches.
 
-    UPDATED: New wheel radius = 3.21cm (changed from 3.4cm)
+    Use the wheel radius specified in the HAMK lesson: 3.21 cm.
     """
 
     # ===== CONFIGURATION =====
-    WHEEL_RADIUS = 3.21     # NEW: updated wheel radius in cm (was 3.4)
+    WHEEL_RADIUS = 3.21      # HAMK lesson formula; do not copy another robot's radius
     ENCODER_MIN = 310       # minimum acceptable encoder degrees
     ENCODER_MAX = 360       # maximum acceptable encoder degrees
 
-    # Recalculated based on new radius:
-    # Min: (310/360) * 2 * π * 3.21 = ~17.36 cm
-    # Max: (360/360) * 2 * π * 3.21 = ~20.17 cm
-    DISTANCE_MIN = 17.0     # NEW: (310/360) * 2 * π * 3.21 ≈ 17.36 cm (allow some tolerance)
-    DISTANCE_MAX = 20.5     # NEW: (360/360) * 2 * π * 3.21 ≈ 20.17 cm (allow some tolerance)
+    # Allow rounding around the configured radius and encoder interval.
+    DISTANCE_MIN = ENCODER_MIN / 360 * 2 * math.pi * WHEEL_RADIUS - 0.4
+    DISTANCE_MAX = ENCODER_MAX / 360 * 2 * math.pi * WHEEL_RADIUS + 0.4
 
     # Physical displacement bounds (slightly wider tolerance for measurement error)
     DISPLACEMENT_MIN = 16.5 # NEW: OpenCV physical measurement lower bound
@@ -636,6 +650,8 @@ def encoder_theory(robot, frame, td, user_code=None):
                 "code_valid": len(missing) == 0,
                 "missing": missing,
                 "encoder_left": None,
+                "encoder_right": None,
+                "telemetry_tail": "",
                 "distance": None,
                 "start_position": None,
                 "end_position": None,
@@ -666,16 +682,17 @@ def encoder_theory(robot, frame, td, user_code=None):
     # Matches student template print format:
     # print("Encoder degrees left:", left_deg)
     # print("Distance in cm:", distance)
-    msg = robot.get_msg()
-    if msg is not None:
-        text = f"Received: {msg}"
-        try:
-            if msg.startswith("Encoder degrees left:"):
-                td["data"]["encoder_left"] = float(msg.split(":")[1].strip())
-            elif msg.startswith("Distance in cm:"):
-                td["data"]["distance"] = float(msg.split(":")[1].strip())
-        except (ValueError, IndexError):
-            pass
+    for _ in range(64):
+        msg = robot.get_msg()
+        if msg is None:
+            break
+        combined = td["data"]["telemetry_tail"] + str(msg)
+        for match in re.finditer(r"Encoder degrees (left|right):\s*(-?\d+(?:\.\d+)?)|Distance in cm:\s*(-?\d+(?:\.\d+)?)", combined):
+            if match.group(1):
+                td["data"]["encoder_" + match.group(1)] = float(match.group(2))
+            else:
+                td["data"]["distance"] = float(match.group(3))
+        td["data"]["telemetry_tail"] = combined[-512:]
 
     # Show live readings on overlay
     if td["data"]["encoder_left"] is not None:
@@ -695,6 +712,7 @@ def encoder_theory(robot, frame, td, user_code=None):
 
         else:
             left = td["data"]["encoder_left"]
+            right = td["data"]["encoder_right"]
             distance = td["data"]["distance"]
             start = td["data"]["start_position"]
             end = td["data"]["end_position"]
@@ -718,13 +736,17 @@ def encoder_theory(robot, frame, td, user_code=None):
                 )
                 text = "Encoder value out of range."
 
+            elif right is None or not (ENCODER_MIN <= right <= ENCODER_MAX):
+                result = {"success": False, "score": 0,
+                          "description": f"Print the right encoder after stopping; both encoders must be {ENCODER_MIN}-{ENCODER_MAX} degrees. Right: {right} | Score: 0"}
+                text = "Right encoder missing or out of range."
             elif distance is None:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = "No distance calculation received | Score: 0"
                 text = "Distance not printed."
 
-            elif distance < DISTANCE_MIN or distance > DISTANCE_MAX:
+            elif distance < DISTANCE_MIN or distance > DISTANCE_MAX or abs(distance - expected) > 0.3:
                 result["success"] = False
                 result["score"] = 0
                 result["description"] = (

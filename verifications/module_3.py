@@ -78,17 +78,28 @@ def intro_to_octoliner(robot, image, td, user_code=None):
     image = robot.draw_info(image)
 
     if td is None:
-        # Check for analog_read(3) or analog_read(4) — filter commented lines
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        code_valid = "analog_read(3)" in active_code or "analog_read(4)" in active_code
+        # Inspect real calls, not comments or strings mentioning sensor code.
+        try:
+            tree = ast.parse(user_code or "")
+            channels = sorted({
+                node.args[0].value for node in ast.walk(tree)
+                if isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "analog_read" and node.args
+                and isinstance(node.args[0], ast.Constant)
+                and type(node.args[0].value) is int
+                and node.args[0].value in (3, 4)
+            })
+        except SyntaxError:
+            channels = []
+        code_valid = bool(channels)
 
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
                 "code_valid": code_valid,
+                "channels": channels,
                 "sensor_3": None,
                 "sensor_4": None,
             }
@@ -109,12 +120,23 @@ def intro_to_octoliner(robot, image, td, user_code=None):
     msg = robot.get_msg()
     if td["data"]["code_valid"] and msg is not None:
         text = f"Message received: {msg}"
-        numbers = [int(n) for n in re.findall(r'\d+', msg)]
-        if numbers:
-            if td["data"]["sensor_3"] is None:
-                td["data"]["sensor_3"] = numbers[0]
-            elif td["data"]["sensor_4"] is None:
-                td["data"]["sensor_4"] = numbers[0]
+        # Labels identify the channel; only the value after ':'/'=' is data.
+        # A bare integer is supported for print(analog_read(3)) when the
+        # source reads one central channel. Do not guess between two channels.
+        for line in str(msg).splitlines():
+            match = re.fullmatch(r"(?:Sensor\s*|S)([34])\s*[:=]\s*([0-9]+)",
+                                 line.strip(), re.IGNORECASE)
+            if match:
+                channel, value = map(int, match.groups())
+                if channel not in td["data"]["channels"]:
+                    continue
+            elif len(td["data"]["channels"]) == 1 and re.fullmatch(r"[0-9]+", line.strip()):
+                channel = td["data"]["channels"][0]
+                value = int(line.strip())
+            else:
+                continue
+            if 0 <= value <= 1023:
+                td["data"][f"sensor_{channel}"] = value
 
     got_sensor_data = (td["data"]["sensor_3"] is not None or
                        td["data"]["sensor_4"] is not None)
@@ -129,8 +151,8 @@ def intro_to_octoliner(robot, image, td, user_code=None):
         elif not got_sensor_data:
             result["success"] = False
             result["score"] = 0
-            result["description"] = "No printed sensor value received. Print the value returned by analog_read(3) or analog_read(4). | Score: 0"
-            text = "No printed sensor value received."
+            result["description"] = "Timeout: No sensor readings received | Score: 0"
+            text = "No readings received."
         else:
             result["success"] = True
             result["score"] = 100

@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "tasks": {
+    "test_drive": {
+      "reference": "solutions/module_1/test_drive_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "license_to_drive": {
+      "reference": "solutions/module_1/license_to_drive_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "maneuvering": {
+      "reference": "solutions/module_1/maneuvering_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "differential_drive": {
+      "reference": "solutions/module_2/differential_drive_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "welcome": {
+      "reference": "solutions/module_1/welcome_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "directional_movement": {
+      "reference": "solutions/module_1/directional_movement_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "sequential_navigation": {
+      "reference": "solutions/module_1/sequential_navigation_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "python_variables_commands": {
+      "reference": "solutions/module_1/python_variables_commands_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "intro_to_octoliner": {
+      "reference": "solutions/module_3/intro_to_octoliner_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "processing_sensor_data": {
+      "reference": "solutions/module_3/processing_sensor_data_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "electric_motors": {
+      "reference": "solutions/module_2/electric_motors_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "defining_functions": {
+      "reference": "solutions/module_2/defining_functions_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "for_loops": {
+      "reference": "solutions/module_2/for_loops_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "encoder_theory": {
+      "reference": "solutions/module_2/encoder_theory_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "conditional_logic": {
+      "reference": "solutions/module_3/conditional_logic_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "arrays_and_elif": {
+      "reference": "solutions/module_3/arrays_and_elif_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "led_feedback": {
+      "reference": "solutions/module_3/led_feedback_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "simple_line_follower": {
+      "reference": "solutions/module_3/simple_line_follower_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "python_lists": {
+      "reference": "solutions/module_4/python_lists_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "telemetry": {
+      "reference": "solutions/module_4/telemetry_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "color_sensor_basics": {
+      "reference": "solutions/module_4/color_sensor_basics_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "color_classification": {
+      "reference": "solutions/module_4/color_classification_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "concept_of_error": {
+      "reference": "solutions/module_5/concept_of_error_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "upgraded_relay_controller": {
+      "reference": "solutions/module_5/upgraded_relay_controller_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "proportional_control": {
+      "reference": "solutions/module_5/proportional_control_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "adaptive_speed": {
+      "reference": "solutions/module_5/adaptive_speed_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "art_of_debugging": {
+      "reference": "solutions/module_6/art_of_debugging_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "hardware_safety_net": {
+      "reference": "solutions/module_6/hardware_safety_net_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "code_clinic": {
+      "reference": "solutions/module_6/code_clinic_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "navigation": {
+      "reference": "solutions/module_11/navigation_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "perimeter": {
+      "reference": "solutions/module_11/perimeter_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "visual_telemetry": {
+      "reference": "solutions/module_11/visual_telemetry_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "adaptive_racing": {
+      "reference": "solutions/module_11/adaptive_racing_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    },
+    "sandbox": {
+      "reference": "solutions/module_0/sandbox_reference.py",
+      "guidanceUpdated": "2026-10-08",
+      "physicalValidation": {
+        "status": "pending"
+      },
+      "commonMistakes": [],
+      "parameters": {}
+    }
+  }
+}

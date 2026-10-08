@@ -38,6 +38,9 @@ def art_of_debugging(robot, frame, td, user_code=None):
     Checkpoints: (105, 60), (80, 30)
     """
 
+    if td is not None and td["data"].get("final_result") is not None:
+        return frame, td, td["data"]["final_text"], td["data"]["final_result"].copy()
+
     # ===== CONFIGURATION =====
     MIN_MOVEMENT_DISTANCE = 30.0  # cm
     CHECKPOINT_RADIUS = 10.0  # cm
@@ -280,6 +283,9 @@ def art_of_debugging(robot, frame, td, user_code=None):
             result["description"] = "No bugs fixed. Review the code carefully! | Score: 0"
             text = "Start debugging! Find and fix the 6 bugs."
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
     return frame, td, text, result
 
 
@@ -292,6 +298,9 @@ def hardware_safety_net(robot, frame, td, user_code=None):
     Start: x=60, y=40, dir=0°
     No checkpoints (robot spins in place)
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return frame, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     # ===== CONFIGURATION =====
     MIN_ROTATION = 10.0  # cm - robot must move (spinning counts)
@@ -459,6 +468,9 @@ def hardware_safety_net(robot, frame, td, user_code=None):
             )
             text = "Task failed. Code likely crashed on first (0,0,0)."
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
     return frame, td, text, result
 
 
@@ -471,6 +483,9 @@ def code_clinic(robot, frame, td, user_code=None):
     Start: x=50, y=30, dir=0°
     Checkpoints: (105, 60), (60, 90), (80, 30)
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return frame, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     # ===== CONFIGURATION =====
     MIN_MOVEMENT_DISTANCE = 30.0  # cm
@@ -727,4 +742,7 @@ def code_clinic(robot, frame, td, user_code=None):
             )
             text = "Refactoring done, but code has bugs."
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
     return frame, td, text, result

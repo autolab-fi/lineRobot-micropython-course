@@ -213,18 +213,6 @@
         { "type": "program-finished" }
       ]
     },
-    "tuning_and_kick": {
-      "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
-      "checks": [
-        { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop", "time"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "time-import"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["base_speed", "kp", "last_kick_time"] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "minimum-distance", "valueCm": 10 },
-        { "type": "stdout-count", "pattern": "(?:^|\\n)KICK!(?:\\n|$)", "minimumMatches": 2 },
-        { "type": "program-finished" }
-      ]
-    },
     "adaptive_speed": {
       "mode": "simulation-and-lab",
       "timeoutSec": 20,

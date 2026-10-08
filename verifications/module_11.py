@@ -38,33 +38,12 @@ def delta_points(point_0, point_1):
 
 
 def calculate_target_point(rb, targets):
-    """Calculate the target points based on the robot's current position and movement directions."""
-    
-    # Get the robot's position properly
-    pos = rb.get_info().get("position")
-    
-    if pos is None:
-        print("Error: Robot position is None")
-        return []
-
-    point = [pos[0], pos[1]]
-    direction = rb.compute_angle_x()
-
-    res = []
-    for target in targets:
-        if isinstance(target, dict):
-            point[0] += target['forward'] * math.cos(math.radians(direction))
-            point[0] -= target['backward'] * math.cos(math.radians(direction))
-            point[1] -= target['forward'] * math.sin(math.radians(direction))
-            point[1] += target['backward'] * math.sin(math.radians(direction))
-            res.append((point[0], point[1]))
-        else:
-            # Handle reversed y-axis
-            direction += target[0]['left']
-            direction -= target[0]['right']
-
-    res.reverse()
-    return res
+    """Map physical route centimetres using the starting tag's camera scale."""
+    if __package__:
+        from .camera_geometry import route_targets
+    else:
+        from camera_geometry import route_targets
+    return route_targets(rb.get_info(), targets)
 
 def draw_trajectory(image, points, color, width, restore):
     """Function for drawing point trajectory"""
@@ -119,7 +98,12 @@ def navigation(robot, image, td: dict, user_code):
             {'forward': 40, 'backward': 0},
         ]
 
-        td["data"]['targets'] = calculate_target_point(robot, route)
+        targets = calculate_target_point(robot, route)
+        if not targets:
+            result.update(success=False, score=0,
+                          description="Cannot measure the robot tag. Please retry when the camera view is clear.")
+            return image, td, "Waiting for a valid camera tag", result
+        td["data"]['targets'] = targets
         td["data"]['delta'] = 4
         td["data"]['reached_point'] = False
 
@@ -172,7 +156,6 @@ def navigation(robot, image, td: dict, user_code):
                     checkpoint_index = len(td["data"]['targets']) - 1
                     td["data"]["checkpoint_visible"][checkpoint_index] = False
                     
-                    td["data"]['delta'] += 1.3
                     td["data"]['targets'].pop()
                 elif not td["data"]['reached_point']:
                     # Final checkpoint collected

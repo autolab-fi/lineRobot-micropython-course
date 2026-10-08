@@ -67,7 +67,7 @@ You will write an upgraded autonomous line-following program. The rover must use
    * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `5`)
    * Otherwise: Drive Straight (e.g., `20`, `20`)
 
-Watch how much cleaner your steering logic has become!
+Drive through all three marked checkpoints in order. Moving away from the start alone does not complete the route. Watch how much cleaner your steering logic has become!
 
 ## Conclusion
 Mission accomplished! You have successfully modernized your autonomous control system.

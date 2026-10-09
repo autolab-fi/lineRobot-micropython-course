@@ -22,11 +22,11 @@ def detect_color_name(r, g, b):
         return "Blue"
     return "Floor"
 
-time.sleep(0.5)
+time.sleep(1.1)
 for step in range(6):
     r, g, b = sensor.rgb()
     color_name = detect_color_name(r, g, b)
     print(f"Scan - {color_name} (Raw: R:{r} G:{g} B:{b})")
     if step < 5:
         robot.move_forward_speed_distance(40, 13)
-        time.sleep(0.5)
+        time.sleep(1.1)

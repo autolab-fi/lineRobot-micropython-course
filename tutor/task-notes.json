@@ -228,7 +228,7 @@
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
-        "submissionId": 22046
+        "submissionId": 22053
       },
       "commonMistakes": [
         "Use the supplied three-zone sensor grouping. Individual scout channels have blind spots.",
@@ -287,25 +287,28 @@
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending",
-        "reason": "Slow 40% experiment 22054 produced Green, Floor and strong Red (184,47,40), ending safely at (125.21,35.68). Recheck with updated semantic checker."
+        "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
       },
       "commonMistakes": [
         "Do not move after the sixth reading.",
-        "Wait 0.5 s before the first measurement and between moves and reads.",
+        "Wait 1.1 s before the first measurement and between moves and reads.",
         "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
       ],
       "parameters": {
         "readings": 6,
         "moves": 5,
         "stepCm": 13,
-        "settleSeconds": 0.5,
+        "settleSeconds": 1.1,
         "expectedZones": [
           "Green",
           "Floor",
           "Red"
         ],
         "speedPercent": 40,
-        "totalTravelCm": 65
+        "totalTravelCm": 65,
+        "startXCm": 127,
+        "redRatio": 0.5,
+        "greenRatio": 0.4
       }
     },
     "color_classification": {
@@ -313,25 +316,28 @@
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending",
-        "reason": "Slow 40% experiment 22054 produced Green, Floor and strong Red (184,47,40), ending safely at (125.21,35.68). Recheck with updated semantic checker."
+        "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
       },
       "commonMistakes": [
         "Do not move after the sixth reading.",
-        "Wait 0.5 s before the first measurement and between moves and reads.",
+        "Wait 1.1 s before the first measurement and between moves and reads.",
         "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
       ],
       "parameters": {
         "readings": 6,
         "moves": 5,
         "stepCm": 13,
-        "settleSeconds": 0.5,
+        "settleSeconds": 1.1,
         "expectedZones": [
           "Green",
           "Floor",
           "Red"
         ],
         "speedPercent": 40,
-        "totalTravelCm": 65
+        "totalTravelCm": 65,
+        "startXCm": 127,
+        "redRatio": 0.5,
+        "greenRatio": 0.4
       }
     },
     "concept_of_error": {

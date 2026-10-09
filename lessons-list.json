@@ -233,7 +233,7 @@
                 "sn": 23,
                 "name": "Color Sensor Basics",
                 "description": "Initialize the tcs3472 sensor and scan a straight track, printing raw RGB values.",
-                "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\n# Initialize the I2C bus and the color sensor\nbus =\ncolor_sensor =\n\n# Create your scanning loop for \n    # Read and print RGB values\n    \n    # If step < 5: move 13 cm at 40% speed and wait 0.5 s before the next reading\n\nprint(\"Linear scan complete.\")"
+                "template": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\n# Initialize the I2C bus and the color sensor\nbus =\ncolor_sensor =\n\n# Create your scanning loop for \n    # Read and print RGB values\n    \n    # If step < 5: move 13 cm at 40% speed and wait 1.1 s before the next reading\n\nprint(\"Linear scan complete.\")"
             },
             {
                 "str_id": "color_classification",

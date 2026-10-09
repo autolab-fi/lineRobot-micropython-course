@@ -9,8 +9,8 @@ import numpy as np
 target_points = {
     'python_lists':        [(65, 45), (30, 0)],
     'telemetry':           [(75, 30), (30, 0)],
-    'color_sensor_basics': [(124, 98), (0, -30)],
-    'color_classification':[(124, 98), (0, -30)],
+    'color_sensor_basics': [(127, 98), (0, -30)],
+    'color_classification':[(127, 98), (0, -30)],
     'multiple_sensors':    [(45, 29), (30, 0)],
     'data_logging':        [(45, 29), (30, 0)],
 }
@@ -452,7 +452,7 @@ def _scan_label_plausible(name, r, g, b):
 def color_sensor_basics(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Sensor Basics — 4.3
-    Start: x=124, y=98, direction x=0, y=-30
+    Start: x=127, y=98, direction x=0, y=-30
     """
 
     if td is not None and td["data"].get("final_result") is not None:
@@ -563,7 +563,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
 def color_classification(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Classification — 4.4
-    Start: x=124, y=98, direction x=0, y=-30
+    Start: x=127, y=98, direction x=0, y=-30
     """
 
     if td is not None and td["data"].get("final_result") is not None:

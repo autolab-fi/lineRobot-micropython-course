@@ -41,7 +41,7 @@ This function returns a single decimal number (`float`) representing the exact p
 * **`0.0`**: The line is perfectly in the **center**.
 * **`1.0`**: The line is far to the **right** (under sensor 1).
 
-This continuous gradient—smoothly transitioning from `-1.0` to `1.0`- is exactly what we need. This value is our **Error**!
+This continuous gradient-smoothly transitioning from `-1.0` to `1.0`- is exactly what we need. This value is our **Error**!
 
 ## Assignment
 Mission Control requires a structural scan of a basaltic fracture (the black line). To prevent the rover from twisting off the track during the scan, the engineering team has provided a skeleton for a `diagnostic_sweep(speed_left, speed_right)` function. 

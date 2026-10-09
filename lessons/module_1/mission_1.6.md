@@ -28,8 +28,8 @@ Below, the image represents the possible directions of the robot's movement.
 
 ### 1. Standard Turns (90 Degrees)
 For simple navigation, like a maze or a city grid, we usually turn exactly 90 degrees.
-* **`robot.turn_right()`** — Turns the robot 90 degrees to the right.
-* **`robot.turn_left()`** — Turns the robot 90 degrees to the left.
+* **`robot.turn_right()`** - Turns the robot 90 degrees to the right.
+* **`robot.turn_left()`** - Turns the robot 90 degrees to the left.
 
 As you can see, the turning functions don't require any parameters. It's sufficient to call them, and the robot will turn in place in the desired direction.
 
@@ -37,8 +37,8 @@ As you can see, the turning functions don't require any parameters. It's suffici
 Real-world paths are rarely perfect squares. Sometimes you need to turn just a little bit, or make a U-turn.
 To do this, you can pass a **parameter** (an integer or float) to the turn functions.
 
-* **`robot.turn_right_angle(degrees)`** — Turns right by the specified angle.
-* **`robot.turn_left_angle(degrees)`** — Turns left by the specified angle.
+* **`robot.turn_right_angle(degrees)`** - Turns right by the specified angle.
+* **`robot.turn_left_angle(degrees)`** - Turns left by the specified angle.
 
 ### 3. Using Variables for Turns
 Remember the variables from the last mission? You can use them here too! This makes your code readable and easy to change.

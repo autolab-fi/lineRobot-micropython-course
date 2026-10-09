@@ -18,7 +18,7 @@ Imagine walking towards a wall with your eyes closed. You decide to take exactly
 * If your steps are too long, you hit the wall.
 * If your steps are too short, you don't reach it.
 
-This is how `for` loops work — they are "blind."
+This is how `for` loops work - they are "blind."
 
 To stop exactly at the wall, you need to keep your eyes open and say: *"I will keep walking **while** the distance is greater than 0."*
 In this mission, you will program this "Active Vision" logic.
@@ -73,7 +73,7 @@ target = (Target_cm / (2 * math.pi * radius)) * 360
 
 **Expected Behavior:**
 * The robot should stop before hitting the wall at 40 cm
-* You'll notice some "coasting" — the robot continues rolling briefly after the loop exits
+* You'll notice some "coasting" - the robot continues rolling briefly after the loop exits
 
 ## Conclusion
 

@@ -16,7 +16,7 @@ Learn the principles of "Clean Code" by refactoring a messy, unreadable script i
 ## Introduction
 In the previous missions, you learned how to find bugs and handle errors. But did you notice that finding a bug in a messy program is much harder than in a clean one?
 
-In professional robotics, code is read by humans far more often than it is run by computers. If your code is a "spaghetti mess" of cryptic variables and repeated lines, you will eventually make a mistake that costs millions. Today, you will learn how to perform **Refactoring** — the process of improving your code's structure without changing what it does.
+In professional robotics, code is read by humans far more often than it is run by computers. If your code is a "spaghetti mess" of cryptic variables and repeated lines, you will eventually make a mistake that costs millions. Today, you will learn how to perform **Refactoring** - the process of improving your code's structure without changing what it does.
 
 ## Theory
 
@@ -43,9 +43,9 @@ You have been handed a "Spaghetti Script" that successfully follows the line and
 1.  **Configuration Panel:** Create a section at the top for **Constants**. Move the `SENSITIVITY` (240), `LINE_THRESHOLD` (500), `BASE_SPEED`, and `KP` there.
 2.  **Standardize Naming:** Replace all cryptic names (like `sa`, `rr`, `v`) with descriptive names.
 3.  **Modularize:** Wrap the logic into three distinct functions:
-    * `get_mineral_color()` — Must include your `try-except` safety net.
-    * `calculate_steering()` — For the P-controller math.
-    * `apply_movement()` — To handle the motor commands.
+    * `get_mineral_color()` - Must include your `try-except` safety net.
+    * `calculate_steering()` - For the P-controller math.
+    * `apply_movement()` - To handle the motor commands.
 4.  **The Clean Loop:** Simplify the `while True` loop so it only manages the high-level mission logic.
 
 ## Conclusion

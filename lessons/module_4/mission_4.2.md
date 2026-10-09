@@ -14,7 +14,7 @@ Learn how to track real-world execution time, perform mathematical operations to
 ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
-Welcome back to Mission Control! While your rover executes its routes, it must constantly report its status and sensor data back to the base—a process known as **telemetry**.
+Welcome back to Mission Control! While your rover executes its routes, it must constantly report its status and sensor data back to the base-a process known as **telemetry**.
 
 In previous modules, you printed basic messages by separating text and variables with commas, like `print("Total distance:", total)`. While this is fine for simple reading, it automatically inserts unwanted spaces and quickly becomes a confusing mess of quotation marks when you try to format multiple variables like `print("name=", name, ";dist=", dist)`. 
 

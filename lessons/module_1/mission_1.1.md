@@ -67,7 +67,7 @@ After your own submission, use the **Physical lab** view in **Run** to review th
 
 Return to Moodle and open **Test drive**. Always launch the next activity from Moodle so its grade is returned to the correct activity.
 
-The course is continuously available and self-paced. There is no scheduled Zoom meeting or separate exam. Work through the six modules in order; the Sandbox is optional. The Remote Lab uses a **70% participation-certificate threshold**; check your progress and certificate status there.
+The course is continuously available and self-paced. Work through the six modules in order; the Sandbox is optional. The Remote Lab uses a **70% participation-certificate threshold**; check your progress and certificate status there.
 
 Use the Moodle questions forum for course questions and Remote Lab **Helpdesk** for technical issues.
 

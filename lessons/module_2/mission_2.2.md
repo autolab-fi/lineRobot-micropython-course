@@ -25,7 +25,7 @@ Let's consider the features of the robot from a kinematics perspective. The rove
 This setup provides high maneuverability, enabling the robot to rotate on the spot.
 
 ### 2. The Drifting Challenge
-Differential drive offers great capabilities, but it also introduces challenges. Because of physical and mechanical issues (like microscopic gear inaccuracies, contamination, weight distribution, or surface friction), one motor might run slightly slower than the other — even with the exact same voltage applied!
+Differential drive offers great capabilities, but it also introduces challenges. Because of physical and mechanical issues (like microscopic gear inaccuracies, contamination, weight distribution, or surface friction), one motor might run slightly slower than the other - even with the exact same voltage applied!
 
 If you just turn both motors on at exactly the same power, the robot might curve instead of driving straight. Achieving a perfect straight line requires you to manually adjust and balance the speeds of the individual motors.
 

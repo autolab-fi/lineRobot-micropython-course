@@ -455,7 +455,7 @@
     "code_clinic": {
       "mode": "simulation-and-lab",
       "timeoutSec": 60,
-      "initialPose": { "xM": 0.50, "yM": 0.79, "headingRad": 0 },
+      "initialPose": { "xM": 0.50, "yM": 0.84, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "rgb", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "try-statement", "return-statement", "multiplication"], "requiredFunctions": [{ "name": "get_mineral_color", "parameterCounts": [0] }, { "name": "calculate_steering", "parameterCounts": [1] }, { "name": "apply_movement", "parameterCounts": [1] }], "requiredFunctionCalls": ["get_mineral_color", "calculate_steering", "apply_movement"], "requiredVariableNames": ["SENSITIVITY", "LINE_THRESHOLD", "BASE_SPEED", "KP"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },

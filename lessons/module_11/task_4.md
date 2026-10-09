@@ -24,7 +24,7 @@ Your task is to act as the Senior Engineer: find the bugs, fix them, and clean u
 5. **The Coma Bug:** The rover is updating sensors too slowly.
 
 
-Use the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the line-loss stop in the provided code. Pass all three checkpoints in order to complete the route.
+Use the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the supplied line-loss filter: stop after five consecutive readings below `700`; reset the counter when the line is detected again. Pass all three checkpoints in order to complete the route.
 
 ## Conclusion
 If you fix all 5 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer!

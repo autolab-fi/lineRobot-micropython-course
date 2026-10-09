@@ -16,6 +16,7 @@ braking_force = 20
 
 print("Starting Adaptive Speed Controller...")
 
+lost_readings = 0
 while True:
     sensor_array = octoliner.analog_read_all()
     time.sleep(0.01)
@@ -23,10 +24,15 @@ while True:
 
     # Failsafe Check
     if max(sensor_array) < 700:
+        lost_readings += 1
+        if lost_readings < 5:
+            time.sleep(0.01)
+            continue
         print("CRITICAL: Line lost! Emergency Stop.")
         robot.stop()
         break
     else:
+        lost_readings = 0
         # Calculate Adaptive Speed
         dynamic_speed = max_speed - (braking_force * abs(position))
 

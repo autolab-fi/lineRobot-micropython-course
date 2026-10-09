@@ -68,6 +68,8 @@ class RouteCheckerTests(unittest.TestCase):
                                   cm_to_pixel=lambda x:round(x*22/2.54))
             reference='solutions/module_1/sequential_navigation_reference.py' if task=='sequential_navigation' else 'solutions/module_11/navigation_reference.py'
             code=(ROOT/reference).read_text() if variant!='empty' else 'pass'
+            if variant == 'wrong_commands':
+                code = code.replace('first_distance = 20', 'first_distance = 10')
             checker=getattr(module,task)
             with patch.object(module,'time',SimpleNamespace(time=lambda:clock.now)),patch.object(module.cv2,'imread',return_value=None),contextlib.redirect_stdout(io.StringIO()):
                 _,td,_,_=checker(robot,None,None,code)
@@ -75,11 +77,21 @@ class RouteCheckerTests(unittest.TestCase):
                 if variant=='skip':targets=targets[-1:]
                 if variant=='reverse':targets=targets[::-1]
                 if variant=='too_long':targets=[(37+1.5*(x-37),60+1.5*(y-60)) for x,y in targets]
+                if variant == 'drift_10': targets = [(x, y + 10) for x, y in targets]
+                if variant == 'drift_13': targets = [(x, y + 13) for x, y in targets]
                 for p in targets:
+                    if variant == 'missing_pose': p = None
                     clock.now+=2;details['position']=p
                     _,td,_,_=checker(robot,None,td,code)
                 clock.now=td['end_time']+1
                 _,td,_,result=checker(robot,None,td,code)
+                if task == 'navigation':
+                    expected = result.copy()
+                    details['position'] = targets[-1]
+                    clock.now += 10
+                    result['success'] = not result['success']
+                    _,td,_,result = checker(robot,None,td,code)
+                    self.assertEqual(result, expected)
                 return result
         finally:sys.path.pop(0)
 
@@ -88,5 +100,11 @@ class RouteCheckerTests(unittest.TestCase):
             for variant in ('correct','skip','reverse','too_long','empty'):
                 with self.subTest(task=task,variant=variant):
                     self.assertEqual(self.replay(task,variant)['success'],variant=='correct')
+
+    def test_navigation_tolerates_measured_drift_but_checks_commands(self):
+        self.assertTrue(self.replay('navigation', 'drift_10')['success'])
+        self.assertFalse(self.replay('navigation', 'drift_13')['success'])
+        self.assertFalse(self.replay('navigation', 'wrong_commands')['success'])
+        self.assertFalse(self.replay('navigation', 'missing_pose')['success'])
 
 if __name__=='__main__':unittest.main()

@@ -17,7 +17,7 @@ class LateFrameVerdicts(unittest.TestCase):
         for module, tasks in TASKS.items():
             source = Path(__file__).resolve().parents[1] / 'verifications' / module
             functions = [n for n in ast.parse(source.read_text()).body
-                         if isinstance(n, ast.FunctionDef) and (n.name in tasks or n.name in ('_has_scan_step','_rgb_scan_zone','_scan_label_plausible'))]
+                         if isinstance(n, ast.FunctionDef) and (n.name in tasks or n.name in ('_has_scan_step','_rgb_scan_zone','_scan_label_plausible','_student_route_matches'))]
             clock = SimpleNamespace(now=0.0)
             namespace = {
                 'ast': ast, 'math': math, 'os': os, 're': re, '__file__': str(source),

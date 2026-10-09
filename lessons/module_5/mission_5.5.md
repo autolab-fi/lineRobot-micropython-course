@@ -39,7 +39,7 @@ Instead of a fixed `base_speed`, we will calculate a `dynamic_speed` every singl
 Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
 
 **Requirements:**
-1. **Setup:** Use your code from Mission 5.3. Start with sensitivity `245`, line-loss threshold `700` and `kp = 25`.
+1. **Setup:** Use your code from Mission 5.3. Start with sensitivity `245`, line-loss threshold `700` and `kp = 25`. Keep the five-reading line-loss filter from your P-controller: stop after five consecutive low readings and reset the counter when the line returns.
 2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:
    * `max_speed = 40`
    * `braking_force = 20`

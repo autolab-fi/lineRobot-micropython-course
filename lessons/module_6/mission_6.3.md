@@ -24,15 +24,15 @@ In professional robotics, code is read by humans far more often than it is run b
 In professional Python, we use specific styles to distinguish between different types of data at a glance:
 
 * **Constants (ALL_CAPS):** These are the "Configuration Settings" of your robot. We place them at the very top. Even though Python technically allows you to change them, the CAPS tell other engineers: *"This is a fixed rule for the mission."*
-* **Variables (snake_case):** These represent live, changing data (sensor values, current speed). 
+* **Variables (snake_case):** These represent live, changing data (sensor values, current speed).
 
 ### 2. Eliminating "Magic Numbers"
-A **Magic Number** is a hardcoded value (like `700` or `245`) that appears in your code without explanation. 
+A **Magic Number** is a hardcoded value (like `700` or `245`) that appears in your code without explanation.
 * **The Problem:** If you need to change the sensitivity in several different places, you will eventually miss one.
 * **The Solution:** Use Constants. By defining `SENSITIVITY = 245` at the top, you create a "Control Panel" for your robot. You tune the robot at the top; the logic stays at the bottom.
 
 ### 3. Modularity: The Manager and the Workers
-If your `while True` loop is a long list of math and sensor reads, it's hard to follow. Instead, use **Functions** to delegate tasks. 
+If your `while True` loop is a long list of math and sensor reads, it's hard to follow. Instead, use **Functions** to delegate tasks.
 * **The Functions (Workers):** Each should do **one thing** (e.g., *only* calculate steering or *only* identify a color).
 * **The Main Loop (Manager):** It should read like a "Table of Contents," calling the workers in the right order. This follows the **DRY (Don't Repeat Yourself)** principle.
 

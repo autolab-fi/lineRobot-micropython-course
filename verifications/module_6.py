@@ -4,6 +4,7 @@ import time
 import os
 import numpy as np
 import ast
+import re
 
 target_points = {
     'art_of_debugging': [(60, 92), (30, 0)],           # Start: x=60, y=92, direction=30°
@@ -259,7 +260,7 @@ def art_of_debugging(robot, frame, td, user_code=None):
             text = "All bugs fixed! Mission complete!"
         
         elif checkpoints_hit >= 1 and distance_moved >= MIN_MOVEMENT_DISTANCE:
-            result["success"] = True
+            result["success"] = False
             result["score"] = 85
             result["description"] = (
                 f"Good debugging! Distance: {distance_moved:.1f}cm, "
@@ -358,6 +359,9 @@ def hardware_safety_net(robot, frame, td, user_code=None):
                 "max_distance_moved": 0.0,
                 
                 "scans_received": 0,
+                "current_sector": None,
+                "sector_ids": set(),
+                "analysis_by_sector": {},
                 "sector_messages": [],
                 "analysis_messages": [],
                 "unknown_detections": 0,
@@ -384,16 +388,20 @@ def hardware_safety_net(robot, frame, td, user_code=None):
     # ── MQTT message parsing ──────────────────────────────────────────────────
     msg = robot.get_msg()
     if msg is not None:
-        if "Sector #" in msg:
-            td["data"]["sector_messages"].append(msg)
-            td["data"]["scans_received"] += 1
-        
-        elif "ANALYSIS:" in msg:
-            td["data"]["analysis_messages"].append(msg)
-            if "Unknown" in msg:
-                td["data"]["unknown_detections"] += 1
-        
-        elif "Survey Complete" in msg or "Complete" in msg:
+        # MQTT can combine several print lines in one delivery. Read events in
+        # order and associate each analysis with its numbered scan; repeated
+        # delivery of a sector must not inflate the number of completed scans.
+        for event in re.finditer(r"Sector\s*#\s*(\d+)\b|ANALYSIS:\s*(Red|Green|Blue|Floor|Unknown)\b", msg):
+            if event.group(1) is not None:
+                sector = int(event.group(1))
+                td["data"]["current_sector"] = sector if 1 <= sector <= EXPECTED_SCANS else None
+                if td["data"]["current_sector"] is not None:
+                    td["data"]["sector_ids"].add(sector)
+            elif td["data"]["current_sector"] is not None:
+                td["data"]["analysis_by_sector"][td["data"]["current_sector"]] = event.group(2)
+        td["data"]["scans_received"] = len(td["data"]["sector_ids"])
+        td["data"]["unknown_detections"] = sum(label == "Unknown" for label in td["data"]["analysis_by_sector"].values())
+        if "Survey Complete" in msg:
             td["data"]["completion_message"] = True
 
     # ── live status text ──────────────────────────────────────────────────────
@@ -422,7 +430,9 @@ def hardware_safety_net(robot, frame, td, user_code=None):
             )
             text = "Implement try-except block first!"
         
-        elif scans_received >= EXPECTED_SCANS and unknown_count >= 3:
+        elif (scans_received >= EXPECTED_SCANS and unknown_count >= 4
+              and len(td["data"]["analysis_by_sector"]) >= EXPECTED_SCANS
+              and td["data"]["completion_message"]):
             result["success"] = True
             result["score"] = 100
             result["description"] = (
@@ -433,7 +443,7 @@ def hardware_safety_net(robot, frame, td, user_code=None):
             text = "All scans completed! Safety net working!"
         
         elif scans_received >= MIN_SCANS_SUCCESS and unknown_count >= 2:
-            result["success"] = True
+            result["success"] = False
             result["score"] = 85
             result["description"] = (
                 f"Good! Processed {scans_received}/{EXPECTED_SCANS} scans, "
@@ -442,7 +452,7 @@ def hardware_safety_net(robot, frame, td, user_code=None):
             text = "Try-except working! Almost all scans completed."
         
         elif scans_received >= MIN_SCANS_SUCCESS:
-            result["success"] = True
+            result["success"] = False
             result["score"] = 70
             result["description"] = (
                 f"Scans completed ({scans_received}), but only {unknown_count}/4 "
@@ -638,7 +648,7 @@ def code_clinic(robot, frame, td, user_code=None):
     # ── MQTT message parsing ──────────────────────────────────────────────────
     msg = robot.get_msg()
     if msg is not None:
-        if "Mineral Detected" in msg or "mineral" in msg.lower():
+        if re.search(r"(?:Mineral Detected:|Found mineral:)\s*(?:Red|Green|Blue)\b", msg, re.IGNORECASE):
             if msg not in td["data"]["minerals_detected"]:
                 td["data"]["minerals_detected"].append(msg)
 
@@ -716,7 +726,7 @@ def code_clinic(robot, frame, td, user_code=None):
             text = "Clean code works perfectly!"
         
         elif checkpoints_hit >= 2 and robot_moved:
-            result["success"] = True
+            result["success"] = False
             result["score"] = 85
             result["description"] = (
                 f"Good refactoring! Checkpoints: {checkpoints_hit}/{total_checkpoints}, "
@@ -725,7 +735,7 @@ def code_clinic(robot, frame, td, user_code=None):
             text = "Refactored code working well!"
         
         elif robot_moved:
-            result["success"] = True
+            result["success"] = False
             result["score"] = 70
             result["description"] = (
                 f"Code refactored, robot moved {distance_moved:.1f}cm, "

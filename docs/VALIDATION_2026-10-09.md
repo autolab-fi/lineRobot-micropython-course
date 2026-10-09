@@ -23,19 +23,24 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | processing_sensor_data | 22042 |
 | arrays_and_elif | 22043 |
 | led_feedback | 22044 |
+| simple_line_follower | 22053 |
 | python_lists | 22032 |
 | telemetry | 22035 |
-| simple_line_follower | 22046, 22053 |
 | color_sensor_basics | 22057 |
 | color_classification | 22058 |
 | concept_of_error | 22059 |
-| adaptive_speed | 22065 |
-| proportional_control | 22067 |
 | upgraded_relay_controller | 22070 |
+| proportional_control | 22067 |
+| art_of_debugging | 22071 |
+| hardware_safety_net | 22072 |
+| code_clinic | 22073 |
+| perimeter | 22075 |
+| visual_telemetry | 22076 |
+| sandbox | 22078 |
 
 ## Checks
 
-- 58 verifier/replay tests passed.
+- 80 verifier/replay tests passed for the latest candidate, including actual module 6 event recordings and wrong-route negative cases.
 - All 34 simulator task references passed, including renamed programs and negative empty/output-only cases (136 cases; Sandbox intentionally permits free programs).
 - All 17 simulator UI scenarios passed earlier in this audit; the targeted line/waypoint/telemetry/RGB UI check also passed with the final color reference.
 - Sequential Navigation uses 20/15/20/15 cm, with the original 6 cm checkpoint tolerance, after the long route accumulated about 8 cm of drift.
@@ -44,15 +49,7 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 
 ## Remaining physical checks
 
-The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Remaining tasks at this checkpoint:
-- art_of_debugging
-- hardware_safety_net
-- code_clinic
-- navigation
-- perimeter
-- visual_telemetry
-- adaptive_racing
-- sandbox
+The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Latest candidate has **31/34** confirmed references. Navigation and Adaptive Racing require corrected physical runs. Adaptive Speed passed as 22065, but its added five-reading filter requires a fresh reference run before being marked confirmed again.
 
 ## Battery and docking
 
@@ -62,7 +59,7 @@ The new magnetic dock target is **(27.5, 63.0)**; direction (30, 0). Previous (2
 
 ## Publication
 
-Only previously promoted verified changes are in main (course 6ad7103, simulator 8cc6dd6). This audit remains on `validation/hamk-course-20261008`; pending tasks are not declared validated. Worker candidate checkers currently come from course revision 7d895f8; subsequent Concept/controller/race changes are not deployed or physically validated. Backend lesson/reference updates and public simulator deployment still require coordinated release after verification. No firmware or robot calibration changes were made during this audit.
+Only previously promoted verified changes are in main (course 6ad7103, simulator 8cc6dd6). This audit remains on `validation/hamk-course-20261008`; pending tasks are not declared validated. Worker candidate checkers at the start of this checkpoint came from 5fed9de. The stricter module 6 and module 11 candidates below still require deployment. Backend lesson/reference updates and public simulator deployment still require coordinated release after verification. No firmware or robot calibration changes were made during this audit.
 
 ## Latest candidate changes (physical tests pending)
 
@@ -99,3 +96,12 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - Relay 22069 (20/20 straight, 0/20 turns, five-reading filter) followed the line around to approximately (43, 32), but the existing 70-second firmware stop occurred before the third checkpoint. The route was stable but too slow.
 - Relay 22070 (25/25 straight, 0/25 turns, five-reading filter) passed all three checkpoints before the firmware stop. The canonical reference, lesson motor examples and tutor parameters now match this tested source.
 - Pending Debugging and Clinic candidates reuse measured sensitivity 245 / threshold 700 / base 20 / gain 25 and the five-reading filter. Their simulator routes now use the same ordered checkpoints as the physical grader. Debugging's start is (60, 92), east, on the lower straight; its six intended bugs remain in the starter. Clinic keeps start (50, 30), east. Physical tests still required.
+
+## Debugging and final-route checkpoint
+
+- Art of Debugging 22071, Hardware Safety Net 22072 and Code Clinic 22073 passed. Their actual physical MQTT/position events are checked into test fixtures and pass the stricter checker requiring full completion. Partial routes/scans no longer pass. Combined MQTT deliveries are parsed in order and scan numbers prevent double counting; Code Clinic requires a real Red/Green/Blue detection rather than arbitrary text containing “mineral”.
+- Perimeter 22075, Visual Telemetry 22076 and Sandbox 22078 passed. Perimeter additionally validates four 30 cm/right-90 legs, so total distance alone cannot count as a square.
+- Navigation 22074 missed the third checkpoint after accumulated open-loop turn drift. Approximate observed displacement from expected points was 7–12 cm. Candidate tolerance is 12 cm instead of 4, together with static validation of the required distances and turn sequence. Missing camera position cannot pass at timeout, and final verdicts cannot flip on later frames. This candidate needs a physical run.
+- Racing 22077 stopped after only about 10 cm on a weak sensor sample. Adaptive and Racing references/starters now preserve the same five-reading filter as P/Relay; both modified references need a fresh physical run. A regression check prevents the supplied short filter delay from concealing the unfixed five-second Racing delay.
+- Clinic simulator start moved from (0.50, 0.79) to (0.50, 0.84), placing its sensor on the line. The full simulator regression after that correction passed 136 cases; the second run including the latest Adaptive/Racing filters also passed all 136 cases.
+- Before this checkpoint, HAMK returned to its magnetic dock. Three stable charge samples confirmed contact, last battery 23.72 V and input 24.06 V. No new physical launch occurs below the 23.3 V audit reserve; the user cutoff remains 23.0 V.

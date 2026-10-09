@@ -31,5 +31,9 @@ class RacingRouteTests(unittest.TestCase):
  def test_partial_route_fails(self):
   result=self.replay([(105,60)]);self.assertFalse(result['success']);self.assertEqual(result['score'],33)
  def test_motion_cannot_pass_invalid_code(self):self.assertFalse(self.replay([(105,60),(60,90),(80,30)],'pass')['success'])
+ def test_filter_sleep_does_not_hide_unfixed_five_second_delay(self):
+  code=REFERENCE.rsplit('time.sleep(0.01)',1)[0]+'time.sleep(5)\n'
+  self.assertIn('time.sleep(0.01)',code)
+  self.assertFalse(self.replay([(105,60),(60,90),(80,30)],code)['success'])
 
 if __name__=='__main__':unittest.main()

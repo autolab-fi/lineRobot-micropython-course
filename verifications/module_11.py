@@ -59,10 +59,93 @@ def restore_trajectory(image, prev_point, point, color, width):
     """Function for restoring trajectory if robot was not recognized"""
     cv2.line(image, prev_point, point, color, width)
 
+def _student_route_matches(code, expected):
+    """Read simple numeric Python routes without executing student code.
+
+    Supports named distances, arithmetic, bounded range loops and small helper
+    functions. The camera tolerance does not excuse wrong movement commands.
+    """
+    try:
+        tree = ast.parse(code)
+        functions = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+        commands = []
+        budget = [1000]
+        def number(node, values):
+            if isinstance(node, ast.Constant) and type(node.value) in (int, float): value = node.value
+            elif isinstance(node, ast.Name): value = values[node.id]
+            elif isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+                value = number(node.operand, values) * (-1 if isinstance(node.op, ast.USub) else 1)
+            elif isinstance(node, ast.BinOp):
+                a, b = number(node.left, values), number(node.right, values)
+                if isinstance(node.op, ast.Add): value = a + b
+                elif isinstance(node.op, ast.Sub): value = a - b
+                elif isinstance(node.op, ast.Mult): value = a * b
+                elif isinstance(node.op, ast.Div): value = a / b
+                elif isinstance(node.op, ast.FloorDiv): value = a // b
+                else: raise ValueError('Unsupported arithmetic')
+            else: raise ValueError('Not a numeric route argument')
+            if not math.isfinite(value) or abs(value) > 10000: raise ValueError('Unbounded numeric value')
+            return value
+        def statements(nodes, values, depth=0):
+            if depth > 8: raise ValueError('Recursive route')
+            for node in nodes:
+                budget[0] -= 1
+                if budget[0] <= 0: raise ValueError('Route too large')
+                if isinstance(node, (ast.Import, ast.ImportFrom, ast.FunctionDef, ast.Pass)): continue
+                if isinstance(node, ast.Assign):
+                    try: value = number(node.value, values)
+                    except ValueError:
+                        if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Name) and node.value.func.id == 'Robot': continue
+                        raise
+                    for target in node.targets:
+                        if not isinstance(target, ast.Name): raise ValueError('Unsupported assignment')
+                        values[target.id] = value
+                elif isinstance(node, ast.For):
+                    if not isinstance(node.target, ast.Name) or not isinstance(node.iter, ast.Call) or not isinstance(node.iter.func, ast.Name) or node.iter.func.id != 'range': raise ValueError('Unsupported loop')
+                    args = [number(a, values) for a in node.iter.args]
+                    if any(int(v) != v for v in args): raise ValueError('Noninteger loop')
+                    iterations = range(*[int(v) for v in args])
+                    if len(iterations) > 40: raise ValueError('Loop too long')
+                    for value in iterations:
+                        values[node.target.id] = value; statements(node.body, values, depth + 1)
+                    statements(node.orelse, values, depth + 1)
+                elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+                    call = node.value
+                    if isinstance(call.func, ast.Name) and call.func.id in functions:
+                        function = functions[call.func.id]
+                        if len(call.args) != len(function.args.args) or call.keywords: raise ValueError('Unsupported helper arguments')
+                        local = dict(values); local.update({p.arg: number(a, values) for p, a in zip(function.args.args, call.args)})
+                        statements(function.body, local, depth + 1)
+                    elif isinstance(call.func, ast.Name) and call.func.id == 'print': continue
+                    elif isinstance(call.func, ast.Attribute):
+                        method = call.func.attr
+                        if method in ('stop', 'sleep'): continue
+                        if method not in ('move_forward_distance', 'move_backward_distance', 'turn_left_angle', 'turn_right_angle', 'turn_left', 'turn_right'): raise ValueError('Unsupported motion')
+                        if method in ('turn_left', 'turn_right'):
+                            if call.args or call.keywords: raise ValueError('Unexpected turn arguments')
+                            value = 90
+                        else:
+                            if len(call.args) != 1 or call.keywords: raise ValueError('Expected one route argument')
+                            value = number(call.args[0], values)
+                            if value < 0: raise ValueError('Negative motion argument')
+                        kind = 'move' if method.startswith('move_') else 'turn'
+                        sign = -1 if method == 'move_backward_distance' or method.startswith('turn_left') else 1
+                        commands.append((kind, sign * value))
+                    else: raise ValueError('Unknown call')
+                else: raise ValueError('Unsupported route control flow')
+        statements(tree.body, {})
+        return len(commands) == len(expected) and all(a[0] == b[0] and abs(a[1] - b[1]) < .01 for a, b in zip(commands, expected))
+    except (SyntaxError, ValueError, KeyError, TypeError, ZeroDivisionError, OverflowError, RecursionError):
+        return False
+
+
 # Task 1: Navigation
 
 def navigation(robot, image, td: dict, user_code): 
     """Test for task 1 navigation"""
+
+    if td is not None and td.get("data", {}).get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     result = {
         "success": True,
@@ -77,7 +160,7 @@ def navigation(robot, image, td: dict, user_code):
             "start_time": time.time(),
             "end_time": time.time() + 30,
             "data": {},
-            "delta": 4,
+            "delta": 12,
             "reached_point": False
         }
 
@@ -85,7 +168,9 @@ def navigation(robot, image, td: dict, user_code):
     comments_count = user_code.count('#')
     has_variables = bool(re.search(r'\w+\s*=\s*\d+', user_code))
 
-    style_ok = (comments_count >= 2) and has_variables
+    style_ok = ((comments_count >= 2) and has_variables and _student_route_matches(
+        user_code, [("move", 20), ("turn", -45), ("move", 40), ("turn", 45),
+                    ("move", 20), ("turn", 90), ("move", 40)]))
 
     if not td["data"] and robot:
         route = [
@@ -104,7 +189,7 @@ def navigation(robot, image, td: dict, user_code):
                           description="Cannot measure the robot tag. Please retry when the camera view is clear.")
             return image, td, "Waiting for a valid camera tag", result
         td["data"]['targets'] = targets
-        td["data"]['delta'] = 4
+        td["data"]['delta'] = 12
         td["data"]['reached_point'] = False
 
         # Load single mineral image
@@ -181,7 +266,14 @@ def navigation(robot, image, td: dict, user_code):
     if td["data"].get('reached_point') or time_up:
         if not style_ok and result["success"]:
             result.update({"success": False, "score": 0, 
-                           "description": "Task failed. Use variables (e.g., dist = 20) and at least 2 comments (#) in your code."})
+                           "description": "Task failed. Use the required 20/40/20/40 cm route and 45/45/90 degree turns, variables and at least 2 comments."})
+    if time_up:
+        if not td["data"].get('reached_point'):
+            result.update(success=False, score=0,
+                          description="Robot did not complete all route checkpoints before the deadline.")
+            text = result["description"]
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     # Draw minerals at checkpoint locations with masking
     if td["data"] and td["data"]["mineral"] is not None and td["data"]["mask"] is not None:
@@ -249,7 +341,7 @@ def perimeter(robot, image, td: dict, user_code=None):
             "end_time": time.time() + TASK_DURATION,
             "data": {
                 "syntax_ok": syntax_ok,
-                "has_for_loop": has_for_loop,
+                "has_for_loop": has_for_loop and _student_route_matches(user_code, [("move", 30), ("turn", 90)] * 4),
                 "total_distance": 0.0,
                 "last_pos": None,
                 "completed_verdict": False
@@ -308,7 +400,7 @@ def perimeter(robot, image, td: dict, user_code=None):
         elif not td["data"]["has_for_loop"]:
             result["success"] = False
             result["score"] = 0
-            result["description"] = "Mission Failed: You must use a 'for' loop to automate the patrol! | Score: 0"
+            result["description"] = "Mission Failed: Use a four-iteration loop with 30 cm forward and a right turn in each iteration. | Score: 0"
             text = "Missing loop"
             
         elif total_dist < 100.0:
@@ -500,7 +592,8 @@ def adaptive_racing(robot, frame, td: dict, user_code):
         has_time_import = bool(re.search(r'import\s+time', active_code))
         has_sensitivity = bool(re.search(r'set_sensitivity\(\s*[^)]+\s*\)', active_code))
         has_track_line = 'track_line(' in active_code
-        has_good_sleep = bool(re.search(r'time\.sleep\(\s*0?\.[0-9]+\s*\)', active_code))
+        has_good_sleep = (bool(re.search(r'time\.sleep\(\s*0?\.[0-9]+\s*\)', active_code))
+                          and not re.search(r'time\.sleep\(\s*5(?:\.0*)?\s*\)', active_code))
 
         code_valid = syntax_ok and has_time_import and has_sensitivity and has_track_line and has_good_sleep
 

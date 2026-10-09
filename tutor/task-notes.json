@@ -39,9 +39,11 @@
     },
     "differential_drive": {
       "reference": "solutions/module_2/differential_drive_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22034
       },
       "commonMistakes": [],
       "parameters": {}
@@ -72,10 +74,11 @@
     },
     "sequential_navigation": {
       "reference": "solutions/module_1/sequential_navigation_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "Original 35/25 cm route accumulated an 8 cm final error in submission 22030; compact 20/15 cm route awaits retest."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22031
       },
       "commonMistakes": [],
       "parameters": {
@@ -98,30 +101,49 @@
     },
     "intro_to_octoliner": {
       "reference": "solutions/module_3/intro_to_octoliner_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22040
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "processing_sensor_data": {
       "reference": "solutions/module_3/processing_sensor_data_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22042
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "electric_motors": {
       "reference": "solutions/module_2/electric_motors_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22039
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "physicalTimedDrive": {
+          "leftSpeed": 30,
+          "rightSpeed": 64,
+          "durationSeconds": 2.1
+        },
+        "simulatorTimedDrive": {
+          "leftSpeed": 30,
+          "rightSpeed": 50,
+          "durationSeconds": 2.5
+        },
+        "tuning": "Tune motor balance and duration independently for the physical rover and simulator. These open-loop settings depend on the robot and battery."
+      },
+      "simulationReference": "solutions/module_2/electric_motors_simulation_reference.py"
     },
     "defining_functions": {
       "reference": "solutions/module_2/defining_functions_reference.py",
@@ -169,27 +191,33 @@
     },
     "conditional_logic": {
       "reference": "solutions/module_3/conditional_logic_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22041
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "arrays_and_elif": {
       "reference": "solutions/module_3/arrays_and_elif_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22043
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "led_feedback": {
       "reference": "solutions/module_3/led_feedback_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22044
       },
       "commonMistakes": [],
       "parameters": {}
@@ -215,10 +243,11 @@
     },
     "python_lists": {
       "reference": "solutions/module_4/python_lists_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "Shorter route awaits hardware retest after original route missed two checkpoints in submission 22005."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22032
       },
       "commonMistakes": [],
       "parameters": {
@@ -231,9 +260,11 @@
     },
     "telemetry": {
       "reference": "solutions/module_4/telemetry_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22035
       },
       "commonMistakes": [],
       "parameters": {}

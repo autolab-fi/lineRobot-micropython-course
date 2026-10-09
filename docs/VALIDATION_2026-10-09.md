@@ -28,6 +28,7 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | simple_line_follower | 22046, 22053 |
 | color_sensor_basics | 22057 |
 | color_classification | 22058 |
+| concept_of_error | 22059 |
 
 ## Checks
 
@@ -41,7 +42,6 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 ## Remaining physical checks
 
 The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Remaining tasks at this checkpoint:
-- concept_of_error
 - upgraded_relay_controller
 - proportional_control
 - adaptive_speed
@@ -66,9 +66,18 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 
 ## Latest candidate changes (physical tests pending)
 
-- Concept start moved to (104, 76), facing up, away from the left frame.
+- Concept start moved to (104, 76), facing up, away from the left frame; physical submission 22059 passed, with first-attempt reset and about 29 cm displacement.
 - Adaptive Speed and Adaptive Racing use maximum speed 40, braking 20, gain 25, sensitivity 245 and raw line-loss threshold 700.
 - Adaptive Racing requires all three ordered route checkpoints; five replay tests cover full/partial/skipped routes, invalid code and immutable final results.
 - Simulator Relay, P, Adaptive Speed and Racing now check the full three-checkpoint route. All 34 canonical and renamed references passed alongside empty/output-only cases (136 cases).
 - Color references physically demonstrated Green → Floor → Red using six readings, five 13 cm steps at 40%, and 1.1 s settling. Lessons, starter code and tutor guidance agree.
-- Latest physical total: **22/34**, with **12 pending**. These candidate changes stay on the validation branch until physical verification.
+- Latest physical total: **23/34**, with **11 pending**. These candidate changes stay on the validation branch until physical verification.
+
+## Controller experiments after 9e9b481
+
+- Concept 22059 passed on the new start (104, 76), with ten error readings and about 29 cm displacement. Reset succeeded on its first attempt.
+- Relay 22060 stopped on line loss at the lower right bend, tag approximately (99.7, 79.7), heading 107.6 degrees; 1/3 checkpoints. The canonical 5/25 turning command is not yet validated for a full HAMK lap.
+- P-controller 22061 passed the right bend and lower straight, then stopped on line loss at the lower left bend, approximately (22.6, 75), heading -116.6 degrees; 2/3 checkpoints. Its current base_speed=30, kp=20 reference is not yet validated for a full HAMK lap.
+- Both controller resets succeeded on their first attempt. No boundary stop or reset retry occurred in these three submissions.
+- Proposed experimental values (not canonical yet): Relay -5/20 turns and 15/15 straight; P-controller base speed 20 and gain 30. This reduces forward motion on a bend and permits a tighter turn. Physical and simulator comparison are still required.
+- Battery reached about 23.29 V after P-controller; further launches paused for docking before the 23.0 V user cutoff.

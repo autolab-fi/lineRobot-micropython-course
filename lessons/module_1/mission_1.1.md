@@ -55,6 +55,14 @@ Run the supplied system diagnostic to check your connection to the rover. Read t
 
 ![HAMK simulator view for practising robot movement](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-simulator-20261009.png)
 
+## Review a physical verification
+
+![Camera frame from a physical HAMK robot verification on the lunar track](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-physical-verification-20261009.png)
+
+This frame comes from a successful physical **Simple Line Follower** verification on 9 October 2026. It shows the real HAMK rover and track, with on-screen markers from the recording. The technical side panel has been omitted. It is an example of recorded physical feedback, not a simulator view or a required result for this introductory diagnostic.
+
+After your own submission, use the **Physical lab** view in **Run** to review the recording. Read **Output** for printed values, errors and verification feedback. A program can finish without passing every task requirement: check the verification result as well as the video. Return to Moodle and refresh the activity to see the returned grade and completion state. If a result appears delayed, check the submission status before submitting again.
+
 ## Proceed to the next mission
 
 Return to Moodle and open **Test drive**. Always launch the next activity from Moodle so its grade is returned to the correct activity.

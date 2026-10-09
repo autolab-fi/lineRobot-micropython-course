@@ -2,14 +2,17 @@
 index: 27
 module: module_5
 task: concept_of_error
-previous: data_logging
-next: failsafe_protocols
+previous: color_classification
+next: upgraded_relay_controller
 ---
 
 # Mission 5.1 The Concept of Error
 
+Starting settings for this exercise: `sensitivity = 245`.
+Sensitivity is the Octoliner setup value (0–255); the detection threshold is a separate value applied to analog readings. Check the readings if lighting or sensor position changes.
+
 ## Objective
-Understand the limitations of a Relay (Bang-Bang) controller and introduce the concept of "Error" as a continuous gradient using the advanced `track_line()` function.
+Understand the limitations of a Relay (Bang-Bang) controller and introduce the concept of "Error" as a signed position estimate using the advanced `track_line()` function.
 
 ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
@@ -25,10 +28,10 @@ To achieve a smooth, professional ride, the rover needs to know not just *where*
 
 ### 1. What is "Error"?
 In control theory, **Error** is the mathematical difference between where you *want* to be (the Target) and where you *actually* are (the Current State).
-For our lunar rover, the Target is to keep the tracking line perfectly centered under the sensor array. The Error is the physical distance the line has drifted to either side.
+For our research rover, the Target is to keep the tracking line perfectly centered under the sensor array. Here, the error is a normalized line-position reading, not a distance in centimetres.
 
 ### 2. The `track_line()` Function
-Calculating the exact center of a line using 8 separate sensors requires complex math (like calculating a weighted average). Fortunately, the Octoliner library has a built-in method that performs this calculation for us instantly!
+The Octoliner library converts the pattern across its eight sensors into a signed line-position estimate. You can read this estimate with a built-in method.
 
 Instead of reading an array of 8 raw numbers and using `elif` statements, we can use the `track_line()` function:
 
@@ -36,15 +39,15 @@ Instead of reading an array of 8 raw numbers and using `elif` statements, we can
 position = octoliner.track_line()
 ```
 
-This function returns a single decimal number (`float`) representing the exact position of the line:
+This function returns a single decimal number (`float`) representing the estimated position of the line:
 * **`-1.0`**: The line is far to the **left** (under sensor 7).
 * **`0.0`**: The line is perfectly in the **center**.
-* **`1.0`**: The line is far to the **right** (under sensor 1).
+* **`1.0`**: The line is far to the **right** (under sensor 0).
 
-This continuous gradient-smoothly transitioning from `-1.0` to `1.0`- is exactly what we need. This value is our **Error**!
+This value is our **Error**. In this library it changes in steps, such as `0`, `0.25` and `0.5`, rather than continuously. If a sensor pattern is not recognized, `track_line()` keeps the previous valid value. A repeated value alone does not prove that the line is still visible; the next mission adds a check of the raw sensor readings.
 
 ## Assignment
-Mission Control requires a structural scan of a basaltic fracture (the black line). To prevent the rover from twisting off the track during the scan, the engineering team has provided a skeleton for a `diagnostic_sweep(speed_left, speed_right)` function. 
+Mission Control requires a structural scan of a basaltic fracture (the black line). To prevent the rover from twisting off the track during the scan, the engineering team has provided a skeleton for a `diagnostic_sweep(speed_left, speed_right)` function.
 
 You must complete the core logic of this function and then execute the mission sequence.
 
@@ -58,9 +61,9 @@ You must complete the core logic of this function and then execute the mission s
    * Drive the rover straight forward by **30 cm**.
    * Call `diagnostic_sweep()` to swing **Right**.
 
-Watch the live video feed as the robot rotates over the line and observe the terminal. You should see the printed numbers transition smoothly from `-1.0` (or close to it) to `1.0`.
+Watch the live video feed as the robot rotates over the line and observe the terminal. Observe how the sign and magnitude change as the sensor crosses the line. Values may repeat or change in steps; a short sweep does not have to cover the full range from `-1.0` to `1.0`.
 
 ## Conclusion
-Excellent! You have successfully observed the continuous gradient of the line's position. 
+Excellent! You have successfully observed a numerical estimate of the line's position.
 
-The robot now sees the world not just in rigid black and white ("Yes/No"), but in highly precise shades of grey ("How much?"). This smooth Error value is the absolute foundation of advanced robotics.
+The robot now sees the world not just in rigid black and white ("Yes/No"), but in a signed estimate ("Which side, and how far across the sensor array?"). This signed Error value is the foundation for the feedback controllers in the next missions.

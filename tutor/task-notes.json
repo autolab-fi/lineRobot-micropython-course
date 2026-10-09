@@ -3,7 +3,7 @@
   "tasks": {
     "test_drive": {
       "reference": "solutions/module_1/test_drive_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -15,7 +15,7 @@
     },
     "license_to_drive": {
       "reference": "solutions/module_1/license_to_drive_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -27,7 +27,7 @@
     },
     "maneuvering": {
       "reference": "solutions/module_1/maneuvering_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -39,17 +39,19 @@
     },
     "differential_drive": {
       "reference": "solutions/module_2/differential_drive_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22034,
+        "referenceSha256": "7bd9b3b19801768a07eb34b434774db07d223d93fdce0fbdd820a2bff472e2a7"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "welcome": {
       "reference": "solutions/module_1/welcome_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -61,7 +63,7 @@
     },
     "directional_movement": {
       "reference": "solutions/module_1/directional_movement_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -73,17 +75,23 @@
     },
     "sequential_navigation": {
       "reference": "solutions/module_1/sequential_navigation_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22031,
+        "referenceSha256": "49b5810af4c33dbb360e1213314a604cc75c62aa5cfa5b549b40900cd32de626"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "first_and_third_leg_cm": 20,
+        "second_and_fourth_leg_cm": 15,
+        "turn_angle_degrees": 90
+      }
     },
     "python_variables_commands": {
       "reference": "solutions/module_1/python_variables_commands_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -95,37 +103,56 @@
     },
     "intro_to_octoliner": {
       "reference": "solutions/module_3/intro_to_octoliner_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22040,
+        "referenceSha256": "e29850b05248a178f671e3dbf3eda03278bbef573b77d82fea86492d61a7f4a9"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "processing_sensor_data": {
       "reference": "solutions/module_3/processing_sensor_data_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22042,
+        "referenceSha256": "b7b5dfb540565f89799612754b0830f024e036350f4d9fd60595cda9279ca8ae"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "electric_motors": {
       "reference": "solutions/module_2/electric_motors_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22039,
+        "referenceSha256": "6ef8d1f7f554e8d45ef59dab34eca01a6b38e02e9196e2d77ab861a77fbcf77c"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "physicalTimedDrive": {
+          "leftSpeed": 30,
+          "rightSpeed": 64,
+          "durationSeconds": 2.1
+        },
+        "simulatorTimedDrive": {
+          "leftSpeed": 30,
+          "rightSpeed": 50,
+          "durationSeconds": 2.5
+        },
+        "tuning": "Tune motor balance and duration independently for the physical rover and simulator. These open-loop settings depend on the robot and battery."
+      },
+      "simulationReference": "solutions/module_2/electric_motors_simulation_reference.py"
     },
     "defining_functions": {
       "reference": "solutions/module_2/defining_functions_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -141,7 +168,7 @@
     },
     "for_loops": {
       "reference": "solutions/module_2/for_loops_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -153,7 +180,7 @@
     },
     "encoder_theory": {
       "reference": "solutions/module_2/encoder_theory_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
@@ -169,200 +196,398 @@
     },
     "conditional_logic": {
       "reference": "solutions/module_3/conditional_logic_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22041,
+        "referenceSha256": "40769d7e32d41f9259c7cb51823fff77422a46dc4d4fe3ccec86c9abbe2d635c"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "arrays_and_elif": {
       "reference": "solutions/module_3/arrays_and_elif_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22043,
+        "referenceSha256": "187eee7af0e1ae48ac16e973af29610b38154fddf805155e46cdacc41b4a7993"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "led_feedback": {
       "reference": "solutions/module_3/led_feedback_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22044,
+        "referenceSha256": "927b7d35550bbe067f577abc898e5f7c1ea5ba97f9ecfc988487376d662d6248"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "simple_line_follower": {
       "reference": "solutions/module_3/simple_line_follower_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22053,
+        "referenceSha256": "b4213714a0eba0e56fd562dae2bd37d13320fed54705b3477c39fb73d3634e08"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Use the supplied three-zone sensor grouping. Individual scout channels have blind spots.",
+        "Steer with differential wheel speeds while reading the sensor; do not add blocking angle turns.",
+        "Keep the supplied short line-loss stop. A failed reset or immediate line loss is not proof of incorrect steering code."
+      ],
+      "parameters": {
+        "sensitivity": 243,
+        "threshold": 700,
+        "speed": 15,
+        "turn_speed": 3,
+        "lost_limit": 15,
+        "physicalCheckpoints": [
+          [
+            104,
+            48
+          ],
+          [
+            103,
+            56
+          ]
+        ],
+        "checkpointRadiusCm": 3
+      }
     },
     "python_lists": {
       "reference": "solutions/module_4/python_lists_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22032,
+        "referenceSha256": "ab405d554975c9fd7abbcf4999bac86b4f1d714367f82a9370ba01d4a3fa5e97"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "route_cm": [
+          35,
+          30,
+          35
+        ]
+      }
     },
     "telemetry": {
       "reference": "solutions/module_4/telemetry_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22035,
+        "referenceSha256": "b5fff2ea6aa731f4956df284912c4390486f3a2d43ce2ef5ca360a4fe74fe8a8"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "color_sensor_basics": {
       "reference": "solutions/module_4/color_sensor_basics_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22057,
+        "referenceSha256": "aeeae8ba72ef9d7d792eb3583dff6c485bce7f3275d6beb7cf2c6135d0d94056"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Do not move after the sixth reading.",
+        "Wait 1.1 s before the first measurement and between moves and reads.",
+        "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
+      ],
+      "parameters": {
+        "readings": 6,
+        "moves": 5,
+        "stepCm": 13,
+        "settleSeconds": 1.1,
+        "expectedZones": [
+          "Green",
+          "Floor",
+          "Red"
+        ],
+        "speedPercent": 40,
+        "totalTravelCm": 65,
+        "startXCm": 127,
+        "redRatio": 0.5,
+        "greenRatio": 0.4
+      }
     },
     "color_classification": {
       "reference": "solutions/module_4/color_classification_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22058,
+        "referenceSha256": "0f3d59c0d58accfa6b13da0c26a9898a242bd7d870373fc6cc5a253742207c4e"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Do not move after the sixth reading.",
+        "Wait 1.1 s before the first measurement and between moves and reads.",
+        "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
+      ],
+      "parameters": {
+        "readings": 6,
+        "moves": 5,
+        "stepCm": 13,
+        "settleSeconds": 1.1,
+        "expectedZones": [
+          "Green",
+          "Floor",
+          "Red"
+        ],
+        "speedPercent": 40,
+        "totalTravelCm": 65,
+        "startXCm": 127,
+        "redRatio": 0.5,
+        "greenRatio": 0.4
+      }
     },
     "concept_of_error": {
       "reference": "solutions/module_5/concept_of_error_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22059,
+        "referenceSha256": "a17f816abf90d69a9b2a233a91e76a582b322d226e7cf7db3454658d753e5583"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "startXCm": 104,
+        "startYCm": 76,
+        "headingDegrees": -90
+      }
     },
     "upgraded_relay_controller": {
       "reference": "solutions/module_5/upgraded_relay_controller_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22070,
+        "referenceSha256": "dbfa8b951da6d789212e49e32495e83709eacb77562130f306fbd84c35dd959c"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "timeoutSeconds": 90,
+        "straightMotors": [
+          25,
+          25
+        ],
+        "leftTurnMotors": [
+          0,
+          25
+        ],
+        "rightTurnMotors": [
+          25,
+          0
+        ],
+        "robotRuntimeLimitSeconds": 70
+      }
     },
     "proportional_control": {
       "reference": "solutions/module_5/proportional_control_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22067,
+        "referenceSha256": "48c2a7adc580e51737e8f20b77ecd6a1f5c47bd9eefaa831e6aa341ef0cc8a6a"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "timeoutSeconds": 90,
+        "baseSpeed": 20,
+        "kp": 25,
+        "robotRuntimeLimitSeconds": 70
+      }
     },
     "adaptive_speed": {
       "reference": "solutions/module_5/adaptive_speed_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22080,
+        "referenceSha256": "c9aec7fb1a46398bfd39feab8cf8a2f04b150df2b980e5f566beca07719da386"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Keep the five-reading line-loss filter; one weak sample is not enough to stop.",
+        "Reset lost_readings to zero whenever the line is detected."
+      ],
+      "parameters": {
+        "kp": 25,
+        "maxSpeed": 40,
+        "brakingForce": 20,
+        "lineLossReadings": 5
+      }
     },
     "art_of_debugging": {
       "reference": "solutions/module_6/art_of_debugging_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "reason": "Lower-straight start failed repeat 22083; upper-straight start and ordered checkpoints need physical validation."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "baseSpeed": 20,
+        "kp": 25,
+        "timeoutSeconds": 60,
+        "startXCm": 50,
+        "startYCm": 30,
+        "headingDegrees": 0,
+        "checkpoints": [
+          [
+            80,
+            30
+          ],
+          [
+            105,
+            60
+          ]
+        ]
+      }
     },
     "hardware_safety_net": {
       "reference": "solutions/module_6/hardware_safety_net_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22072,
+        "referenceSha256": "bdecd9289c12205ebfe748f65035e68a27693f9fa8b50dea63f9620dffac0967",
+        "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "code_clinic": {
       "reference": "solutions/module_6/code_clinic_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22073,
+        "referenceSha256": "0f1e73dd33c6a31bcdcc1e2870a6bec10b1e3e2e8c5bf8747ea21e97a66a380e",
+        "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "baseSpeed": 20,
+        "kp": 25,
+        "timeoutSeconds": 60
+      }
     },
     "navigation": {
       "reference": "solutions/module_11/navigation_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22079,
+        "referenceSha256": "61428fc653c1ef8b31639093bed8d49ac7b032bb7ea4793be81af774eccc68cb"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Follow the required 20/40/20/40 cm sequence and left 45/right 45/right 90 degree turns; use variables and at least two comments."
+      ],
+      "parameters": {
+        "checkpointToleranceCm": 12
+      }
     },
     "perimeter": {
       "reference": "solutions/module_11/perimeter_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22075,
+        "referenceSha256": "b286b2c98581a1b3f1d080636aba931a78a444aa3c759688c948dfd85f143b0a"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "visual_telemetry": {
       "reference": "solutions/module_11/visual_telemetry_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22076,
+        "referenceSha256": "c1e60dc8afa5f7b6243d20477327c9c74c234c7a6fce4498d5b7c4a2b2dc5e17"
       },
       "commonMistakes": [],
       "parameters": {}
     },
     "adaptive_racing": {
       "reference": "solutions/module_11/adaptive_racing_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22081,
+        "referenceSha256": "c2d91b09572703f1177b323c639b759c2ae17e07a12701a51a4907f659cc15b5"
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "Keep the five-reading line-loss filter; one weak sample is not enough to stop.",
+        "Reset lost_readings to zero whenever the line is detected."
+      ],
+      "parameters": {
+        "kp": 25,
+        "maxSpeed": 40,
+        "brakingForce": 20,
+        "sensitivity": 245,
+        "checkpoints": [
+          [
+            105,
+            60
+          ],
+          [
+            60,
+            90
+          ],
+          [
+            80,
+            30
+          ]
+        ],
+        "checkpointRadiusCm": 10,
+        "lineLossReadings": 5
+      }
     },
     "sandbox": {
       "reference": "solutions/module_0/sandbox_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "note": "Pre-audit reference retained unchanged; candidate modifications are not included in main."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22078,
+        "referenceSha256": "bcbfc089d8d86c528173bf11c5023ad72e474177ac7d4fc09ac33638883addc3"
       },
       "commonMistakes": [],
       "parameters": {}

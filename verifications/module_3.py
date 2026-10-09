@@ -13,7 +13,7 @@ target_points = {
     'processing_sensor_data': [(85,63),(30,0)],
     'arrays_and_elif': [(70, 50),(30,0)],
     'led_feedback': [(70,50),(30,0)],
-    'simple_line_follower': [(75,30),(30,0)],
+    'simple_line_follower': [(104,40),(0,30)],
     'logical_operators': [(75,30),(30,0)]
 
     #'differential_drive': [(30, 50), (30, 0)],
@@ -78,17 +78,28 @@ def intro_to_octoliner(robot, image, td, user_code=None):
     image = robot.draw_info(image)
 
     if td is None:
-        # Check for analog_read(3) or analog_read(4) — filter commented lines
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        code_valid = "analog_read(3)" in active_code or "analog_read(4)" in active_code
+        # Inspect real calls, not comments or strings mentioning sensor code.
+        try:
+            tree = ast.parse(user_code or "")
+            channels = sorted({
+                node.args[0].value for node in ast.walk(tree)
+                if isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "analog_read" and node.args
+                and isinstance(node.args[0], ast.Constant)
+                and type(node.args[0].value) is int
+                and node.args[0].value in (3, 4)
+            })
+        except SyntaxError:
+            channels = []
+        code_valid = bool(channels)
 
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
                 "code_valid": code_valid,
+                "channels": channels,
                 "sensor_3": None,
                 "sensor_4": None,
             }
@@ -109,12 +120,23 @@ def intro_to_octoliner(robot, image, td, user_code=None):
     msg = robot.get_msg()
     if td["data"]["code_valid"] and msg is not None:
         text = f"Message received: {msg}"
-        numbers = [int(n) for n in re.findall(r'\d+', msg)]
-        if numbers:
-            if td["data"]["sensor_3"] is None:
-                td["data"]["sensor_3"] = numbers[0]
-            elif td["data"]["sensor_4"] is None:
-                td["data"]["sensor_4"] = numbers[0]
+        # Labels identify the channel; only the value after ':'/'=' is data.
+        # A bare integer is supported for print(analog_read(3)) when the
+        # source reads one central channel. Do not guess between two channels.
+        for line in str(msg).splitlines():
+            match = re.fullmatch(r"(?:Sensor\s*|S)([34])\s*[:=]\s*([0-9]+)",
+                                 line.strip(), re.IGNORECASE)
+            if match:
+                channel, value = map(int, match.groups())
+                if channel not in td["data"]["channels"]:
+                    continue
+            elif len(td["data"]["channels"]) == 1 and re.fullmatch(r"[0-9]+", line.strip()):
+                channel = td["data"]["channels"][0]
+                value = int(line.strip())
+            else:
+                continue
+            if 0 <= value <= 1023:
+                td["data"][f"sensor_{channel}"] = value
 
     got_sensor_data = (td["data"]["sensor_3"] is not None or
                        td["data"]["sensor_4"] is not None)
@@ -129,8 +151,8 @@ def intro_to_octoliner(robot, image, td, user_code=None):
         elif not got_sensor_data:
             result["success"] = False
             result["score"] = 0
-            result["description"] = "No printed sensor value received. Print the value returned by analog_read(3) or analog_read(4). | Score: 0"
-            text = "No printed sensor value received."
+            result["description"] = "Timeout: No sensor readings received | Score: 0"
+            text = "No readings received."
         else:
             result["success"] = True
             result["score"] = 100
@@ -643,17 +665,21 @@ def simple_line_follower(robot, image, td, user_code=None):
     """
     Verification for lesson: Simple Line Follower
     Students must:
-    - Use analog_read_all() and extract scouts at indices 1 and 6
+    - Use analog_read_all() and group readings into left, center and right zones
     - Use if/elif/else steering logic
     - Drive continuously through checkpoints in a while True loop
     Checkpoint detection via robot position (OpenCV).
     Flag overlays drawn at each checkpoint, turning green when hit.
     """
 
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
+
     # ===== CONFIGURATION =====
     TASK_DURATION     = 90
-    CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(103, 45), (98, 80)]
+    CHECKPOINT_RADIUS = 3.0   # cm
+    # Stop before the front sensor board reaches the lower curve.
+    CHECKPOINTS       = [(104, 48), (103, 56)]
     # =========================
 
     result = {
@@ -672,18 +698,17 @@ def simple_line_follower(robot, image, td, user_code=None):
 
         has_read_all = "analog_read_all()" in active_code
         has_elif     = "elif" in active_code
-        has_index_1  = "[1]" in active_code
-        has_index_6  = "[6]" in active_code
+        has_motor_speed = "run_motors_speed(" in active_code
         has_while    = "while True" in active_code
-        code_valid   = has_read_all and has_elif and has_index_1 and has_index_6 and has_while
+        code_valid   = has_read_all and has_elif and has_motor_speed and has_while
 
         missing = []
         if not has_read_all:
             missing.append("analog_read_all()")
         if not has_elif:
             missing.append("elif statement")
-        if not (has_index_1 and has_index_6):
-            missing.append("scout indices [1] and [6]")
+        if not has_motor_speed:
+            missing.append("run_motors_speed()")
         if not has_while:
             missing.append("while True loop")
 
@@ -752,10 +777,9 @@ def simple_line_follower(robot, image, td, user_code=None):
 
             # early finish — shorten timer only, verdict handled by timeout block
             if not td["data"]["checkpoints_remaining"]:
-                elapsed = time.time() - td["start_time"]
-                if elapsed >= 10.0 and not td["data"]["completed"]:
+                if not td["data"]["completed"]:
                     td["data"]["completed"] = True
-                    td["end_time"] = time.time() + 10.0
+                    td["end_time"] = time.time()
                 text = "All checkpoints reached! Finishing..."
 
     msg = robot.get_msg()
@@ -827,6 +851,9 @@ def simple_line_follower(robot, image, td, user_code=None):
             result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
             text = "Line following complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
     return image, td, text, result
 
 def logical_operators(robot, image, td, user_code=None):

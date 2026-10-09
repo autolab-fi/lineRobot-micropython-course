@@ -4,10 +4,10 @@ from octoliner import Octoliner
 from tcs3472 import tcs3472
 import machine
 
-SENSITIVITY = 240
-LINE_THRESHOLD = 500
+SENSITIVITY = 245
+LINE_THRESHOLD = 700
 BASE_SPEED = 20
-KP = 15
+KP = 25
 robot = Robot()
 bus = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)
 octoliner = Octoliner()
@@ -37,11 +37,17 @@ def apply_movement(correction):
     robot.run_motors_speed(int(BASE_SPEED + correction), int(BASE_SPEED - correction))
 
 last_color = "Floor"
+lost_readings = 0
 while True:
     sensor_array = octoliner.analog_read_all()
     if max(sensor_array) < LINE_THRESHOLD:
+        lost_readings += 1
+        if lost_readings < 5:
+            time.sleep(0.01)
+            continue
         robot.stop()
         break
+    lost_readings = 0
     position = octoliner.track_line()
     mineral = get_mineral_color()
     if mineral != last_color and mineral not in ("Floor", "Unknown"):

@@ -81,13 +81,13 @@
       "checks": [
         { "type": "source-code", "minimumCommentCount": 3 },
         { "type": "navigation-sequence", "steps": [
-          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "move-distance", "distanceCm": 20 },
           { "type": "turn", "angleDeg": 90 },
-          { "type": "move-distance", "distanceCm": 25 },
+          { "type": "move-distance", "distanceCm": 15 },
           { "type": "turn", "angleDeg": -90 },
-          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "move-distance", "distanceCm": 20 },
           { "type": "turn", "angleDeg": -90 },
-          { "type": "move-distance", "distanceCm": 25 }
+          { "type": "move-distance", "distanceCm": 15 }
         ] },
         { "type": "program-finished" }
       ]
@@ -135,17 +135,58 @@
     "simple_line_follower": {
       "mode": "simulation-and-lab",
       "checks": [
-        { "type": "source-code", "requiredMethods": ["analog_read_all"], "requiredAnyMethods": [["run_motors_speed", "turn_left_angle", "turn_right_angle"]], "requiredFeatures": ["while-true-loop", "if-statement", "elif-statement"], "requiredIndexAccesses": [1, 3, 6] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 5 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 1.03, "yM": 0.55 }, { "xM": 0.98, "yM": 0.20 }], "toleranceM": 0.10, "stopProgramOnPass": true },
-        { "type": "program-finished" }
-      ]
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "analog_read_all"
+          ],
+          "requiredAnyMethods": [
+            [
+              "run_motors_speed"
+            ]
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "if-statement",
+            "elif-statement"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 5
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.04,
+              "yM": 0.52
+            },
+            {
+              "xM": 1.03,
+              "yM": 0.44
+            }
+          ],
+          "toleranceM": 0.03,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
+      ],
+      "timeoutSec": 90,
+      "initialPose": {
+        "xM": 1.05,
+        "yM": 0.6,
+        "headingRad": -1.570796327
+      }
     },
     "python_lists": {
       "mode": "simulation-and-lab",
       "checks": [
         { "type": "source-code", "requiredMethods": ["move_forward_distance", "turn_right"], "requiredFeatures": ["list-assignment", "for-loop", "print"], "requiredFunctionCalls": ["len"], "requiredVariableNames": ["route"], "requiredLoopIterableNames": ["route"] },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 1.30, "yM": 0.70 }, { "xM": 1.30, "yM": 0.10 }, { "xM": 0.60, "yM": 0.10 }], "toleranceM": 0.10 },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 1.00, "yM": 0.55 }, { "xM": 1.00, "yM": 0.25 }, { "xM": 0.65, "yM": 0.25 }], "toleranceM": 0.10 },
         { "type": "program-finished" }
       ]
     },
@@ -160,22 +201,22 @@
     },
     "color_sensor_basics": {
       "mode": "simulation-and-lab",
-      "initialPose": { "xM": 1.28, "yM": 0.10, "headingRad": 1.570796327 },
+      "initialPose": { "xM": 1.27, "yM": 0.10, "headingRad": 1.570796327 },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["rgb", "move_forward_distance"], "requiredFeatures": ["for-loop", "f-string", "print"], "requiredRangeArguments": [6] },
-        { "type": "repeated-move-distance", "distanceCm": 10, "count": 6, "toleranceCm": 0.3 },
+        { "type": "source-code", "requiredMethods": ["rgb"], "requiredAnyMethods": [["move_forward_distance", "move_forward_speed_distance"]], "requiredFeatures": ["for-loop", "f-string", "print"], "requiredRangeArguments": [6] },
+        { "type": "repeated-move-distance", "distanceCm": 13, "count": 5, "toleranceCm": 0.3 },
         { "type": "sensor-read", "sensor": "color", "minimumReads": 6 },
-        { "type": "color-rgb-scan", "minimumScans": 6, "minimumDistinctColors": 2 },
+        { "type": "color-rgb-scan", "minimumScans": 6, "minimumDistinctColors": 3 },
         { "type": "program-finished" }
       ]
     },
     "color_classification": {
       "mode": "simulation-and-lab",
-      "initialPose": { "xM": 1.28, "yM": 0.10, "headingRad": 1.570796327 },
+      "initialPose": { "xM": 1.27, "yM": 0.10, "headingRad": 1.570796327 },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["rgb", "move_forward_distance"], "requiredFeatures": ["for-loop", "if-statement", "elif-statement", "division", "f-string", "return-statement", "print"], "requiredFunctions": [{ "name": "detect_color_name", "parameterCounts": [3] }], "requiredFunctionCalls": ["detect_color_name"], "requiredRangeArguments": [6] },
-        { "type": "repeated-move-distance", "distanceCm": 10, "count": 6, "toleranceCm": 0.3 },
-        { "type": "color-classification-scan", "minimumScans": 6, "minimumDistinctColors": 2 },
+        { "type": "source-code", "requiredMethods": ["rgb"], "requiredAnyMethods": [["move_forward_distance", "move_forward_speed_distance"]], "requiredFeatures": ["for-loop", "if-statement", "elif-statement", "division", "f-string", "return-statement", "print"], "requiredFunctions": [{ "name": "detect_color_name", "parameterCounts": [3] }], "requiredFunctionCalls": ["detect_color_name"], "requiredRangeArguments": [6] },
+        { "type": "repeated-move-distance", "distanceCm": 13, "count": 5, "toleranceCm": 0.3 },
+        { "type": "color-classification-scan", "minimumScans": 6, "minimumDistinctColors": 3 },
         { "type": "program-finished" }
       ]
     },
@@ -191,48 +232,211 @@
     },
     "upgraded_relay_controller": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 90,
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.79,
+        "headingRad": 0
+      },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "elif-statement", "break-statement"], "requiredFunctionCalls": ["max"] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "minimum-distance", "valueCm": 30 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
-        { "type": "program-finished" }
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "set_sensitivity",
+            "analog_read_all",
+            "track_line",
+            "run_motors_speed",
+            "stop"
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "if-statement",
+            "elif-statement",
+            "break-statement"
+          ],
+          "requiredFunctionCalls": [
+            "max"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 10
+        },
+        {
+          "type": "minimum-distance",
+          "valueCm": 30
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.05,
+              "yM": 0.4
+            },
+            {
+              "xM": 0.6,
+              "yM": 0.2
+            },
+            {
+              "xM": 0.8,
+              "yM": 0.79
+            }
+          ],
+          "toleranceM": 0.1,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
       ]
     },
     "proportional_control": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 90,
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.79,
+        "headingRad": 0
+      },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "addition", "subtraction"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["base_speed", "kp"] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "minimum-distance", "valueCm": 10 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
-        { "type": "program-finished" }
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "set_sensitivity",
+            "analog_read_all",
+            "track_line",
+            "run_motors_speed",
+            "stop"
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "if-statement",
+            "break-statement",
+            "multiplication",
+            "addition",
+            "subtraction"
+          ],
+          "requiredFunctionCalls": [
+            "max",
+            "int"
+          ],
+          "requiredVariableNames": [
+            "base_speed",
+            "kp"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 10
+        },
+        {
+          "type": "minimum-distance",
+          "valueCm": 10
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.05,
+              "yM": 0.4
+            },
+            {
+              "xM": 0.6,
+              "yM": 0.2
+            },
+            {
+              "xM": 0.8,
+              "yM": 0.79
+            }
+          ],
+          "toleranceM": 0.1,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
       ]
     },
     "adaptive_speed": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.79,
+        "headingRad": 0
+      },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "addition", "subtraction", "abs-call"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["kp", "max_speed", "braking_force"] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "minimum-distance", "valueCm": 10 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
-        { "type": "program-finished" }
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "set_sensitivity",
+            "analog_read_all",
+            "track_line",
+            "run_motors_speed",
+            "stop"
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "if-statement",
+            "break-statement",
+            "multiplication",
+            "addition",
+            "subtraction",
+            "abs-call"
+          ],
+          "requiredFunctionCalls": [
+            "max",
+            "int"
+          ],
+          "requiredVariableNames": [
+            "kp",
+            "max_speed",
+            "braking_force"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 10
+        },
+        {
+          "type": "minimum-distance",
+          "valueCm": 10
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.05,
+              "yM": 0.4
+            },
+            {
+              "xM": 0.6,
+              "yM": 0.2
+            },
+            {
+              "xM": 0.8,
+              "yM": 0.79
+            }
+          ],
+          "toleranceM": 0.1,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
       ]
     },
     "art_of_debugging": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": { "xM": 0.50, "yM": 0.84, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "addition", "subtraction", "print"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["base_speed", "kp"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 0.80, "yM": 0.79 }, { "xM": 1.05, "yM": 0.40 }], "toleranceM": 0.10, "stopProgramOnPass": true },
         { "type": "program-finished" }
       ]
     },
@@ -250,14 +454,14 @@
     },
     "code_clinic": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": { "xM": 0.50, "yM": 0.84, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "rgb", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "try-statement", "return-statement", "multiplication"], "requiredFunctions": [{ "name": "get_mineral_color", "parameterCounts": [0] }, { "name": "calculate_steering", "parameterCounts": [1] }, { "name": "apply_movement", "parameterCounts": [1] }], "requiredFunctionCalls": ["get_mineral_color", "calculate_steering", "apply_movement"], "requiredVariableNames": ["SENSITIVITY", "LINE_THRESHOLD", "BASE_SPEED", "KP"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
         { "type": "sensor-read", "sensor": "color", "minimumReads": 1 },
         { "type": "minimum-distance", "valueCm": 30 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 0.80, "yM": 0.79 }, { "xM": 1.05, "yM": 0.40 }, { "xM": 0.60, "yM": 0.20 }], "toleranceM": 0.10, "stopProgramOnPass": true },
         { "type": "program-finished" }
       ]
     },
@@ -290,14 +494,60 @@
     },
     "adaptive_racing": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": {
+        "xM": 0.4,
+        "yM": 0.79,
+        "headingRad": 0
+      },
       "checks": [
-        { "type": "source-code", "requiredMethods": ["set_sensitivity", "track_line", "run_motors_speed"], "requiredFeatures": ["while-true-loop", "time-import", "abs-call", "multiplication", "addition", "subtraction"], "requiredVariableNames": ["max_vel", "brake_f", "k_prop"] },
-        { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "minimum-distance", "valueCm": 30 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
-        { "type": "program-finished" }
+        {
+          "type": "source-code",
+          "requiredMethods": [
+            "set_sensitivity",
+            "track_line",
+            "run_motors_speed"
+          ],
+          "requiredFeatures": [
+            "while-true-loop",
+            "time-import",
+            "abs-call",
+            "multiplication",
+            "addition",
+            "subtraction"
+          ]
+        },
+        {
+          "type": "sensor-read",
+          "sensor": "octoliner",
+          "minimumReads": 10
+        },
+        {
+          "type": "minimum-distance",
+          "valueCm": 30
+        },
+        {
+          "type": "ordered-checkpoints",
+          "points": [
+            {
+              "xM": 1.05,
+              "yM": 0.4
+            },
+            {
+              "xM": 0.6,
+              "yM": 0.2
+            },
+            {
+              "xM": 0.8,
+              "yM": 0.79
+            }
+          ],
+          "toleranceM": 0.1,
+          "stopProgramOnPass": true
+        },
+        {
+          "type": "program-finished"
+        }
       ]
     }
   }

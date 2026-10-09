@@ -102,4 +102,4 @@ robot.run_motors_speed(left_speed, right_speed)
 
 In this lesson, we explored three control strategies for keeping a line-following robot centered: Relay, P, and PI. The relay controller is simple but leads to unstable movement. The P controller improves this by making adjustments based on how far off the robot is, but still can't fully correct long-term drift. The PI controller solves this by remembering past errors and slowly pushing the robot back on track.
 
-Each method builds on the last, making the robot smarter and more stable. As we go forward, we’ll explore the PID controller, which adds one final component — the derivative — to further improve control and reduce overshoot.
+Each method builds on the last, making the robot smarter and more stable. As we go forward, we’ll explore the PID controller, which adds one final component - the derivative - to further improve control and reduce overshoot.

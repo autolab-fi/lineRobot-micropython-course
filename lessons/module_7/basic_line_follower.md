@@ -2,11 +2,11 @@
 
 ### Objective
 
-Understand how different types of controllers work — Relay, Proportional (P), and Proportional-Integral (PI). Learn how each improves performance for a line-following robot.
+Understand how different types of controllers work - Relay, Proportional (P), and Proportional-Integral (PI). Learn how each improves performance for a line-following robot.
 
 ### 1. **Relay Controller**
 
-A relay controller is the simplest type of control system. It just turns motors fully left or right based on which side of the line the robot is on. It doesn't care how far the robot is from the center — it only knows left or right.
+A relay controller is the simplest type of control system. It just turns motors fully left or right based on which side of the line the robot is on. It doesn't care how far the robot is from the center - it only knows left or right.
 
 **Control rule:**
 

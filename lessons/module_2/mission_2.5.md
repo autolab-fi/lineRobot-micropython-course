@@ -27,7 +27,7 @@ There are two main types:
 
 ![Encoders](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-2/encoders.gif?raw=true)
 
-Our platform is a differential drive robot based on the ESP32 microcontroller and MicroPython. It is specifically equipped with two DC motors with encoders - JGB37-520 178.
+Our platform is a differential drive robot based on the ESP32 microcontroller and MicroPython. It is specifically equipped with two DC motors with encoders – JGB37-520 178.
 
 ### 2. Getting Encoder Values
 We will measure the rotation of the robot's wheels in degrees:

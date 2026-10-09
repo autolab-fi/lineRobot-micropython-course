@@ -8,10 +8,13 @@ robot = Robot()
 bus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))
 color_sensor = tcs3472(bus)
 
+# Let the first I2C color measurement settle before reading.
+time.sleep(1.1)
 for step in range(6):
     r, g, b = color_sensor.rgb()
     print(f"Scan - R:{r} G:{g} B:{b}")
-    robot.move_forward_distance(10)
-    time.sleep(0.5)
+    if step < 5:
+        robot.move_forward_speed_distance(40, 13)
+        time.sleep(1.1)
 
 print("Linear scan complete.")

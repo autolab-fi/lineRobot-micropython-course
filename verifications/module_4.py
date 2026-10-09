@@ -1,3 +1,4 @@
+import ast
 import cv2
 import math
 import time
@@ -6,10 +7,10 @@ import re
 import numpy as np
 
 target_points = {
-    'python_lists':        [(75, 30), (30, 0)],
+    'python_lists':        [(65, 45), (30, 0)],
     'telemetry':           [(75, 30), (30, 0)],
-    'color_sensor_basics': [(128, 98), (0, -30)],
-    'color_classification':[(128, 99), (0, -30)],
+    'color_sensor_basics': [(127, 98), (0, -30)],
+    'color_classification':[(127, 98), (0, -30)],
     'multiple_sensors':    [(45, 29), (30, 0)],
     'data_logging':        [(45, 29), (30, 0)],
 }
@@ -44,15 +45,18 @@ def get_target_points(task):
 def python_lists(robot, image, td, user_code=None):
     """
     Verification for lesson: Python Lists (Waypoints) — 4.1
-    Start: x=75, y=30, direction x=30, y=0
-    Checkpoints: (130,30), (130,90), (60,90)
+    Start: x=65, y=45, direction x=30, y=0
+    Checkpoints: (100,45), (100,75), (65,75)
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     # ===== CONFIGURATION =====
     TASK_DURATION     = 30
     CHECKPOINT_RADIUS = 10.0   # cm
-    CHECKPOINTS       = [(130, 30), (130, 90), (60, 90)]
-    START_POS_CM      = (75, 30)
+    CHECKPOINTS       = [(100, 45), (100, 75), (65, 75)]
+    START_POS_CM      = (65, 45)
     # =========================
 
     # ── default result and text ───────────────────────────────────────────────
@@ -248,6 +252,10 @@ def python_lists(robot, image, td, user_code=None):
             result["description"] = f"You are amazing! All {total} checkpoints reached | Score: 100"
             text = "Route complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -260,6 +268,9 @@ def telemetry(robot, image, td, user_code=None):
     Verification for lesson: Telemetry — 4.2
     Start: x=75, y=30, direction x=30, y=0
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION  = 20
     START_POS_CM   = (75, 30)
@@ -372,6 +383,10 @@ def telemetry(robot, image, td, user_code=None):
             result["description"] = "Telemetry report received with all required fields | Score: 100"
             text = "Telemetry complete!"
 
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
+
     return image, td, text, result
 
 
@@ -379,11 +394,69 @@ def telemetry(robot, image, td, user_code=None):
 # 4.3 Color Sensor Basics
 # ──────────────────────────────────────────────────────────────────────────────
 
+def _has_scan_step(code):
+    """Recognize a 13 cm scan step without depending on variable names/spaces."""
+    try:
+        tree = ast.parse(code or "")
+    except SyntaxError:
+        return False
+    constants = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Constant):
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    constants[target.id] = node.value.value
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Attribute):
+            continue
+        index = {"move_forward_distance": 0, "move_forward_speed_distance": 1}.get(node.func.attr)
+        if index is None or len(node.args) <= index:
+            continue
+        arg = node.args[index]
+        value = arg.value if isinstance(arg, ast.Constant) else constants.get(arg.id) if isinstance(arg, ast.Name) else None
+        if type(value) in (int, float) and abs(value - 13) < 0.001:
+            return True
+    return False
+
+
+def _rgb_scan_zone(r, g, b):
+    total = r + g + b
+    if total == 0:
+        return "Unknown"
+    if r / total > 0.45:
+        return "Red"
+    if g / total > 0.4:
+        return "Green"
+    if b / total > 0.4:
+        return "Blue"
+    return "Floor"
+
+
+def _scan_label_plausible(name, r, g, b):
+    total = r + g + b
+    if name == "Unknown":
+        return total == 0
+    if total == 0:
+        return False
+    if name == "Floor":
+        return True  # Students may choose different cutoffs for mixed edges.
+    if name == "Red":
+        return r > max(g, b) and r / total > 0.44
+    if name == "Green":
+        return g > max(r, b) and g / total > 0.38
+    if name == "Blue":
+        return b > max(r, g) and b / total > 0.38
+    return False
+
+
 def color_sensor_basics(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Sensor Basics — 4.3
-    Start: x=128, y=98, direction x=0, y=-30
+    Start: x=127, y=98, direction x=0, y=-30
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION   = 20
     MIN_VALID_SCANS = 5
@@ -406,7 +479,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
         has_tcs3472    = "tcs3472" in active_code
         has_range6     = "range(6)" in active_code
         has_rgb        = ".rgb()" in active_code
-        has_move       = "move_forward_distance(10)" in active_code
+        has_move       = _has_scan_step(user_code)
         has_scan_print = "Scan - R:" in active_code
         code_valid = (
             has_i2c and has_tcs3472 and has_range6
@@ -418,7 +491,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
         if not has_tcs3472:    missing.append("tcs3472 sensor")
         if not has_range6:     missing.append("range(6) loop")
         if not has_rgb:        missing.append(".rgb() call")
-        if not has_move:       missing.append("move_forward_distance(10)")
+        if not has_move:       missing.append("13 cm scanning step")
         if not has_scan_print: missing.append('print format "Scan - R:..."')
 
         td = {
@@ -441,7 +514,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
         match = re.search(r'Scan - R:(\d+) G:(\d+) B:(\d+)', msg)
         if match:
             r, g, b = int(match.group(1)), int(match.group(2)), int(match.group(3))
-            if 0 <= r <= 255 and 0 <= g <= 255 and 0 <= b <= 255:
+            if 0 <= r <= 255 and 0 <= g <= 255 and 0 <= b <= 255 and r + g + b > 0:
                 td["data"]["valid_scans"].append((r, g, b))
                 td["data"]["last_scan"] = (r, g, b)
 
@@ -465,11 +538,20 @@ def color_sensor_basics(robot, image, td, user_code=None):
             result["score"]       = int((valid / MIN_VALID_SCANS) * 100)
             result["description"] = f"Only {valid}/{MIN_VALID_SCANS} valid scans received | Score: {result['score']}"
             text = f"Only {valid}/{MIN_VALID_SCANS} valid scans received."
+        elif not {"Green", "Floor", "Red"}.issubset({_rgb_scan_zone(*scan) for scan in td["data"]["valid_scans"]}):
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Scan the starting green zone, floor and red zone; wait for the sensor after each move."
+            text = "Not all three zones were scanned."
         else:
             result["success"]     = True
             result["score"]       = 100
             result["description"] = f"Color scan complete! {valid} valid zones reported | Score: 100"
             text = "Scan complete!"
+
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 
@@ -481,8 +563,11 @@ def color_sensor_basics(robot, image, td, user_code=None):
 def color_classification(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Classification — 4.4
-    Start: x=128, y=99, direction x=0, y=-30
+    Start: x=127, y=98, direction x=0, y=-30
     """
+
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     TASK_DURATION   = 20
     MIN_VALID_SCANS = 5
@@ -510,7 +595,7 @@ def color_classification(robot, image, td, user_code=None):
                              and "b_ratio" in active_code)
         has_range6        = "range(6)" in active_code
         has_rgb           = ".rgb()" in active_code
-        has_move          = "move_forward_distance(10)" in active_code
+        has_move          = _has_scan_step(user_code)
         has_detect_call   = "detect_color_name(r, g, b)" in active_code
         has_scan_print    = "Scan -" in active_code
         code_valid = (
@@ -526,7 +611,7 @@ def color_classification(robot, image, td, user_code=None):
         if not has_normalization: missing.append("r_ratio / g_ratio / b_ratio normalization")
         if not has_range6:        missing.append("range(6) loop")
         if not has_rgb:           missing.append(".rgb() call")
-        if not has_move:          missing.append("move_forward_distance(10)")
+        if not has_move:          missing.append("13 cm scanning step")
         if not has_detect_call:   missing.append("detect_color_name(r, g, b) call in loop")
         if not has_scan_print:    missing.append('print format "Scan Scan -..."')
 
@@ -576,11 +661,25 @@ def color_classification(robot, image, td, user_code=None):
             result["score"]       = int((valid / MIN_VALID_SCANS) * 100)
             result["description"] = f"Only {valid}/{MIN_VALID_SCANS} valid scans received | Score: {result['score']}"
             text = f"Only {valid}/{MIN_VALID_SCANS} valid scans received."
+        elif not {"Green", "Floor", "Red"}.issubset({scan[0] for scan in td["data"]["valid_scans"]}):
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Report Green, Floor and Red from the six readings; check the ratios and sensor settling delays."
+            text = "Not all three zones were classified."
+        elif any(not _scan_label_plausible(name, r, g, b) for name, r, g, b in td["data"]["valid_scans"]):
+            result["success"] = False
+            result["score"] = 0
+            result["description"] = "Some color names do not match the RGB readings. Compare the floor with the green and red samples."
+            text = "Color classification does not match the readings."
         else:
             result["success"]     = True
             result["score"]       = 100
             result["description"] = f"Smart scan complete! {valid} zones classified | Score: 100"
             text = "Smart scan complete!"
+
+    if td["data"].get("completed_verdict"):
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 

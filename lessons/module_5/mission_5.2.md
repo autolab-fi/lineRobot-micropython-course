@@ -14,7 +14,7 @@ Learn how to build an upgraded Relay (Bang-Bang) controller using the continuous
 ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)
 
 ## Introduction
-In Module 3, you built a Relay Controller by checking multiple individual sensors (Index 1, 3, 6) to decide whether to turn left or right. It worked, but the code was long and complex.
+In Module 3, you built a Relay Controller by comparing left, centre and right sensor groups to decide whether to turn left or right. It worked, but the code was long and complex.
 
 Now that we have the `track_line()` function, which gives us a single continuous Error value from `-1.0` to `1.0`, writing that same controller becomes incredibly simple. 
 
@@ -44,30 +44,32 @@ We can use Python's built-in `max()` function! It looks through a list and finds
 highest_value = max(sensor_array) # Returns 800
 ```
 
-If the highest value in our sensor array is less than 500, it means even the "darkest" spot the sensor sees is still too bright. The robot is completely blind and we must trigger an Emergency Stop.
+If the highest value in our sensor array is less than 700, it means even the "darkest" spot the sensor sees is still too bright. The robot is completely blind and we must trigger an Emergency Stop.
 
 ### 3. Thresholding the Error
 Instead of asking "Does Sensor 1 see the line?", we now ask "Is the Error large enough?". 
 We can create "zones" using simple math thresholds:
-* If `position < -0.15`: The line is too far left. We need to steer left.
-* If `position > 0.15`: The line is too far right. We need to steer right.
+* If `position < -0.3`: The line is too far left. We need to steer left.
+* If `position > 0.3`: The line is too far right. We need to steer right.
 * `else`: The line is somewhere near the center (`0.0`). Drive straight!
 
 ## Assignment
 You will write an upgraded autonomous line-following program. The rover must use raw analog data to catch tracking errors and steer itself using the new Error thresholds.
 
 **Requirements:**
-1. **Setup:** Make sure your sensitivity is set manually using `octoliner.set_sensitivity()`.
+1. **Setup:** Use `octoliner.set_sensitivity(245)`. The matching raw line-loss threshold for this exercise is `700`.
 2. **The Tracking Loop:** Create a `while True:` loop. Inside the loop:
    * Read the raw data with `octoliner.analog_read_all()`
    * Read the position
-3. **Failsafe Check:** First, check `if max(sensor_array) < 500:`. If True, print a critical error message, stop the motors, and `break` the loop.
+3. **Failsafe Check:** First, check `if max(sensor_array) < 700:`. Count consecutive low readings using the filter in the starter code. On the fifth low reading, print a critical error message, stop the motors, and `break` the loop. Reset the counter when the line is detected.
 4. **Steering Logic:** If the line is successfully detected (`else:`), use an `if / elif / else` block to check the `position` variable:
-   * If `< -0.3`: Turn Left (e.g., Left: `5`, Right: `25`)
-   * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `5`)
-   * Otherwise: Drive Straight (e.g., `20`, `20`)
+   * If `< -0.3`: Turn Left (e.g., Left: `0`, Right: `25`)
+   * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `0`)
+   * Otherwise: Drive Straight (e.g., `25`, `25`)
 
-Watch how much cleaner your steering logic has become!
+Use five consecutive low readings before declaring the line lost; a single weak reading may occur while crossing the edge of the line. Keep a `lost_readings` counter, reset it to zero on a valid reading, and stop and `break` when it reaches five. The starter code provides this short filter. Stop the inside wheel for a tighter turn; keep the outside wheel at `25`.
+
+Drive through all three marked checkpoints in order before the automatic safety stop at 70 seconds. Moving away from the start alone does not complete the route. Watch how much cleaner your steering logic has become!
 
 ## Conclusion
 Mission accomplished! You have successfully modernized your autonomous control system.

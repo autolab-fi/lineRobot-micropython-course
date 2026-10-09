@@ -7,17 +7,17 @@
       "module": "module_11",
       "verificationFile": "verifications/module_11.py",
       "physicalStart": {
-        "xCm": 80,
+        "xCm": 40,
         "yCm": 30,
         "direction": [
-          -30,
+          30,
           0
         ]
       },
       "initialPose": {
-        "xM": 0.8,
+        "xM": 0.4,
         "yM": 0.7,
-        "headingRad": -3.141592654
+        "headingRad": -0.0
       },
       "blockLibraryFunctions": false
     },
@@ -62,7 +62,7 @@
       "verificationFile": "verifications/module_6.py",
       "physicalStart": {
         "xCm": 50,
-        "yCm": 94,
+        "yCm": 30,
         "direction": [
           30,
           0
@@ -70,7 +70,7 @@
       },
       "initialPose": {
         "xM": 0.5,
-        "yM": 0.06,
+        "yM": 0.7,
         "headingRad": -0.0
       },
       "blockLibraryFunctions": false
@@ -115,16 +115,16 @@
       "module": "module_4",
       "verificationFile": "verifications/module_4.py",
       "physicalStart": {
-        "xCm": 128,
-        "yCm": 99,
+        "xCm": 127,
+        "yCm": 98,
         "direction": [
           0,
           -30
         ]
       },
       "initialPose": {
-        "xM": 1.28,
-        "yM": 0.01,
+        "xM": 1.27,
+        "yM": 0.02,
         "headingRad": 1.570796327
       },
       "blockLibraryFunctions": false
@@ -133,7 +133,7 @@
       "module": "module_4",
       "verificationFile": "verifications/module_4.py",
       "physicalStart": {
-        "xCm": 128,
+        "xCm": 127,
         "yCm": 98,
         "direction": [
           0,
@@ -141,7 +141,7 @@
         ]
       },
       "initialPose": {
-        "xM": 1.28,
+        "xM": 1.27,
         "yM": 0.02,
         "headingRad": 1.570796327
       },
@@ -151,16 +151,16 @@
       "module": "module_5",
       "verificationFile": "verifications/module_5.py",
       "physicalStart": {
-        "xCm": 22,
-        "yCm": 86,
+        "xCm": 104,
+        "yCm": 76,
         "direction": [
           0,
           -30
         ]
       },
       "initialPose": {
-        "xM": 0.22,
-        "yM": 0.14,
+        "xM": 1.04,
+        "yM": 0.24,
         "headingRad": 1.570796327
       },
       "blockLibraryFunctions": false
@@ -619,16 +619,16 @@
       "module": "module_4",
       "verificationFile": "verifications/module_4.py",
       "physicalStart": {
-        "xCm": 75,
-        "yCm": 30,
+        "xCm": 65,
+        "yCm": 45,
         "direction": [
           30,
           0
         ]
       },
       "initialPose": {
-        "xM": 0.75,
-        "yM": 0.7,
+        "xM": 0.65,
+        "yM": 0.55,
         "headingRad": -0.0
       },
       "blockLibraryFunctions": false
@@ -691,17 +691,17 @@
       "module": "module_3",
       "verificationFile": "verifications/module_3.py",
       "physicalStart": {
-        "xCm": 75,
-        "yCm": 30,
+        "xCm": 104,
+        "yCm": 40,
         "direction": [
-          30,
-          0
+          0,
+          30
         ]
       },
       "initialPose": {
-        "xM": 0.75,
-        "yM": 0.7,
-        "headingRad": -0.0
+        "xM": 1.04,
+        "yM": 0.6,
+        "headingRad": -1.570796327
       },
       "blockLibraryFunctions": true
     },

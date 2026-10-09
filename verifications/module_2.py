@@ -77,8 +77,8 @@ def draw_trajectory(image, points, color, width, restore):
 def electric_motors(robot, image, td: dict, user_code=None):
     """Test for lesson: Electric Motors — robot must reach the flag using run_motor commands"""
     #Values in relation to robot!
-    FLAG_X = 400
-    FLAG_Y = 1000
+    FLAG_X_CM = 115.0
+    FLAG_Y_CM = 46.0
     FLAG_THRESHOLD = 10.0
 
     result = {
@@ -89,24 +89,36 @@ def electric_motors(robot, image, td: dict, user_code=None):
     text = "Not recognized"
 
     image = robot.draw_info(image)
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     if not td:
         banned = ["turn_left", "turn_right", "move_forward_distance",
                   "move_backward_distance", "move_forward_seconds", "move_backward_seconds"]
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        found_banned = [f for f in banned if f in active_code]
+        try:
+            tree = ast.parse(user_code or "")
+            calls = {node.func.attr for node in ast.walk(tree)
+                     if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)}
+        except SyntaxError:
+            calls = set()
+        found_banned = sorted(calls.intersection(banned))
+        required_present = {"run_motors_speed", "stop"}.issubset(calls)
 
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
                 "reached": False,
-                "code_valid": len(found_banned) == 0,
+                "code_valid": len(found_banned) == 0 and required_present,
                 "banned_found": found_banned,
-                "flag-coords": (FLAG_X, FLAG_Y),
-                "flag-coords-cm": None,  # set lazily once robot is detected
+                "flag-coords": (int(FLAG_Y_CM / robot.pixels_to_cm(1)),
+                                int(FLAG_X_CM / robot.pixels_to_cm(1))),
+                "flag-coords-cm": (FLAG_X_CM, FLAG_Y_CM),
+                "stable_position": None,
+                "stable_since": time.time(),
+                "last_seen": None,
+                "at_target": False,
+                "stopped": False,
             }
         }
 
@@ -171,36 +183,44 @@ def electric_motors(robot, image, td: dict, user_code=None):
     if td["data"]["code_valid"]:
         position = robot.get_info()["position"]
         if position:
-            # set flag-coords-cm lazily on first detection
-            if td["data"]["flag-coords-cm"] is None:
-                coords = td["data"]["flag-coords"]
-                td["data"]["flag-coords-cm"] = (robot.pixels_to_cm(coords[0]), robot.pixels_to_cm(coords[1]))
-            delta = robot.delta_points((position[1], position[0]), td["data"]["flag-coords-cm"])
+            delta = robot.delta_points(position, td["data"]["flag-coords-cm"])
+            now = time.time()
+            td["data"]["last_seen"] = now
+            anchor = td["data"]["stable_position"]
+            if anchor is None or robot.delta_points(position, anchor) > 1.0:
+                td["data"]["stable_position"] = tuple(position)
+                td["data"]["stable_since"] = now
+            td["data"]["at_target"] = delta < FLAG_THRESHOLD
+            td["data"]["stopped"] = now - td["data"]["stable_since"] >= 0.75
             if delta < FLAG_THRESHOLD:
                 td["data"]["reached"] = True
                 text = "The robot has reached target point!"
             else:
                 text = f'Distance to target point {delta:0.1f} cm'
     else:
-        text = f"Banned functions detected: {', '.join(td['data']['banned_found'])}"
+        text = "Use run_motors_speed() and stop(), without high-level navigation."
 
     # timeout / final verdict
     if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
-            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            result["description"] = "Use run_motors_speed() and stop(), without high-level navigation | Score: 0"
             text = "Banned functions detected."
-        elif not td["data"]["reached"]:
+        elif (not td["data"]["at_target"] or not td["data"]["stopped"]
+              or td["data"]["last_seen"] is None or time.time() - td["data"]["last_seen"] > 1.5):
             result["success"] = False
             result["score"] = 0
-            result["description"] = "Robot did not reach the target point | Score: 0"
+            result["description"] = "Robot must stop within 10 cm of (115, 46) cm | Score: 0"
             text = "Failed to reach target point."
         else:
             result["success"] = True
             result["score"] = 100
             result["description"] = "You are amazing! The Robot has reached the target point | Score: 100"
             text = "The robot has reached target point!"
+
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 
@@ -218,25 +238,36 @@ def differential_drive(robot, image, td, user_code=None):
     text = "Drive the robot in a straight line for 3 seconds"
 
     image = robot.draw_info(image)
+    if td is not None and td["data"].get("final_result") is not None:
+        return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     if not td:
         banned = ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds",
                   "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"]
-        lines = user_code.split('\n') if user_code else []
-        active_lines = [line.split('#')[0] for line in lines]
-        active_code = '\n'.join(active_lines)
-        found_banned = [f for f in banned if f in active_code]
+        try:
+            tree = ast.parse(user_code or "")
+            calls = {n.func.attr for n in ast.walk(tree)
+                     if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)}
+        except SyntaxError:
+            calls = set()
+        found_banned = sorted(calls.intersection(banned))
+        required_present = {"run_motor_left", "run_motor_right"}.issubset(calls) and (
+            "stop" in calls or {"stop_motor_left", "stop_motor_right"}.issubset(calls))
 
         td = {
             "start_time": time.time(),
             "end_time": time.time() + 10,
             "data": {
-                "code_valid": len(found_banned) == 0,
+                "code_valid": len(found_banned) == 0 and required_present,
                 "banned_found": found_banned,
                 "task-failed": "",
                 "failed-cone": {},
                 "direction_0": None,
                 "prev_robot_position": None,
+                "prev_sample_time": None,
+                "first_still_time": None,
+                "last_seen": None,
+                "settled": False,
                 "robot_start_move_time": None,
                 "robot_end_move_time": None,
                 "max_angle_deviation": 0,
@@ -327,64 +358,42 @@ def differential_drive(robot, image, td, user_code=None):
         except Exception as e:
             print(f"Error drawing cones: {e}")
 
-    # evaluation — only if code valid
+    # Bound movement by the adjacent stationary samples. Measuring only between
+    # moving samples loses up to two camera frame intervals from a 3 s pulse.
+    now = time.time()
     if td["data"]["code_valid"] and robot and robot.position is not None:
+        data = td["data"]
+        data["last_seen"] = now
         angle_x = robot.compute_angle_x()
-        angle_x_disp = angle_x
-        if angle_x > 180:
-            angle_x -= 360
-
-        if td["data"]["direction_0"] is not None:
-            angle_diff = abs(td["data"]["direction_0"] - angle_x)
-            if angle_diff > 180:
-                angle_diff = 360 - angle_diff
-
-            td["data"]["max_angle_deviation"] = max(td["data"]["max_angle_deviation"], angle_diff)
-            text = f'Robot angle with x: {angle_x_disp:0.0f}°, Deviation: {angle_diff:.1f}°'
-
-            if td["data"]["prev_robot_position"] is not None:
-                delta_pos = robot.delta_points(robot.position, td["data"]["prev_robot_position"])
-
-                if td["data"]["robot_start_move_time"] is None and delta_pos > 1:
-                    td["data"]["robot_start_move_time"] = time.time()
-                    td["data"]["straight_driving_start"] = time.time()
-                    text = f"Robot started moving at angle {angle_x_disp:0.0f}°"
-
-                if td["data"]["robot_start_move_time"] is not None and delta_pos > 0.5:
-                    if angle_diff <= 10 and td["data"]["straight_driving_start"] is not None:
-                        td["data"]["straight_driving_duration"] = time.time() - td["data"]["straight_driving_start"]
-                        if td["data"]["straight_driving_duration"] >= 3.0:
-                            text = f"Success! Robot drove straight for {td['data']['straight_driving_duration']:.1f}s"
-                            td["data"]["task-failed"] = ""
-                        else:
-                            text = f"Straight: {td['data']['straight_driving_duration']:.1f}/3.0s, Deviation: {angle_diff:.1f}°"
-                    elif angle_diff > 10:
-                        td["data"]["straight_driving_start"] = None
-                        td["data"]["straight_driving_duration"] = 0
-                        if not td["data"]["task-failed"]:
-                            td["data"]["task-failed"] = f"Robot deviated {angle_diff:.1f}° (max allowed: 10°)"
-                            if robot.position_px is not None and len(td["data"]["cones-coords"]) > 0:
-                                min_index = closest_node((robot.position_px[1], robot.position_px[0]),
-                                                        td["data"]["cones-coords"])
-                                if min_index not in td["data"]["failed-cone"]:
-                                    td["data"]["failed-cone"][min_index] = -20
-
-                if td["data"]["robot_start_move_time"] is not None and delta_pos < 0.5:
-                    if td["data"]["robot_end_move_time"] is None:
-                        td["data"]["robot_end_move_time"] = time.time()
-                        if td["data"]["straight_driving_duration"] < 3.0 and not td["data"]["task-failed"]:
-                            td["data"]["task-failed"] = (
-                                f"Robot only drove straight for {td['data']['straight_driving_duration']:.1f}s (need 3.0s)"
-                            )
-
-        td["data"]["prev_robot_position"] = robot.position
+        if data["direction_0"] is not None:
+            angle_diff = abs((angle_x - data["direction_0"] + 180) % 360 - 180)
+            data["max_angle_deviation"] = max(data["max_angle_deviation"], angle_diff)
+            previous = data["prev_robot_position"]
+            if previous is not None:
+                moved = robot.delta_points(robot.position, previous) > 0.5
+                if moved and not data["settled"]:
+                    if data["robot_start_move_time"] is None:
+                        data["robot_start_move_time"] = data["prev_sample_time"]
+                    data["first_still_time"] = None
+                    data["straight_driving_duration"] = now - data["robot_start_move_time"]
+                elif data["robot_start_move_time"] is not None and not data["settled"]:
+                    if data["first_still_time"] is None:
+                        data["first_still_time"] = now
+                    if now - data["first_still_time"] >= 0.6:
+                        data["settled"] = True
+                        data["straight_driving_duration"] = data["first_still_time"] - data["robot_start_move_time"]
+                if data["robot_start_move_time"] is not None and angle_diff > 10:
+                    data["task-failed"] = f"Robot deviated {angle_diff:.1f}° (max allowed: 10°)"
+            data["prev_robot_position"] = tuple(robot.position)
+            data["prev_sample_time"] = now
+            text = f"Straight: {data['straight_driving_duration']:.1f}/3.0s, Deviation: {angle_diff:.1f}°"
 
     # timeout / final verdict
     if td["end_time"] - time.time() < 1:
         if not td["data"]["code_valid"]:
             result["success"] = False
             result["score"] = 0
-            result["description"] = f"Banned functions used: {', '.join(td['data']['banned_found'])} | Score: 0"
+            result["description"] = "Use both raw motor functions and stop the motors, without high-level navigation. | Score: 0"
             text = "Banned functions detected."
         elif td["data"]["task-failed"]:
             result["success"] = False
@@ -396,6 +405,9 @@ def differential_drive(robot, image, td, user_code=None):
             result["score"] = 0
             result["description"] = "Robot didn't start moving | Score: 0"
             text = "Robot didn't start moving."
+        elif not td["data"]["settled"] or td["data"]["last_seen"] is None or now - td["data"]["last_seen"] > 1.5:
+            result = {"success": False, "score": 0, "description": "Stop the robot in camera view after driving straight. | Score: 0"}
+            text = "Final stop not confirmed."
         elif td["data"]["straight_driving_duration"] >= 3.0:
             result["success"] = True
             result["score"] = 100
@@ -412,6 +424,9 @@ def differential_drive(robot, image, td, user_code=None):
                 f"(need 3.0s) | Score: 0"
             )
             text = f"Only {td['data']['straight_driving_duration']:.1f}s straight, need 3.0s."
+
+        td["data"]["final_result"] = result.copy()
+        td["data"]["final_text"] = text
 
     return image, td, text, result
 

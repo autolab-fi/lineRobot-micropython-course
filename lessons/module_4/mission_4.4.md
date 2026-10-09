@@ -3,7 +3,7 @@ index: 24
 module: module_4
 task: color_classification
 previous: color_sensor_basics
-next: multiple_sensors
+next: concept_of_error
 ---
 
 # Mission 4.4 Color Classification
@@ -56,13 +56,14 @@ Your task is to upgrade your Linear Scanner from the previous mission. You will 
 1. Set up the hardware: Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.
 2. Complete the `detect_color_name(r, g, b)` function:
     * Math: Calculate the `total` light, and then divide each color by the total to find `r_ratio`, `g_ratio`, and `b_ratio`.
-    * Logic: Fill in the `if/elif` statements. *Hint: A good starting point for a dominant color is `0.45` (45%). For example, if it's red, `r_ratio` should be `> 0.45`.
+    * Logic: Fill in the `if/elif` statements. *Hint: Start with `r_ratio > 0.5` for red and `g_ratio > 0.4` for green. Compare these with your raw readings and adjust if needed.
 3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function, add small changes inside the loop:
     * Call the function: after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.
+    * Keep the six readings and five 13 cm movements at 40% speed from Mission 4.3, including the sensor settling delays. Read the starting green zone, the lunar floor and the red zone; do not move after the last reading.
     * Print: Output the final color name and the raw values using an f-string: `Scan - {color_name} (Raw: R:{r} G:{g} B:{b})`.
 
 
 ## Conclusion
 Congratulations! You have successfully built a color classification algorithm. Your rover can now adapt to the lighting conditions and accurately identify the "Red" and "Green" zones while ignoring the background noise of the lunar floor.
 
-> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will need to copy and paste this exact function into your next mission, where we will combine the color scanner with the line-tracking algorithm!
+> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will reuse this function in later missions that combine color scanning with line tracking.

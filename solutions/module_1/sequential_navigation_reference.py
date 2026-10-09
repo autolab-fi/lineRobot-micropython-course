@@ -2,8 +2,8 @@ from lineRobot import Robot
 robot = Robot()
 
 angle = 90
-d1 = 35
-d2 = 25
+d1 = 20
+d2 = 15
 
 #Moving to point 1
 robot.move_forward_distance(d1)

@@ -59,7 +59,7 @@ However, you will not be able to use the built-in robot movement functions. The 
 
 ![finish_point](https://api.ondroid.org/media/courses/9/images/66d281d20f664211bd2a512777b8ffbc.png)
 
-*Hint: You will need to run the code multiple times, adjusting your `time.sleep()` value until the robot stops exactly on the target!*
+*Hint: Tune the left and right motor settings until the rover drives towards the flag, then adjust `time.sleep()` until it stops on the target. The physical rover and simulator may need different settings because the motors and battery affect this timed movement.*
 
 ## Conclusion
 Congratulations! In this lesson, you learned about the structure of a simple electric motor. Electric motors are a fascinating area in robotics, with a wide variety of types, each having its own application. Next, we will look at how having two separate motors allows us to steer the robot!

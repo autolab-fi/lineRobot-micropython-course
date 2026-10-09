@@ -6,7 +6,7 @@ Program the robot to systematically explore and reveal a fog-covered terrain map
 ![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)
 
 ## Introduction
-Mission Control provides a partially obscured map—only areas the robot physically visits will be revealed. Your task is to write a sequence of movements that can be repeated to efficiently survey the landing zone, uncovering more than half the terrain without manually controlling each step.
+Mission Control provides a partially obscured map-only areas the robot physically visits will be revealed. Your task is to write a sequence of movements that can be repeated to efficiently survey the landing zone, uncovering more than half the terrain without manually controlling each step.
 
 ## Theory
 
@@ -14,7 +14,7 @@ Mission Control provides a partially obscured map—only areas the robot physica
 In planetary exploration, robots often face limited sensor range or data transmission constraints. The "fog of war" concept means areas remain hidden until directly surveyed. Your robot must follow a systematic pattern to maximize map coverage with minimal backtracking.
 
 ### Movement Sequences
-Rather than writing individual commands for each move, you'll create a reusable movement pattern. Think of it like a lawnmower pattern—moving forward in straight lines, then shifting over and repeating. The key is:
+Rather than writing individual commands for each move, you'll create a reusable movement pattern. Think of it like a lawnmower pattern-moving forward in straight lines, then shifting over and repeating. The key is:
 - **Consistency**: Each pass should cover equal distance
 - **Overlap**: Slight overlap ensures no gaps in coverage
 

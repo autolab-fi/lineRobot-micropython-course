@@ -1,22 +1,49 @@
+import machine
 import time
 from lineRobot import Robot
 from octoliner import Octoliner
-import machine
 
-max_vel = 70
-brake_f = 45
-k_prop = 35
 robot = Robot()
 i2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)
 octoliner = Octoliner()
 octoliner.begin(i2c)
-octoliner.set_sensitivity(240)
+
+octoliner.set_sensitivity(245)
+
+kp = 25
+max_speed = 40
+braking_force = 20
+
 print("Starting Adaptive Racing Controller...")
+
+lost_readings = 0
 while True:
+    sensor_array = octoliner.analog_read_all()
+    time.sleep(0.01)
     position = octoliner.track_line()
-    dynamic_speed = max_vel - (brake_f * abs(position))
-    P = k_prop * position
-    left_wheel = int(dynamic_speed + P)
-    right_wheel = int(dynamic_speed - P)
-    robot.run_motors_speed(left_wheel, right_wheel)
-    time.sleep(0.05)
+
+    # Failsafe Check
+    if max(sensor_array) < 700:
+        lost_readings += 1
+        if lost_readings < 5:
+            time.sleep(0.01)
+            continue
+        print("CRITICAL: Line lost! Emergency Stop.")
+        robot.stop()
+        break
+    else:
+        lost_readings = 0
+        # Calculate Adaptive Speed
+        dynamic_speed = max_speed - (braking_force * abs(position))
+
+        # Calculate P-Controller Power
+        P = kp * position
+
+        # Apply Power to Dynamic Speed
+        left_speed = int(dynamic_speed + P)
+        right_speed = int(dynamic_speed - P)
+
+        # Send to Motors
+        robot.run_motors_speed(left_speed, right_speed)
+
+    time.sleep(0.01)

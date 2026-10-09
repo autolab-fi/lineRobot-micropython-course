@@ -3,7 +3,7 @@ index: 34
 module: module_6
 task: code_clinic
 previous: hardware_safety_net
-next: module_7_intro
+next:
 ---
 
 # Mission 6.3 Code Clinic (Refactoring)
@@ -24,15 +24,15 @@ In professional robotics, code is read by humans far more often than it is run b
 In professional Python, we use specific styles to distinguish between different types of data at a glance:
 
 * **Constants (ALL_CAPS):** These are the "Configuration Settings" of your robot. We place them at the very top. Even though Python technically allows you to change them, the CAPS tell other engineers: *"This is a fixed rule for the mission."*
-* **Variables (snake_case):** These represent live, changing data (sensor values, current speed). 
+* **Variables (snake_case):** These represent live, changing data (sensor values, current speed).
 
 ### 2. Eliminating "Magic Numbers"
-A **Magic Number** is a hardcoded value (like `500` or `240`) that appears in your code without explanation. 
+A **Magic Number** is a hardcoded value (like `700` or `245`) that appears in your code without explanation.
 * **The Problem:** If you need to change the sensitivity in several different places, you will eventually miss one.
-* **The Solution:** Use Constants. By defining `SENSITIVITY = 240` at the top, you create a "Control Panel" for your robot. You tune the robot at the top; the logic stays at the bottom.
+* **The Solution:** Use Constants. By defining `SENSITIVITY = 245` at the top, you create a "Control Panel" for your robot. You tune the robot at the top; the logic stays at the bottom.
 
 ### 3. Modularity: The Manager and the Workers
-If your `while True` loop is a long list of math and sensor reads, it's hard to follow. Instead, use **Functions** to delegate tasks. 
+If your `while True` loop is a long list of math and sensor reads, it's hard to follow. Instead, use **Functions** to delegate tasks.
 * **The Functions (Workers):** Each should do **one thing** (e.g., *only* calculate steering or *only* identify a color).
 * **The Main Loop (Manager):** It should read like a "Table of Contents," calling the workers in the right order. This follows the **DRY (Don't Repeat Yourself)** principle.
 
@@ -40,13 +40,15 @@ If your `while True` loop is a long list of math and sensor reads, it's hard to 
 You have been handed a "Spaghetti Script" that successfully follows the line and identifies minerals. Your task is to perform a full architectural upgrade.
 
 **Requirements:**
-1.  **Configuration Panel:** Create a section at the top for **Constants**. Move the `SENSITIVITY` (240), `LINE_THRESHOLD` (500), `BASE_SPEED`, and `KP` there.
+1.  **Configuration Panel:** Create a section at the top for **Constants**. Move the `SENSITIVITY` (245), `LINE_THRESHOLD` (700), `BASE_SPEED` (20), and `KP` (25) there.
 2.  **Standardize Naming:** Replace all cryptic names (like `sa`, `rr`, `v`) with descriptive names.
 3.  **Modularize:** Wrap the logic into three distinct functions:
     * `get_mineral_color()` - Must include your `try-except` safety net.
     * `calculate_steering()` - For the P-controller math.
     * `apply_movement()` - To handle the motor commands.
 4.  **The Clean Loop:** Simplify the `while True` loop so it only manages the high-level mission logic.
+
+Keep the supplied five-reading line-loss filter. The rover must pass all three marked checkpoints in order.
 
 ## Conclusion
 Excellent work, Architect! The robot still drives exactly the same, but the code is now "Space-Grade." By separating the **Settings** (Constants) from the **Logic** (Functions), you've made your rover significantly more stable and much easier to upgrade for future missions.

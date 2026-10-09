@@ -336,33 +336,12 @@ def maneuvering(robot, image, td: dict, user_code):
     return image, td, text, result
 
 def calculate_target_point(rb, targets):
-    """Calculate the target points based on the robot's current position and movement directions."""
-    
-    # Get the robot's position properly
-    pos = rb.get_info().get("position")
-    
-    if pos is None:
-        print("Error: Robot position is None")
-        return []
-
-    point = [pos[0], pos[1]]
-    direction = rb.compute_angle_x()
-
-    res = []
-    for target in targets:
-        if isinstance(target, dict):
-            point[0] += target['forward'] * math.cos(math.radians(direction))
-            point[0] -= target['backward'] * math.cos(math.radians(direction))
-            point[1] -= target['forward'] * math.sin(math.radians(direction))
-            point[1] += target['backward'] * math.sin(math.radians(direction))
-            res.append((point[0], point[1]))
-        else:
-            # Handle reversed y-axis
-            direction += target[0]['left']
-            direction -= target[0]['right']
-
-    res.reverse()
-    return res
+    """Map physical route centimetres using the starting tag's camera scale."""
+    if __package__:
+        from .camera_geometry import route_targets
+    else:
+        from camera_geometry import route_targets
+    return route_targets(rb.get_info(), targets)
 
 
 def sequential_navigation(robot, image, td: dict, user_code): 
@@ -391,17 +370,25 @@ def sequential_navigation(robot, image, td: dict, user_code):
 
     if not td["data"] and robot:
         route = [
-            {'forward': 35, 'backward': 0},
+            {'forward': 20, 'backward': 0},
             [{'left': 90, 'right': 0}],
-            {'forward': 25, 'backward': 0},
+            {'forward': 15, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 35, 'backward': 0},
+            {'forward': 20, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 25, 'backward': 0}
+            {'forward': 15, 'backward': 0}
         ]
 
-        td["data"]['targets'] = calculate_target_point(robot, route)
-        td["data"]['delta'] = 4
+        targets = calculate_target_point(robot, route)
+        if not targets:
+            result.update(success=False, score=0,
+                          description="Cannot measure the robot tag. Please retry when the camera view is clear.")
+            return image, td, "Waiting for a valid camera tag", result
+        td["data"]['targets'] = targets
+        # HAMK's measured multi-turn route accumulated about 6 camera-cm
+        # of cross-track error (21998). Use a fixed, bounded tolerance;
+        # never widen it after each checkpoint.
+        td["data"]['delta'] = 6
         td["data"]['reached_point'] = False
 
         # Load single mineral image
@@ -453,7 +440,6 @@ def sequential_navigation(robot, image, td: dict, user_code):
                     checkpoint_index = len(td["data"]['targets']) - 1
                     td["data"]["checkpoint_visible"][checkpoint_index] = False
                     
-                    td["data"]['delta'] += 1.3
                     td["data"]['targets'].pop()
                 elif not td["data"]['reached_point']:
                     # Final checkpoint collected

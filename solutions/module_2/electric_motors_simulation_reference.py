@@ -6,8 +6,8 @@ from octoliner import Octoliner
 robot = Robot()
 
 speed = 30
-s_time = 2.1
-sp_offset = 34
+s_time = 2.5
+sp_offset = 20
 
 def moves(sp, st, off):
     robot.run_motors_speed(sp, sp + off)

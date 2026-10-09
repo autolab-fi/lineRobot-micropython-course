@@ -11,8 +11,8 @@ octoliner.begin(i2c)
 octoliner.set_sensitivity(245)
 
 kp = 25
-max_speed = 85
-braking_force = 45
+max_speed = 40
+braking_force = 20
 
 print("Starting Adaptive Speed Controller...")
 

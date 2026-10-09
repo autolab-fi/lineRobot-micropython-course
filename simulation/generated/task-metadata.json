@@ -7,17 +7,17 @@
       "module": "module_11",
       "verificationFile": "verifications/module_11.py",
       "physicalStart": {
-        "xCm": 80,
+        "xCm": 40,
         "yCm": 30,
         "direction": [
-          -30,
+          30,
           0
         ]
       },
       "initialPose": {
-        "xM": 0.8,
+        "xM": 0.4,
         "yM": 0.7,
-        "headingRad": -3.141592654
+        "headingRad": -0.0
       },
       "blockLibraryFunctions": false
     },
@@ -151,16 +151,16 @@
       "module": "module_5",
       "verificationFile": "verifications/module_5.py",
       "physicalStart": {
-        "xCm": 22,
-        "yCm": 86,
+        "xCm": 104,
+        "yCm": 76,
         "direction": [
           0,
           -30
         ]
       },
       "initialPose": {
-        "xM": 0.22,
-        "yM": 0.14,
+        "xM": 1.04,
+        "yM": 0.24,
         "headingRad": 1.570796327
       },
       "blockLibraryFunctions": false

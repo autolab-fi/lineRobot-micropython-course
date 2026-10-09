@@ -286,8 +286,9 @@
       "reference": "solutions/module_4/color_sensor_basics_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22057
       },
       "commonMistakes": [
         "Do not move after the sixth reading.",
@@ -315,8 +316,9 @@
       "reference": "solutions/module_4/color_classification_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22058
       },
       "commonMistakes": [
         "Do not move after the sixth reading.",
@@ -342,12 +344,16 @@
     },
     "concept_of_error": {
       "reference": "solutions/module_5/concept_of_error_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "startXCm": 104,
+        "startYCm": 76,
+        "headingDegrees": -90
+      }
     },
     "upgraded_relay_controller": {
       "reference": "solutions/module_5/upgraded_relay_controller_reference.py",
@@ -369,12 +375,16 @@
     },
     "adaptive_speed": {
       "reference": "solutions/module_5/adaptive_speed_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "kp": 25,
+        "maxSpeed": 40,
+        "brakingForce": 20
+      }
     },
     "art_of_debugging": {
       "reference": "solutions/module_6/art_of_debugging_reference.py",
@@ -432,12 +442,32 @@
     },
     "adaptive_racing": {
       "reference": "solutions/module_11/adaptive_racing_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "kp": 25,
+        "maxSpeed": 40,
+        "brakingForce": 20,
+        "sensitivity": 245,
+        "checkpoints": [
+          [
+            105,
+            60
+          ],
+          [
+            60,
+            90
+          ],
+          [
+            80,
+            30
+          ]
+        ],
+        "checkpointRadiusCm": 10
+      }
     },
     "sandbox": {
       "reference": "solutions/module_0/sandbox_reference.py",

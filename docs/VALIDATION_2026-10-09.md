@@ -25,12 +25,15 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | led_feedback | 22044 |
 | python_lists | 22032 |
 | telemetry | 22035 |
+| simple_line_follower | 22046, 22053 |
+| color_sensor_basics | 22057 |
+| color_classification | 22058 |
 
 ## Checks
 
-- 45 verifier/replay tests passed.
+- 56 verifier/replay tests passed.
 - All 34 simulator task references passed, including renamed programs and negative empty/output-only cases (136 cases; Sandbox intentionally permits free programs).
-- All 17 simulator UI scenarios passed.
+- All 17 simulator UI scenarios passed earlier in this audit; the targeted line/waypoint/telemetry/RGB UI check also passed with the final color reference.
 - Sequential Navigation uses 20/15/20/15 cm, with the original 6 cm checkpoint tolerance, after the long route accumulated about 8 cm of drift.
 - Lists uses [35, 30, 35] and a smaller safe route.
 - Electric Motors timed reference uses left 30 / right 64 for 2.1 seconds on HAMK (22038 and 22039 passed). Simulator keeps its own 30/50, 2.5 s reference. The lesson explains tuning balance and time independently.
@@ -38,9 +41,6 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 ## Remaining physical checks
 
 The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Remaining tasks at this checkpoint:
-- simple_line_follower
-- color_sensor_basics
-- color_classification
 - concept_of_error
 - upgraded_relay_controller
 - proportional_control
@@ -56,10 +56,19 @@ The live matrix and submission records are in `artifacts/hamk-course-audit-20261
 
 ## Battery and docking
 
-User cutoff: below **23.0 V battery voltage**, stop the current test and return to dock. The audit guard checks before submission and polls during the run; the runner requests docking after a low-voltage cutoff and stops the series. Low-voltage stopping was tested offline without discharging the physical battery. Live battery telemetry has been confirmed during actual tests.
+User cutoff: below **23.0 V battery voltage**, stop the current test and return to dock. The audit guard requires at least **23.3 V** before a new submission and polls during the run; the runner requests docking after a low-voltage cutoff and stops the series. The firmware may defer ADC sampling until student Python returns, so cached readings during long-running code are labelled explicitly and are not a guarantee of continuous fresh voltage monitoring. Low-voltage stopping was tested offline without discharging the physical battery. Live battery telemetry has been confirmed during actual tests.
 
 The new magnetic dock target is **(27.5, 63.0)**; direction (30, 0). Previous (27.5, 57.7) is obsolete. AutoCharge is temporarily suspended during controlled course submissions and must be restored on cleanup.
 
 ## Publication
 
-Only previously promoted verified changes are in main (course 6ad7103, simulator 8cc6dd6). This audit remains on `validation/hamk-course-20261008`; pending tasks are not declared validated. Worker candidate checkers currently come from course revision 9091db1. Backend lesson/reference updates and public simulator deployment still require coordinated release after verification. No firmware or robot calibration changes were made during this audit.
+Only previously promoted verified changes are in main (course 6ad7103, simulator 8cc6dd6). This audit remains on `validation/hamk-course-20261008`; pending tasks are not declared validated. Worker candidate checkers currently come from course revision 7d895f8; subsequent Concept/controller/race changes are not deployed or physically validated. Backend lesson/reference updates and public simulator deployment still require coordinated release after verification. No firmware or robot calibration changes were made during this audit.
+
+## Latest candidate changes (physical tests pending)
+
+- Concept start moved to (104, 76), facing up, away from the left frame.
+- Adaptive Speed and Adaptive Racing use maximum speed 40, braking 20, gain 25, sensitivity 245 and raw line-loss threshold 700.
+- Adaptive Racing requires all three ordered route checkpoints; five replay tests cover full/partial/skipped routes, invalid code and immutable final results.
+- Simulator Relay, P, Adaptive Speed and Racing now check the full three-checkpoint route. All 34 canonical and renamed references passed alongside empty/output-only cases (136 cases).
+- Color references physically demonstrated Green → Floor → Red using six readings, five 13 cm steps at 40%, and 1.1 s settling. Lessons, starter code and tutor guidance agree.
+- Latest physical total: **22/34**, with **12 pending**. These candidate changes stay on the validation branch until physical verification.

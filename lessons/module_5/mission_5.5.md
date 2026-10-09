@@ -41,8 +41,8 @@ Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
 **Requirements:**
 1. **Setup:** Use your code from Mission 5.3 (without the Kick timer).
 2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:
-   * `max_speed = 85`
-   * `braking_force = 45`
+   * `max_speed = 40`
+   * `braking_force = 20`
 3. **Adaptive Math:** Inside the loop, before calculating `P`:
    * Calculate `dynamic_speed` using the formula with `abs(position)`.
 4. **The P-Controller:**
@@ -54,13 +54,6 @@ Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
 Once your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. 
 
 Try experimenting with extreme parameters and observe how the rover reacts:
-* **The Drift Test:** What happens if you dramatically increase `kp` (e.g., to 40 or 50)? Can you make the rover slide into corners like a rally car?
-* **The Over-Braking Test:** What if you set a low `max_speed` (like 50) but a massive `braking_force` (like 80)? Will the inner wheel actually spin *backwards* on a sharp turn?
-* **The Speed Run:** Can you find the perfect setup to handle a `max_speed` of 100? How much braking force and `kp` do you need to survive the first corner at maximum velocity?
-
-Change one variable at a time, run the code, and discover your ultimate racing setup!
-
-## Conclusion
-Your lunar rover now adjusts its speed to the shape of the track. It slows down when the line is far from the centre of the sensor array and speeds up when the line is centred.
-
-Next, you will practise diagnosing and correcting errors in rover programs.
+* **The Steering Test:** Compare small changes to `kp` while keeping the starting maximum speed. Observe how smoothly the rover follows the bends.
+* **The Braking Test:** Change `braking_force` in small steps and compare the speed on straights with the speed through corners.
+* Keep the line-loss stop enabled during every experiment. Finish a stable lap with the supplied settings before changing the speed.

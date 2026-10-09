@@ -1946,7 +1946,7 @@
       "assignment_full_text": "---\nindex: 23\nmodule: module_4\ntask: color_sensor_basics\nprevious: telemetry_reporting\nnext: color_classification\n---\n\n# Mission 4.3 Color Sensor Basics\n\n## Objective\nUnderstand the RGB color model, initialize the TCS34725 color sensor via the I2C interface, and read raw color data from the lunar surface across multiple zones.\n\n![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)\n\n## Introduction\nYour rover is now fully capable of navigating and reporting its physical status. However, to conduct true scientific research, it needs to analyze the geological composition of the ground. \n\nToday, we are activating the rover's spectrometer: the **TCS34725 Color Sensor**. This hardware will allow your robot to distinguish between different types of minerals based on their color signatures. \n\n![Color_sensor](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-4/color_sensor.jpg?raw=true)\n\n## Theory\n\n### 1. How the Color Sensor Works (The RGB Model)\nTo understand how the robot \"sees\" color, we need to understand the **RGB model**. RGB stands for **R**ed, **G**reen, and **B**lue. \n\n![RGB](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-4/rgb_explanation.jpg?raw=true)\n\nInstead of seeing \"Yellow\" or \"Purple\" like a human eye, the sensor measures the intensity of red, green, and blue light reflecting off the ground. By combining these three basic values, the computer can identify any color. \n\n### 2. The I2C Communication Bus\nIn Module 3, you connected the Octoliner using the **I2C** interface with pins `SDA=21` and `SCL=22`. You might be wondering: *how can we connect a new color sensor if the line sensor is already using those exact same pins?*\n\nThe magic of I2C is that it acts as a **communication bus**. Like a shared telephone line. Multiple sensors can connect to the exact same two wires! To prevent them from talking over each other, every sensor is manufactured with a unique internal \"address\".\n* The Octoliner's default address is `42`.\n* The TCS34725 Color Sensor's address is `0x29` (which is 41 in standard numbers).\n\nBecause their addresses are different, the rover's brain can talk to both of them on the same pins without any conflict. For now, we will just initialize the color sensor on this bus:\n\n```python\nimport machine\nfrom tcs3472 import tcs3472\n\n# 1. Initialize the shared I2C bus\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\n\n# 2. Connect the color sensor to the bus\ncolor_sensor = tcs3472(bus)\n```\n\n### 3. Reading the RGB Data\nOnce the sensor is connected, reading the data is very straightforward. We use the `.rgb()` method, which reads the surface and returns three integers representing the Red, Green, and Blue intensity values (ranging from 0 to 255)\n\n```python\n# Read the color data\nr, g, b = color_sensor.rgb()\nprint(f\"Red: {r}, Green: {g}, Blue: {b}\")\n```\n\n## Assignment\nMission Control has positioned the rover at the start of a straight testing corridor containing colored geological anomalies. \n\nYou must program the rover to act as a **Linear Scanner**: it will take a series of short steps forward, stopping to scan and report the raw RGB values of the surface at the start and after each step.\n\n**Requirements:**\n1. Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus (`sda=21`, `scl=22`). Wait `time.sleep(1.1)` before the first reading so the sensor can collect light.\n2. Use `for step in range(6)` to take six readings over the colored corridor.\n3. Read the color using `.rgb()` and print an f-string: `Scan - R:<value> G:<value> B:<value>`.\n4. Between readings, move forward **13 cm** using `robot.move_forward_speed_distance(40, 13)` and wait `time.sleep(1.1)` before reading again. Use `if step < 5` for the movement: six readings need five movements. Do not move again after the final reading.\n\nThe six samples cover the starting green zone, the lunar floor and the red zone. Total travel is 65 cm. The supplied 40% speed keeps the repeated starts and stops gentle. The sensor collects light over a time interval, so keep the 1.1 second pauses for stable samples.\n\nOnce your rover completes the scan, look closely at the data printed in your terminal. *Did you notice how the R, G, and B values changed drastically when the rover drove over a colored zone compared to the normal ground?*\n\n> **Important:** Save your code or keep this tab open! You will use this exact loop as the foundation for your next mission.\n\n\n## Conclusion\nSpectrometer online! You have successfully established an I2C connection with a new piece of hardware and extracted raw RGB data from multiple zones.\n\nRight now, the rover is just printing numbers. In the next mission, we will teach the robot's brain how to understand these numbers and classify them into actual human-readable colors!",
       "assignment_summary": "--- index: 23 module: module_4 task: color_sensor_basics previous: telemetry_reporting next: color_classification --- # Mission 4.3 Color Sensor Basics ## Objective Understand the RGB color model, initialize the TCS34725 color sensor via the I2C interface, and read raw color data from the lunar surface across multiple zones. ![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green) ## Introduction Your rover is now fully capable of navigating and reporting its physical status. However, to conduct true scientific research, it needs to analyze the geological composition of the ground. Today, we are activating the rover's spectrometer: the **TCS34725 Color Sensor**. This hardware will allow your robot to distinguish between different types of minerals based on their color signatures. ![Color_sensor](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-4/color_sensor.jpg?raw=true) ## Theory ### 1. How the Color Sensor Works (The RGB Model) To understand how the robot \"sees\" color, we need to understand the **RGB model**. RGB stands for **R**ed, **G**reen, and **B**lue. ![RGB](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-4/rgb_explanation.jpg?raw=true) Instead of seeing \"Yellow\" or \"Purple\" like a human eye, the sensor measures the intensity of red, green, and blue light reflecting off the ground. By combining these three basic values, the computer can identify any color. ### 2. The I2C Communication Bus In Module 3, you connected the Octoliner using the **I2C** interface with pins `SDA=21` and `SCL=22`. You might be wondering: *how can we connect a new color sensor if the line sensor is already using those exact same pins?* The magic of I2C is that it acts as a **communication bus**. Like a shared telephone line. Multiple sensors can connect to the exact same two wires! To prevent them from talking over each other, every sensor is manufactured with a unique internal \"address\". * The Octoliner'",
       "reference_solution_text": "from lineRobot import Robot\nimport machine\nfrom tcs3472 import tcs3472\nimport time\n\nrobot = Robot()\n\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\ncolor_sensor = tcs3472(bus)\n\n# Let the first I2C color measurement settle before reading.\ntime.sleep(1.1)\nfor step in range(6):\n    r, g, b = color_sensor.rgb()\n    print(f\"Scan - R:{r} G:{g} B:{b}\")\n    if step < 5:\n        robot.move_forward_speed_distance(40, 13)\n        time.sleep(1.1)\n\nprint(\"Linear scan complete.\")\n",
-      "verification_summary": "Verification for lesson: Color Sensor Basics — 4.3\nStart: x=127, y=98, direction x=0, y=-30\nHardware evidence: {\"status\": \"pending\", \"reason\": \"22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Verification for lesson: Color Sensor Basics — 4.3\nStart: x=127, y=98, direction x=0, y=-30\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22057}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 127,
@@ -2002,8 +2002,9 @@
           }
         ],
         "physical_validation": {
-          "status": "pending",
-          "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22057
         },
         "starting_parameters": {
           "readings": 6,
@@ -2052,10 +2053,10 @@
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_4.py"
     },
     "color_classification": {
-      "assignment_full_text": "---\nindex: 24\nmodule: module_4\ntask: color_classification\nprevious: color_sensor_basics\nnext: multiple_sensors\n---\n\n# Mission 4.4 Color Classification\n\n## Objective\nLearn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nIn the previous mission, your rover successfully scanned the terrain and printed raw RGB (Red, Green, Blue) values. However, raw numbers are hard for humans to read, and even harder for a robot to use for making decisions. \n\nIf we want the rover to say \"I found Green!\" instead of \"R:165 G:174 B:142\", we need to teach its brain how to interpret those numbers. \n\n## Theory\n\n### 1. The Illumination Problem\nYou might think we can just say: `if r > 150: print(\"Red\")`. But there is a huge problem: **lighting changes**. \nIf the rover drives into a shadow, the raw values for *all* colors will drop. The sensor might read `R:80 G:20 B:20`. The red value is low (80), but the object is still clearly red! \n\nTo fix this, we don't look at the raw numbers. We look at the **proportions** (ratios).\n\n### 2. Normalizing Data\nTo find the true color, we calculate what percentage of the total light belongs to each color. This is called **data normalization**.\n1. First, we find the total amount of light: `total = r + g + b`\n2. Then, we divide each color by the total: `r_ratio = r / total`\n\nIf `r_ratio` is `0.5`, it means 50% of all the light reflecting off the ground is red. This proportion stays the same whether the rover is in bright sunlight or deep shadow!\n\n**The Golden Rule of Normalization:** Because we are dividing by the total, the sum of your ratios (`r_ratio + g_ratio + b_ratio`) will **always equal exactly 1.0 (100%)**.\n\n### 3. Creating a Custom Function\nWe will package this math into a custom **function**. A function is a reusable block of code that takes inputs, processes them, and `returns` an output.\n\n```python\ndef detect_color_name(r, g, b):\n    # Math goes here\n    return \"Red\" # The output\n```\n\n## Assignment\nYour task is to upgrade your Linear Scanner from the previous mission. You will create a custom Python function that uses math to convert raw RGB data into a specific color name (\"Red\", \"Green\", or \"Floor\"), and then apply it to your scanning loop.\n\n**⚠️ WARNING: The Illumination Trap!** The grey lunar floor under the lab lights might reflect more red light than you expect (sometimes over 40% of the total light). \n* Do not just guess the numbers! \n* Look at the raw data logs from your Mission 4.3 scan and use a calculator to find the exact `r_ratio` of the floor versus the Red zone. \n* Set your `if r_ratio > ___` threshold high enough to ignore the floor, but low enough to detect the real Red zone.\n\n**Requirements:**\n1. Set up the hardware: Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.\n2. Complete the `detect_color_name(r, g, b)` function:\n    * Math: Calculate the `total` light, and then divide each color by the total to find `r_ratio`, `g_ratio`, and `b_ratio`.\n    * Logic: Fill in the `if/elif` statements. *Hint: Start with `r_ratio > 0.5` for red and `g_ratio > 0.4` for green. Compare these with your raw readings and adjust if needed.\n3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function, add small changes inside the loop:\n    * Call the function: after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.\n    * Keep the six readings and five 13 cm movements at 40% speed from Mission 4.3, including the sensor settling delays. Read the starting green zone, the lunar floor and the red zone; do not move after the last reading.\n    * Print: Output the final color name and the raw values using an f-string: `Scan - {color_name} (Raw: R:{r} G:{g} B:{b})`.\n\n\n## Conclusion\nCongratulations! You have successfully built a color classification algorithm. Your rover can now adapt to the lighting conditions and accurately identify the \"Red\" and \"Green\" zones while ignoring the background noise of the lunar floor.\n\n> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will need to copy and paste this exact function into your next mission, where we will combine the color scanner with the line-tracking algorithm!\n",
-      "assignment_summary": "--- index: 24 module: module_4 task: color_classification previous: color_sensor_basics next: multiple_sensors --- # Mission 4.4 Color Classification ## Objective Learn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction In the previous mission, your rover successfully scanned the terrain and printed raw RGB (Red, Green, Blue) values. However, raw numbers are hard for humans to read, and even harder for a robot to use for making decisions. If we want the rover to say \"I found Green!\" instead of \"R:165 G:174 B:142\", we need to teach its brain how to interpret those numbers. ## Theory ### 1. The Illumination Problem You might think we can just say: `if r > 150: print(\"Red\")`. But there is a huge problem: **lighting changes**. If the rover drives into a shadow, the raw values for *all* colors will drop. The sensor might read `R:80 G:20 B:20`. The red value is low (80), but the object is still clearly red! To fix this, we don't look at the raw numbers. We look at the **proportions** (ratios). ### 2. Normalizing Data To find the true color, we calculate what percentage of the total light belongs to each color. This is called **data normalization**. 1. First, we find the total amount of light: `total = r + g + b` 2. Then, we divide each color by the total: `r_ratio = r / total` If `r_ratio` is `0.5`, it means 50% of all the light reflecting off the ground is red. This proportion stays the same whether the rover is in bright sunlight or deep shadow! **The Golden Rule of Normalization:** Because we are dividing by the total, the sum of your ratios (`r_ratio + g_ratio + b_ratio`) will **always equal exactly 1.0 (100%)**. ### 3. Creating a Custom Function We will package this math into a custom **function**. A function is a reusable block of code that takes inputs, processes them, and `re",
+      "assignment_full_text": "---\nindex: 24\nmodule: module_4\ntask: color_classification\nprevious: color_sensor_basics\nnext: concept_of_error\n---\n\n# Mission 4.4 Color Classification\n\n## Objective\nLearn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nIn the previous mission, your rover successfully scanned the terrain and printed raw RGB (Red, Green, Blue) values. However, raw numbers are hard for humans to read, and even harder for a robot to use for making decisions. \n\nIf we want the rover to say \"I found Green!\" instead of \"R:165 G:174 B:142\", we need to teach its brain how to interpret those numbers. \n\n## Theory\n\n### 1. The Illumination Problem\nYou might think we can just say: `if r > 150: print(\"Red\")`. But there is a huge problem: **lighting changes**. \nIf the rover drives into a shadow, the raw values for *all* colors will drop. The sensor might read `R:80 G:20 B:20`. The red value is low (80), but the object is still clearly red! \n\nTo fix this, we don't look at the raw numbers. We look at the **proportions** (ratios).\n\n### 2. Normalizing Data\nTo find the true color, we calculate what percentage of the total light belongs to each color. This is called **data normalization**.\n1. First, we find the total amount of light: `total = r + g + b`\n2. Then, we divide each color by the total: `r_ratio = r / total`\n\nIf `r_ratio` is `0.5`, it means 50% of all the light reflecting off the ground is red. This proportion stays the same whether the rover is in bright sunlight or deep shadow!\n\n**The Golden Rule of Normalization:** Because we are dividing by the total, the sum of your ratios (`r_ratio + g_ratio + b_ratio`) will **always equal exactly 1.0 (100%)**.\n\n### 3. Creating a Custom Function\nWe will package this math into a custom **function**. A function is a reusable block of code that takes inputs, processes them, and `returns` an output.\n\n```python\ndef detect_color_name(r, g, b):\n    # Math goes here\n    return \"Red\" # The output\n```\n\n## Assignment\nYour task is to upgrade your Linear Scanner from the previous mission. You will create a custom Python function that uses math to convert raw RGB data into a specific color name (\"Red\", \"Green\", or \"Floor\"), and then apply it to your scanning loop.\n\n**⚠️ WARNING: The Illumination Trap!** The grey lunar floor under the lab lights might reflect more red light than you expect (sometimes over 40% of the total light). \n* Do not just guess the numbers! \n* Look at the raw data logs from your Mission 4.3 scan and use a calculator to find the exact `r_ratio` of the floor versus the Red zone. \n* Set your `if r_ratio > ___` threshold high enough to ignore the floor, but low enough to detect the real Red zone.\n\n**Requirements:**\n1. Set up the hardware: Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus.\n2. Complete the `detect_color_name(r, g, b)` function:\n    * Math: Calculate the `total` light, and then divide each color by the total to find `r_ratio`, `g_ratio`, and `b_ratio`.\n    * Logic: Fill in the `if/elif` statements. *Hint: Start with `r_ratio > 0.5` for red and `g_ratio > 0.4` for green. Compare these with your raw readings and adjust if needed.\n3. Build the Smart Scanner: Add your previous scanning loop from Mission 4.3 below the function, add small changes inside the loop:\n    * Call the function: after reading the `r, g, b` values, pass them into your new function: `color_name = detect_color_name(r, g, b)`.\n    * Keep the six readings and five 13 cm movements at 40% speed from Mission 4.3, including the sensor settling delays. Read the starting green zone, the lunar floor and the red zone; do not move after the last reading.\n    * Print: Output the final color name and the raw values using an f-string: `Scan - {color_name} (Raw: R:{r} G:{g} B:{b})`.\n\n\n## Conclusion\nCongratulations! You have successfully built a color classification algorithm. Your rover can now adapt to the lighting conditions and accurately identify the \"Red\" and \"Green\" zones while ignoring the background noise of the lunar floor.\n\n> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will reuse this function in later missions that combine color scanning with line tracking.\n",
+      "assignment_summary": "--- index: 24 module: module_4 task: color_classification previous: color_sensor_basics next: concept_of_error --- # Mission 4.4 Color Classification ## Objective Learn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction In the previous mission, your rover successfully scanned the terrain and printed raw RGB (Red, Green, Blue) values. However, raw numbers are hard for humans to read, and even harder for a robot to use for making decisions. If we want the rover to say \"I found Green!\" instead of \"R:165 G:174 B:142\", we need to teach its brain how to interpret those numbers. ## Theory ### 1. The Illumination Problem You might think we can just say: `if r > 150: print(\"Red\")`. But there is a huge problem: **lighting changes**. If the rover drives into a shadow, the raw values for *all* colors will drop. The sensor might read `R:80 G:20 B:20`. The red value is low (80), but the object is still clearly red! To fix this, we don't look at the raw numbers. We look at the **proportions** (ratios). ### 2. Normalizing Data To find the true color, we calculate what percentage of the total light belongs to each color. This is called **data normalization**. 1. First, we find the total amount of light: `total = r + g + b` 2. Then, we divide each color by the total: `r_ratio = r / total` If `r_ratio` is `0.5`, it means 50% of all the light reflecting off the ground is red. This proportion stays the same whether the rover is in bright sunlight or deep shadow! **The Golden Rule of Normalization:** Because we are dividing by the total, the sum of your ratios (`r_ratio + g_ratio + b_ratio`) will **always equal exactly 1.0 (100%)**. ### 3. Creating a Custom Function We will package this math into a custom **function**. A function is a reusable block of code that takes inputs, processes them, and `re",
       "reference_solution_text": "from lineRobot import Robot\nfrom tcs3472 import tcs3472\nimport machine\nimport time\n\nrobot = Robot()\nbus = machine.I2C(sda=machine.Pin(21), scl=machine.Pin(22))\nsensor = tcs3472(bus)\n\ndef detect_color_name(r, g, b):\n    total = r + g + b\n    if total == 0:\n        return \"Unknown\"\n    r_ratio = r / total\n    g_ratio = g / total\n    b_ratio = b / total\n    if r_ratio > 0.5:\n        return \"Red\"\n    elif g_ratio > 0.4:\n        return \"Green\"\n    elif b_ratio > 0.4:\n        return \"Blue\"\n    return \"Floor\"\n\ntime.sleep(1.1)\nfor step in range(6):\n    r, g, b = sensor.rgb()\n    color_name = detect_color_name(r, g, b)\n    print(f\"Scan - {color_name} (Raw: R:{r} G:{g} B:{b})\")\n    if step < 5:\n        robot.move_forward_speed_distance(40, 13)\n        time.sleep(1.1)\n",
-      "verification_summary": "Verification for lesson: Color Classification — 4.4\nStart: x=127, y=98, direction x=0, y=-30\nHardware evidence: {\"status\": \"pending\", \"reason\": \"22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Verification for lesson: Color Classification — 4.4\nStart: x=127, y=98, direction x=0, y=-30\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22058}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 127,
@@ -2128,8 +2129,9 @@
           }
         ],
         "physical_validation": {
-          "status": "pending",
-          "reason": "22055 correctly scanned all three zones, but 22056 drifted left off the red patch. Center start at x=127 and wait 1.1 s for a fully stationary TCS integration window; retest both."
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22058
         },
         "starting_parameters": {
           "readings": 6,
@@ -2168,7 +2170,7 @@
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_4/color_classification_reference.py",
         "guidance_updated": "2026-10-09",
         "source_sha256": {
-          "lesson": "59d296ed4c836d310428098a9a9574628f1e3292fff88c98a775f9d437b8bbde",
+          "lesson": "fc0d601a07916b6dee1e805b1be3c6088c0205fa0d17ecc962f26b2791b51e43",
           "template": "d04176f859fda3ae288d6d53de2100c05293c3e534d05be804ef5fb366adc112",
           "reference": "0f3d59c0d58accfa6b13da0c26a9898a242bd7d870373fc6cc5a253742207c4e",
           "checker": "2224677a98b61db975b629ab8da39e1a22d8b9ff7c5774979c7faa557fdf73e3",
@@ -2181,11 +2183,11 @@
       "assignment_full_text": "---\nindex: 27\nmodule: module_5\ntask: concept_of_error\nprevious: color_classification\nnext: upgraded_relay_controller\n---\n\n# Mission 5.1 The Concept of Error\n\nStarting settings for this exercise: `sensitivity = 245`.\nSensitivity is the Octoliner setup value (0–255); the detection threshold is a separate value applied to analog readings. Check the readings if lighting or sensor position changes.\n\n## Objective\nUnderstand the limitations of a Relay (Bang-Bang) controller and introduce the concept of \"Error\" as a signed position estimate using the advanced `track_line()` function.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nWelcome to Module 5, Recruit!\nIn Module 3, you built your first autonomous line follower. It successfully navigated the track, but the ride wasn't exactly smooth. The rover wobbled back and forth aggressively. That algorithm is known as a **Relay Controller** (or \"Bang-Bang\").\n\nWhy did it wobble? Because its \"brain\" only knew three rigid states: \"Line is Left,\" \"Line is Right,\" or \"Line is Center.\" If the line drifted 1 centimeter to the left, the robot steered hard left. If the line drifted 5 centimeters to the left, the robot... steered exactly the same hard left.\n\nTo achieve a smooth, professional ride, the rover needs to know not just *where* the line is, but *how far* it has drifted. Today, we introduce the foundational concept of precision robotics: **The Error**.\n\n## Theory\n\n### 1. What is \"Error\"?\nIn control theory, **Error** is the mathematical difference between where you *want* to be (the Target) and where you *actually* are (the Current State).\nFor our research rover, the Target is to keep the tracking line perfectly centered under the sensor array. Here, the error is a normalized line-position reading, not a distance in centimetres.\n\n### 2. The `track_line()` Function\nThe Octoliner library converts the pattern across its eight sensors into a signed line-position estimate. You can read this estimate with a built-in method.\n\nInstead of reading an array of 8 raw numbers and using `elif` statements, we can use the `track_line()` function:\n\n```python\nposition = octoliner.track_line()\n```\n\nThis function returns a single decimal number (`float`) representing the estimated position of the line:\n* **`-1.0`**: The line is far to the **left** (under sensor 7).\n* **`0.0`**: The line is perfectly in the **center**.\n* **`1.0`**: The line is far to the **right** (under sensor 0).\n\nThis value is our **Error**. In this library it changes in steps, such as `0`, `0.25` and `0.5`, rather than continuously. If a sensor pattern is not recognized, `track_line()` keeps the previous valid value. A repeated value alone does not prove that the line is still visible; the next mission adds a check of the raw sensor readings.\n\n## Assignment\nMission Control requires a structural scan of a basaltic fracture (the black line). To prevent the rover from twisting off the track during the scan, the engineering team has provided a skeleton for a `diagnostic_sweep(speed_left, speed_right)` function.\n\nYou must complete the core logic of this function and then execute the mission sequence.\n\n**Requirements:**\n1. **Setup:** Initialize your `Robot`, the I2C bus, and the `Octoliner` (don't forget to set the sensitivity).\n2. **Complete the Function:** Inside the `diagnostic_sweep` `for` loop, replace the `# TODO` comments with actual code:\n   * Read the line position using `octoliner.track_line()` and save it to a variable.\n   * Print the result using a string format (e.g., `\"Error: -0.45\"`).\n3. **The Mission Sequence:** Below the function, program the following path:\n   * Call `diagnostic_sweep()` to swing **Left** (Left motor: `-15`, Right motor: `15`).\n   * Drive the rover straight forward by **30 cm**.\n   * Call `diagnostic_sweep()` to swing **Right**.\n\nWatch the live video feed as the robot rotates over the line and observe the terminal. Observe how the sign and magnitude change as the sensor crosses the line. Values may repeat or change in steps; a short sweep does not have to cover the full range from `-1.0` to `1.0`.\n\n## Conclusion\nExcellent! You have successfully observed a numerical estimate of the line's position.\n\nThe robot now sees the world not just in rigid black and white (\"Yes/No\"), but in a signed estimate (\"Which side, and how far across the sensor array?\"). This signed Error value is the foundation for the feedback controllers in the next missions.\n",
       "assignment_summary": "--- index: 27 module: module_5 task: concept_of_error previous: color_classification next: upgraded_relay_controller --- # Mission 5.1 The Concept of Error Starting settings for this exercise: `sensitivity = 245`. Sensitivity is the Octoliner setup value (0–255); the detection threshold is a separate value applied to analog readings. Check the readings if lighting or sensor position changes. ## Objective Understand the limitations of a Relay (Bang-Bang) controller and introduce the concept of \"Error\" as a signed position estimate using the advanced `track_line()` function. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction Welcome to Module 5, Recruit! In Module 3, you built your first autonomous line follower. It successfully navigated the track, but the ride wasn't exactly smooth. The rover wobbled back and forth aggressively. That algorithm is known as a **Relay Controller** (or \"Bang-Bang\"). Why did it wobble? Because its \"brain\" only knew three rigid states: \"Line is Left,\" \"Line is Right,\" or \"Line is Center.\" If the line drifted 1 centimeter to the left, the robot steered hard left. If the line drifted 5 centimeters to the left, the robot... steered exactly the same hard left. To achieve a smooth, professional ride, the rover needs to know not just *where* the line is, but *how far* it has drifted. Today, we introduce the foundational concept of precision robotics: **The Error**. ## Theory ### 1. What is \"Error\"? In control theory, **Error** is the mathematical difference between where you *want* to be (the Target) and where you *actually* are (the Current State). For our research rover, the Target is to keep the tracking line perfectly centered under the sensor array. Here, the error is a normalized line-position reading, not a distance in centimetres. ### 2. The `track_line()` Function The Octoliner library converts the pattern across its eight sensors into a signed line-position estimate. You can read this estimate",
       "reference_solution_text": "from lineRobot import Robot\nimport machine\nimport time\nfrom octoliner import Octoliner\n\ndef diagnostic_sweep(speed_left, speed_right):\n    print(\"Starting sweep...\")\n    for i in range(5):\n        robot.run_motors_speed(speed_left, speed_right)\n        time.sleep(0.1)\n        robot.stop()\n\n        # Completed TODOs\n        position = octoliner.track_line()\n        print(\"Error:\", position)\n\n        time.sleep(0.4)\n\n    print(\"Returning to center...\")\n    robot.run_motors_speed(-speed_left, -speed_right)\n    time.sleep(0.4)\n    robot.stop()\n    print(\"Sweep complete.\")\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\n\n# Mission Sequence\ndiagnostic_sweep(-15, 15)\nrobot.move_forward_distance(30)\ndiagnostic_sweep(15, -15)\n",
-      "verification_summary": "Verification for lesson: Concept of Error — 5.1\nStart: x=22, y=86, direction=-30\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Verification for lesson: Concept of Error — 5.1\nStart: x=104, y=76, direction=-30\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
-          "xCm": 22,
-          "yCm": 86,
+          "xCm": 104,
+          "yCm": 76,
           "direction": [
             0,
             -30
@@ -2249,7 +2251,11 @@
         "physical_validation": {
           "status": "pending"
         },
-        "starting_parameters": {},
+        "starting_parameters": {
+          "startXCm": 104,
+          "startYCm": 76,
+          "headingDegrees": -90
+        },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
         "simulator_limitations": "Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.",
@@ -2265,12 +2271,12 @@
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
         "task_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.1.md",
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_5/concept_of_error_reference.py",
-        "guidance_updated": "2026-10-08",
+        "guidance_updated": "2026-10-09",
         "source_sha256": {
           "lesson": "00111ee7133c914856180c6a2702923c0fad6c93024914885f9195e3da4324db",
           "template": "26bee22003fd39e434f34324a130b8b110e73baa338244b77ac23f6f995a5493",
           "reference": "a17f816abf90d69a9b2a233a91e76a582b322d226e7cf7db3454658d753e5583",
-          "checker": "65083ad6c644e1179e46f55017456169e05b2c05909f534532faffbc7afad788",
+          "checker": "d9241e8271a37bc1b9d494b9cc1b1c5562d2ee2ff65f30e8322d05f4553e99dd",
           "simulation": "9e251b9492c851b26c54d98ce200147843fdec63b71d92f553d88fc95cf5d00e"
         }
       },
@@ -2341,15 +2347,19 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 0.85,
-                "yM": 0.79
+                "xM": 1.05,
+                "yM": 0.4
               },
               {
-                "xM": 1.1,
-                "yM": 0.65
+                "xM": 0.6,
+                "yM": 0.2
+              },
+              {
+                "xM": 0.8,
+                "yM": 0.79
               }
             ],
-            "toleranceM": 0.12,
+            "toleranceM": 0.1,
             "stopProgramOnPass": true
           },
           {
@@ -2380,8 +2390,8 @@
           "lesson": "07c46c235b166c5ab09cc764460f42a5b11dafa848f9c721abc26bc89b7f97f1",
           "template": "b0d18dd11a52f6ddefefee272a2cb28a56e280db21c85d0abe11c4d47a6791c8",
           "reference": "9921a565fddce396478fa4c66681fd6e926a38f19b657eeb82b532d6a6baf36c",
-          "checker": "65083ad6c644e1179e46f55017456169e05b2c05909f534532faffbc7afad788",
-          "simulation": "ad3ebc8a929c1c5047a7de4e0a56d8c72f338dcb028183a0efebfc471b769beb"
+          "checker": "d9241e8271a37bc1b9d494b9cc1b1c5562d2ee2ff65f30e8322d05f4553e99dd",
+          "simulation": "a1377c981b5af628e209dd5cc42508bf62b37d1eb8e015be08b6bdfcb0bf120e"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_5.py"
@@ -2459,15 +2469,19 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 0.85,
-                "yM": 0.79
+                "xM": 1.05,
+                "yM": 0.4
               },
               {
-                "xM": 1.1,
-                "yM": 0.65
+                "xM": 0.6,
+                "yM": 0.2
+              },
+              {
+                "xM": 0.8,
+                "yM": 0.79
               }
             ],
-            "toleranceM": 0.12,
+            "toleranceM": 0.1,
             "stopProgramOnPass": true
           },
           {
@@ -2498,16 +2512,16 @@
           "lesson": "7b107ab62f66c991c95d748bac191b85ee439bd697a930a7e35a9dde4f2dfc1f",
           "template": "5bd2d64dc497b8ebb6d50f56849d25ab77a7f5838ea7a843be239acd8f9499cd",
           "reference": "7eead302fe23a3446ac5b7b16a1bedf42ff3133597f414e39f1fa2d4fca77a21",
-          "checker": "65083ad6c644e1179e46f55017456169e05b2c05909f534532faffbc7afad788",
-          "simulation": "8af8704e97c4ec2dc204c8b7abbff0d7fdc233068b4c38ee46e98daa7a243704"
+          "checker": "d9241e8271a37bc1b9d494b9cc1b1c5562d2ee2ff65f30e8322d05f4553e99dd",
+          "simulation": "54af0b05dd88d539ae9847ec6cfd776eecef32d1b5cadf9ad8ca4fce56bfc680"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_5.py"
     },
     "adaptive_speed": {
-      "assignment_full_text": "---\nindex: 31\nmodule: module_5\ntask: adaptive_speed\nprevious: proportional_control\nnext: art_of_debugging\n---\n\n# Mission 5.5 Adaptive Speed \n\n## Objective\nMake the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Introduction\nYour Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. \nIf you set the speed to `30`, the robot easily navigates sharp corners, but crawls agonizingly slowly on straightaways. If you increase the speed to `80`, it flies down the straights but crashes on the first sharp turn because it's going too fast to steer!\n\nThink about real racing drivers. They don't press the gas pedal identically the whole track. They accelerate on the straights and hit the brakes *before* entering a turn. Today, we will teach your rover to do exactly that.\n\n## Theory\n### 1. Absolute Error (`abs`)\nTo know *when* to brake, the robot needs to know if it's approaching a turn. \nOur Error ranges from `-1.0` to `1.0`. We don't care if the turn is left or right; we only care about the *size* of the Error. \n\nPython has a built-in function called `abs()` (Absolute Value) that removes the minus sign:\n* `abs(-0.8)` becomes `0.8`\n* `abs(0.0)` stays `0.0`\n\n### 2. The Adaptive Speed Formula\nInstead of a fixed `base_speed`, we will calculate a `dynamic_speed` every single loop using this formula:\n`dynamic_speed = max_speed - (braking_force * abs(position))`\n\n* On a straight line (`position = 0.0`), the robot drives at the full `max_speed`.\n* On a sharp turn (e.g., `position = 1.0`), the robot subtracts the full `braking_force` from its speed, safely slowing down to execute the turn!\n\n## Assignment\nUpgrade your P-Controller to the ultimate Adaptive Speed Controller!\n\n**Requirements:**\n1. **Setup:** Use your code from Mission 5.3 (without the Kick timer).\n2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:\n   * `max_speed = 85`\n   * `braking_force = 45`\n3. **Adaptive Math:** Inside the loop, before calculating `P`:\n   * Calculate `dynamic_speed` using the formula with `abs(position)`.\n4. **The P-Controller:**\n   * Calculate `P` as usual (`kp * position`).\n   * Calculate `left_speed` and `right_speed` using your new `dynamic_speed` instead of a fixed base speed. Don't forget to use `int()`!\n6. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**\n\n**The Tuning Challenge (Optional):**\nOnce your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. \n\nTry experimenting with extreme parameters and observe how the rover reacts:\n* **The Drift Test:** What happens if you dramatically increase `kp` (e.g., to 40 or 50)? Can you make the rover slide into corners like a rally car?\n* **The Over-Braking Test:** What if you set a low `max_speed` (like 50) but a massive `braking_force` (like 80)? Will the inner wheel actually spin *backwards* on a sharp turn?\n* **The Speed Run:** Can you find the perfect setup to handle a `max_speed` of 100? How much braking force and `kp` do you need to survive the first corner at maximum velocity?\n\nChange one variable at a time, run the code, and discover your ultimate racing setup!\n\n## Conclusion\nYour lunar rover now adjusts its speed to the shape of the track. It slows down when the line is far from the centre of the sensor array and speeds up when the line is centred.\n\nNext, you will practise diagnosing and correcting errors in rover programs.\n",
+      "assignment_full_text": "---\nindex: 31\nmodule: module_5\ntask: adaptive_speed\nprevious: proportional_control\nnext: art_of_debugging\n---\n\n# Mission 5.5 Adaptive Speed \n\n## Objective\nMake the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Introduction\nYour Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. \nIf you set the speed to `30`, the robot easily navigates sharp corners, but crawls agonizingly slowly on straightaways. If you increase the speed to `80`, it flies down the straights but crashes on the first sharp turn because it's going too fast to steer!\n\nThink about real racing drivers. They don't press the gas pedal identically the whole track. They accelerate on the straights and hit the brakes *before* entering a turn. Today, we will teach your rover to do exactly that.\n\n## Theory\n### 1. Absolute Error (`abs`)\nTo know *when* to brake, the robot needs to know if it's approaching a turn. \nOur Error ranges from `-1.0` to `1.0`. We don't care if the turn is left or right; we only care about the *size* of the Error. \n\nPython has a built-in function called `abs()` (Absolute Value) that removes the minus sign:\n* `abs(-0.8)` becomes `0.8`\n* `abs(0.0)` stays `0.0`\n\n### 2. The Adaptive Speed Formula\nInstead of a fixed `base_speed`, we will calculate a `dynamic_speed` every single loop using this formula:\n`dynamic_speed = max_speed - (braking_force * abs(position))`\n\n* On a straight line (`position = 0.0`), the robot drives at the full `max_speed`.\n* On a sharp turn (e.g., `position = 1.0`), the robot subtracts the full `braking_force` from its speed, safely slowing down to execute the turn!\n\n## Assignment\nUpgrade your P-Controller to the ultimate Adaptive Speed Controller!\n\n**Requirements:**\n1. **Setup:** Use your code from Mission 5.3 (without the Kick timer).\n2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:\n   * `max_speed = 40`\n   * `braking_force = 20`\n3. **Adaptive Math:** Inside the loop, before calculating `P`:\n   * Calculate `dynamic_speed` using the formula with `abs(position)`.\n4. **The P-Controller:**\n   * Calculate `P` as usual (`kp * position`).\n   * Calculate `left_speed` and `right_speed` using your new `dynamic_speed` instead of a fixed base speed. Don't forget to use `int()`!\n6. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**\n\n**The Tuning Challenge (Optional):**\nOnce your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. \n\nTry experimenting with extreme parameters and observe how the rover reacts:\n* **The Steering Test:** Compare small changes to `kp` while keeping the starting maximum speed. Observe how smoothly the rover follows the bends.\n* **The Braking Test:** Change `braking_force` in small steps and compare the speed on straights with the speed through corners.\n* Keep the line-loss stop enabled during every experiment. Finish a stable lap with the supplied settings before changing the speed.\n",
       "assignment_summary": "--- index: 31 module: module_5 task: adaptive_speed previous: proportional_control next: art_of_debugging --- # Mission 5.5 Adaptive Speed ## Objective Make the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function. ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red) ## Introduction Your Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. If you set the speed to `30`, the robot easily navigates sharp corners, but crawls agonizingly slowly on straightaways. If you increase the speed to `80`, it flies down the straights but crashes on the first sharp turn because it's going too fast to steer! Think about real racing drivers. They don't press the gas pedal identically the whole track. They accelerate on the straights and hit the brakes *before* entering a turn. Today, we will teach your rover to do exactly that. ## Theory ### 1. Absolute Error (`abs`) To know *when* to brake, the robot needs to know if it's approaching a turn. Our Error ranges from `-1.0` to `1.0`. We don't care if the turn is left or right; we only care about the *size* of the Error. Python has a built-in function called `abs()` (Absolute Value) that removes the minus sign: * `abs(-0.8)` becomes `0.8` * `abs(0.0)` stays `0.0` ### 2. The Adaptive Speed Formula Instead of a fixed `base_speed`, we will calculate a `dynamic_speed` every single loop using this formula: `dynamic_speed = max_speed - (braking_force * abs(position))` * On a straight line (`position = 0.0`), the robot drives at the full `max_speed`. * On a sharp turn (e.g., `position = 1.0`), the robot subtracts the full `braking_force` from its speed, safely slowing down to execute the turn! ## Assignment Upgrade your P-Controller to the ultimate Adaptive Speed Controller! **Requirements:** 1. **Setup:** Use your code from Mission 5.3 (without the Kick timer). 2. **New Variables:** Remove `base_speed`. Create two",
-      "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nkp = 25\nmax_speed = 85\nbraking_force = 45\n\nprint(\"Starting Adaptive Speed Controller...\")\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        # Calculate Adaptive Speed\n        dynamic_speed = max_speed - (braking_force * abs(position))\n\n        # Calculate P-Controller Power\n        P = kp * position\n\n        # Apply Power to Dynamic Speed\n        left_speed = int(dynamic_speed + P)\n        right_speed = int(dynamic_speed - P)\n\n        # Send to Motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
+      "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nkp = 25\nmax_speed = 40\nbraking_force = 20\n\nprint(\"Starting Adaptive Speed Controller...\")\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        # Calculate Adaptive Speed\n        dynamic_speed = max_speed - (braking_force * abs(position))\n\n        # Calculate P-Controller Power\n        P = kp * position\n\n        # Apply Power to Dynamic Speed\n        left_speed = int(dynamic_speed + P)\n        right_speed = int(dynamic_speed - P)\n\n        # Send to Motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
       "verification_summary": "Verification for lesson: Adaptive Speed — 5.4\nStart: x=40, y=30\nCheckpoints: (105, 60), (60, 90), (80, 30) - required in order\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
@@ -2579,15 +2593,19 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 0.85,
-                "yM": 0.79
+                "xM": 1.05,
+                "yM": 0.4
               },
               {
-                "xM": 1.1,
-                "yM": 0.65
+                "xM": 0.6,
+                "yM": 0.2
+              },
+              {
+                "xM": 0.8,
+                "yM": 0.79
               }
             ],
-            "toleranceM": 0.12,
+            "toleranceM": 0.1,
             "stopProgramOnPass": true
           },
           {
@@ -2597,7 +2615,11 @@
         "physical_validation": {
           "status": "pending"
         },
-        "starting_parameters": {},
+        "starting_parameters": {
+          "kp": 25,
+          "maxSpeed": 40,
+          "brakingForce": 20
+        },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
         "simulator_limitations": "Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.",
@@ -2613,13 +2635,13 @@
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
         "task_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.5.md",
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_5/adaptive_speed_reference.py",
-        "guidance_updated": "2026-10-08",
+        "guidance_updated": "2026-10-09",
         "source_sha256": {
-          "lesson": "e50869378d573f3ac111f5662cb53e67291849dc0698d2ceddcd11392653287d",
+          "lesson": "930812496841c7d7a7b70f631561118b91b2bbf97adeafca661e8d912056f4e9",
           "template": "7f905f6c91ac34b0f2dc9444bf90c7845dbcf2af3a5cdf03d801d2c3fc578718",
-          "reference": "7f5e8d2f345f9e4bc6c4c8198c87ef0703a84de17b5f393f9c7c21cd8d165646",
-          "checker": "65083ad6c644e1179e46f55017456169e05b2c05909f534532faffbc7afad788",
-          "simulation": "d67f1c86bdc645b12d1a01deab034a1d39b3ff1dc6f0808092bfa094293d6bc5"
+          "reference": "108bf080e3d0469f5613973cc0d05a1c5b293da0e59c57151400d9900babcd18",
+          "checker": "d9241e8271a37bc1b9d494b9cc1b1c5562d2ee2ff65f30e8322d05f4553e99dd",
+          "simulation": "1910e2d1fe8a35394c0177f8a1487cd0d85175393f862990c6460abbb8932997"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_5.py"
@@ -3068,7 +3090,7 @@
           "lesson": "2b99804e9ea03cb3c1839649e137c759c80ee7b35f8b358635a78026268b8bab",
           "template": "aaaafb380a43f9e74cce9e5a15c98dfa8d919a4b8f125e605fbec58bef7b6d59",
           "reference": "61428fc653c1ef8b31639093bed8d49ac7b032bb7ea4793be81af774eccc68cb",
-          "checker": "232855c0a261ffe188447d4d17f5418539407785713fc6de2f986c4fe233c4ea",
+          "checker": "d3bf154e417107df5fba232a93fd4c57ba6f6d481b6edc8afc7a6746a8178a00",
           "simulation": "153e0d5ac5d199b5895dc708a8092474e8e9dbe958d4bd4ed5bcdf3e1626e68d"
         }
       },
@@ -3180,7 +3202,7 @@
           "lesson": "6f8577d28bd8a5cd5d0b21a188ffd808e518c3e1cfc4f8c0c2e7a02e2e8d61a2",
           "template": "539df164c4e523049e2c40d6072eecefd2ec8a767e815ef82f5c71a28b4f53b5",
           "reference": "b286b2c98581a1b3f1d080636aba931a78a444aa3c759688c948dfd85f143b0a",
-          "checker": "232855c0a261ffe188447d4d17f5418539407785713fc6de2f986c4fe233c4ea",
+          "checker": "d3bf154e417107df5fba232a93fd4c57ba6f6d481b6edc8afc7a6746a8178a00",
           "simulation": "481ae9abe1702d98bd114bb6deea7f89de297f5df98796624f11c3d95cf5af3a"
         }
       },
@@ -3273,29 +3295,44 @@
           "lesson": "5cf76a9a69290a2662120b64630c4d81fb5cf90cf8eb4dd4cb88deaba1e018da",
           "template": "ff12ba3170aaf7f2f722d7d4ae45a053f92288111937995e33b1e76d13827d91",
           "reference": "c1e60dc8afa5f7b6243d20477327c9c74c234c7a6fce4498d5b7c4a2b2dc5e17",
-          "checker": "232855c0a261ffe188447d4d17f5418539407785713fc6de2f986c4fe233c4ea",
+          "checker": "d3bf154e417107df5fba232a93fd4c57ba6f6d481b6edc8afc7a6746a8178a00",
           "simulation": "3a3cded3694bc2b5ad7a0aa7e369d6ca1816fa7457ff9cbb8e6db79102b7fea8"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_11.py"
     },
     "adaptive_racing": {
-      "assignment_full_text": "---\nindex: 38\nmodule: module_11\ntask: adaptive_racing\nprevious: visual_telemetry\nnext: \n---\n# Task 4 Adaptive Racing\n## Objective\nDemonstrate your ability to debug faulty logic, fix syntax errors, and organize code.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Assignment\nWe have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **4 distinct bugs**. \n\nYour task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track.\n\n**Your Bug Hunt Checklist:**\n1. **The Syntax Bug:** Python refuses to run the code.\n2. **The Import Bug:** A crucial library is missing.\n3. **The Setup Bug:** Something is initialized, but is not configured.\n3. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function.\n4. **The Coma Bug:** The rover is updating sensors too slowly.\n\n\n## Conclusion\nIf you fix all 4 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer!\n",
-      "assignment_summary": "--- index: 38 module: module_11 task: adaptive_racing previous: visual_telemetry next: --- # Task 4 Adaptive Racing ## Objective Demonstrate your ability to debug faulty logic, fix syntax errors, and organize code. ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red) ## Assignment We have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **4 distinct bugs**. Your task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track. **Your Bug Hunt Checklist:** 1. **The Syntax Bug:** Python refuses to run the code. 2. **The Import Bug:** A crucial library is missing. 3. **The Setup Bug:** Something is initialized, but is not configured. 3. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function. 4. **The Coma Bug:** The rover is updating sensors too slowly. ## Conclusion If you fix all 4 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer! ",
-      "reference_solution_text": "import time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\nimport machine\n\nmax_vel = 70\nbrake_f = 45\nk_prop = 35\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(240)\nprint(\"Starting Adaptive Racing Controller...\")\nwhile True:\n    position = octoliner.track_line()\n    dynamic_speed = max_vel - (brake_f * abs(position))\n    P = k_prop * position\n    left_wheel = int(dynamic_speed + P)\n    right_wheel = int(dynamic_speed - P)\n    robot.run_motors_speed(left_wheel, right_wheel)\n    time.sleep(0.05)\n",
+      "assignment_full_text": "---\nindex: 38\nmodule: module_11\ntask: adaptive_racing\nprevious: visual_telemetry\nnext: \n---\n# Task 4 Adaptive Racing\n## Objective\nDemonstrate your ability to debug faulty logic, fix syntax errors, and organize code.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Assignment\nWe have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **5 distinct bugs**. \n\nYour task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track.\n\n**Your Bug Hunt Checklist:**\n1. **The Syntax Bug:** Python refuses to run the code.\n2. **The Import Bug:** A crucial library is missing.\n3. **The Setup Bug:** Something is initialized, but is not configured.\n4. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function.\n5. **The Coma Bug:** The rover is updating sensors too slowly.\n\n\nUse the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the line-loss stop in the provided code. Pass all three checkpoints in order to complete the route.\n\n## Conclusion\nIf you fix all 5 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer!\n",
+      "assignment_summary": "--- index: 38 module: module_11 task: adaptive_racing previous: visual_telemetry next: --- # Task 4 Adaptive Racing ## Objective Demonstrate your ability to debug faulty logic, fix syntax errors, and organize code. ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red) ## Assignment We have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **5 distinct bugs**. Your task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track. **Your Bug Hunt Checklist:** 1. **The Syntax Bug:** Python refuses to run the code. 2. **The Import Bug:** A crucial library is missing. 3. **The Setup Bug:** Something is initialized, but is not configured. 4. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function. 5. **The Coma Bug:** The rover is updating sensors too slowly. Use the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the line-loss stop in the provided code. Pass all three checkpoints in order to complete the route. ## Conclusion If you fix all 5 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer! ",
+      "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nkp = 25\nmax_speed = 40\nbraking_force = 20\n\nprint(\"Starting Adaptive Racing Controller...\")\n\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        # Calculate Adaptive Speed\n        dynamic_speed = max_speed - (braking_force * abs(position))\n\n        # Calculate P-Controller Power\n        P = kp * position\n\n        # Apply Power to Dynamic Speed\n        left_speed = int(dynamic_speed + P)\n        right_speed = int(dynamic_speed - P)\n\n        # Send to Motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
       "verification_summary": "Verification for Mission 11.4: Code Clinic (Adaptive Racing)\nStudents must fix 5 bugs:\n1. SyntaxError (missing colon)\n2. Missing 'import time'\n3. Empty set_sensitivity()\n4. analog_read_all() -> track_line()\n5. time.sleep(5) -> time.sleep(0.05)\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
-          "xCm": 80,
+          "xCm": 40,
           "yCm": 30,
           "direction": [
-            -30,
+            30,
             0
           ]
         },
         "physical_checker_constants": {
-          "TASK_DURATION": 40.0,
-          "MIN_MOVEMENT_DISTANCE": 30.0
+          "TASK_DURATION": 60.0,
+          "MIN_MOVEMENT_DISTANCE": 30.0,
+          "CHECKPOINTS": [
+            [
+              105,
+              60
+            ],
+            [
+              60,
+              90
+            ],
+            [
+              80,
+              30
+            ]
+          ],
+          "CHECKPOINT_RADIUS": 10.0
         },
         "simulator_checks": [
           {
@@ -3312,11 +3349,6 @@
               "multiplication",
               "addition",
               "subtraction"
-            ],
-            "requiredVariableNames": [
-              "max_vel",
-              "brake_f",
-              "k_prop"
             ]
           },
           {
@@ -3332,15 +3364,19 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 0.85,
-                "yM": 0.79
+                "xM": 1.05,
+                "yM": 0.4
               },
               {
-                "xM": 1.1,
-                "yM": 0.65
+                "xM": 0.6,
+                "yM": 0.2
+              },
+              {
+                "xM": 0.8,
+                "yM": 0.79
               }
             ],
-            "toleranceM": 0.12,
+            "toleranceM": 0.1,
             "stopProgramOnPass": true
           },
           {
@@ -3350,7 +3386,27 @@
         "physical_validation": {
           "status": "pending"
         },
-        "starting_parameters": {},
+        "starting_parameters": {
+          "kp": 25,
+          "maxSpeed": 40,
+          "brakingForce": 20,
+          "sensitivity": 245,
+          "checkpoints": [
+            [
+              105,
+              60
+            ],
+            [
+              60,
+              90
+            ],
+            [
+              80,
+              30
+            ]
+          ],
+          "checkpointRadiusCm": 10
+        },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
         "simulator_limitations": "Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.",
@@ -3366,13 +3422,13 @@
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
         "task_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_4.md",
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_11/adaptive_racing_reference.py",
-        "guidance_updated": "2026-10-08",
+        "guidance_updated": "2026-10-09",
         "source_sha256": {
-          "lesson": "60445c85342647de11affd16034204517dea045aa76d2f957eef720baa677526",
-          "template": "6a3d1d9533bba65ea92e25c8b8597a9522e9305cb1bb188e7cc512035286d974",
-          "reference": "9f9a9032cb2b5f4ba85795128c6ff091f5db0eb0371fa97540e15673c2588ed0",
-          "checker": "232855c0a261ffe188447d4d17f5418539407785713fc6de2f986c4fe233c4ea",
-          "simulation": "a52fdd829f7b2a28f44b384f19b81a5f80da537f8bf3451559bb8292ccac8d89"
+          "lesson": "c42e00c35f136ba6232bf8ae1384239c844525b5ef771d31510b10b6dd03bb16",
+          "template": "1ad58a4af8f0898a5fcc24dd0e6e731b001116094890b3e94b3ab3bc3f3a457a",
+          "reference": "01af7d906003e2b16bf8ac3223794cd68b446fab20559c2ab86edd29f6683c8c",
+          "checker": "d3bf154e417107df5fba232a93fd4c57ba6f6d481b6edc8afc7a6746a8178a00",
+          "simulation": "7557b08e237a2a83b7394c2fe3ebe233ed2e4db85548a0a8d59e5517099c8573"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_11.py"

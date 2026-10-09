@@ -3,7 +3,7 @@ index: 24
 module: module_4
 task: color_classification
 previous: color_sensor_basics
-next: multiple_sensors
+next: concept_of_error
 ---
 
 # Mission 4.4 Color Classification
@@ -66,4 +66,4 @@ Your task is to upgrade your Linear Scanner from the previous mission. You will 
 ## Conclusion
 Congratulations! You have successfully built a color classification algorithm. Your rover can now adapt to the lighting conditions and accurately identify the "Red" and "Green" zones while ignoring the background noise of the lunar floor.
 
-> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will need to copy and paste this exact function into your next mission, where we will combine the color scanner with the line-tracking algorithm!
+> **Important:** Save your completed `detect_color_name(r, g, b)` function. You will reuse this function in later missions that combine color scanning with line tracking.

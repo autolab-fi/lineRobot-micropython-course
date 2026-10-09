@@ -6,7 +6,7 @@ import numpy as np
 import re
 
 target_points = {
-    'concept_of_error': [(22, 86),(0,-30)],           # Start: x=22, y=86, direction=-30
+    'concept_of_error': [(104, 76),(0,-30)],           # Start: x=104, y=76, direction=-30
     'upgraded_relay_controller': [(40, 30), (30, 0)],   # Start: x=40, y=30
     'proportional_control': [(40, 30),(30, 0)],        # Start: x=40, y=30
     'adaptive_speed': [(40, 30),(30, 0)],              # Start: x=40, y=30
@@ -37,7 +37,7 @@ def get_target_points(task):
 def concept_of_error(robot, image, td, user_code=None):
     """
     Verification for lesson: Concept of Error — 5.1
-    Start: x=22, y=86, direction=-30
+    Start: x=104, y=76, direction=-30
     """
 
     if td is not None and td["data"].get("final_result") is not None:

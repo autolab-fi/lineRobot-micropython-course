@@ -12,7 +12,7 @@ target_points = {
     'navigation': [(30, 70), (30, 0)],
     'perimeter': [(50, 50), (30, 0)],
     'visual_telemetry': [(50, 60), (30, 0)],
-    'adaptive_racing': [(80, 30), (-30, 0)],
+    'adaptive_racing': [(40, 30), (30, 0)],
 }
 
 block_library_functions = {
@@ -464,12 +464,14 @@ def adaptive_racing(robot, frame, td: dict, user_code):
     4. analog_read_all() -> track_line()
     5. time.sleep(5) -> time.sleep(0.05)
     """
-
     if td is not None and td["data"].get("final_result") is not None:
         return frame, td, td["data"]["final_text"], td["data"]["final_result"].copy()
+
     # ===== CONFIGURATION =====
-    TASK_DURATION = 40.0  # seconds
+    TASK_DURATION = 60.0  # seconds
     MIN_MOVEMENT_DISTANCE = 30.0  # cm
+    CHECKPOINTS = [(105, 60), (60, 90), (80, 30)]
+    CHECKPOINT_RADIUS = 10.0
     # =========================
 
     result = {
@@ -526,7 +528,9 @@ def adaptive_racing(robot, frame, td: dict, user_code):
                 "missing": missing,
                 "completed_verdict": False,
                 "start_position": start_pos,
-                "max_distance_moved": 0.0
+                "max_distance_moved": 0.0,
+                "checkpoints_remaining": list(CHECKPOINTS),
+                "checkpoints_hit": []
             }
         }
 
@@ -541,6 +545,11 @@ def adaptive_racing(robot, frame, td: dict, user_code):
             dist = math.sqrt(dx**2 + dy**2)
             if dist > td["data"]["max_distance_moved"]:
                 td["data"]["max_distance_moved"] = dist
+
+    if pos is not None and td["data"]["checkpoints_remaining"]:
+        target = td["data"]["checkpoints_remaining"][0]
+        if math.hypot(pos[0]-target[0], pos[1]-target[1]) < CHECKPOINT_RADIUS:
+            td["data"]["checkpoints_hit"].append(td["data"]["checkpoints_remaining"].pop(0))
 
     # ── Live status text ──────────────────────────────────────────────────────
     if not td["data"].get("completed_verdict"):
@@ -573,14 +582,18 @@ def adaptive_racing(robot, frame, td: dict, user_code):
             result["description"] = f"Code fixed, but robot barely moved ({distance_moved:.1f}cm). Check logic! | Score: 20"
             text = "Robot failed to navigate."
             
+        elif td["data"]["checkpoints_remaining"]:
+            result["success"] = False
+            result["score"] = int(100 * len(td["data"]["checkpoints_hit"]) / len(CHECKPOINTS))
+            result["description"] = f"Route incomplete: {len(td['data']['checkpoints_hit'])}/3 checkpoints | Score: {result['score']}"
+            text = "Route incomplete."
         else:
             result["success"] = True
             result["score"] = 100
-            result["description"] = "You are amazing! All bugs fixed and racing complete | Score: 100"
+            result["description"] = "All bugs fixed and route complete: 3/3 checkpoints | Score: 100"
             text = "Exam Complete!"
     
     if td["data"].get("completed_verdict"):
         td["data"]["final_result"] = result.copy()
         td["data"]["final_text"] = text
-
     return frame, td, text, result

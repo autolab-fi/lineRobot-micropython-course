@@ -445,8 +445,15 @@
       "reference": "solutions/module_6/art_of_debugging_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "Lower-straight start failed repeat 22083; upper-straight start and ordered checkpoints need physical validation."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22085,
+        "referenceSha256": "82a77c9550544b34bff80d3b83a0dfcee607076bed85fe5211c4105f79ab29e7",
+        "checkerRevision": "a3da6b1",
+        "repeatSubmissionIds": [
+          22084,
+          22085
+        ]
       },
       "commonMistakes": [],
       "parameters": {
@@ -477,9 +484,9 @@
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
-        "submissionId": 22072,
+        "submissionId": 22082,
         "referenceSha256": "bdecd9289c12205ebfe748f65035e68a27693f9fa8b50dea63f9620dffac0967",
-        "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
+        "checkerRevision": "a3da6b1"
       },
       "commonMistakes": [],
       "parameters": {}
@@ -490,9 +497,9 @@
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
-        "submissionId": 22073,
+        "submissionId": 22086,
         "referenceSha256": "0f1e73dd33c6a31bcdcc1e2870a6bec10b1e3e2e8c5bf8747ea21e97a66a380e",
-        "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
+        "checkerRevision": "a3da6b1"
       },
       "commonMistakes": [],
       "parameters": {

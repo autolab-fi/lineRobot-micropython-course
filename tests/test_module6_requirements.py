@@ -44,7 +44,7 @@ class Module6Requirements(unittest.TestCase):
  def test_debugging_partial_route_fails(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(80,30)}])['success'])
  def test_debugging_invalid_code_cannot_pass_with_motion(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(80,30)},{'pose':(105,60)}],False)['success'])
  def test_recorded_hamk_runs_pass_stricter_requirements(self):
-  for sid in (22072,22073):
+  for sid in (22072,22073,22084,22085):
    with self.subTest(submission=sid):
     fixture=json.loads((ROOT/f'tests/fixtures/hamk-{sid}.json').read_text())
     result=self.replay(fixture['task'],fixture['events']);self.assertTrue(result['success']);self.assertEqual(result['score'],100)

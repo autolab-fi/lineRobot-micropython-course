@@ -23,36 +23,45 @@ You have been selected for the **Artemis Support Program**. Your goal is to deve
 To assist the astronauts, we are deploying autonomous **Lunar Terrain Vehicles (LTV)**. Before we send them to the lunar South Pole, they must be tested in our simulation facility.
 
 
+## The HAMK remote laboratory
+
+Your code controls a real rover in HAMK’s robotics laboratory at **Riihimäki campus**. The lunar setting belongs to this HAMK course; it is separate from the Metropolia Mars laboratory.
+
+![The HAMK lunar rover and its physical track](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/course-info/hamk-image.jpg)
+
+## Open activities through Moodle
+
+Open each activity from your HAMK Moodle course. Ondroid opens in a new window or tab and signs you in automatically through LTI. You do not need a separate registration, group membership or group key. Allow pop-ups for Moodle if your browser blocks the launch. If your session expires, return to Moodle and open the activity again.
+
 ## Mission Control Interface
 
-Before you begin coding, take a moment to understand your workspace.
+![Current Ondroid workspace opened from the HAMK Moodle course](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-workspace-20261009.png)
 
-![Interface](https://api.ondroid.org/media/courses/9/images/module-1/Interface1.png)
+* **Lesson:** your task objective and instructions.
+* **Editor:** your Python program and activity files.
+* **Output:** printed values, errors and verification feedback.
+* **Run:** the browser simulator or physical-lab view.
 
-* **Red Box:** This area contains the **Mission Briefing** (instructions). Read these carefully.
-* **Yellow Box:** This is the **Code Editor**. Here you will write your Python scripts.
-* **White Box:** This is the **Terminal**. It shows the status of your upload and any messages from the rover.
-* **Blue Box:** This shows the **Live Video Feed** of the rover executing your code.
-    *Note: Sometimes the video may take time to load, just be patient*
-* **Red Arrow:** The **Verify** button. You will use this to upload your code to the rover.
+The header **Reset** restores the workspace layout. The separate Editor reset restores starter code.
 
 ## Assignment
 
-Let's run a system check to make sure you are connected to the facility. You don't need to write code yet — just upload the test protocol.
+Run the supplied system diagnostic to check your connection to the rover. Read the code first: it initializes the robot, moves forward and backward, then checks steering.
 
-Upload the program to the rover - see the animation below: click the Verify button (Red Arrow), watch the video feed (Blue Box):
+1. Use **Test in simulator**, when available, to practise in the browser.
+2. Use **Verify on robot** to submit the diagnostic to the physical HAMK rover. Wait if your submission is queued.
+3. Review the recorded camera feedback, Output and verification result.
+4. Successful physical verification returns **100/100** to this activity in Moodle. Unsuccessful verification returns **0**; review the feedback and retry. A simulator pass alone does not complete the graded Moodle activity.
 
-![Interface's animation](https://api.ondroid.org/media/courses/9/images/module-1/upload.gif)
+![HAMK simulator view for practising robot movement](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-simulator-20261009.png)
 
-## Proceed to the next Mission
+## Proceed to the next mission
 
-To move forward, use the navigation menu at the top of the screen:
+Return to Moodle and open **Test drive**. Always launch the next activity from Moodle so its grade is returned to the correct activity.
 
-![Menu](https://api.ondroid.org/media/courses/9/images/22bebd9fc20c4eab875e7771995460a6.jpg)
+The course is continuously available and self-paced. There is no scheduled Zoom meeting or separate exam. Work through the six modules in order; the Sandbox is optional. Ondroid retains its existing **70% participation-certificate threshold**; check your progress and certificate status there.
 
-1. Click on the current mission name (e.g., 2.6 LOOPS & FUNCTIONS...) in the top bar.
-2. Select the next mission from the drop-down list.
-3. If you've finished a module, you can switch between Modules (1, 2, 3, etc.) using the same top menu to see the full list of topics.
+Use the Moodle questions forum for course questions and Ondroid **Helpdesk** for technical issues.
 
 ## Conclusion
 

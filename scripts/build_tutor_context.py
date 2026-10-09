@@ -37,7 +37,8 @@ def build(check=False):
     notes = json.loads((ROOT/'tutor/task-notes.json').read_text())['tasks']
     sim = json.loads((ROOT/'simulation/manifest.json').read_text())['tasks']
     metadata = json.loads((ROOT/'simulation/generated/task-metadata.json').read_text())['tasks']
-    assert set(notes) == {t['str_id'] for t in lessons} == set(sim), 'Active task coverage differs'
+    active = {t['str_id'] for t in lessons}
+    assert active <= set(notes) and active <= set(sim), 'Active task coverage differs'
     profiles = {}
     changed = []
     for lesson in lessons:

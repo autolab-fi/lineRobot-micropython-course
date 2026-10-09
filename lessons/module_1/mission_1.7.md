@@ -57,4 +57,4 @@ You can refresh your memory of the library functions by revisiting the previous 
 
 Mission accomplished! You have successfully programmed a multi-step autonomous route and learned to keep your code clean with comments.
 
-You have completed the Basic Training! Next up is the **Weekly Challenge**, where you will put everything you've learned to the ultimate test.
+You have completed the Basic Training! Continue to **Motors, Loops & Functions** in Moodle to make your movement programs more reusable.

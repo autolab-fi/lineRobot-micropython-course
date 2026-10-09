@@ -677,8 +677,9 @@ def simple_line_follower(robot, image, td, user_code=None):
 
     # ===== CONFIGURATION =====
     TASK_DURATION     = 90
-    CHECKPOINT_RADIUS = 4.0   # cm
-    CHECKPOINTS       = [(104, 52), (103, 64)]
+    CHECKPOINT_RADIUS = 3.0   # cm
+    # Stop before the front sensor board reaches the lower curve.
+    CHECKPOINTS       = [(104, 48), (103, 56)]
     # =========================
 
     result = {

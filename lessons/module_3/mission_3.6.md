@@ -24,7 +24,7 @@ Complete the three marked steering branches in the starter code:
 - Left sees the line: slow the left wheel to `turn_speed`, keeping the right at `speed`.
 - Right sees the line: keep the left wheel at `speed`, slowing the right to `turn_speed`.
 
-Use the supplied `run_motors_speed()` call. Do not add angle turns: the loop should keep reading the sensor while steering. Pass the two checkpoints on the short section; the checker ends the run after both are reached.
+Use the supplied `run_motors_speed()` call. Do not add angle turns: the loop should keep reading the sensor while steering. Pass the two checkpoints on the short section before the bend; the checker ends the run after both are reached.
 
 The starter code also handles brief gaps in detection. It remembers the previous wheel speeds, then stops after 15 consecutive readings without a line. You do not need to implement this part. If it stops immediately, inspect the sensor readings and starting position rather than increasing the timeout.
 

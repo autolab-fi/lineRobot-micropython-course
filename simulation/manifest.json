@@ -161,14 +161,14 @@
           "points": [
             {
               "xM": 1.04,
-              "yM": 0.48
+              "yM": 0.52
             },
             {
               "xM": 1.03,
-              "yM": 0.36
+              "yM": 0.44
             }
           ],
-          "toleranceM": 0.04,
+          "toleranceM": 0.03,
           "stopProgramOnPass": true
         },
         {

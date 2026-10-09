@@ -559,7 +559,7 @@ def proportional_control(robot, image, td, user_code=None):
         # ── td state init ─────────────────────────────────────────────────────
         td = {
             "start_time": time.time(),
-            "end_time":   time.time() + 60,
+            "end_time":   time.time() + TASK_DURATION,
             "data": {
                 "code_valid":               code_valid,
                 "missing":                  missing,

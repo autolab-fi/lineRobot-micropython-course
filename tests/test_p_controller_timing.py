@@ -17,8 +17,9 @@ class PControllerTimingTests(unittest.TestCase):
   return clock,robot,verify,state
  def test_lap_completed_at_seventy_seconds_is_accepted(self):
   clock,robot,verify,state=self.setup_replay()
-  for timestamp,point in [(25,(105,60)),(40,(60,90)),(70,(80,30))]:
+  for timestamp,point in [(25,(105,60)),(40,(60,90)),(60.1,(40,30)),(70,(80,30))]:
    clock.now=timestamp;robot.position=point;_,state,_,_=verify(robot,None,state,CODE)
+   if timestamp==60.1:self.assertIsNone(state['data'].get('final_result'))
   clock.now=90.1;_,state,_,result=verify(robot,None,state,CODE)
   self.assertTrue(result['success'])
  def test_late_checkpoint_cannot_change_failed_verdict(self):

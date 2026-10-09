@@ -396,14 +396,16 @@
         "lineLossReadings": 5,
         "timeoutSeconds": 90,
         "baseSpeed": 20,
-        "kp": 30
+        "kp": 25
       }
     },
     "adaptive_speed": {
       "reference": "solutions/module_5/adaptive_speed_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22065
       },
       "commonMistakes": [],
       "parameters": {

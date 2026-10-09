@@ -52,7 +52,7 @@ Write a Proportional Control loop to navigate the track. You will replace your b
 1. **Setup:** Initialize the robot and Octoliner. Use sensitivity `245` and the raw line-loss threshold `700`, as in the previous mission.
 2. **Control Variables:** Before the loop, create two variables:
    * `base_speed = 20`
-   * `kp = 30` (This is our starting guess for the Proportional Coefficient).
+   * `kp = 25` (This is our starting guess for the Proportional Coefficient).
 3. **The Loop:** Inside your `while True:` loop:
    * Read the `position` from the sensor.
    * Include the Failsafe from the previous mission to protect the software.

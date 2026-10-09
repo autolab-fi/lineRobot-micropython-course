@@ -11,7 +11,7 @@ octoliner.begin(i2c)
 octoliner.set_sensitivity(245)
 
 base_speed = 20
-kp = 30
+kp = 25
 
 print("Starting P-controller...")
 

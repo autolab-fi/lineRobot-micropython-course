@@ -29,10 +29,11 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | color_sensor_basics | 22057 |
 | color_classification | 22058 |
 | concept_of_error | 22059 |
+| adaptive_speed | 22065 |
 
 ## Checks
 
-- 56 verifier/replay tests passed.
+- 58 verifier/replay tests passed.
 - All 34 simulator task references passed, including renamed programs and negative empty/output-only cases (136 cases; Sandbox intentionally permits free programs).
 - All 17 simulator UI scenarios passed earlier in this audit; the targeted line/waypoint/telemetry/RGB UI check also passed with the final color reference.
 - Sequential Navigation uses 20/15/20/15 cm, with the original 6 cm checkpoint tolerance, after the long route accumulated about 8 cm of drift.
@@ -44,7 +45,6 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Remaining tasks at this checkpoint:
 - upgraded_relay_controller
 - proportional_control
-- adaptive_speed
 - art_of_debugging
 - hardware_safety_net
 - code_clinic
@@ -71,7 +71,7 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - Adaptive Racing requires all three ordered route checkpoints; five replay tests cover full/partial/skipped routes, invalid code and immutable final results.
 - Simulator Relay, P, Adaptive Speed and Racing now check the full three-checkpoint route. All 34 canonical and renamed references passed alongside empty/output-only cases (136 cases).
 - Color references physically demonstrated Green → Floor → Red using six readings, five 13 cm steps at 40%, and 1.1 s settling. Lessons, starter code and tutor guidance agree.
-- Latest physical total: **23/34**, with **11 pending**. These candidate changes stay on the validation branch until physical verification.
+- Latest physical total: **24/34**, with **10 pending**. These candidate changes stay on the validation branch until physical verification.
 
 ## Controller experiments after 9e9b481
 
@@ -81,3 +81,14 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - Both controller resets succeeded on their first attempt. No boundary stop or reset retry occurred in these three submissions.
 - Proposed experimental values (not canonical yet): Relay -5/20 turns and 15/15 straight; P-controller base speed 20 and gain 30. This reduces forward motion on a bend and permits a tighter turn. Physical and simulator comparison are still required.
 - Battery reached about 23.29 V after P-controller; further launches paused for docking before the 23.0 V user cutoff.
+
+## Follow-up measurements
+
+- Relay experiment 22062 (15/15 straight, -5/20 turns, immediate threshold 700) stopped on a straight with samples [44, 54, 213, 512, 48, 46, 43, 46]. A single below-threshold sample does not prove all channels lost the line. A five-reading filter is now provided in the Relay and P candidate starter code.
+- P experiment 22063 (base 20, gain 30, filter five) navigated both lower bends and the left side, but reached the third-checkpoint area after the 60-second verdict was already frozen. P's deadline was raised to 90 seconds; late checkpoints after the deadline still cannot change a verdict (two regression tests).
+- Repeat 22064 at the same P settings lost the line on the lower left section after 2/3 checkpoints. Samples [44, 53, 44, 45, 48, 46, 43, 46] show a genuine loss; this reference remains pending and is not a reliable full-lap solution yet.
+- Adaptive Speed 22065 (max 40, braking 20, gain 25, sensitivity 245, immediate loss threshold 700) passed all 3/3 checkpoints and followed approximately two laps during the 60-second run. Fresh post-run battery was about 23.33 V.
+- Lessons and starters had stale sensitivity 240 / threshold 500 advice. Relay, P and Adaptive starter setup now agrees with the candidate references (245 / 700); obsolete Kick wording and P's removed-Tuning transition were corrected.
+- All 58 local tests and all 136 simulator audit cases passed after the timing/filter candidate update. Physical validation remains separate from simulator validation.
+
+- P experiment 22066 (base 20, gain 25, five-reading filter) followed both lower bends and the left side without line loss, but again received a 2/3 verdict at 60 seconds. Inspection found a duplicate hard-coded `end_time = time.time() + 60` despite the updated `TASK_DURATION = 90`. The deadline now uses the constant. The timing regression now includes a frame at 60.1 seconds before completing the third checkpoint at 70 seconds, so it detects premature verdict freezing. No worker restart or firmware change was needed.

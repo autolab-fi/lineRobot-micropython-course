@@ -226,8 +226,9 @@
       "reference": "solutions/module_3/simple_line_follower_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "22045 reached the first checkpoint and lost the line when its front sensor board entered the lower bend. Shorten the introductory straight route before that bend; retest."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22046
       },
       "commonMistakes": [
         "Use the supplied three-zone sensor grouping. Individual scout channels have blind spots.",
@@ -283,21 +284,43 @@
     },
     "color_sensor_basics": {
       "reference": "solutions/module_4/color_sensor_basics_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "pending",
+        "reason": "Old scanner passed but missed red. Validate six readings separated by five 12 cm moves, first integration delay, safer start x=124."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "readings": 6,
+        "moves": 5,
+        "stepCm": 12,
+        "settleSeconds": 0.5,
+        "expectedZones": [
+          "Green",
+          "Floor",
+          "Red"
+        ]
+      }
     },
     "color_classification": {
       "reference": "solutions/module_4/color_classification_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "pending",
+        "reason": "Old scanner passed but missed red. Validate six readings separated by five 12 cm moves, first integration delay, safer start x=124."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "readings": 6,
+        "moves": 5,
+        "stepCm": 12,
+        "settleSeconds": 0.5,
+        "expectedZones": [
+          "Green",
+          "Floor",
+          "Red"
+        ]
+      }
     },
     "concept_of_error": {
       "reference": "solutions/module_5/concept_of_error_reference.py",

@@ -8,8 +8,8 @@ import numpy as np
 target_points = {
     'python_lists':        [(65, 45), (30, 0)],
     'telemetry':           [(75, 30), (30, 0)],
-    'color_sensor_basics': [(128, 98), (0, -30)],
-    'color_classification':[(128, 99), (0, -30)],
+    'color_sensor_basics': [(124, 98), (0, -30)],
+    'color_classification':[(124, 98), (0, -30)],
     'multiple_sensors':    [(45, 29), (30, 0)],
     'data_logging':        [(45, 29), (30, 0)],
 }
@@ -396,7 +396,7 @@ def telemetry(robot, image, td, user_code=None):
 def color_sensor_basics(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Sensor Basics — 4.3
-    Start: x=128, y=98, direction x=0, y=-30
+    Start: x=124, y=98, direction x=0, y=-30
     """
 
     if td is not None and td["data"].get("final_result") is not None:
@@ -423,7 +423,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
         has_tcs3472    = "tcs3472" in active_code
         has_range6     = "range(6)" in active_code
         has_rgb        = ".rgb()" in active_code
-        has_move       = "move_forward_distance(10)" in active_code
+        has_move       = "move_forward_distance(12)" in active_code
         has_scan_print = "Scan - R:" in active_code
         code_valid = (
             has_i2c and has_tcs3472 and has_range6
@@ -435,7 +435,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
         if not has_tcs3472:    missing.append("tcs3472 sensor")
         if not has_range6:     missing.append("range(6) loop")
         if not has_rgb:        missing.append(".rgb() call")
-        if not has_move:       missing.append("move_forward_distance(10)")
+        if not has_move:       missing.append("move_forward_distance(12)")
         if not has_scan_print: missing.append('print format "Scan - R:..."')
 
         td = {
@@ -502,7 +502,7 @@ def color_sensor_basics(robot, image, td, user_code=None):
 def color_classification(robot, image, td, user_code=None):
     """
     Verification for lesson: Color Classification — 4.4
-    Start: x=128, y=99, direction x=0, y=-30
+    Start: x=124, y=98, direction x=0, y=-30
     """
 
     if td is not None and td["data"].get("final_result") is not None:
@@ -534,7 +534,7 @@ def color_classification(robot, image, td, user_code=None):
                              and "b_ratio" in active_code)
         has_range6        = "range(6)" in active_code
         has_rgb           = ".rgb()" in active_code
-        has_move          = "move_forward_distance(10)" in active_code
+        has_move          = "move_forward_distance(12)" in active_code
         has_detect_call   = "detect_color_name(r, g, b)" in active_code
         has_scan_print    = "Scan -" in active_code
         code_valid = (
@@ -550,7 +550,7 @@ def color_classification(robot, image, td, user_code=None):
         if not has_normalization: missing.append("r_ratio / g_ratio / b_ratio normalization")
         if not has_range6:        missing.append("range(6) loop")
         if not has_rgb:           missing.append(".rgb() call")
-        if not has_move:          missing.append("move_forward_distance(10)")
+        if not has_move:          missing.append("move_forward_distance(12)")
         if not has_detect_call:   missing.append("detect_color_name(r, g, b) call in loop")
         if not has_scan_print:    missing.append('print format "Scan Scan -..."')
 

@@ -61,15 +61,15 @@ print(f"Red: {r}, Green: {g}, Blue: {b}")
 ## Assignment
 Mission Control has positioned the rover at the start of a straight testing corridor containing colored geological anomalies. 
 
-You must program the rover to act as a **Linear Scanner**: it will take a series of short steps forward, stopping to scan and report the raw RGB values of the surface after each step.
+You must program the rover to act as a **Linear Scanner**: it will take a series of short steps forward, stopping to scan and report the raw RGB values of the surface at the start and after each step.
 
 **Requirements:**
-1. Set up the hardware: initialize the `Robot` and the `tcs3472` color sensor on the I2C bus (`sda=21`, `scl=22`).
-2. Use a `for` loop with the `range` function to make the rover perform 6 identical scanning steps.
-3. Inside the loop:
-* Read the color using the `.rgb()` method and print the result using an f-string: `Scan - R:<value> G:<value> B:<value>`.
-* Сommand the rover to move forward by **10 cm**.
-* Add a `time.sleep(0.5)` delay after the movement to let the sensor stabilize over the ground.
+1. Initialize the `Robot` and the `tcs3472` color sensor on the I2C bus (`sda=21`, `scl=22`). Wait `time.sleep(0.5)` before the first reading so the sensor can collect light.
+2. Use `for step in range(6)` to take six readings over the colored corridor.
+3. Read the color using `.rgb()` and print an f-string: `Scan - R:<value> G:<value> B:<value>`.
+4. Between readings, move forward **12 cm** and wait `time.sleep(0.5)` before reading again. Use `if step < 5` for the movement: six readings need five movements. Do not move again after the final reading.
+
+The six samples cover the starting green zone, the lunar floor and the red zone. Total travel is 60 cm.
 
 Once your rover completes the scan, look closely at the data printed in your terminal. *Did you notice how the R, G, and B values changed drastically when the rover drove over a colored zone compared to the normal ground?*
 

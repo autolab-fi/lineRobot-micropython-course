@@ -39,7 +39,7 @@ Instead of a fixed `base_speed`, we will calculate a `dynamic_speed` every singl
 Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
 
 **Requirements:**
-1. **Setup:** Use your code from Mission 5.3 (without the Kick timer).
+1. **Setup:** Use your code from Mission 5.3. Start with sensitivity `245`, line-loss threshold `700` and `kp = 25`.
 2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:
    * `max_speed = 40`
    * `braking_force = 20`
@@ -48,12 +48,12 @@ Upgrade your P-Controller to the ultimate Adaptive Speed Controller!
 4. **The P-Controller:**
    * Calculate `P` as usual (`kp * position`).
    * Calculate `left_speed` and `right_speed` using your new `dynamic_speed` instead of a fixed base speed. Don't forget to use `int()`!
-6. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**
+5. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**
 
 **The Tuning Challenge (Optional):**
 Once your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. 
 
-Try experimenting with extreme parameters and observe how the rover reacts:
+Change one parameter at a time and observe how the rover reacts:
 * **The Steering Test:** Compare small changes to `kp` while keeping the starting maximum speed. Observe how smoothly the rover follows the bends.
 * **The Braking Test:** Change `braking_force` in small steps and compare the speed on straights with the speed through corners.
 * Keep the line-loss stop enabled during every experiment. Finish a stable lap with the supplied settings before changing the speed.

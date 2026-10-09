@@ -49,10 +49,10 @@ Because the left wheel is now spinning at `40` and the right wheel at `10`, the 
 Write a Proportional Control loop to navigate the track. You will replace your bulky `if/elif/else` steering blocks with just three elegant lines of mathematical code.
 
 **Requirements:**
-1. **Setup:** Initialize your hardware, including auto-calibration and the `math` library.
+1. **Setup:** Initialize the robot and Octoliner. Use sensitivity `245` and the raw line-loss threshold `700`, as in the previous mission.
 2. **Control Variables:** Before the loop, create two variables:
-   * `base_speed = 30`
-   * `kp = 10` (This is our starting guess for the Proportional Coefficient).
+   * `base_speed = 20`
+   * `kp = 30` (This is our starting guess for the Proportional Coefficient).
 3. **The Loop:** Inside your `while True:` loop:
    * Read the `position` from the sensor.
    * Include the Failsafe from the previous mission to protect the software.
@@ -60,15 +60,15 @@ Write a Proportional Control loop to navigate the track. You will replace your b
      * Calculate `P` by multiplying `kp` and `position`.
      * Calculate `left_speed` and `right_speed`. *(Note: Wrap your final math in `int()` like this: `int(base_speed + P)` to ensure the motor function receives whole numbers).*
      * Send the speeds to the motors using `run_motors_speed()`.
-   * Keep the `time.sleep(0.05)` delay.
+   * Keep the `time.sleep(0.01)` delay. Use the same five-reading line-loss filter as in Mission 5.2.
 
-Execute the code! Watch closely. The rover should navigate the track much smoother than before, automatically adjusting its turn sharpness.
+The checker allows 90 seconds to pass all three marked checkpoints in order. Execute the code! Watch closely. The rover should navigate the track much smoother than before, automatically adjusting its turn sharpness.
 
 ## Conclusion
 Brilliant! You have successfully implemented a Proportional Controller. 
 
-Look at your code: you replaced complicated logical conditions with pure, elegant mathematics. The rover now makes hundreds of tiny, calculated adjustments per second.
+Look at your code: you replaced complicated logical conditions with pure, elegant mathematics. The rover now makes repeated, calculated adjustments as it reads the line.
 
-However, you might notice it still isn't *perfect*. Maybe it turns a little too sluggishly, or maybe it shakes a bit on the straightaways. In the next mission, we will learn how engineers **"Tune"** the *K_p* value to achieve flawless movement!
+However, you might notice it still isn't *perfect*. Maybe it turns a little too sluggishly, or maybe it shakes a bit on the straightaways. In the next mission, we will reduce forward speed when the error grows, giving the rover more time to turn.
 
 > **Important:** Save your standard P-Controller math. You will need to copy and paste this into your next mission.

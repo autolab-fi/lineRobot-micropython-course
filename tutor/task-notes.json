@@ -364,7 +364,24 @@
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "timeoutSeconds": 90,
+        "straightMotors": [
+          15,
+          15
+        ],
+        "leftTurnMotors": [
+          -5,
+          20
+        ],
+        "rightTurnMotors": [
+          20,
+          -5
+        ]
+      }
     },
     "proportional_control": {
       "reference": "solutions/module_5/proportional_control_reference.py",
@@ -373,7 +390,14 @@
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "timeoutSeconds": 90,
+        "baseSpeed": 20,
+        "kp": 30
+      }
     },
     "adaptive_speed": {
       "reference": "solutions/module_5/adaptive_speed_reference.py",

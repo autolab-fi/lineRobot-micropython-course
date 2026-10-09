@@ -493,7 +493,7 @@ def proportional_control(robot, image, td, user_code=None):
         return image, td, td["data"]["final_text"], td["data"]["final_result"].copy()
 
     # ===== CONFIGURATION =====
-    TASK_DURATION = 60
+    TASK_DURATION = 90
     
     # Movement tracking
     MIN_MOVEMENT_DISTANCE = 10.0  # cm - anti-cheat minimum

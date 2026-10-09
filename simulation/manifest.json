@@ -293,7 +293,7 @@
     },
     "proportional_control": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 60,
+      "timeoutSec": 90,
       "initialPose": {
         "xM": 0.4,
         "yM": 0.79,

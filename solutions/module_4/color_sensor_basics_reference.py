@@ -14,7 +14,7 @@ for step in range(6):
     r, g, b = color_sensor.rgb()
     print(f"Scan - R:{r} G:{g} B:{b}")
     if step < 5:
-        robot.move_forward_distance(12)
+        robot.move_forward_speed_distance(40, 13)
         time.sleep(0.5)
 
 print("Linear scan complete.")

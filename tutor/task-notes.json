@@ -287,19 +287,25 @@
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending",
-        "reason": "Old scanner passed but missed red. Validate six readings separated by five 12 cm moves, first integration delay, safer start x=124."
+        "reason": "Slow 40% experiment 22054 produced Green, Floor and strong Red (184,47,40), ending safely at (125.21,35.68). Recheck with updated semantic checker."
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "Do not move after the sixth reading.",
+        "Wait 0.5 s before the first measurement and between moves and reads.",
+        "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
+      ],
       "parameters": {
         "readings": 6,
         "moves": 5,
-        "stepCm": 12,
+        "stepCm": 13,
         "settleSeconds": 0.5,
         "expectedZones": [
           "Green",
           "Floor",
           "Red"
-        ]
+        ],
+        "speedPercent": 40,
+        "totalTravelCm": 65
       }
     },
     "color_classification": {
@@ -307,19 +313,25 @@
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
         "status": "pending",
-        "reason": "Old scanner passed but missed red. Validate six readings separated by five 12 cm moves, first integration delay, safer start x=124."
+        "reason": "Slow 40% experiment 22054 produced Green, Floor and strong Red (184,47,40), ending safely at (125.21,35.68). Recheck with updated semantic checker."
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "Do not move after the sixth reading.",
+        "Wait 0.5 s before the first measurement and between moves and reads.",
+        "All-floor output is insufficient: scan and classify the green patch, floor and red patch."
+      ],
       "parameters": {
         "readings": 6,
         "moves": 5,
-        "stepCm": 12,
+        "stepCm": 13,
         "settleSeconds": 0.5,
         "expectedZones": [
           "Green",
           "Floor",
           "Red"
-        ]
+        ],
+        "speedPercent": 40,
+        "totalTravelCm": 65
       }
     },
     "concept_of_error": {

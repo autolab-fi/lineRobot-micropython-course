@@ -2032,7 +2032,7 @@
           "template": "7d7de98e0d1887ecbb1965772a15cc6cadebcd07384ebea30b03dc61f0d04454",
           "reference": "89cd2ce2943d720633b9daeaa6a9bd4da7bd1ae7545a85c8dd87f29a78ae178f",
           "checker": "7d1aec8299df49dd27e2171467fb302d98edfee4c0d1da63a2ae35b39b067785",
-          "simulation": "f71bd23409c68254228b4672ef6aeab644febffc24e2fd407d5d20f2722fd572"
+          "simulation": "4d841835c20cdc39247f7219ba9bbc2a44d880c61459cb3129f1692a4615c18c"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_4.py"
@@ -2144,7 +2144,7 @@
           "template": "d04176f859fda3ae288d6d53de2100c05293c3e534d05be804ef5fb366adc112",
           "reference": "4f2f76ea0d89abace88bb77b9d79f22f18c0ed7cb5ee0549c0c3ebde9be7574b",
           "checker": "7d1aec8299df49dd27e2171467fb302d98edfee4c0d1da63a2ae35b39b067785",
-          "simulation": "1a0710b020a8e3f94c205372b48a03422e4b99a491c2a426b2332d974f0f7817"
+          "simulation": "ca6edbf76fec7d094c095c6d81c2e566f281e9aeaaff3a012cd1909481b7eedc"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_4.py"

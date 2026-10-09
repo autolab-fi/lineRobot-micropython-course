@@ -201,7 +201,7 @@
     },
     "color_sensor_basics": {
       "mode": "simulation-and-lab",
-      "initialPose": { "xM": 1.24, "yM": 0.02, "headingRad": 1.570796327 },
+      "initialPose": { "xM": 1.24, "yM": 0.10, "headingRad": 1.570796327 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["rgb", "move_forward_distance"], "requiredFeatures": ["for-loop", "f-string", "print"], "requiredRangeArguments": [6] },
         { "type": "repeated-move-distance", "distanceCm": 12, "count": 5, "toleranceCm": 0.3 },
@@ -212,7 +212,7 @@
     },
     "color_classification": {
       "mode": "simulation-and-lab",
-      "initialPose": { "xM": 1.24, "yM": 0.02, "headingRad": 1.570796327 },
+      "initialPose": { "xM": 1.24, "yM": 0.10, "headingRad": 1.570796327 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["rgb", "move_forward_distance"], "requiredFeatures": ["for-loop", "if-statement", "elif-statement", "division", "f-string", "return-statement", "print"], "requiredFunctions": [{ "name": "detect_color_name", "parameterCounts": [3] }], "requiredFunctionCalls": ["detect_color_name"], "requiredRangeArguments": [6] },
         { "type": "repeated-move-distance", "distanceCm": 12, "count": 5, "toleranceCm": 0.3 },

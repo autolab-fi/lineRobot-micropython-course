@@ -32,10 +32,10 @@ while True:
         lost_readings = 0
         # Simple Control Logic
         if position < -0.3:
-            robot.run_motors_speed(-5, 20)   # Turn left
+            robot.run_motors_speed(0, 25)   # Turn left
         elif position > 0.3:
-            robot.run_motors_speed(20, -5)   # Turn right
+            robot.run_motors_speed(25, 0)   # Turn right
         else:
-            robot.run_motors_speed(15, 15)  # Go straight
+            robot.run_motors_speed(25, 25)  # Go straight
 
     time.sleep(0.01)

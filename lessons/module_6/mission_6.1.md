@@ -74,6 +74,8 @@ The provided code contains a chain of **6 distinct bugs (3 Syntax/Runtime + 3 Lo
 5. **The Drunken Sailor:** The Proportional power (`P`) is miscalculated. Use `print()` to inspect the math.
 6. **The Blocked Steering:** The robot accelerates instead of turning. Print `left_speed` and `right_speed` to find the flaw in the differential steering.
 
+The supplied settings are sensitivity `245`, raw line-loss threshold `700`, base speed `20` and gain `25`. Keep the supplied five-reading line-loss filter while fixing the six bugs. Drive through the two marked checkpoints in order.
+
 Find all 6 bugs, fix them, and watch the rover successfully navigate the track!
 
 ## Conclusion

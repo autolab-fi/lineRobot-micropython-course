@@ -361,7 +361,9 @@
       "reference": "solutions/module_5/upgraded_relay_controller_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22070
       },
       "commonMistakes": [],
       "parameters": {
@@ -370,24 +372,27 @@
         "lineLossReadings": 5,
         "timeoutSeconds": 90,
         "straightMotors": [
-          15,
-          15
+          25,
+          25
         ],
         "leftTurnMotors": [
-          -5,
-          20
+          0,
+          25
         ],
         "rightTurnMotors": [
-          20,
-          -5
-        ]
+          25,
+          0
+        ],
+        "robotRuntimeLimitSeconds": 70
       }
     },
     "proportional_control": {
       "reference": "solutions/module_5/proportional_control_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22067
       },
       "commonMistakes": [],
       "parameters": {
@@ -396,7 +401,8 @@
         "lineLossReadings": 5,
         "timeoutSeconds": 90,
         "baseSpeed": 20,
-        "kp": 25
+        "kp": 25,
+        "robotRuntimeLimitSeconds": 70
       }
     },
     "adaptive_speed": {
@@ -421,7 +427,17 @@
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "baseSpeed": 20,
+        "kp": 25,
+        "timeoutSeconds": 60,
+        "startXCm": 60,
+        "startYCm": 92,
+        "headingDegrees": 0
+      }
     },
     "hardware_safety_net": {
       "reference": "solutions/module_6/hardware_safety_net_reference.py",
@@ -439,7 +455,14 @@
         "status": "pending"
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "sensitivity": 245,
+        "lineLossThreshold": 700,
+        "lineLossReadings": 5,
+        "baseSpeed": 20,
+        "kp": 25,
+        "timeoutSeconds": 60
+      }
     },
     "navigation": {
       "reference": "solutions/module_11/navigation_reference.py",

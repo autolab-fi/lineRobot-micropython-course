@@ -62,7 +62,7 @@ Write a Proportional Control loop to navigate the track. You will replace your b
      * Send the speeds to the motors using `run_motors_speed()`.
    * Keep the `time.sleep(0.01)` delay. Use the same five-reading line-loss filter as in Mission 5.2.
 
-The checker allows 90 seconds to pass all three marked checkpoints in order. Execute the code! Watch closely. The rover should navigate the track much smoother than before, automatically adjusting its turn sharpness.
+Pass all three marked checkpoints in order before the rover’s automatic safety stop at 70 seconds. Execute the code! Watch closely. The rover should navigate the track much smoother than before, automatically adjusting its turn sharpness.
 
 ## Conclusion
 Brilliant! You have successfully implemented a Proportional Controller. 

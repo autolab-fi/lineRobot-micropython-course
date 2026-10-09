@@ -61,16 +61,16 @@
       "module": "module_6",
       "verificationFile": "verifications/module_6.py",
       "physicalStart": {
-        "xCm": 50,
-        "yCm": 94,
+        "xCm": 60,
+        "yCm": 92,
         "direction": [
           30,
           0
         ]
       },
       "initialPose": {
-        "xM": 0.5,
-        "yM": 0.06,
+        "xM": 0.6,
+        "yM": 0.08,
         "headingRad": -0.0
       },
       "blockLibraryFunctions": false

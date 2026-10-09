@@ -6,7 +6,7 @@ import numpy as np
 import ast
 
 target_points = {
-    'art_of_debugging': [(50, 94), (30, 0)],           # Start: x=50, y=94, direction=30°
+    'art_of_debugging': [(60, 92), (30, 0)],           # Start: x=60, y=92, direction=30°
     'hardware_safety_net': [(60, 40), (30, 0)],         # Start: x=60, y=40, direction=0° (spins in place)
     'code_clinic': [(50, 30), (30, 0)],                # Start: x=50, y=30, direction=30°
 }
@@ -34,7 +34,7 @@ def get_target_points(task):
 def art_of_debugging(robot, frame, td, user_code=None):
     """
     Verification for lesson: The Art of Debugging — 6.1
-    Start: x=50, y=94, dir=30°
+    Start: x=60, y=92, dir=30°
     Checkpoints: (105, 60), (80, 30)
     """
 

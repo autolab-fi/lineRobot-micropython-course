@@ -30,6 +30,8 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | color_classification | 22058 |
 | concept_of_error | 22059 |
 | adaptive_speed | 22065 |
+| proportional_control | 22067 |
+| upgraded_relay_controller | 22070 |
 
 ## Checks
 
@@ -43,8 +45,6 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 ## Remaining physical checks
 
 The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Remaining tasks at this checkpoint:
-- upgraded_relay_controller
-- proportional_control
 - art_of_debugging
 - hardware_safety_net
 - code_clinic
@@ -71,7 +71,7 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - Adaptive Racing requires all three ordered route checkpoints; five replay tests cover full/partial/skipped routes, invalid code and immutable final results.
 - Simulator Relay, P, Adaptive Speed and Racing now check the full three-checkpoint route. All 34 canonical and renamed references passed alongside empty/output-only cases (136 cases).
 - Color references physically demonstrated Green → Floor → Red using six readings, five 13 cm steps at 40%, and 1.1 s settling. Lessons, starter code and tutor guidance agree.
-- Latest physical total: **24/34**, with **10 pending**. These candidate changes stay on the validation branch until physical verification.
+- Latest physical total: **26/34**, with **8 pending**. These candidate changes stay on the validation branch until physical verification.
 
 ## Controller experiments after 9e9b481
 
@@ -92,3 +92,10 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - All 58 local tests and all 136 simulator audit cases passed after the timing/filter candidate update. Physical validation remains separate from simulator validation.
 
 - P experiment 22066 (base 20, gain 25, five-reading filter) followed both lower bends and the left side without line loss, but again received a 2/3 verdict at 60 seconds. Inspection found a duplicate hard-coded `end_time = time.time() + 60` despite the updated `TASK_DURATION = 90`. The deadline now uses the constant. The timing regression now includes a frame at 60.1 seconds before completing the third checkpoint at 70 seconds, so it detects premature verdict freezing. No worker restart or firmware change was needed.
+
+- P 22067 passed 3/3 with base 20, gain 25, five-reading filter and the corrected 90-second deadline. The firmware's existing user-code watchdog is 70 seconds; it interrupted the loop after the third checkpoint. The checker continued to its deadline and preserved the completed route. This firmware limit was inspected, not changed.
+- Relay 22068 (15/15 straight, -5/20 turns, five-reading filter) lost the line almost immediately on the first straight; reverse-wheel steering is too aggressive with this setup and remains unvalidated.
+
+- Relay 22069 (20/20 straight, 0/20 turns, five-reading filter) followed the line around to approximately (43, 32), but the existing 70-second firmware stop occurred before the third checkpoint. The route was stable but too slow.
+- Relay 22070 (25/25 straight, 0/25 turns, five-reading filter) passed all three checkpoints before the firmware stop. The canonical reference, lesson motor examples and tutor parameters now match this tested source.
+- Pending Debugging and Clinic candidates reuse measured sensitivity 245 / threshold 700 / base 20 / gain 25 and the five-reading filter. Their simulator routes now use the same ordered checkpoints as the physical grader. Debugging's start is (60, 92), east, on the lower straight; its six intended bugs remain in the starter. Clinic keeps start (50, 30), east. Physical tests still required.

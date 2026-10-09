@@ -431,12 +431,12 @@
     },
     "art_of_debugging": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": { "xM": 0.60, "yM": 0.20, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "addition", "subtraction", "print"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["base_speed", "kp"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 1.05, "yM": 0.40 }, { "xM": 0.80, "yM": 0.79 }], "toleranceM": 0.10, "stopProgramOnPass": true },
         { "type": "program-finished" }
       ]
     },
@@ -454,14 +454,14 @@
     },
     "code_clinic": {
       "mode": "simulation-and-lab",
-      "timeoutSec": 20,
-      "initialPose": { "xM": 0.40, "yM": 0.79, "headingRad": 0 },
+      "timeoutSec": 60,
+      "initialPose": { "xM": 0.50, "yM": 0.79, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "rgb", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "try-statement", "return-statement", "multiplication"], "requiredFunctions": [{ "name": "get_mineral_color", "parameterCounts": [0] }, { "name": "calculate_steering", "parameterCounts": [1] }, { "name": "apply_movement", "parameterCounts": [1] }], "requiredFunctionCalls": ["get_mineral_color", "calculate_steering", "apply_movement"], "requiredVariableNames": ["SENSITIVITY", "LINE_THRESHOLD", "BASE_SPEED", "KP"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
         { "type": "sensor-read", "sensor": "color", "minimumReads": 1 },
         { "type": "minimum-distance", "valueCm": 30 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 0.85, "yM": 0.79 }, { "xM": 1.10, "yM": 0.65 }], "toleranceM": 0.12, "stopProgramOnPass": true },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 0.80, "yM": 0.79 }, { "xM": 1.05, "yM": 0.40 }, { "xM": 0.60, "yM": 0.20 }], "toleranceM": 0.10, "stopProgramOnPass": true },
         { "type": "program-finished" }
       ]
     },

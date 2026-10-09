@@ -63,13 +63,13 @@ You will write an upgraded autonomous line-following program. The rover must use
    * Read the position
 3. **Failsafe Check:** First, check `if max(sensor_array) < 700:`. Count consecutive low readings using the filter in the starter code. On the fifth low reading, print a critical error message, stop the motors, and `break` the loop. Reset the counter when the line is detected.
 4. **Steering Logic:** If the line is successfully detected (`else:`), use an `if / elif / else` block to check the `position` variable:
-   * If `< -0.3`: Turn Left (e.g., Left: `-5`, Right: `20`)
-   * If `> 0.3`: Turn Right (e.g., Left: `20`, Right: `-5`)
-   * Otherwise: Drive Straight (e.g., `15`, `15`)
+   * If `< -0.3`: Turn Left (e.g., Left: `0`, Right: `25`)
+   * If `> 0.3`: Turn Right (e.g., Left: `25`, Right: `0`)
+   * Otherwise: Drive Straight (e.g., `25`, `25`)
 
-Use five consecutive low readings before declaring the line lost; a single weak reading may occur while crossing the edge of the line. Keep a `lost_readings` counter, reset it to zero on a valid reading, and stop and `break` when it reaches five. The starter code provides this short filter. Negative motor speed lets the inside wheel reverse for the tighter bends.
+Use five consecutive low readings before declaring the line lost; a single weak reading may occur while crossing the edge of the line. Keep a `lost_readings` counter, reset it to zero on a valid reading, and stop and `break` when it reaches five. The starter code provides this short filter. Stop the inside wheel for a tighter turn; keep the outside wheel at `25`.
 
-Drive through all three marked checkpoints in order. Moving away from the start alone does not complete the route. Watch how much cleaner your steering logic has become!
+Drive through all three marked checkpoints in order before the automatic safety stop at 70 seconds. Moving away from the start alone does not complete the route. Watch how much cleaner your steering logic has become!
 
 ## Conclusion
 Mission accomplished! You have successfully modernized your autonomous control system.

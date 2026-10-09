@@ -74,7 +74,7 @@ class RouteCheckerTests(unittest.TestCase):
                 targets=list(reversed(td['data']['targets']))
                 if variant=='skip':targets=targets[-1:]
                 if variant=='reverse':targets=targets[::-1]
-                if variant=='too_long':targets=[(37+(x-37)/.9,60+(y-60)/.9) for x,y in targets]
+                if variant=='too_long':targets=[(37+1.5*(x-37),60+1.5*(y-60)) for x,y in targets]
                 for p in targets:
                     clock.now+=2;details['position']=p
                     _,td,_,_=checker(robot,None,td,code)

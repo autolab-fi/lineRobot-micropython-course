@@ -81,13 +81,13 @@
       "checks": [
         { "type": "source-code", "minimumCommentCount": 3 },
         { "type": "navigation-sequence", "steps": [
-          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "move-distance", "distanceCm": 20 },
           { "type": "turn", "angleDeg": 90 },
-          { "type": "move-distance", "distanceCm": 25 },
+          { "type": "move-distance", "distanceCm": 15 },
           { "type": "turn", "angleDeg": -90 },
-          { "type": "move-distance", "distanceCm": 35 },
+          { "type": "move-distance", "distanceCm": 20 },
           { "type": "turn", "angleDeg": -90 },
-          { "type": "move-distance", "distanceCm": 25 }
+          { "type": "move-distance", "distanceCm": 15 }
         ] },
         { "type": "program-finished" }
       ]

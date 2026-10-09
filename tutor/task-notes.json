@@ -74,10 +74,15 @@
       "reference": "solutions/module_1/sequential_navigation_reference.py",
       "guidanceUpdated": "2026-10-08",
       "physicalValidation": {
-        "status": "pending"
+        "status": "pending",
+        "reason": "Original 35/25 cm route accumulated an 8 cm final error in submission 22030; compact 20/15 cm route awaits retest."
       },
       "commonMistakes": [],
-      "parameters": {}
+      "parameters": {
+        "first_and_third_leg_cm": 20,
+        "second_and_fourth_leg_cm": 15,
+        "turn_angle_degrees": 90
+      }
     },
     "python_variables_commands": {
       "reference": "solutions/module_1/python_variables_commands_reference.py",

@@ -137,7 +137,7 @@
           "lesson": "0f3fd30e6e49ade1e4024b5d8162a890e0d5fee6d02730ccbec252acdba0144d",
           "template": "5cee2cc17e54fa1ffef1f40f981dd49e53d547086438be305794eb0ea1777da9",
           "reference": "37a48fa8980953093421034821da155f6eca25f30589868fca51e35d53591031",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "a07713885f5c3ce4a61f584d4dcf0b9df5c85ea9b4a0102eaed99620182ea31a"
         }
       },
@@ -200,7 +200,7 @@
           "lesson": "271cc96b8de99bf7b1da52789bccb5aaa17e9e34fe615b40e756525f5536e683",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "9a01ced5bb405fbecf83b5f8f9e028580f99199d8eef1869217a09edd46017af",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "d56a784ca7fda772258b5e72174d66e9ffe23d09f4f487dc20f71cb03d61a87e"
         }
       },
@@ -263,7 +263,7 @@
           "lesson": "8455f07a37fedbc6f03b024b8f86a67f754d3f3ae66fdd217d271827e681b786",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "cc854f6c9e983cf5c2631c1cf15c61674cf00f9cc753d610d617bde7f9ff438d",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "15c98ef8f34e9062a0b388e5e1d622cec92e82d41104dca1b315f7eb26ecae03"
         }
       },
@@ -329,7 +329,7 @@
           "lesson": "c4557a1c358be270856630e6bc3f546b2fad96dea2dcf9beaed62d93eb5333c9",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "3f6337d39bdaeb885c9096154bcfe23448097d74875d49d9f389584ee7b7d4db",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "db28db95755854b58cf5e7b477ead483f741d4a188ee29eb5f1a277ddba5e463"
         }
       },
@@ -408,7 +408,7 @@
           "lesson": "50d3a8e1841839680631c56fedb9a1117724b9037d92ed0e5a1647032d9d83dc",
           "template": "94184280c584574f994c7a701b640f16ae9571692ffa686617a1214a1af77c1a",
           "reference": "e1b92fbf4892c8d3135f73a8739025f4cef64838e0a40dd9e035a52d957724c9",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "ecc0253836534335b7963d30151a67c0c7ca35f21a2ab26a1bbb7ae4cd2ee769"
         }
       },
@@ -482,17 +482,17 @@
           "lesson": "d2a2e61287ed4d30295be372f7c6e9f8615f5d3e3fa4bc1ad67fac409453a409",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
           "reference": "7d48a252ad5d8e79b5b4d39a405fb1019ae49030b41616207188088284daf8a4",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
           "simulation": "42805d4725907e8fff7a0b8b8d73df3de663eff36208aad61c3687082d161da5"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_1.py"
     },
     "sequential_navigation": {
-      "assignment_full_text": "---\nindex: 7\nmodule: module_1\ntask: sequential_navigation\nprevious: maneuvering\nnext: electric_motors\n---\n\n# Mission 1.7 Sequential navigation\n\n## Objective\n\nCreate a complex route visiting multiple waypoints and learn how to document your code using comments.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\n\nYou have mastered the controls: moving, turning, and using variables. Now, you are ready for your first real navigation.\n\nA real mission is never just \"drive forward.\" It involves a sequence of actions: \"Go to the crater, turn left, approach the solar panel, turn right...\" As your programs get longer, they can become hard to read. In this mission, we will learn how to organize long code and navigate a complex route.\n\n## Theory\n\n### 1. Sequential Execution\nThroughout the preceding lessons, you've been creating programs. Let's define what a program is: a program is an ordered sequence of commands. These commands are executed by a designated executor, which, in our case, is the robot.\nThe robot reads your code from **top to bottom**, line by line. It will not start the next command until the previous one is finished.\n\nThis means the **order** of your commands is critical. If you swap a \"Turn\" and a \"Move,\" the robot will end up in a completely different place!\n\n### 2. Comments (The \"Mission Logs\")\nWhen writing long programs, it is easy to forget what a specific block of code does. To help yourself (and other engineers), you can use **Comments**.\n\nA comment is a line of text that the computer **ignores**. It is meant only for humans. In Python, we create a comment using the hash symbol (`#`).\n\n```python\n# This is a comment. The robot ignores it.\nrobot.move_forward_distance(20) # You can also write comments here\n```\n\n**Why use comments?**\n* **Organization:** Separate your code into logical blocks (e.g., `# Section 1: Leaving Base`).\n* **Debugging:** Quickly disable a line of code without deleting it.\n\n## Assignment\n\nYou need to navigate the robot through a specific route to collect geological samples (minerals) at **4 waypoints**. You must use **comments** to label each section of the journey.\n    * Example: `# Moving to Point 1`, `# Collecting Sample 2`, `# Returning to base`.\n\n![trajectory](https://github.com/autolab-fi/lineRobot-micropython-course/blob/main/images/module-1/trajectory.jpg?raw=true)\n\nYou can refresh your memory of the library functions by revisiting the previous lessons.\n\n**Hint:** Break the path down into small steps. Write code for the first leg, run it, test it, and then add the next leg.\n\n## Conclusion\n\nMission accomplished! You have successfully programmed a multi-step autonomous route and learned to keep your code clean with comments.\n\nYou have completed the Basic Training! Next up is the **Weekly Challenge**, where you will put everything you've learned to the ultimate test.\n",
+      "assignment_full_text": "---\nindex: 7\nmodule: module_1\ntask: sequential_navigation\nprevious: maneuvering\nnext: electric_motors\n---\n\n# Mission 1.7 Sequential navigation\n\n## Objective\n\nCreate a complex route visiting multiple waypoints and learn how to document your code using comments.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\n\nYou have mastered the controls: moving, turning, and using variables. Now, you are ready for your first real navigation.\n\nA real mission is never just \"drive forward.\" It involves a sequence of actions: \"Go to the crater, turn left, approach the solar panel, turn right...\" As your programs get longer, they can become hard to read. In this mission, we will learn how to organize long code and navigate a complex route.\n\n## Theory\n\n### 1. Sequential Execution\nThroughout the preceding lessons, you've been creating programs. Let's define what a program is: a program is an ordered sequence of commands. These commands are executed by a designated executor, which, in our case, is the robot.\nThe robot reads your code from **top to bottom**, line by line. It will not start the next command until the previous one is finished.\n\nThis means the **order** of your commands is critical. If you swap a \"Turn\" and a \"Move,\" the robot will end up in a completely different place!\n\n### 2. Comments (The \"Mission Logs\")\nWhen writing long programs, it is easy to forget what a specific block of code does. To help yourself (and other engineers), you can use **Comments**.\n\nA comment is a line of text that the computer **ignores**. It is meant only for humans. In Python, we create a comment using the hash symbol (`#`).\n\n```python\n# This is a comment. The robot ignores it.\nrobot.move_forward_distance(20) # You can also write comments here\n```\n\n**Why use comments?**\n* **Organization:** Separate your code into logical blocks (e.g., `# Section 1: Leaving Base`).\n* **Debugging:** Quickly disable a line of code without deleting it.\n\n## Assignment\n\nYou need to navigate the robot through a specific route to collect geological samples (minerals) at **4 waypoints**. You must use **comments** to label each section of the journey.\n    * Example: `# Moving to Point 1`, `# Collecting Sample 2`, `# Returning to base`.\n\nMission Control provides this compact sampling route. Start facing right, travel **20 cm**, turn left **90°**, travel **15 cm**, turn right **90°**, travel **20 cm**, turn right **90°**, then travel **15 cm** to the fourth mineral.\n\n```text\n                 2 ─── 20 cm ───> 3\n                 ↑                 │\n               15 cm             15 cm\n                 │                 ↓\nStart ─20 cm───> 1                 4\n```\n\nYou can refresh your memory of the library functions by revisiting the previous lessons.\n\n**Hint:** Break the path down into small steps. Write code for the first leg, run it, test it, and then add the next leg.\n\n## Conclusion\n\nMission accomplished! You have successfully programmed a multi-step autonomous route and learned to keep your code clean with comments.\n\nYou have completed the Basic Training! Next, you will control the rover's electric motors directly.\n",
       "assignment_summary": "--- index: 7 module: module_1 task: sequential_navigation previous: maneuvering next: electric_motors --- # Mission 1.7 Sequential navigation ## Objective Create a complex route visiting multiple waypoints and learn how to document your code using comments. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction You have mastered the controls: moving, turning, and using variables. Now, you are ready for your first real navigation. A real mission is never just \"drive forward.\" It involves a sequence of actions: \"Go to the crater, turn left, approach the solar panel, turn right...\" As your programs get longer, they can become hard to read. In this mission, we will learn how to organize long code and navigate a complex route. ## Theory ### 1. Sequential Execution Throughout the preceding lessons, you've been creating programs. Let's define what a program is: a program is an ordered sequence of commands. These commands are executed by a designated executor, which, in our case, is the robot. The robot reads your code from **top to bottom**, line by line. It will not start the next command until the previous one is finished. This means the **order** of your commands is critical. If you swap a \"Turn\" and a \"Move,\" the robot will end up in a completely different place! ### 2. Comments (The \"Mission Logs\") When writing long programs, it is easy to forget what a specific block of code does. To help yourself (and other engineers), you can use **Comments**. A comment is a line of text that the computer **ignores**. It is meant only for humans. In Python, we create a comment using the hash symbol (`#`). **Why use comments?** * **Organization:** Separate your code into logical blocks (e.g., `# Section 1: Leaving Base`). * **Debugging:** Quickly disable a line of code without deleting it. ## Assignment You need to navigate the robot through a specific route to collect geological samples (minerals) at **4 waypoints**. You must use **comments** t",
-      "reference_solution_text": "from lineRobot import Robot\nrobot = Robot()\n\nangle = 90\nd1 = 35\nd2 = 25\n\n#Moving to point 1\nrobot.move_forward_distance(d1)\nrobot.turn_left_angle(angle)\n\n#Moving to point 2\nrobot.move_forward_distance(d2)\nrobot.turn_right_angle(angle)\n\n#Moving to point 3\nrobot.move_forward_distance(d1)\nrobot.turn_right_angle(angle)\n\n\n#Moving to final point\nrobot.move_forward_distance(d2)\n",
-      "verification_summary": "Test for Mission 1.7 Sequential navigation\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "reference_solution_text": "from lineRobot import Robot\nrobot = Robot()\n\nangle = 90\nd1 = 20\nd2 = 15\n\n#Moving to point 1\nrobot.move_forward_distance(d1)\nrobot.turn_left_angle(angle)\n\n#Moving to point 2\nrobot.move_forward_distance(d2)\nrobot.turn_right_angle(angle)\n\n#Moving to point 3\nrobot.move_forward_distance(d1)\nrobot.turn_right_angle(angle)\n\n\n#Moving to final point\nrobot.move_forward_distance(d2)\n",
+      "verification_summary": "Test for Mission 1.7 Sequential navigation\nHardware evidence: {\"status\": \"pending\", \"reason\": \"Original 35/25 cm route accumulated an 8 cm final error in submission 22030; compact 20/15 cm route awaits retest.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 35,
@@ -513,7 +513,7 @@
             "steps": [
               {
                 "type": "move-distance",
-                "distanceCm": 35
+                "distanceCm": 20
               },
               {
                 "type": "turn",
@@ -521,7 +521,7 @@
               },
               {
                 "type": "move-distance",
-                "distanceCm": 25
+                "distanceCm": 15
               },
               {
                 "type": "turn",
@@ -529,7 +529,7 @@
               },
               {
                 "type": "move-distance",
-                "distanceCm": 35
+                "distanceCm": 20
               },
               {
                 "type": "turn",
@@ -537,7 +537,7 @@
               },
               {
                 "type": "move-distance",
-                "distanceCm": 25
+                "distanceCm": 15
               }
             ]
           },
@@ -546,9 +546,14 @@
           }
         ],
         "physical_validation": {
-          "status": "pending"
+          "status": "pending",
+          "reason": "Original 35/25 cm route accumulated an 8 cm final error in submission 22030; compact 20/15 cm route awaits retest."
         },
-        "starting_parameters": {},
+        "starting_parameters": {
+          "first_and_third_leg_cm": 20,
+          "second_and_fourth_leg_cm": 15,
+          "turn_angle_degrees": 90
+        },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
         "simulator_limitations": "Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.",
@@ -566,11 +571,11 @@
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_1/sequential_navigation_reference.py",
         "guidance_updated": "2026-10-08",
         "source_sha256": {
-          "lesson": "3f796fffeaedce8f5c2f62a5557a3ee6fc4cb4553f61891423f4cfd7e1499e4b",
+          "lesson": "dbb6e639a36a369ff3f4b54dca3d5b878acedc3ea456f16aa8ac99206596e857",
           "template": "541309f9764cc6ff43b9711c3ecb72bb06cfcffaa723b81c78db9c27ad5e34c9",
-          "reference": "fd3b75a71aa0abfdda6a8b0f43592f22d543658eb7a2af8d654725f0649e2067",
-          "checker": "4523ca83d7f381673b357e9da27c301d7f1fd3fcc8066efcc2ae9aa9fa86e622",
-          "simulation": "dc46faa19171e018bda108679a53fe61dec67fe686ae9e6ed79e4175d5385623"
+          "reference": "49b5810af4c33dbb360e1213314a604cc75c62aa5cfa5b549b40900cd32de626",
+          "checker": "7e71d9befb5d1b4751d844d71d1088eeed78b4062b6e04ce957bcfc050da2ac9",
+          "simulation": "9a56c65de5d512b7f033ac27308e8242ff767f2a9057ea8f69ecfdeb8d0861b5"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_1.py"

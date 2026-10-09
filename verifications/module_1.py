@@ -370,13 +370,13 @@ def sequential_navigation(robot, image, td: dict, user_code):
 
     if not td["data"] and robot:
         route = [
-            {'forward': 35, 'backward': 0},
+            {'forward': 20, 'backward': 0},
             [{'left': 90, 'right': 0}],
-            {'forward': 25, 'backward': 0},
+            {'forward': 15, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 35, 'backward': 0},
+            {'forward': 20, 'backward': 0},
             [{'left': 0, 'right': 90}],
-            {'forward': 25, 'backward': 0}
+            {'forward': 15, 'backward': 0}
         ]
 
         targets = calculate_target_point(robot, route)

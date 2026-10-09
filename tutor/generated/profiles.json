@@ -2573,7 +2573,7 @@
       "assignment_full_text": "---\nindex: 31\nmodule: module_5\ntask: adaptive_speed\nprevious: proportional_control\nnext: art_of_debugging\n---\n\n# Mission 5.5 Adaptive Speed \n\n## Objective\nMake the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Introduction\nYour Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. \nIf you set the speed to `30`, the robot easily navigates sharp corners, but crawls agonizingly slowly on straightaways. If you increase the speed to `80`, it flies down the straights but crashes on the first sharp turn because it's going too fast to steer!\n\nThink about real racing drivers. They don't press the gas pedal identically the whole track. They accelerate on the straights and hit the brakes *before* entering a turn. Today, we will teach your rover to do exactly that.\n\n## Theory\n### 1. Absolute Error (`abs`)\nTo know *when* to brake, the robot needs to know if it's approaching a turn. \nOur Error ranges from `-1.0` to `1.0`. We don't care if the turn is left or right; we only care about the *size* of the Error. \n\nPython has a built-in function called `abs()` (Absolute Value) that removes the minus sign:\n* `abs(-0.8)` becomes `0.8`\n* `abs(0.0)` stays `0.0`\n\n### 2. The Adaptive Speed Formula\nInstead of a fixed `base_speed`, we will calculate a `dynamic_speed` every single loop using this formula:\n`dynamic_speed = max_speed - (braking_force * abs(position))`\n\n* On a straight line (`position = 0.0`), the robot drives at the full `max_speed`.\n* On a sharp turn (e.g., `position = 1.0`), the robot subtracts the full `braking_force` from its speed, safely slowing down to execute the turn!\n\n## Assignment\nUpgrade your P-Controller to the ultimate Adaptive Speed Controller!\n\n**Requirements:**\n1. **Setup:** Use your code from Mission 5.3. Start with sensitivity `245`, line-loss threshold `700` and `kp = 25`. Keep the five-reading line-loss filter from your P-controller: stop after five consecutive low readings and reset the counter when the line returns.\n2. **New Variables:** Remove `base_speed`. Create two new variables before the loop:\n   * `max_speed = 40`\n   * `braking_force = 20`\n3. **Adaptive Math:** Inside the loop, before calculating `P`:\n   * Calculate `dynamic_speed` using the formula with `abs(position)`.\n4. **The P-Controller:**\n   * Calculate `P` as usual (`kp * position`).\n   * Calculate `left_speed` and `right_speed` using your new `dynamic_speed` instead of a fixed base speed. Don't forget to use `int()`!\n5. **Execute:** Send the speeds to the motors. Watch your robot fly down the straights, dynamically brake for the corners, and **complete one full lap!**\n\n**The Tuning Challenge (Optional):**\nOnce your rover is successfully completing lap, it’s time to push the physics to the limit! Remember that the absolute maximum power the motors can accept is `100`. \n\nChange one parameter at a time and observe how the rover reacts:\n* **The Steering Test:** Compare small changes to `kp` while keeping the starting maximum speed. Observe how smoothly the rover follows the bends.\n* **The Braking Test:** Change `braking_force` in small steps and compare the speed on straights with the speed through corners.\n* Keep the line-loss stop enabled during every experiment. Finish a stable lap with the supplied settings before changing the speed.\n",
       "assignment_summary": "--- index: 31 module: module_5 task: adaptive_speed previous: proportional_control next: art_of_debugging --- # Mission 5.5 Adaptive Speed ## Objective Make the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function. ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red) ## Introduction Your Proportional Controller is stable, but it has a flaw: it drives at a constant `base_speed`. If you set the speed to `30`, the robot easily navigates sharp corners, but crawls agonizingly slowly on straightaways. If you increase the speed to `80`, it flies down the straights but crashes on the first sharp turn because it's going too fast to steer! Think about real racing drivers. They don't press the gas pedal identically the whole track. They accelerate on the straights and hit the brakes *before* entering a turn. Today, we will teach your rover to do exactly that. ## Theory ### 1. Absolute Error (`abs`) To know *when* to brake, the robot needs to know if it's approaching a turn. Our Error ranges from `-1.0` to `1.0`. We don't care if the turn is left or right; we only care about the *size* of the Error. Python has a built-in function called `abs()` (Absolute Value) that removes the minus sign: * `abs(-0.8)` becomes `0.8` * `abs(0.0)` stays `0.0` ### 2. The Adaptive Speed Formula Instead of a fixed `base_speed`, we will calculate a `dynamic_speed` every single loop using this formula: `dynamic_speed = max_speed - (braking_force * abs(position))` * On a straight line (`position = 0.0`), the robot drives at the full `max_speed`. * On a sharp turn (e.g., `position = 1.0`), the robot subtracts the full `braking_force` from its speed, safely slowing down to execute the turn! ## Assignment Upgrade your P-Controller to the ultimate Adaptive Speed Controller! **Requirements:** 1. **Setup:** Use your code from Mission 5.3. Start with sensitivity `245`, line-loss threshold `700` and `kp = 25`. Keep th",
       "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nkp = 25\nmax_speed = 40\nbraking_force = 20\n\nprint(\"Starting Adaptive Speed Controller...\")\n\nlost_readings = 0\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        lost_readings += 1\n        if lost_readings < 5:\n            time.sleep(0.01)\n            continue\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        lost_readings = 0\n        # Calculate Adaptive Speed\n        dynamic_speed = max_speed - (braking_force * abs(position))\n\n        # Calculate P-Controller Power\n        P = kp * position\n\n        # Apply Power to Dynamic Speed\n        left_speed = int(dynamic_speed + P)\n        right_speed = int(dynamic_speed - P)\n\n        # Send to Motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
-      "verification_summary": "Verification for lesson: Adaptive Speed — 5.4\nStart: x=40, y=30\nCheckpoints: (105, 60), (60, 90), (80, 30) - required in order\nHardware evidence: {\"status\": \"pending\", \"reason\": \"Five-reading line-loss filter needs a fresh physical run.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Verification for lesson: Adaptive Speed — 5.4\nStart: x=40, y=30\nCheckpoints: (105, 60), (60, 90), (80, 30) - required in order\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22080, \"referenceSha256\": \"c9aec7fb1a46398bfd39feab8cf8a2f04b150df2b980e5f566beca07719da386\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 40,
@@ -2664,8 +2664,10 @@
           }
         ],
         "physical_validation": {
-          "status": "pending",
-          "reason": "Five-reading line-loss filter needs a fresh physical run."
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22080,
+          "referenceSha256": "c9aec7fb1a46398bfd39feab8cf8a2f04b150df2b980e5f566beca07719da386"
         },
         "starting_parameters": {
           "kp": 25,
@@ -2705,12 +2707,12 @@
     "art_of_debugging": {
       "assignment_full_text": "---\nindex: 32\nmodule: module_6\ntask: art_of_debugging\nprevious: adaptive_speed\nnext: hardware_safety_net\n---\n\n# Mission 6.1 The Art of Debugging\n\n## Objective\nUnderstand the difference between syntax and logic errors, and master the \"Print Debugging\" technique to find hidden problems in the robot's logic.\n\n![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange)\n\n## Introduction\nWelcome to Module 6!\n\nUp to this point, you have written increasingly complex algorithms, from simple turns to P-controllers and color normalization. But in real-world robotics, writing the code is only half the battle. The other half is making it work correctly.\n\nErrors (or \"bugs\") are inevitable. Even NASA engineers write bugs. True professionalism is not about writing flawless code on the first try, but knowing how to quickly find and fix the issues. Today, we begin mastering the art of debugging.\n\n## Theory\n\n### 1. Two Types of Errors\nIn programming, you will face two main enemies:\n* **Syntax Errors:** These are typos. You forgot a colon after an `if` statement, missed a parenthesis, or typed `prnt()` instead of `print()`. Python will immediately stop the program and point out the exact line where you made the mistake. These are the easiest to fix.\n* **Logic Errors:** This is a roboticist's nightmare. The code is written perfectly, and there are no red error messages. However, instead of driving forward, the robot spins in place or crashes into a wall. The problem isn't in the grammar of the language, but in the *logic* of your instructions.\n\n### 2. Reading the Robot MQTT Log\nLook closely at your **Robot MQTT Log** in the terminal. You will see a `Traceback` telling you exactly which line caused the crash:\n```text\n11:18:53: Traceback (most recent call last):\n11:18:53:   File \"<string>\", line 19\n11:18:53: SyntaxError: invalid syntax\n11:18:53: MPY: soft reboot\n```\n\n### 3. Print Debugging\nHow do you find a logic error if the computer is completely silent? You must force it to talk.\n\nThe golden rule of debugging is: **Never guess. Verify.**\nIf the robot turns the wrong way, do not just randomly change numbers in your code. Instead, output the variables to the terminal using the `print()` function to see what the robot is *actually* thinking at that exact moment.\n\n**A Real-World Example:**\nImagine the robot is supposed to drive straight but keeps veering left.\n\n```python\nbase_speed = 30\ncorrection = 10\n\n# It looks correct, but let's add a print statement!\nleft_motor = base_speed - correction\nright_motor = base_speed + correction\n\nprint(f\"DEBUG: Left={left_motor}, Right={right_motor}\")\nrobot.run_motors_speed(left_motor, right_motor)\n```\n\n*Terminal Output:* `DEBUG: Left=20, Right=40`.\n\nBy looking at the output, you immediately see the problem: the right motor is spinning faster than the left, causing the robot to turn left. To make it go right, you need to swap the addition and subtraction signs.\n\n## Assignment\nToday, you are stepping into the shoes of a Senior QA (Quality Assurance) Engineer. A junior developer has submitted a Proportional Controller script, but it is a complete mess. \n\nThe provided code contains a chain of **6 distinct bugs (3 Syntax/Runtime + 3 Logic)**. You must use your knowledge of the MQTT Log and Print Debugging to fix them one by one.\n\n**Your Bug Hunt Checklist:**\n1. **The Syntax Crash:** Look at the MQTT Log for a `SyntaxError` and inspect the main loop structure.\n2. **The Typo Crash:** The Traceback indicates an unrecognized name. Locate and fix the typo.\n3. **The Fake Emergency:** The failsafe triggers instantly. Review the threshold condition for logical accuracy.\n4. **The Attribute Crash:** The Traceback points to a method that does not exist. Verify the spelling of the hardware commands.\n5. **The Drunken Sailor:** The Proportional power (`P`) is miscalculated. Use `print()` to inspect the math.\n6. **The Blocked Steering:** The robot accelerates instead of turning. Print `left_speed` and `right_speed` to find the flaw in the differential steering.\n\nThe supplied settings are sensitivity `245`, raw line-loss threshold `700`, base speed `20` and gain `25`. Keep the supplied five-reading line-loss filter while fixing the six bugs. Drive through the two marked checkpoints in order.\n\nFind all 6 bugs, fix them, and watch the rover successfully navigate the track!\n\n## Conclusion\nOutstanding work, Senior Engineer! You have successfully hunted down a complex combination of grammar, spelling, and physics bugs.\n\nYou learned that debugging is a step-by-step process: first, you fix the crashes by reading the Traceback in the MQTT log, and then you fix the behavior by using `print()` to peek inside the robot's brain.",
       "assignment_summary": "--- index: 32 module: module_6 task: art_of_debugging previous: adaptive_speed next: hardware_safety_net --- # Mission 6.1 The Art of Debugging ## Objective Understand the difference between syntax and logic errors, and master the \"Print Debugging\" technique to find hidden problems in the robot's logic. ![Intermediate](https://img.shields.io/badge/Difficulty-Intermediate-orange) ## Introduction Welcome to Module 6! Up to this point, you have written increasingly complex algorithms, from simple turns to P-controllers and color normalization. But in real-world robotics, writing the code is only half the battle. The other half is making it work correctly. Errors (or \"bugs\") are inevitable. Even NASA engineers write bugs. True professionalism is not about writing flawless code on the first try, but knowing how to quickly find and fix the issues. Today, we begin mastering the art of debugging. ## Theory ### 1. Two Types of Errors In programming, you will face two main enemies: * **Syntax Errors:** These are typos. You forgot a colon after an `if` statement, missed a parenthesis, or typed `prnt()` instead of `print()`. Python will immediately stop the program and point out the exact line where you made the mistake. These are the easiest to fix. * **Logic Errors:** This is a roboticist's nightmare. The code is written perfectly, and there are no red error messages. However, instead of driving forward, the robot spins in place or crashes into a wall. The problem isn't in the grammar of the language, but in the *logic* of your instructions. ### 2. Reading the Robot MQTT Log Look closely at your **Robot MQTT Log** in the terminal. You will see a `Traceback` telling you exactly which line caused the crash: ### 3. Print Debugging How do you find a logic error if the computer is completely silent? You must force it to talk. The golden rule of debugging is: **Never guess. Verify.** If the robot turns the wrong way, do not just randomly change numbers in your code. Instead, output",
-      "reference_solution_text": "import time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\nimport machine\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\nbase_speed = 20\nkp = 25\nprint(\"Beginning Bug Hunt\")\nlost_readings = 0\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    position = octoliner.track_line()\n    print(sensor_array)\n    if max(sensor_array) < 700:\n        lost_readings += 1\n        if lost_readings < 5:\n            time.sleep(0.01)\n            continue\n        print(\"CRITICAL: Failsafe triggered! Stopping motors.\")\n        robot.stop()\n        break\n    else:\n        lost_readings = 0\n        P = kp * position\n        left_speed = int(base_speed + P)\n        right_speed = int(base_speed - P)\n        robot.run_motors_speed(left_speed, right_speed)\n        time.sleep(0.05)\n",
-      "verification_summary": "Verification for lesson: The Art of Debugging — 6.1\nStart: x=60, y=92, dir=30°\nCheckpoints: (105, 60), (80, 30)\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22071, \"referenceSha256\": \"efa9a13f0e7406cf4a86fa7ba87ff9dff633810714f47c8084a20afc6ae332e4\", \"checkerEvidence\": \"Recorded physical events replayed against stricter full-completion checker.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "reference_solution_text": "# Follow the upper straight and right bend through both checkpoints.\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\nimport machine\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(245)\nbase_speed = 20\nkp = 25\nprint(\"Beginning Bug Hunt\")\nlost_readings = 0\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    position = octoliner.track_line()\n    print(sensor_array)\n    if max(sensor_array) < 700:\n        lost_readings += 1\n        if lost_readings < 5:\n            time.sleep(0.01)\n            continue\n        print(\"CRITICAL: Failsafe triggered! Stopping motors.\")\n        robot.stop()\n        break\n    else:\n        lost_readings = 0\n        P = kp * position\n        left_speed = int(base_speed + P)\n        right_speed = int(base_speed - P)\n        robot.run_motors_speed(left_speed, right_speed)\n        time.sleep(0.05)\n",
+      "verification_summary": "Verification for lesson: The Art of Debugging — 6.1\nStart: x=50, y=30, facing right\nCheckpoints: (80, 30), (105, 60)\nHardware evidence: {\"status\": \"pending\", \"reason\": \"Lower-straight start failed repeat 22083; upper-straight start and ordered checkpoints need physical validation.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
-          "xCm": 60,
-          "yCm": 92,
+          "xCm": 50,
+          "yCm": 30,
           "direction": [
             30,
             0
@@ -2721,12 +2723,12 @@
           "CHECKPOINT_RADIUS": 10.0,
           "CHECKPOINTS": [
             [
-              105,
-              60
-            ],
-            [
               80,
               30
+            ],
+            [
+              105,
+              60
             ]
           ]
         },
@@ -2767,12 +2769,12 @@
             "type": "ordered-checkpoints",
             "points": [
               {
-                "xM": 1.05,
-                "yM": 0.4
-              },
-              {
                 "xM": 0.8,
                 "yM": 0.79
+              },
+              {
+                "xM": 1.05,
+                "yM": 0.4
               }
             ],
             "toleranceM": 0.1,
@@ -2783,11 +2785,8 @@
           }
         ],
         "physical_validation": {
-          "status": "passed",
-          "date": "2026-10-09",
-          "submissionId": 22071,
-          "referenceSha256": "efa9a13f0e7406cf4a86fa7ba87ff9dff633810714f47c8084a20afc6ae332e4",
-          "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
+          "status": "pending",
+          "reason": "Lower-straight start failed repeat 22083; upper-straight start and ordered checkpoints need physical validation."
         },
         "starting_parameters": {
           "sensitivity": 245,
@@ -2796,9 +2795,19 @@
           "baseSpeed": 20,
           "kp": 25,
           "timeoutSeconds": 60,
-          "startXCm": 60,
-          "startYCm": 92,
-          "headingDegrees": 0
+          "startXCm": 50,
+          "startYCm": 30,
+          "headingDegrees": 0,
+          "checkpoints": [
+            [
+              80,
+              30
+            ],
+            [
+              105,
+              60
+            ]
+          ]
         },
         "execution_mode": "simulation-and-lab",
         "completion_requires": "successful physical verification; simulation is practice",
@@ -2819,9 +2828,9 @@
         "source_sha256": {
           "lesson": "fa22d3a87a0080e133aaf64e2b22c811fe6d3579495ef1c9907e398098b1f642",
           "template": "20ae40a7497c260bca3780d7b16084485563e7f11959123108d513a4036026c0",
-          "reference": "efa9a13f0e7406cf4a86fa7ba87ff9dff633810714f47c8084a20afc6ae332e4",
-          "checker": "bf0b45c392af0444554364131a31337268788a661da4dff28a5f71e242ccc8b2",
-          "simulation": "a8007e66cb4b0758945d74a4f7a39c02514cd28181336ac47bdb728a37755cfc"
+          "reference": "82a77c9550544b34bff80d3b83a0dfcee607076bed85fe5211c4105f79ab29e7",
+          "checker": "82dad40aba12d91ee3c7cbf3609a91d847a08e6d5719db334754796b95dcecab",
+          "simulation": "0e1269ad5718166b6624a9086c03abc127b29aba9704d719662fd64a3c8f0115"
         }
       },
       "checker_source_ref": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/verifications/module_6.py"
@@ -2921,7 +2930,7 @@
           "lesson": "402050c48548717963e50ef0073ae4e7539c36a99efe28ba70425f15dd50b813",
           "template": "27b0fa03d2b6ee40220de6022e4f5b0c4de8483023f3e2786568e16215f3f8f3",
           "reference": "bdecd9289c12205ebfe748f65035e68a27693f9fa8b50dea63f9620dffac0967",
-          "checker": "bf0b45c392af0444554364131a31337268788a661da4dff28a5f71e242ccc8b2",
+          "checker": "82dad40aba12d91ee3c7cbf3609a91d847a08e6d5719db334754796b95dcecab",
           "simulation": "aa0b601af1eb96ba51183628d2ff7c167460b69c0ce7ca6be2949454bd720e96"
         }
       },
@@ -3080,7 +3089,7 @@
           "lesson": "44fea091a348065091087bc4613282f3dbff019e3583768e905fb3b11b352b2e",
           "template": "838fa83308fcadbb35ea5418f73b90e90b2f80ced58e18dcf1c3967ec62ae719",
           "reference": "0f1e73dd33c6a31bcdcc1e2870a6bec10b1e3e2e8c5bf8747ea21e97a66a380e",
-          "checker": "bf0b45c392af0444554364131a31337268788a661da4dff28a5f71e242ccc8b2",
+          "checker": "82dad40aba12d91ee3c7cbf3609a91d847a08e6d5719db334754796b95dcecab",
           "simulation": "2a951f3b66865f1960a30cd04fd3db38f3ae5e9af45c4d01a7169dac9c3939bf"
         }
       },
@@ -3090,7 +3099,7 @@
       "assignment_full_text": "---\nindex: 35\nmodule: module_11\ntask: navigation\nprevious: code_clinic\nnext: perimeter\n---\n# Task 1 Navigation\n## Objective\nDemonstrate your ability to navigate a custom route by sequentially combining distance movement and precise angle turns.\n\n![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green)\n\n## Assignment\nYour rover must navigate a specific route to collect geological samples at **4 waypoints**. A map with the exact distances and turning angles: \n\n![Task1](https://api.ondroid.org/media/courses/9/images/8a55ed8e67c64926989b056f3b73ada0.jpg)\n\n**Requirements:**\n1. **Movement:** Write a sequential program using `robot.move_forward_distance()` and the precision turning functions (`turn_right_angle()` or `turn_left_angle()`) to reach all 4 waypoints.\n2. **Documentation:** Use comments (`#`) to clearly label each section of your journey (e.g., `# Moving to Point 1`, `# Moving to Point 2`) - at least 2 comments.\n3. **Variables:** Use variables at the top of your program to store the distances and turning angles.\n\n## Conclusion\nMission accomplished! You have successfully programmed a multi-step autonomous route.\n",
       "assignment_summary": "--- index: 35 module: module_11 task: navigation previous: code_clinic next: perimeter --- # Task 1 Navigation ## Objective Demonstrate your ability to navigate a custom route by sequentially combining distance movement and precise angle turns. ![Beginner](https://img.shields.io/badge/Difficulty-Beginner-green) ## Assignment Your rover must navigate a specific route to collect geological samples at **4 waypoints**. A map with the exact distances and turning angles: ![Task1](https://api.ondroid.org/media/courses/9/images/8a55ed8e67c64926989b056f3b73ada0.jpg) **Requirements:** 1. **Movement:** Write a sequential program using `robot.move_forward_distance()` and the precision turning functions (`turn_right_angle()` or `turn_left_angle()`) to reach all 4 waypoints. 2. **Documentation:** Use comments (`#`) to clearly label each section of your journey (e.g., `# Moving to Point 1`, `# Moving to Point 2`) - at least 2 comments. 3. **Variables:** Use variables at the top of your program to store the distances and turning angles. ## Conclusion Mission accomplished! You have successfully programmed a multi-step autonomous route. ",
       "reference_solution_text": "from lineRobot import Robot\n\nrobot = Robot()\nfirst_distance = 20\nlong_distance = 40\nsmall_angle = 45\nlarge_angle = 90\n# Moving to waypoint 1\nrobot.move_forward_distance(first_distance)\nrobot.turn_left_angle(small_angle)\n# Moving to waypoint 2\nrobot.move_forward_distance(long_distance)\nrobot.turn_right_angle(small_angle)\n# Moving to waypoint 3\nrobot.move_forward_distance(first_distance)\nrobot.turn_right_angle(large_angle)\n# Moving to waypoint 4\nrobot.move_forward_distance(long_distance)\n",
-      "verification_summary": "Test for task 1 navigation\nHardware evidence: {\"status\": \"pending\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Test for task 1 navigation\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22079, \"referenceSha256\": \"61428fc653c1ef8b31639093bed8d49ac7b032bb7ea4793be81af774eccc68cb\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 30,
@@ -3156,7 +3165,10 @@
           }
         ],
         "physical_validation": {
-          "status": "pending"
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22079,
+          "referenceSha256": "61428fc653c1ef8b31639093bed8d49ac7b032bb7ea4793be81af774eccc68cb"
         },
         "starting_parameters": {
           "checkpointToleranceCm": 12
@@ -3178,7 +3190,7 @@
         "course_repo_url": "https://github.com/autolab-fi/lineRobot-micropython-course",
         "task_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_11/task_1.md",
         "reference_url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/solutions/module_11/navigation_reference.py",
-        "guidance_updated": "2026-10-08",
+        "guidance_updated": "2026-10-09",
         "source_sha256": {
           "lesson": "2b99804e9ea03cb3c1839649e137c759c80ee7b35f8b358635a78026268b8bab",
           "template": "aaaafb380a43f9e74cce9e5a15c98dfa8d919a4b8f125e605fbec58bef7b6d59",
@@ -3404,7 +3416,7 @@
       "assignment_full_text": "---\nindex: 38\nmodule: module_11\ntask: adaptive_racing\nprevious: visual_telemetry\nnext:\n---\n# Task 4 Adaptive Racing\n## Objective\nDemonstrate your ability to debug faulty logic, fix syntax errors, and organize code.\n\n![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red)\n\n## Assignment\nWe have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **5 distinct bugs**.\n\nYour task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track.\n\n**Your Bug Hunt Checklist:**\n1. **The Syntax Bug:** Python refuses to run the code.\n2. **The Import Bug:** A crucial library is missing.\n3. **The Setup Bug:** Something is initialized, but is not configured.\n4. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function.\n5. **The Coma Bug:** The rover is updating sensors too slowly.\n\n\nUse the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the supplied line-loss filter: stop after five consecutive readings below `700`; reset the counter when the line is detected again. Pass all three checkpoints in order to complete the route.\n\n## Conclusion\nIf you fix all 5 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer!\n",
       "assignment_summary": "--- index: 38 module: module_11 task: adaptive_racing previous: visual_telemetry next: --- # Task 4 Adaptive Racing ## Objective Demonstrate your ability to debug faulty logic, fix syntax errors, and organize code. ![Advanced](https://img.shields.io/badge/Difficulty-Advanced-red) ## Assignment We have written an Advanced Adaptive Speed Controller for the rover's final race. However, the script is broken. The code contains **5 distinct bugs**. Your task is to act as the Senior Engineer: find the bugs, fix them, and clean up the variables so the rover can navigate the track. **Your Bug Hunt Checklist:** 1. **The Syntax Bug:** Python refuses to run the code. 2. **The Import Bug:** A crucial library is missing. 3. **The Setup Bug:** Something is initialized, but is not configured. 4. **The Array Bug:** The controller is trying to do math using an entire array of 8 sensors. Use the correct tracking function. 5. **The Coma Bug:** The rover is updating sensors too slowly. Use the supplied safe starting settings: `sensitivity = 245`, `kp = 25`, `max_speed = 40`, `braking_force = 20`. Keep the supplied line-loss filter: stop after five consecutive readings below `700`; reset the counter when the line is detected again. Pass all three checkpoints in order to complete the route. ## Conclusion If you fix all 5 bugs and organize your variables, the rover will smoothly and rapidly navigate the final sector using adaptive braking. Good luck, Engineer! ",
       "reference_solution_text": "import machine\nimport time\nfrom lineRobot import Robot\nfrom octoliner import Octoliner\n\nrobot = Robot()\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\n\noctoliner.set_sensitivity(245)\n\nkp = 25\nmax_speed = 40\nbraking_force = 20\n\nprint(\"Starting Adaptive Racing Controller...\")\n\nlost_readings = 0\nwhile True:\n    sensor_array = octoliner.analog_read_all()\n    time.sleep(0.01)\n    position = octoliner.track_line()\n\n    # Failsafe Check\n    if max(sensor_array) < 700:\n        lost_readings += 1\n        if lost_readings < 5:\n            time.sleep(0.01)\n            continue\n        print(\"CRITICAL: Line lost! Emergency Stop.\")\n        robot.stop()\n        break\n    else:\n        lost_readings = 0\n        # Calculate Adaptive Speed\n        dynamic_speed = max_speed - (braking_force * abs(position))\n\n        # Calculate P-Controller Power\n        P = kp * position\n\n        # Apply Power to Dynamic Speed\n        left_speed = int(dynamic_speed + P)\n        right_speed = int(dynamic_speed - P)\n\n        # Send to Motors\n        robot.run_motors_speed(left_speed, right_speed)\n\n    time.sleep(0.01)\n",
-      "verification_summary": "Verification for Mission 11.4: Code Clinic (Adaptive Racing)\nStudents must fix 5 bugs:\n1. SyntaxError (missing colon)\n2. Missing 'import time'\n3. Empty set_sensitivity()\n4. analog_read_all() -> track_line()\n5. time.sleep(5) -> time.sleep(0.05)\nHardware evidence: {\"status\": \"pending\", \"reason\": \"Five-reading line-loss filter needs a fresh physical run.\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
+      "verification_summary": "Verification for Mission 11.4: Code Clinic (Adaptive Racing)\nStudents must fix 5 bugs:\n1. SyntaxError (missing colon)\n2. Missing 'import time'\n3. Empty set_sensitivity()\n4. analog_read_all() -> track_line()\n5. time.sleep(5) -> time.sleep(0.05)\nHardware evidence: {\"status\": \"passed\", \"date\": \"2026-10-09\", \"submissionId\": 22081, \"referenceSha256\": \"c2d91b09572703f1177b323c639b759c2ae17e07a12701a51a4907f659cc15b5\"}\nThe physical and simulator checks are distinct; consult their labeled rules. Reset failures before student execution are infrastructure failures. Do not infer a student-code failure from reset or video delivery alone. Provide hints rather than a complete solution.",
       "verification_rules": {
         "physical_start": {
           "xCm": 40,
@@ -3483,8 +3495,10 @@
           }
         ],
         "physical_validation": {
-          "status": "pending",
-          "reason": "Five-reading line-loss filter needs a fresh physical run."
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22081,
+          "referenceSha256": "c2d91b09572703f1177b323c639b759c2ae17e07a12701a51a4907f659cc15b5"
         },
         "starting_parameters": {
           "kp": 25,

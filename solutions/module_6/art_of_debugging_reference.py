@@ -1,3 +1,4 @@
+# Follow the upper straight and right bend through both checkpoints.
 import time
 from lineRobot import Robot
 from octoliner import Octoliner

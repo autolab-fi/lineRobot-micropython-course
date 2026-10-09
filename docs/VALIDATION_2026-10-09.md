@@ -2,7 +2,7 @@
 
 Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning and Kick is excluded; scope is 34 tasks including Sandbox.
 
-## Confirmed so far
+## Latest physical results
 
 | Task | Physical submission |
 | --- | --- |
@@ -31,25 +31,28 @@ Continuation of the 2026-10-08 audit. The lunar/Artemis story remains. Tuning an
 | concept_of_error | 22059 |
 | upgraded_relay_controller | 22070 |
 | proportional_control | 22067 |
-| art_of_debugging | 22071 |
+| adaptive_speed | 22080 |
+| art_of_debugging | 22071 (old route; new start pending) |
 | hardware_safety_net | 22072 |
 | code_clinic | 22073 |
+| navigation | 22079 |
 | perimeter | 22075 |
 | visual_telemetry | 22076 |
+| adaptive_racing | 22081 |
 | sandbox | 22078 |
 
 ## Checks
 
-- 80 verifier/replay tests passed for the latest candidate, including actual module 6 event recordings and wrong-route negative cases.
+- 81 verifier/replay tests passed for the latest candidate, including actual module 6 event recordings and wrong-route negative cases.
 - All 34 simulator task references passed, including renamed programs and negative empty/output-only cases (136 cases; Sandbox intentionally permits free programs).
 - All 17 simulator UI scenarios passed earlier in this audit; the targeted line/waypoint/telemetry/RGB UI check also passed with the final color reference.
 - Sequential Navigation uses 20/15/20/15 cm, with the original 6 cm checkpoint tolerance, after the long route accumulated about 8 cm of drift.
 - Lists uses [35, 30, 35] and a smaller safe route.
 - Electric Motors timed reference uses left 30 / right 64 for 2.1 seconds on HAMK (22038 and 22039 passed). Simulator keeps its own 30/50, 2.5 s reference. The lesson explains tuning balance and time independently.
 
-## Remaining physical checks
+## Active course coverage
 
-The live matrix and submission records are in `artifacts/hamk-course-audit-20261009/` in the workspace. Latest candidate has **31/34** confirmed references. Navigation and Adaptive Racing require corrected physical runs. Adaptive Speed passed as 22065, but its added five-reading filter requires a fresh reference run before being marked confirmed again.
+At the preceding checkpoint all **30 current Moodle activities** (29 core tasks plus Sandbox) had successful physical references. The subsequent repeat below exposed an unstable Art of Debugging start; that updated candidate is pending. The four removed final-block tasks (Navigation, Perimeter, Visual Telemetry and Adaptive Racing) also passed, bringing the archived audit scope to **34/34**. Each success includes a finished submission and video. The candidate is being reconciled with current main a1638fa; the removed final block must stay excluded.
 
 ## Battery and docking
 
@@ -60,6 +63,10 @@ The new magnetic dock target is **(27.5, 63.0)**; direction (30, 0). Previous (2
 ## Publication
 
 Only previously promoted verified changes are in main (course 6ad7103, simulator 8cc6dd6). This audit remains on `validation/hamk-course-20261008`; pending tasks are not declared validated. Worker candidate checkers at the start of this checkpoint came from 5fed9de. The stricter module 6 and module 11 candidates below still require deployment. Backend lesson/reference updates and public simulator deployment still require coordinated release after verification. No firmware or robot calibration changes were made during this audit.
+
+## Historical checkpoints and experiments
+
+The entries below record earlier candidate states and failures; the latest successful submissions are listed above.
 
 ## Latest candidate changes (physical tests pending)
 
@@ -105,3 +112,16 @@ Only previously promoted verified changes are in main (course 6ad7103, simulator
 - Racing 22077 stopped after only about 10 cm on a weak sensor sample. Adaptive and Racing references/starters now preserve the same five-reading filter as P/Relay; both modified references need a fresh physical run. A regression check prevents the supplied short filter delay from concealing the unfixed five-second Racing delay.
 - Clinic simulator start moved from (0.50, 0.79) to (0.50, 0.84), placing its sensor on the line. The full simulator regression after that correction passed 136 cases; the second run including the latest Adaptive/Racing filters also passed all 136 cases.
 - Before this checkpoint, HAMK returned to its magnetic dock. Three stable charge samples confirmed contact, last battery 23.72 V and input 24.06 V. No new physical launch occurs below the 23.3 V audit reserve; the user cutoff remains 23.0 V.
+
+## Final candidate confirmation
+
+- Navigation 22079 passed all four ordered checkpoints with the candidate 12 cm tolerance and correct-command check. Final camera error was about 8 cm. It remains outside the current Moodle activity list.
+- Adaptive Speed 22080 and Racing 22081 both passed 3/3 checkpoints with the five-reading filter. The exact reference hashes are stored in tutor task notes. Racing remains outside the current Moodle list.
+- Candidate checker a90c855 was downloaded to HAMK and all 11 course modules imported successfully. The downloader's legacy bare-name import warnings for modules 1/4 did not prevent their qualified imports; final import checks passed.
+- A further physical repeat of all three module 6 tasks with the stricter checker is in progress; recorded-event replays already pass.
+
+## Repeat-test correction before release
+
+Hardware Safety Net 22082 passed with the deployed strict parser: 10/10 scans, 4/4 Unknown events and completion. Art of Debugging repeat 22083 failed on line loss near (80, 96), before its first checkpoint. Its earlier success therefore does not establish a stable lower-straight start. Candidate start is now (50, 30), east, with ordered checkpoints (80, 30), (105, 60); simulator start is (0.50, 0.84) with matching order. The six debugging bugs and controller settings are unchanged. This changed task is pending two physical confirmations, and publication is postponed.
+
+Isolation check: no Metropolia verifier, firmware or calibration was changed. Both generated Metropolia simulation configurations are byte-identical to their committed versions after rebuilding. The shared simulator's Metropolia curriculum regression passed all 35 tasks / 140 cases with the active-task bundle selection change.

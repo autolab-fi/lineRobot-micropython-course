@@ -432,11 +432,11 @@
     "art_of_debugging": {
       "mode": "simulation-and-lab",
       "timeoutSec": 60,
-      "initialPose": { "xM": 0.60, "yM": 0.20, "headingRad": 0 },
+      "initialPose": { "xM": 0.50, "yM": 0.84, "headingRad": 0 },
       "checks": [
         { "type": "source-code", "requiredMethods": ["set_sensitivity", "analog_read_all", "track_line", "run_motors_speed", "stop"], "requiredFeatures": ["while-true-loop", "if-statement", "break-statement", "multiplication", "addition", "subtraction", "print"], "requiredFunctionCalls": ["max", "int"], "requiredVariableNames": ["base_speed", "kp"] },
         { "type": "sensor-read", "sensor": "octoliner", "minimumReads": 10 },
-        { "type": "ordered-checkpoints", "points": [{ "xM": 1.05, "yM": 0.40 }, { "xM": 0.80, "yM": 0.79 }], "toleranceM": 0.10, "stopProgramOnPass": true },
+        { "type": "ordered-checkpoints", "points": [{ "xM": 0.80, "yM": 0.79 }, { "xM": 1.05, "yM": 0.40 }], "toleranceM": 0.10, "stopProgramOnPass": true },
         { "type": "program-finished" }
       ]
     },

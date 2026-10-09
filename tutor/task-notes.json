@@ -425,8 +425,10 @@
       "reference": "solutions/module_5/adaptive_speed_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "Five-reading line-loss filter needs a fresh physical run."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22080,
+        "referenceSha256": "c9aec7fb1a46398bfd39feab8cf8a2f04b150df2b980e5f566beca07719da386"
       },
       "commonMistakes": [
         "Keep the five-reading line-loss filter; one weak sample is not enough to stop.",
@@ -443,11 +445,8 @@
       "reference": "solutions/module_6/art_of_debugging_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "passed",
-        "date": "2026-10-09",
-        "submissionId": 22071,
-        "referenceSha256": "efa9a13f0e7406cf4a86fa7ba87ff9dff633810714f47c8084a20afc6ae332e4",
-        "checkerEvidence": "Recorded physical events replayed against stricter full-completion checker."
+        "status": "pending",
+        "reason": "Lower-straight start failed repeat 22083; upper-straight start and ordered checkpoints need physical validation."
       },
       "commonMistakes": [],
       "parameters": {
@@ -457,9 +456,19 @@
         "baseSpeed": 20,
         "kp": 25,
         "timeoutSeconds": 60,
-        "startXCm": 60,
-        "startYCm": 92,
-        "headingDegrees": 0
+        "startXCm": 50,
+        "startYCm": 30,
+        "headingDegrees": 0,
+        "checkpoints": [
+          [
+            80,
+            30
+          ],
+          [
+            105,
+            60
+          ]
+        ]
       }
     },
     "hardware_safety_net": {
@@ -497,9 +506,12 @@
     },
     "navigation": {
       "reference": "solutions/module_11/navigation_reference.py",
-      "guidanceUpdated": "2026-10-08",
+      "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending"
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22079,
+        "referenceSha256": "61428fc653c1ef8b31639093bed8d49ac7b032bb7ea4793be81af774eccc68cb"
       },
       "commonMistakes": [
         "Follow the required 20/40/20/40 cm sequence and left 45/right 45/right 90 degree turns; use variables and at least two comments."
@@ -536,8 +548,10 @@
       "reference": "solutions/module_11/adaptive_racing_reference.py",
       "guidanceUpdated": "2026-10-09",
       "physicalValidation": {
-        "status": "pending",
-        "reason": "Five-reading line-loss filter needs a fresh physical run."
+        "status": "passed",
+        "date": "2026-10-09",
+        "submissionId": 22081,
+        "referenceSha256": "c2d91b09572703f1177b323c639b759c2ae17e07a12701a51a4907f659cc15b5"
       },
       "commonMistakes": [
         "Keep the five-reading line-loss filter; one weak sample is not enough to stop.",

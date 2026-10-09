@@ -40,12 +40,15 @@ class Module6Requirements(unittest.TestCase):
  def test_clinic_no_color_fails(self):self.assertFalse(self.clinic([(80,30),(105,60),(60,90)],'')['success'])
  def test_no_minerals_message_is_not_a_detection(self):self.assertFalse(self.clinic([(80,30),(105,60),(60,90)],'No minerals found')['success'])
  def test_clinic_invalid_code_cannot_pass_with_motion(self):self.assertFalse(self.clinic([(80,30),(105,60),(60,90)],valid=False)['success'])
- def test_debugging_full_route_passes(self):self.assertTrue(self.replay('art_of_debugging',[{'pose':(105,60)},{'pose':(80,30)}])['success'])
- def test_debugging_partial_route_fails(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(105,60)}])['success'])
- def test_debugging_invalid_code_cannot_pass_with_motion(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(105,60)},{'pose':(80,30)}],False)['success'])
+ def test_debugging_full_route_passes(self):self.assertTrue(self.replay('art_of_debugging',[{'pose':(80,30)},{'pose':(105,60)}])['success'])
+ def test_debugging_partial_route_fails(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(80,30)}])['success'])
+ def test_debugging_invalid_code_cannot_pass_with_motion(self):self.assertFalse(self.replay('art_of_debugging',[{'pose':(80,30)},{'pose':(105,60)}],False)['success'])
  def test_recorded_hamk_runs_pass_stricter_requirements(self):
-  for sid in (22071,22072,22073):
+  for sid in (22072,22073):
    with self.subTest(submission=sid):
     fixture=json.loads((ROOT/f'tests/fixtures/hamk-{sid}.json').read_text())
     result=self.replay(fixture['task'],fixture['events']);self.assertTrue(result['success']);self.assertEqual(result['score'],100)
+ def test_previous_lower_straight_route_does_not_skip_new_checkpoint_order(self):
+  fixture=json.loads((ROOT/'tests/fixtures/hamk-22071.json').read_text())
+  self.assertFalse(self.replay(fixture['task'],fixture['events'])['success'])
 if __name__=='__main__':unittest.main()

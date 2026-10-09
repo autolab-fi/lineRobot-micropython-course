@@ -31,11 +31,11 @@ Your code controls a real rover in HAMK’s robotics laboratory at **Riihimäki 
 
 ## Open activities through Moodle
 
-Open each activity from your HAMK Moodle course. Ondroid opens in a new window or tab and signs you in automatically through LTI. You do not need a separate registration, group membership or group key. Allow pop-ups for Moodle if your browser blocks the launch. If your session expires, return to Moodle and open the activity again.
+Open each activity from your HAMK Moodle course. Remote Lab opens in a new window or tab and signs you in automatically through LTI. You do not need a separate registration, group membership or group key. Allow pop-ups for Moodle if your browser blocks the launch. If your session expires, return to Moodle and open the activity again.
 
 ## Mission Control Interface
 
-![Current Ondroid workspace opened from the HAMK Moodle course](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-workspace-20261009.png)
+![Current Remote Lab workspace opened from the HAMK Moodle course](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-workspace-20261009.png)
 
 * **Lesson:** your task objective and instructions.
 * **Editor:** your Python program and activity files.
@@ -59,9 +59,9 @@ Run the supplied system diagnostic to check your connection to the rover. Read t
 
 Return to Moodle and open **Test drive**. Always launch the next activity from Moodle so its grade is returned to the correct activity.
 
-The course is continuously available and self-paced. There is no scheduled Zoom meeting or separate exam. Work through the six modules in order; the Sandbox is optional. Ondroid retains its existing **70% participation-certificate threshold**; check your progress and certificate status there.
+The course is continuously available and self-paced. There is no scheduled Zoom meeting or separate exam. Work through the six modules in order; the Sandbox is optional. The Remote Lab uses a **70% participation-certificate threshold**; check your progress and certificate status there.
 
-Use the Moodle questions forum for course questions and Ondroid **Helpdesk** for technical issues.
+Use the Moodle questions forum for course questions and Remote Lab **Helpdesk** for technical issues.
 
 ## Conclusion
 

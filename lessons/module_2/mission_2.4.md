@@ -8,6 +8,8 @@ next: encoder_theory
 
 # Mission 2.4 For Loops
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn how to use **for** loops to create complex movement patterns by using the loop counter variable.
 

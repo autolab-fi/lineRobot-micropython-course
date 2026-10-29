@@ -1,5 +1,7 @@
 # Sandbox
 
+**Completion:** Optional practice; Sandbox does not contribute to the Moodle course grade.
+
 ## Objective
 
 Here you can test different functions of the robot. The robot will execute your code for up to 20 seconds.

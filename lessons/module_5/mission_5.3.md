@@ -8,6 +8,8 @@ next: adaptive_speed
 
 # Mission 5.3 Proportional Control Logic
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Understand the mathematical concept of Proportional Control and write a P-controller algorithm to smoothly steer the rover based on the continuous Error gradient.
 

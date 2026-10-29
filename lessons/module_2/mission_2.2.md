@@ -8,6 +8,8 @@ next: defining_functions
 
 # Mission 2.2 Differential Drive
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Learn about Differential Drive kinematics and examine the main challenges related to manual motor control using raw PWM values.
 

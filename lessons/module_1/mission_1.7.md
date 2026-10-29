@@ -8,6 +8,8 @@ next: electric_motors
 
 # Mission 1.7 Sequential navigation
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Create a complex route visiting multiple waypoints and learn how to document your code using comments.

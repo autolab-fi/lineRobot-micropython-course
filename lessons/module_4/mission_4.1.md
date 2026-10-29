@@ -8,6 +8,8 @@ next: telemetry
 
 # Mission 4.1 Python Lists (Waypoints)
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Create Python lists, determine their size using `len()`, and use a `for` loop to execute a multi-step navigation route.
 

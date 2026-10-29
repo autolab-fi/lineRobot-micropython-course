@@ -8,6 +8,8 @@ next: proportional_control
 
 # Mission 5.2 Upgraded Relay Controller
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn how to build an upgraded Relay (Bang-Bang) controller using the continuous Error variable, and implement a robust Failsafe using raw analog data.
 

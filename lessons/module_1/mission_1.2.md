@@ -8,6 +8,8 @@ next: license_to_drive
 
 # Mission 1.2 Test drive
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Understand the concept of a "Robot Object" and execute your first movement code.

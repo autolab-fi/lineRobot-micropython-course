@@ -208,27 +208,55 @@
     },
     "arrays_and_elif": {
       "reference": "solutions/module_3/arrays_and_elif_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-10-29",
       "physicalValidation": {
-        "status": "passed",
-        "date": "2026-10-09",
-        "submissionId": 22043,
-        "referenceSha256": "187eee7af0e1ae48ac16e973af29610b38154fddf805155e46cdacc41b4a7993"
+        "status": "pending-revalidation",
+        "date": "2026-10-29",
+        "notes": "Zone classification and MQTT parser ported from Metropolia; HAMK start (70, 50) retained. Previous HAMK evidence applies to the old contract only.",
+        "previousContractEvidence": {
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22043,
+          "referenceSha256": "187eee7af0e1ae48ac16e973af29610b38154fddf805155e46cdacc41b4a7993"
+        }
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "A reset failure before student execution is an infrastructure/positioning failure, not evidence that the student algorithm is wrong.",
+        "Do not confuse sensitivity (0–255 setup setting) with the analog detection threshold. Use the dated task-specific settings, not one sensitivity for every lesson.",
+        "Facing forward, Octoliner indices 0–2 are right, 3–4 center, 5–7 left.",
+        "Classify the number of active zones, not a preferred zone; the detection threshold is 800.",
+        "Print all three Boolean states for every scan; blink once per detected scan in 3.5."
+      ],
+      "parameters": {
+        "sensitivity": 243,
+        "threshold": 800
+      }
     },
     "led_feedback": {
       "reference": "solutions/module_3/led_feedback_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-10-29",
       "physicalValidation": {
-        "status": "passed",
-        "date": "2026-10-09",
-        "submissionId": 22044,
-        "referenceSha256": "927b7d35550bbe067f577abc898e5f7c1ea5ba97f9ecfc988487376d662d6248"
+        "status": "pending-revalidation",
+        "date": "2026-10-29",
+        "notes": "Zone classification and MQTT parser ported from Metropolia; HAMK start (70, 50) retained. Previous HAMK evidence applies to the old contract only.",
+        "previousContractEvidence": {
+          "status": "passed",
+          "date": "2026-10-09",
+          "submissionId": 22044,
+          "referenceSha256": "927b7d35550bbe067f577abc898e5f7c1ea5ba97f9ecfc988487376d662d6248"
+        }
       },
-      "commonMistakes": [],
-      "parameters": {}
+      "commonMistakes": [
+        "A reset failure before student execution is an infrastructure/positioning failure, not evidence that the student algorithm is wrong.",
+        "Do not confuse sensitivity (0–255 setup setting) with the analog detection threshold. Use the dated task-specific settings, not one sensitivity for every lesson.",
+        "Facing forward, Octoliner indices 0–2 are right, 3–4 center, 5–7 left.",
+        "Classify the number of active zones, not a preferred zone; the detection threshold is 800.",
+        "Print all three Boolean states for every scan; blink once per detected scan in 3.5."
+      ],
+      "parameters": {
+        "sensitivity": 243,
+        "threshold": 800
+      }
     },
     "simple_line_follower": {
       "reference": "solutions/module_3/simple_line_follower_reference.py",

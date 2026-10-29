@@ -8,6 +8,8 @@ next: upgraded_relay_controller
 
 # Mission 5.1 The Concept of Error
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 Starting settings for this exercise: `sensitivity = 245`.
 Sensitivity is the Octoliner setup value (0–255); the detection threshold is a separate value applied to analog readings. Check the readings if lighting or sensor position changes.
 

@@ -8,6 +8,8 @@ next: reading_multiple_sensors
 
 # Mission 3.3 Processing Sensor Data
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn how to use comparison operators, understand Boolean values (`True`/`False`), and encapsulate threshold logic inside a custom Python function.
 

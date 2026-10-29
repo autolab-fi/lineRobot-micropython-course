@@ -8,6 +8,8 @@ next: color_sensor_basics
 
 # Mission 4.2 Telemetry 
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Learn how to track real-world execution time, perform mathematical operations to calculate the robot's actual speed, and construct structured telemetry reports using Python f-strings.
 

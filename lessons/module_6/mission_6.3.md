@@ -8,6 +8,8 @@ next:
 
 # Mission 6.3 Code Clinic (Refactoring)
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn the principles of "Clean Code" by refactoring a messy, unreadable script into a modular, professional program.
 

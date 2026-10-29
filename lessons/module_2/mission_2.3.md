@@ -7,6 +7,8 @@ next: for_loops
 ---
 # Mission 2.3 Defining Functions
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn what a function is and how to create your own custom functions in MicroPython.
 

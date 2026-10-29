@@ -8,6 +8,8 @@ next: while_loops
 
 # Mission 2.5 Encoder Theory
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Learn about encoders and their purpose in precise robot movement.
 

@@ -8,6 +8,8 @@ next: code_clinic
 
 # Mission 6.2 The Hardware Safety Net
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn how to protect your robot from unexpected hardware glitches and crashes using the `try-except` block.
 

@@ -1,4 +1,11 @@
-# Browser simulation configuration
+# HAMK simulator completion policy (2026-10-29)
+
+20 of the 29 core activities use `simulation-or-lab`: a successful graded simulator check or physical verification completes the activity and can return its Moodle grade. Nine hardware-focused activities use `simulation-and-lab`: simulation is practice and physical verification is required. Optional Sandbox retains its practice role and zero Moodle weight.
+
+The required physical activities are License to drive, Electric Motors, Differential Drive, Encoder Theory, Introduction to Octoliner Sensor, Telemetry Report, Color Sensor Basics, Color Classification and Adaptive Speed. These cover real motion, calibration, sensors and an integrated controller.
+
+Lessons 3.4/3.5 use independent left/center/right Boolean zones, five 5 cm scans and one LED pulse for each detected scan. Simulation checks validate reports against actual sensor events. Physical stream parsing tolerates fragmented and concatenated MQTT packets. HAMK geometry is retained; Metropolia physical validation is not claimed as HAMK evidence.
+
 
 `manifest.json` contains course-owned simulation modes and checks. Physical
 verification remains in `verifications/` and is executed only by the lab worker.

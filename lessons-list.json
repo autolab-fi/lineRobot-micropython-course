@@ -24,7 +24,7 @@
         "lessons": [
             {
                 "str_id": "welcome",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.1.md",
                 "sn": 1,
                 "name": "Welcome to Artemis Support Program",
@@ -33,7 +33,7 @@
             },
             {
                 "str_id": "test_drive",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.2.md",
                 "sn": 2,
                 "name": "Test drive",
@@ -51,7 +51,7 @@
             },
             {
                 "str_id": "directional_movement",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.4.md",
                 "sn": 4,
                 "name": "Directional Movement",
@@ -60,7 +60,7 @@
             },
             {
                 "str_id": "python_variables_commands",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.5.md",
                 "sn": 5,
                 "name": "Python Variables & Commands",
@@ -69,7 +69,7 @@
             },
             {
                 "str_id": "maneuvering",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.6.md",
                 "sn": 6,
                 "name": "Maneuvering",
@@ -78,7 +78,7 @@
             },
             {
                 "str_id": "sequential_navigation",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_1/mission_1.7.md",
                 "sn": 7,
                 "name": "Sequential navigation",
@@ -113,7 +113,7 @@
             },
             {
                 "str_id": "defining_functions",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.3.md",
                 "sn": 10,
                 "name": "Defining Functions",
@@ -122,7 +122,7 @@
             },
             {
                 "str_id": "for_loops",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_2/mission_2.4.md",
                 "sn": 11,
                 "name": "For Loops",
@@ -157,7 +157,7 @@
             },
             {
                 "str_id": "conditional_logic",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.2.md",
                 "sn": 15,
                 "name": "Conditional Logic & Reactive Behavior",
@@ -166,7 +166,7 @@
             },
             {
                 "str_id": "processing_sensor_data",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.3.md",
                 "sn": 16,
                 "name": "Processing Sensor Data",
@@ -175,25 +175,25 @@
             },
             {
                 "str_id": "arrays_and_elif",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.4.md",
                 "sn": 17,
                 "name": "Arrays and Spatial Logic",
                 "description": "Read the complete sensor array at successive stops and report whether the line is to the left, in the centre or to the right. Index a list of readings and use if/elif/else to classify spatial information.",
-                "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\n# Initialize Hardware\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(240)\nrobot = Robot()\n\n# Define your threshold\n\n# Create a for loop (5 iterations)\n\n    \n    # Move forward by 5 cm and wait a moment to settle (0.5s)\n    # Read the full array of sensors into a variable\n    \n    # Extract the three \"scout\" values by their index\n    left_scout = \n    center_scout = \n    right_scout = \n    \n    # Use conditional logic to determine where the mineral vein is and print the result\n    \nprint(\"Survey complete.\")\n"
+                "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(243)\nrobot = Robot()\nthreshold = 800\n\n# Scan five times: move, settle, read and classify the three zones.\n# Use if / elif / else for zero, one, or multiple active zones.\n"
             },
             {
                 "str_id": "led_feedback",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.5.md",
                 "sn": 18,
                 "name": "Visual Telemetry (LEDs)",
                 "description": "Use sensor readings to change an LED and make the rover display its detection state. Translate a program decision into visible hardware feedback and use an output device alongside a sensor.",
-                "template": "# Write code here"
+                "template": "import machine\nimport time\nfrom octoliner import Octoliner\nfrom lineRobot import Robot\n\ni2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)\noctoliner = Octoliner()\noctoliner.begin(i2c)\noctoliner.set_sensitivity(243)\nrobot = Robot()\nthreshold = 800\n\n# Scan five times: move, settle, read and classify the three zones.\n# Add a blinkLED() function and blink once per detected scan.\n"
             },
             {
                 "str_id": "simple_line_follower",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_3/mission_3.6.md",
                 "sn": 19,
                 "name": "Simple Line Follower",
@@ -210,7 +210,7 @@
         "lessons": [
             {
                 "str_id": "python_lists",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_4/mission_4.1.md",
                 "sn": 21,
                 "name": "Python Lists & Waypoints",
@@ -254,7 +254,7 @@
         "lessons": [
             {
                 "str_id": "concept_of_error",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.1.md",
                 "sn": 27,
                 "name": "Concept of Error",
@@ -263,7 +263,7 @@
             },
             {
                 "str_id": "upgraded_relay_controller",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.2.md",
                 "sn": 28,
                 "name": "Upgraded Relay Controller",
@@ -272,7 +272,7 @@
             },
             {
                 "str_id": "proportional_control",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_5/mission_5.3.md",
                 "sn": 29,
                 "name": "Proportional Control",
@@ -298,7 +298,7 @@
         "lessons": [
             {
                 "str_id": "art_of_debugging",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "name": "The Art of Debugging",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.1.md",
                 "sn": 32,
@@ -307,7 +307,7 @@
             },
             {
                 "str_id": "hardware_safety_net",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "name": "The Hardware Safety Net",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.2.md",
                 "sn": 33,
@@ -316,7 +316,7 @@
             },
             {
                 "str_id": "code_clinic",
-                "executionMode": "simulation-and-lab",
+                "executionMode": "simulation-or-lab",
                 "name": "Code Clinic (Refactoring)",
                 "url": "https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/lessons/module_6/mission_6.3.md",
                 "sn": 34,

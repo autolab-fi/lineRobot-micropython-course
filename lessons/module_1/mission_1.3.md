@@ -8,6 +8,8 @@ next: directional_movement
 
 # Mission 1.3 License to drive
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 
 Understand the structure of a Python robotics program and write your own code to control the robot.

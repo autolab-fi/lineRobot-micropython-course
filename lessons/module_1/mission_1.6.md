@@ -8,6 +8,8 @@ next: sequential_navigation
 
 # Mission 1.6 Maneuvering
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Master the robot's steering system by learning standard 90-degree turns and precision turning with specific angles.

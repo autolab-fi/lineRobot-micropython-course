@@ -60,7 +60,7 @@ def build(check=False):
             'physical_validation': validation,
             'starting_parameters': note['parameters'],
             'execution_mode': lesson['executionMode'],
-            'completion_requires': 'successful physical verification; simulation is practice',
+            'completion_requires': ('successful simulator OR physical verification' if lesson['executionMode'] == 'simulation-or-lab' else 'successful physical verification; simulation is practice'),
             'simulator_limitations': 'Simulated RGB samples do not reproduce all HAMK illumination/tape overlap. Timed motor motion and reset behavior need physical validation.',
             'do_not_reveal': ['full reference solution', 'raw checker implementation', 'hidden test thresholds'],
         }

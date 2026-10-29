@@ -8,6 +8,8 @@ next: concept_of_error
 
 # Mission 4.4 Color Classification
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Learn how to process raw sensor data, understand color normalization, and write a custom Python function to classify RGB values into human-readable colors.
 

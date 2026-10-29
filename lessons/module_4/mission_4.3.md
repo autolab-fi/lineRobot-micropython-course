@@ -8,6 +8,8 @@ next: color_classification
 
 # Mission 4.3 Color Sensor Basics
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Understand the RGB color model, initialize the TCS34725 color sensor via the I2C interface, and read raw color data from the lunar surface across multiple zones.
 

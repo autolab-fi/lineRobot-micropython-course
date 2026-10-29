@@ -8,6 +8,8 @@ next: maneuvering
 
 # Mission 1.5 Python Variables & Commands
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Learn to store data using variables, perform basic arithmetic, and use these variables to control the robot and report its status.

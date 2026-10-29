@@ -8,6 +8,8 @@ next: processing_sensor_data
 
 # Mission 3.2 Conditional Logic & Reactive Behavior
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Learn how to use conditional statements (`if/else`) and the `break` command to create reactive behavior, allowing the rover to stop autonomously when a line is detected.
 

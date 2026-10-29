@@ -8,6 +8,8 @@ next: hardware_safety_net
 
 # Mission 6.1 The Art of Debugging
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Understand the difference between syntax and logic errors, and master the "Print Debugging" technique to find hidden problems in the robot's logic.
 

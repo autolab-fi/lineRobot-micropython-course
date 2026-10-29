@@ -1,32 +1,30 @@
-from lineRobot import Robot
 import machine
-from time import sleep
+import time
 from octoliner import Octoliner
+from lineRobot import Robot
 
 i2c = machine.I2C(scl=machine.Pin(22), sda=machine.Pin(21), freq=100000)
 octoliner = Octoliner()
 octoliner.begin(i2c)
 octoliner.set_sensitivity(243)
-
 robot = Robot()
 threshold = 800
 
 for i in range(5):
     robot.move_forward_distance(5)
-    sleep(0.3)
-
+    time.sleep(0.5)
     sensor_data = octoliner.analog_read_all()
-    left_scout   = sensor_data[1]
-    center_scout = sensor_data[3]
-    right_scout  = sensor_data[6]
+    left = sensor_data[6] > threshold
+    center = sensor_data[3] > threshold
+    right = sensor_data[1] > threshold
+    count = int(left) + int(center) + int(right)
 
-    if center_scout > threshold:
-        print("Vein: Center")
-    elif left_scout > threshold:
-        print("Vein: Left")
-    elif right_scout > threshold:
-        print("Vein: Right")
+    if count == 0:
+        print("No line")
+    elif count == 1:
+        print("Line in one zone")
     else:
-        print("No minerals")
+        print("Line in multiple zones")
+    print("Left:", left, "Center:", center, "Right:", right)
 
 print("Survey complete.")

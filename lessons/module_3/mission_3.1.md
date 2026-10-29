@@ -8,6 +8,8 @@ next: conditional_logic
 
 # Mission 3.1 Introduction to Octoliner Sensor
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Understand the working principle of Infrared (IR) line sensors, establish an I2C connection, and read data from a single central sensor.
 

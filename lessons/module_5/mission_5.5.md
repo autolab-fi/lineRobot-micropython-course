@@ -8,6 +8,8 @@ next: art_of_debugging
 
 # Mission 5.5 Adaptive Speed 
 
+**Completion:** Pass **Verify on robot**. The simulator is available for practice.
+
 ## Objective
 Make the rover race-ready by implementing an Adaptive Speed algorithm that automatically slows down before corners using the `abs()` function.
 

@@ -8,6 +8,8 @@ next: test_drive
 
 # Mission 1.1 Welcome to Artemis Support Program
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Join the Artemis Support Program, familiarize yourself with the Mission Control Interface, and establish a connection with the Lunar Terrain Vehicle (LTV).
@@ -48,10 +50,10 @@ The header **Reset** restores the workspace layout. The separate Editor reset re
 
 Run the supplied system diagnostic to check your connection to the rover. Read the code first: it initializes the robot, moves forward and backward, then checks steering.
 
-1. Use **Test in simulator**, when available, to practise in the browser.
-2. Use **Verify on robot** to submit the diagnostic to the physical HAMK rover. Wait if your submission is queued.
+1. Use **Test in simulator** to practise, then **Check in simulator** to submit a graded simulator check.
+2. Alternatively, use **Verify on robot** to submit this diagnostic to the physical HAMK rover. Wait if your submission is queued.
 3. Review the recorded camera feedback, Output and verification result.
-4. Successful physical verification returns **100/100** to this activity in Moodle. Unsuccessful verification returns **0**; review the feedback and retry. A simulator pass alone does not complete the graded Moodle activity.
+4. A successful **Check in simulator** or **Verify on robot** completes this activity and returns **100/100** to Moodle. Running code with **Test in simulator** alone is practice. Across the course, 20 core activities accept either target; nine hardware-focused activities require physical verification. Read the **Completion** line in each lesson.
 
 ![HAMK simulator view for practising robot movement](https://raw.githubusercontent.com/autolab-fi/lineRobot-micropython-course/main/images/module-1/hamk-simulator-20261009.png)
 

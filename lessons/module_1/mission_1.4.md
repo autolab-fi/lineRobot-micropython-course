@@ -8,6 +8,8 @@ next: python_variables_&_commands
 
 # Mission 1.4 Directional Movement
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 
 Explore functions for moving the robot a specific distance.

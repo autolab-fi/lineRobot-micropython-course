@@ -8,6 +8,8 @@ next: python_lists
 
 # Mission 3.6 Simple Line Follower
 
+**Completion:** Pass **Check in simulator** or **Verify on robot**.
+
 ## Objective
 Guide the Artemis rover using `if/elif/else` and motor speeds to follow a short, nearly straight section of the line. This is your first relay controller: it chooses between driving straight, steering left and steering right.
 

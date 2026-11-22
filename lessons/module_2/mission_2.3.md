@@ -76,7 +76,7 @@ total = add_numbers(5, 10) # The variable 'total' will store the number 15
 ```
 
 ## Assignment
-Write a program that makes the robot turn approximately **180 degrees** by creating your own custom function.
+Write a program that makes the robot turn approximately **180 degrees (±15°)** by creating your own custom function.
 
 **Requirements:**
 * **Do not** use built-in navigation functions (like `turn_left`, `turn_right`, or `move_forward_distance`).

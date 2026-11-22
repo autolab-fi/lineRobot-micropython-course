@@ -160,6 +160,8 @@ def directional_movement(robot, image, td: dict, user_code=None):
             }
         }
 
+    td.setdefault("initial_goal", dict(td["goal"]))
+
     # Get the current robot position
     robot_position = robot.get_info()["position"]
     
@@ -192,8 +194,8 @@ def directional_movement(robot, image, td: dict, user_code=None):
     ):
         result["success"] = False
         result["score"] = 0
-        backward = 35 - td['goal']['backward']
-        forward = 20 - td['goal']['forward']
+        backward = td['initial_goal']['backward'] - td['goal']['backward']
+        forward = td['initial_goal']['forward'] - td['goal']['forward']
         result["description"] = (
             f'Robot failed the task, moved {forward:.1f} cm forward, {backward:.1f} cm backward | Score: {result["score"]}'
         )

@@ -80,7 +80,7 @@ from lineRobot import Robot
 robot = Robot()
 
 # Create variables
-back_dist = 15.5
+back_dist = 20.5
 # ... create other variables ...
 
 # Move using variables

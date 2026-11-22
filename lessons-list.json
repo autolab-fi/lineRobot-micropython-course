@@ -109,7 +109,7 @@
                 "sn": 9,
                 "name": "Differential Drive",
                 "description": "Control the left and right motors separately and adjust their power to reduce drift during a straight run. Explain differential steering and compensate for differences between the two drive motors.",
-                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# TODO: Start the left motor with a raw PWM value\n# TODO: Start the right motor with a slightly different PWM value to fix the drift\n\n# Wait for 3 seconds\ntime.sleep(3)\n\n# TODO: Stop the motors"
+                "template": "from lineRobot import Robot\nimport time\n\nrobot = Robot()\n\n# TODO: Start the left motor with a raw PWM value\n# TODO: Start the right motor with a slightly different PWM value to fix the drift\n\n# Start with 3 seconds; tune if measured movement is shorter\ntime.sleep(3)\n\n# TODO: Stop the motors"
             },
             {
                 "str_id": "defining_functions",

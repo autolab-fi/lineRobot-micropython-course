@@ -46,7 +46,9 @@
         "submissionId": 22034,
         "referenceSha256": "7bd9b3b19801768a07eb34b434774db07d223d93fdce0fbdd820a2bff472e2a7"
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "Both environments require at least 3 seconds of actual straight movement, deviation at most 10 degrees, then a stop. Start with sleep(3); camera sampling and motor response can differ from commanded sleep. There is no 3.1-second upper limit; keep runs short and within the track."
+      ],
       "parameters": {}
     },
     "welcome": {
@@ -93,14 +95,16 @@
     },
     "python_variables_commands": {
       "reference": "solutions/module_1/python_variables_commands_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-11-22",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",
         "submissionId": 21995,
         "referenceSha256": "e1b92fbf4892c8d3135f73a8739025f4cef64838e0a40dd9e035a52d957724c9"
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "Move backward 20.5 cm, then forward 15 cm; the total distance is 35.5 cm."
+      ],
       "parameters": {}
     },
     "intro_to_octoliner": {
@@ -175,7 +179,8 @@
         "referenceSha256": "756a18e0baa11f6e72cb25a09e638ebd2dc0d6d6ae8b63b4931dba103dfaff61"
       },
       "commonMistakes": [
-        "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration."
+        "This is a timed open-loop tuning exercise. Students tune motor values and duration separately in simulation and on the HAMK robot. Keep the same program structure; different successful numerical settings are expected. Change one parameter at a time and do not present instructor reference values as guaranteed calibration.",
+        "Both physical and simulator checks accept a final turn of 180 degrees within ±15 degrees. The physical heading must remain within tolerance for at least one second."
       ],
       "parameters": {},
       "simulationReference": "solutions/module_2/defining_functions_simulation.py",

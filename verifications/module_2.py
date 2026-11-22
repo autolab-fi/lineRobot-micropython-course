@@ -489,7 +489,7 @@ def defining_functions(robot, image, td: dict, user_code=None):
     else:
         text = f"Robot must turn to: {delta_ang:0.0f}°"
 
-        if delta_ang < 10:
+        if delta_ang <= 15:
             if "confirm_start" not in td["data"]:
                 td["data"]["confirm_start"] = time.time()
             elif time.time() - td["data"]["confirm_start"] > 1.0:
@@ -513,7 +513,7 @@ def defining_functions(robot, image, td: dict, user_code=None):
             result["score"] = 0
             result["description"] = "Robot not detected in camera frame | Score: 0"
             text = "Robot not detected."
-        elif delta_ang < 10 and time.time() - td["data"].get("confirm_start", time.time()) >= 1.0:
+        elif delta_ang <= 15 and time.time() - td["data"].get("confirm_start", time.time()) >= 1.0:
             result["success"] = True
             result["score"] = 100
             result["description"] = "You are amazing! The Robot has completed the assignment | Score: 100"
@@ -521,7 +521,7 @@ def defining_functions(robot, image, td: dict, user_code=None):
         else:
             result["success"] = False
             result["score"] = 0
-            result["description"] = f"Robot did not turn 180 degrees. Final error: {delta_ang:0.0f}° | Score: 0"
+            result["description"] = f"Robot did not turn 180 degrees. Final error: {delta_ang:0.0f}° (allowed: ±15°) | Score: 0"
             text = "Failed to reach target angle."
 
         td["data"]["final_result"] = result.copy()

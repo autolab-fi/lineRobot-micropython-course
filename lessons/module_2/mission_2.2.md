@@ -42,12 +42,14 @@ In the `lineRobot` library, you already used `run_motors_speed()` which takes pe
 ## Assignment
 In this lesson, we encourage you to experiment with the differential drive and fix the hardware drift!
 
-Write a program that makes the robot drive straight for **3 seconds with a deviation of no more than 10 degrees**.
+Write a program that makes the robot drive straight for **at least 3 seconds with a deviation of no more than 10 degrees**, then stop.
 
 **Requirements:**
 1. You **cannot** use the built-in library functions like `move_forward_distance`, `move_forward_speed_distance`, or `move_forward_seconds`.
 2. Use the individual `run_motor_left()` and `run_motor_right()` functions.
 3. Stop the motors afterward.
+
+Start with `time.sleep(3)`. Verification measures actual movement: camera sampling and motor response can make this duration differ from the sleep value. If measured movement is too short, adjust the delay. Both the physical and simulator checks require at least 3 seconds of straight movement; there is no narrow upper time tolerance. Keep the run short and within the track.
 
 *Hint: You will likely have to run the program multiple times, adjusting the left and right raw PWM values individually (for example, 500 and 460) to achieve a perfectly straight line!*
 

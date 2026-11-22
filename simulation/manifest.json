@@ -48,7 +48,7 @@
     },
     "differential_drive": {
       "mode": "simulation-and-lab",
-      "checks": [{ "type": "source-code", "requiredMethods": ["run_motor_left", "run_motor_right"], "requiredAnyMethods": [["stop", "stop_motor_left"], ["stop", "stop_motor_right"]], "forbiddenMethods": ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds", "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"] }, { "type": "wheel-drive", "minimumDurationSec": 2.9, "maximumDurationSec": 3.1, "maximumHeadingDeviationDeg": 10, "requireForward": true }, { "type": "robot-stopped" }, { "type": "program-finished" }]
+      "checks": [{ "type": "source-code", "requiredMethods": ["run_motor_left", "run_motor_right"], "requiredAnyMethods": [["stop", "stop_motor_left"], ["stop", "stop_motor_right"]], "forbiddenMethods": ["move_forward_distance", "move_forward_speed_distance", "move_forward_seconds", "move_backward_distance", "move_backward_seconds", "turn_left", "turn_right"] }, { "type": "wheel-drive", "minimumDurationSec": 3.0, "maximumHeadingDeviationDeg": 10, "requireForward": true }, { "type": "robot-stopped" }, { "type": "program-finished" }]
     },
     "defining_functions": {
       "mode": "simulation-or-lab",

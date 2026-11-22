@@ -27,3 +27,7 @@ class FunctionVerifierTests(unittest.TestCase):
  def test_wrong_or_unsettled_heading(self):
   self.assertFalse(self.verdict(end=40))
   self.assertFalse(self.verdict(stable=False))
+
+ def test_shared_fifteen_degree_boundary(self):
+  for end in [165,195]: self.assertTrue(self.verdict(end=end))
+  for end in [164.9,195.1]: self.assertFalse(self.verdict(end=end))

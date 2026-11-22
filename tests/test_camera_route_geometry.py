@@ -70,6 +70,10 @@ class RouteCheckerTests(unittest.TestCase):
             code=(ROOT/reference).read_text() if variant!='empty' else 'pass'
             if variant == 'wrong_commands':
                 code = code.replace('first_distance = 20', 'first_distance = 10')
+            if task == 'sequential_navigation' and variant == 'short_final_command':
+                last = code.rfind('move_forward_distance(d2)')
+                assert last >= 0
+                code = code[:last] + code[last:].replace('move_forward_distance(d2)', 'move_forward_distance(5)', 1)
             checker=getattr(module,task)
             with patch.object(module,'time',SimpleNamespace(time=lambda:clock.now)),patch.object(module.cv2,'imread',return_value=None),contextlib.redirect_stdout(io.StringIO()):
                 _,td,_,_=checker(robot,None,None,code)
@@ -100,6 +104,9 @@ class RouteCheckerTests(unittest.TestCase):
             for variant in ('correct','skip','reverse','too_long','empty'):
                 with self.subTest(task=task,variant=variant):
                     self.assertEqual(self.replay(task,variant)['success'],variant=='correct')
+
+    def test_sequential_camera_success_does_not_override_short_command(self):
+        self.assertFalse(self.replay('sequential_navigation', 'short_final_command')['success'])
 
     def test_navigation_tolerates_measured_drift_but_checks_commands(self):
         self.assertTrue(self.replay('navigation', 'drift_10')['success'])

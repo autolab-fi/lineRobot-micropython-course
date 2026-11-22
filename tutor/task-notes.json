@@ -39,7 +39,7 @@
     },
     "differential_drive": {
       "reference": "solutions/module_2/differential_drive_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-11-22",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
@@ -75,14 +75,16 @@
     },
     "sequential_navigation": {
       "reference": "solutions/module_1/sequential_navigation_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-11-22",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
         "submissionId": 22031,
         "referenceSha256": "49b5810af4c33dbb360e1213314a604cc75c62aa5cfa5b549b40900cd32de626"
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "The movement and turn commands must match the assigned 20/15/20/15 cm route in order. Camera positioning tolerance does not permit a shorter commanded leg. Existing completed attempts are not regraded."
+      ],
       "parameters": {
         "first_and_third_leg_cm": 20,
         "second_and_fourth_leg_cm": 15,
@@ -127,14 +129,16 @@
     },
     "electric_motors": {
       "reference": "solutions/module_2/electric_motors_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-11-22",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-09",
         "submissionId": 22039,
         "referenceSha256": "6ef8d1f7f554e8d45ef59dab34eca01a6b38e02e9196e2d77ab861a77fbcf77c"
       },
-      "commonMistakes": [],
+      "commonMistakes": [
+        "Use the visible finish flag at (115, 46) cm in both environments. Motor balance and duration must be tuned independently; do not copy physical settings between robots or reveal instructor reference constants."
+      ],
       "parameters": {
         "physicalTimedDrive": {
           "leftSpeed": 30,
@@ -143,16 +147,27 @@
         },
         "simulatorTimedDrive": {
           "leftSpeed": 30,
-          "rightSpeed": 50,
-          "durationSeconds": 2.5
+          "rightSpeed": 30,
+          "durationSeconds": 6.4
         },
         "tuning": "Tune motor balance and duration independently for the physical rover and simulator. These open-loop settings depend on the robot and battery."
       },
-      "simulationReference": "solutions/module_2/electric_motors_simulation_reference.py"
+      "simulationReference": "solutions/module_2/electric_motors_simulation_reference.py",
+      "supervisedValidation": {
+        "date": "2026-11-22",
+        "evidence": "docs/generated/HAMK_MOTOR_REVIEW_20261122.json",
+        "method": "Camera observation and offline verifier replay; no graded submission",
+        "finishErrorsCm": [
+          6.66,
+          4.15,
+          3.91
+        ],
+        "note": "Diagnostic measurements or prints before the first motor call can change initial PID output."
+      }
     },
     "defining_functions": {
       "reference": "solutions/module_2/defining_functions_reference.py",
-      "guidanceUpdated": "2026-10-09",
+      "guidanceUpdated": "2026-11-22",
       "physicalValidation": {
         "status": "passed",
         "date": "2026-10-08",

@@ -59,7 +59,7 @@ However, you will not be able to use the built-in robot movement functions. The 
 2. Use `time.sleep()` to wait for the exact amount of time needed to reach the target.
 3. Use `stop()` to stop the motors once the robot is on the point.
 
-![finish_point](https://api.ondroid.org/media/courses/9/images/66d281d20f664211bd2a512777b8ffbc.png)
+The rover starts at **(30, 50) cm**, facing right. Stop within **10 cm** of the flag at **(115, 46) cm**. Coordinates are measured from the upper-left corner of the camera image: X increases rightward and Y downward. The same target is used in the simulator.
 
 *Hint: Tune the left and right motor settings until the rover drives towards the flag, then adjust `time.sleep()` until it stops on the target. The physical rover and simulator may need different settings because the motors and battery affect this timed movement.*
 

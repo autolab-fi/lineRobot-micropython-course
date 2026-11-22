@@ -5,6 +5,11 @@ import os
 import numpy as np
 import re
 
+if __package__:
+    from .module_11 import _student_route_matches
+else:
+    from module_11 import _student_route_matches
+
 
 target_points = {
     'welcome': [(35, 50), (30, 0)],
@@ -367,6 +372,11 @@ def sequential_navigation(robot, image, td: dict, user_code):
     # Code style check
     comments_count = user_code.count('#')
     style_ok = comments_count >= 3
+    if 'route_matches' not in td:
+        td['route_matches'] = _student_route_matches(user_code, [
+            ('move', 20), ('turn', -90), ('move', 15), ('turn', 90),
+            ('move', 20), ('turn', 90), ('move', 15),
+        ])
 
     if not td["data"] and robot:
         route = [
@@ -466,6 +476,11 @@ def sequential_navigation(robot, image, td: dict, user_code):
         if not style_ok and result["success"]:
             result.update({"success": False, "score": 0, 
                            "description": "Task failed. Use at least 3 comments (#) in your code."})
+
+    if not td['route_matches']:
+        result.update(success=False, score=0,
+                      description="Movement and turn commands must match the assigned route: "
+                                  "20 cm, left 90°, 15 cm, right 90°, 20 cm, right 90°, 15 cm.")
 
     # Draw minerals at checkpoint locations with masking
     if td["data"] and td["data"]["mineral"] is not None and td["data"]["mask"] is not None:

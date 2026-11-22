@@ -1,0 +1,1251 @@
+{
+  "date": "2026-11-22",
+  "device_id": 13,
+  "firmware": "4b98e880b",
+  "course_base": "9a8f43ecea84734a3dac4f83575376cb520a9e27",
+  "physical_runs": [
+    {
+      "name": "08-simple-balanced-short",
+      "file": "physical-08-balanced.log",
+      "camera_sample_count": 26,
+      "pulse_ms": 1569,
+      "before": [
+        31.23045454545455,
+        50.222727272727276,
+        -0.8951737102110258
+      ],
+      "after": [
+        85.60954545454545,
+        53.975,
+        9.309940174986025
+      ],
+      "battery_v": 23.603752,
+      "distance_to_flag_cm": 30.453233709877672,
+      "heading_change_deg": 10.20511388519705,
+      "turn_error_deg": 169.79488611480295,
+      "replay_result": {
+        "success": false,
+        "description": "Robot must stop within 10 cm of (115, 46) cm | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-simple-equal-short",
+      "file": "physical-08-equal.log",
+      "camera_sample_count": 26,
+      "pulse_ms": 1567,
+      "before": [
+        30.42227272727273,
+        50.800000000000004,
+        2.726310993906253
+      ],
+      "after": [
+        83.87772727272728,
+        66.50181818181818,
+        29.859016164923247
+      ],
+      "battery_v": 23.618752,
+      "distance_to_flag_cm": 37.26822250216763,
+      "heading_change_deg": 27.132705171016994,
+      "turn_error_deg": 152.867294828983,
+      "replay_result": {
+        "success": false,
+        "description": "Robot must stop within 10 cm of (115, 46) cm | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-reference-simple",
+      "file": "physical-08-initial.log",
+      "camera_sample_count": 29,
+      "pulse_ms": 2167,
+      "before": [
+        30.075909090909093,
+        50.68454545454546,
+        0.0
+      ],
+      "after": [
+        63.730909090909094,
+        25.16909090909091,
+        -88.15238973400538
+      ],
+      "battery_v": 23.64125,
+      "distance_to_flag_cm": 55.339375278352634,
+      "heading_change_deg": -88.15238973400538,
+      "turn_error_deg": 91.84761026599462,
+      "replay_result": {
+        "success": false,
+        "description": "Robot must stop within 10 cm of (115, 46) cm | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-simple-target",
+      "file": "physical-08-target.log",
+      "camera_sample_count": 30,
+      "pulse_ms": 2369,
+      "before": [
+        31.345909090909092,
+        50.165000000000006,
+        -1.8183029644518456
+      ],
+      "after": [
+        123.13227272727273,
+        50.857727272727274,
+        5.440332031005568
+      ],
+      "battery_v": 23.595002,
+      "distance_to_flag_cm": 9.472664565313304,
+      "heading_change_deg": 7.258634995457413,
+      "turn_error_deg": 172.7413650045426,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-exact-original-reference",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 18,
+      "pulse_ms": null,
+      "before": [
+        30.42227272727273,
+        49.356818181818184,
+        -2.726310993906253
+      ],
+      "after": [
+        115.62772727272728,
+        39.370000000000005,
+        -8.259437979878868
+      ],
+      "battery_v": 23.518752,
+      "distance_to_flag_cm": 6.6596502557510915,
+      "heading_change_deg": -5.533126985972615,
+      "turn_error_deg": 174.46687301402739,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.6-1",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 21,
+      "pulse_ms": null,
+      "before": [
+        51.89681818181818,
+        51.03090909090909,
+        -1.8476102659945184
+      ],
+      "after": [
+        48.260000000000005,
+        55.93772727272728,
+        171.6070748126076
+      ],
+      "battery_v": 23.517502,
+      "distance_to_flag_cm": 67.47581806356338,
+      "heading_change_deg": 173.4546850786021,
+      "turn_error_deg": 6.545314921397903,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has completed the assignment | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.6-2",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 18,
+      "pulse_ms": null,
+      "before": [
+        50.45363636363637,
+        50.33818181818182,
+        1.818302964451874
+      ],
+      "after": [
+        46.355000000000004,
+        54.84090909090909,
+        175.3893506813394
+      ],
+      "battery_v": 23.513752,
+      "distance_to_flag_cm": 69.21197655430538,
+      "heading_change_deg": 173.5710477168875,
+      "turn_error_deg": 6.428952283112494,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has completed the assignment | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.65-1",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 20,
+      "pulse_ms": null,
+      "before": [
+        50.39590909090909,
+        50.45363636363637,
+        1.818302964451732
+      ],
+      "after": [
+        45.89318181818182,
+        54.49454545454546,
+        -170.83765295427827
+      ],
+      "battery_v": 23.50875,
+      "distance_to_flag_cm": 69.62693172684125,
+      "heading_change_deg": -172.65595591873,
+      "turn_error_deg": 7.344044081269999,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has completed the assignment | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.65-2",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 20,
+      "pulse_ms": null,
+      "before": [
+        50.39590909090909,
+        50.56909090909091,
+        1.8183029644518456
+      ],
+      "after": [
+        45.89318181818182,
+        54.61000000000001,
+        -170.83765295427827
+      ],
+      "battery_v": 23.50875,
+      "distance_to_flag_cm": 69.64111155930004,
+      "heading_change_deg": -172.65595591873011,
+      "turn_error_deg": 7.344044081269885,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has completed the assignment | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.7-1",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 19,
+      "pulse_ms": null,
+      "before": [
+        50.39590909090909,
+        50.39590909090909,
+        2.726310993906253
+      ],
+      "after": [
+        45.48909090909091,
+        53.85954545454546,
+        -158.3691131634821
+      ],
+      "battery_v": 23.507502,
+      "distance_to_flag_cm": 69.95383432948256,
+      "heading_change_deg": -161.09542415738835,
+      "turn_error_deg": 18.90457584261165,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 19° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-exact-0.7-2",
+      "file": "physical-exact-original.log",
+      "camera_sample_count": 19,
+      "pulse_ms": null,
+      "before": [
+        50.33818181818182,
+        50.742272727272734,
+        2.726310993906253
+      ],
+      "after": [
+        45.43136363636364,
+        54.14818181818182,
+        -156.31791227546168
+      ],
+      "battery_v": 23.50625,
+      "distance_to_flag_cm": 70.04418628578689,
+      "heading_change_deg": -159.04422326936793,
+      "turn_error_deg": 20.955776730632067,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 21° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-exact-original-repeat-1",
+      "file": "physical-exact-repeat.log",
+      "camera_sample_count": 18,
+      "pulse_ms": null,
+      "before": [
+        30.65318181818182,
+        49.01045454545455,
+        1.789910608246089
+      ],
+      "after": [
+        118.62954545454546,
+        43.98818181818182,
+        -4.61064931866062
+      ],
+      "battery_v": 23.5025,
+      "distance_to_flag_cm": 4.149820791709667,
+      "heading_change_deg": -6.400559926906709,
+      "turn_error_deg": 173.5994400730933,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-exact-original-repeat-2",
+      "file": "physical-exact-repeat.log",
+      "camera_sample_count": 19,
+      "pulse_ms": null,
+      "before": [
+        31.750000000000004,
+        53.224545454545456,
+        0.9093804491992046
+      ],
+      "after": [
+        117.12863636363637,
+        42.71818181818182,
+        -12.925999124705925
+      ],
+      "battery_v": 23.497502,
+      "distance_to_flag_cm": 3.91170338179002,
+      "heading_change_deg": -13.83537957390513,
+      "turn_error_deg": 166.16462042609487,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-simple-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 28,
+      "pulse_ms": 2167,
+      "before": [
+        31.807727272727274,
+        52.705000000000005,
+        -1.8183029644518456
+      ],
+      "after": [
+        116.49363636363637,
+        54.95636363636364,
+        4.537772507906652
+      ],
+      "battery_v": 23.581254,
+      "distance_to_flag_cm": 9.080055020403446,
+      "heading_change_deg": 6.356075472358498,
+      "turn_error_deg": 173.6439245276415,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-simple-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 29,
+      "pulse_ms": 2166,
+      "before": [
+        31.807727272727274,
+        50.62681818181819,
+        -2.726310993906253
+      ],
+      "after": [
+        113.37636363636365,
+        45.20045454545455,
+        -3.6913859864512233
+      ],
+      "battery_v": 23.57625,
+      "distance_to_flag_cm": 1.8098253990942235,
+      "heading_change_deg": -0.9650749925449702,
+      "turn_error_deg": 179.03492500745503,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "08-simple-repeat-3",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 27,
+      "pulse_ms": 2167,
+      "before": [
+        32.038636363636364,
+        52.82045454545455,
+        -2.683775159469093
+      ],
+      "after": [
+        116.78227272727274,
+        54.84090909090909,
+        4.61064931866062
+      ],
+      "battery_v": 23.57125,
+      "distance_to_flag_cm": 9.018767633557218,
+      "heading_change_deg": 7.294424478129713,
+      "turn_error_deg": 172.7055755218703,
+      "replay_result": {
+        "success": true,
+        "description": "You are amazing! The Robot has reached the target point | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "09-duration-2.7-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 30,
+      "pulse_ms": 2702,
+      "before": [
+        31.750000000000004,
+        52.300909090909094,
+        -3.5763343749974013
+      ],
+      "after": [
+        89.47727272727273,
+        46.355000000000004,
+        -5.527540151656126
+      ],
+      "battery_v": 23.568752,
+      "distance_to_flag_cm": 25.52519603133375,
+      "heading_change_deg": -1.9512057766587247,
+      "turn_error_deg": 178.04879422334128,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 3.2s with max deviation of 4.0° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 3.2407114505767822,
+      "maximum_deviation_deg": 4.018308993594019
+    },
+    {
+      "name": "09-duration-2.7-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 29,
+      "pulse_ms": 2705,
+      "before": [
+        31.69227272727273,
+        52.300909090909094,
+        0.0
+      ],
+      "after": [
+        89.76590909090909,
+        51.83909090909091,
+        0.0
+      ],
+      "battery_v": 23.565002,
+      "distance_to_flag_cm": 25.900855712753827,
+      "heading_change_deg": 0.0,
+      "turn_error_deg": 180.0,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 3.1s with max deviation of 2.8° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 3.1221814155578613,
+      "maximum_deviation_deg": 2.8155566842112023
+    },
+    {
+      "name": "09-duration-3.0-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 30,
+      "pulse_ms": 3002,
+      "before": [
+        31.51909090909091,
+        52.300909090909094,
+        -1.8183029644518456
+      ],
+      "after": [
+        95.885,
+        49.24136363636364,
+        -2.7702157972001658
+      ],
+      "battery_v": 23.560002,
+      "distance_to_flag_cm": 19.387874128514976,
+      "heading_change_deg": -0.9519128327483202,
+      "turn_error_deg": 179.04808716725168,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 3.5s with max deviation of 2.9° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 3.4608638286590576,
+      "maximum_deviation_deg": 2.9453387262742297
+    },
+    {
+      "name": "09-duration-3.0-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 29,
+      "pulse_ms": 3002,
+      "before": [
+        31.46136363636364,
+        52.82045454545455,
+        -0.9093804491992046
+      ],
+      "after": [
+        96.23136363636364,
+        49.356818181818184,
+        -4.685899839502696
+      ],
+      "battery_v": 23.5575,
+      "distance_to_flag_cm": 19.06646110992279,
+      "heading_change_deg": -3.7765193903034913,
+      "turn_error_deg": 176.2234806096965,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 3.5s with max deviation of 4.8° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 3.4513957500457764,
+      "maximum_deviation_deg": 4.80121268830041
+    },
+    {
+      "name": "09-duration-3.3-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 30,
+      "pulse_ms": 3302,
+      "before": [
+        31.345909090909092,
+        51.55045454545455,
+        -0.8951737102110258
+      ],
+      "after": [
+        102.52363636363637,
+        47.16318181818182,
+        -5.527540151656126
+      ],
+      "battery_v": 23.551252,
+      "distance_to_flag_cm": 12.5304685279093,
+      "heading_change_deg": -4.6323664414451,
+      "turn_error_deg": 175.3676335585549,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 4.0s with max deviation of 5.7° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 4.018369436264038,
+      "maximum_deviation_deg": 5.651117073083043
+    },
+    {
+      "name": "09-duration-3.3-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 29,
+      "pulse_ms": 3302,
+      "before": [
+        31.634545454545457,
+        52.64727272727273,
+        -0.9093804491990909
+      ],
+      "after": [
+        103.1009090909091,
+        49.760909090909095,
+        -3.691385986451337
+      ],
+      "battery_v": 23.548752,
+      "distance_to_flag_cm": 12.479294918099036,
+      "heading_change_deg": -2.782005537252246,
+      "turn_error_deg": 177.21799446274775,
+      "replay_result": {
+        "success": true,
+        "description": "Success! Robot drove straight for 4.0s with max deviation of 4.7° | Score: 100",
+        "score": 100
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission.",
+      "camera_duration_s": 3.9597690105438232,
+      "maximum_deviation_deg": 4.708200140927687
+    },
+    {
+      "name": "10-turn-0.6-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 18,
+      "pulse_ms": 675,
+      "before": [
+        51.55045454545455,
+        50.97318181818182,
+        -3.6913859864512233
+      ],
+      "after": [
+        48.43318181818182,
+        53.975,
+        142.20605700138321
+      ],
+      "battery_v": 23.546254,
+      "distance_to_flag_cm": 67.0428363649036,
+      "heading_change_deg": 145.89744298783444,
+      "turn_error_deg": 34.10255701216556,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 34° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-turn-0.6-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 18,
+      "pulse_ms": 669,
+      "before": [
+        50.56909090909091,
+        50.51136363636364,
+        0.9093804491990909
+      ],
+      "after": [
+        47.33636363636364,
+        53.39772727272727,
+        146.82148834060723
+      ],
+      "battery_v": 23.545,
+      "distance_to_flag_cm": 68.06683520446698,
+      "heading_change_deg": 145.91210789140814,
+      "turn_error_deg": 34.08789210859186,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 34° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-turn-0.65-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 18,
+      "pulse_ms": 717,
+      "before": [
+        50.280454545454546,
+        50.39590909090909,
+        0.0
+      ],
+      "after": [
+        46.70136363636364,
+        53.166818181818186,
+        157.16634582208246
+      ],
+      "battery_v": 23.542502,
+      "distance_to_flag_cm": 68.67362675717274,
+      "heading_change_deg": 157.16634582208246,
+      "turn_error_deg": 22.833654177917538,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 23° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-turn-0.65-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 18,
+      "pulse_ms": 720,
+      "before": [
+        50.04954545454546,
+        50.45363636363637,
+        0.0
+      ],
+      "after": [
+        46.52818181818182,
+        53.05136363636364,
+        157.52056560289697
+      ],
+      "battery_v": 23.54,
+      "distance_to_flag_cm": 68.8339423123229,
+      "heading_change_deg": 157.52056560289697,
+      "turn_error_deg": 22.479434397103034,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 22° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-turn-0.7-repeat-1",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 18,
+      "pulse_ms": 771,
+      "before": [
+        50.165000000000006,
+        50.39590909090909,
+        0.9240453527727652
+      ],
+      "after": [
+        46.23954545454546,
+        52.64727272727273,
+        168.8708107103888
+      ],
+      "battery_v": 23.538752,
+      "distance_to_flag_cm": 69.08101290519895,
+      "heading_change_deg": 167.94676535761607,
+      "turn_error_deg": 12.053234642383927,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 12° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    },
+    {
+      "name": "10-turn-0.7-repeat-2",
+      "file": "physical-repeat-series.log",
+      "camera_sample_count": 17,
+      "pulse_ms": 773,
+      "before": [
+        50.04954545454546,
+        50.56909090909091,
+        1.818302964451874
+      ],
+      "after": [
+        46.12409090909091,
+        52.705000000000005,
+        169.7778313663639
+      ],
+      "battery_v": 23.536252,
+      "distance_to_flag_cm": 69.20150199308664,
+      "heading_change_deg": 167.95952840191205,
+      "turn_error_deg": 12.040471598087947,
+      "replay_result": {
+        "success": false,
+        "description": "Robot did not turn 180 degrees. Final error: 12° | Score: 0",
+        "score": 0
+      },
+      "replay_note": "Camera arrival timestamps; final stationary pose held until verdict timeout. Not a production submission."
+    }
+  ],
+  "aborted_run": {
+    "file": "physical-exact-series.log",
+    "settings": "50/60 for 2.1 s without diagnostic preamble",
+    "reason": "Camera guard at (98.14,98.14); Stop confirmed"
+  },
+  "limitations": [
+    "No graded submissions or student progress writes.",
+    "Replay uses camera arrival timestamps and holds final stationary pose until timeout.",
+    "Instrumented cases include voltage measurement and print before motors; exact-code cases do not. Initial PID output depends on this delay."
+  ],
+  "decisions": {
+    "03": "Preserve physical success criterion and visible runtime-error output.",
+    "07": "Validate assigned commands for future attempts; keep camera tolerance and existing progress.",
+    "09_10_methods": "Accept documented raw PWM and separate stops in simulation.",
+    "09_10_tolerances": "Not changed; commanded duration and camera duration are different quantities. Consider a common 15-degree angle tolerance.",
+    "08": "Align goal with Metropolia. Original HAMK settings passed three exact-code trials without a control loop."
+  },
+  "simulator_cases": [
+    {
+      "taskId": "defining_functions",
+      "variant": "reference",
+      "sha256": "1491d07f106eb340f35facb4f669259433b965a3458ee5f4c5e3220e60f4dff7",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "renamed",
+      "sha256": "e25fbf2cfbf80c5a4f837ce52fd35080ce840e24887edd37d731a4d7a28625c7",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "empty",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: stop; need one method from each group: run_motors_speed/run_motor_left, run_motors_speed/run_motor_right; need at least 1 function definition(s); a defined function must be called"
+        },
+        {
+          "type": "independent-wheel-control",
+          "passed": false,
+          "reason": "Left and right wheels were not controlled independently"
+        },
+        {
+          "type": "final-heading-change",
+          "passed": false,
+          "reason": "Robot did not finish at the required heading",
+          "actual": "0.0°",
+          "expected": "180° ±15°"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "output-only",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: stop; need one method from each group: run_motors_speed/run_motor_left, run_motors_speed/run_motor_right; need at least 1 function definition(s); a defined function must be called"
+        },
+        {
+          "type": "independent-wheel-control",
+          "passed": false,
+          "reason": "Left and right wheels were not controlled independently"
+        },
+        {
+          "type": "final-heading-change",
+          "passed": false,
+          "reason": "Robot did not finish at the required heading",
+          "actual": "0.0°",
+          "expected": "180° ±15°"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "raw-pwm",
+      "sha256": "38a4913d00ebc20037422f5dffe4b6513b8082b9f1d997dc46c855f714c4307b",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "one-motor",
+      "sha256": "a4d50660687a43a0f99345e3aa90bf37f8e7d6d4cfd21886ded2aa021d8404a2",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "need one method from each group: run_motors_speed/run_motor_right"
+        },
+        {
+          "type": "final-heading-change",
+          "passed": false,
+          "reason": "Robot did not finish at the required heading",
+          "actual": "-83.0°",
+          "expected": "180° ±15°"
+        }
+      ]
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "probe-0.63",
+      "sha256": "756a18e0baa11f6e72cb25a09e638ebd2dc0d6d6ae8b63b4931dba103dfaff61",
+      "expected": null,
+      "passed": false,
+      "failures": [
+        {
+          "type": "final-heading-change",
+          "passed": false,
+          "reason": "Robot did not finish at the required heading",
+          "actual": "-162.0°",
+          "expected": "180° ±15°"
+        }
+      ],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "probe-0.65",
+      "sha256": "f7fd6265763e8186af5ad6d91bdd81b9aefb72ba8065f9fb27a72e1b16863aa5",
+      "expected": null,
+      "passed": true,
+      "failures": [],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "defining_functions",
+      "variant": "probe-0.75",
+      "sha256": "2331f7e7cd49375976f2472621a2ac1b6d4eda660083ee42695ab20484494086",
+      "expected": null,
+      "passed": true,
+      "failures": [],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "reference",
+      "sha256": "7bd9b3b19801768a07eb34b434774db07d223d93fdce0fbdd820a2bff472e2a7",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "renamed",
+      "sha256": "10a544ef922d0e89fab5248eef0bc28d7e8ab7fa6f35eb5bed7ad1448c38e120",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "empty",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: run_motor_left, run_motor_right; need one method from each group: stop/stop_motor_left, stop/stop_motor_right"
+        },
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "0.00s, 0.0° deviation"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "output-only",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: run_motor_left, run_motor_right; need one method from each group: stop/stop_motor_left, stop/stop_motor_right"
+        },
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "0.00s, 0.0° deviation"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "separate-stop",
+      "sha256": "59f8ce1f618d2795c8360fd9b9d9fe5e6862ef5dbf4d8ab5b7f839aea1517990",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "one-stop",
+      "sha256": "9a56f6e73f0e273c93b093eb747284ba6c8ceaa2f57f31951350fdb8a7a52c3a",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "need one method from each group: stop/stop_motor_right"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "probe-2.7",
+      "sha256": "eb8e1077e7b874c1ab4075f1ac00ad7819390de9668f2bea237f97b9dc737490",
+      "expected": null,
+      "passed": false,
+      "failures": [
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "2.70s, 7.5° deviation"
+        }
+      ],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "probe-2.9",
+      "sha256": "faffd959daa54570c74e534a1be5491e1f2907b9684cc7d9b0884c4f280fe4c3",
+      "expected": null,
+      "passed": true,
+      "failures": [],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "probe-3.1",
+      "sha256": "70b0daa58828b80bbf95e0ccf20f4d4215e604602d3731a1f19bfa1baab60cc7",
+      "expected": null,
+      "passed": true,
+      "failures": [],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "differential_drive",
+      "variant": "probe-3.3",
+      "sha256": "32e61854787cdf75239ba5ebdd368580008c64335a990bb86e08e467a7a97448",
+      "expected": null,
+      "passed": false,
+      "failures": [
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "3.30s, 9.1° deviation"
+        }
+      ],
+      "purpose": "Tolerance observation"
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "reference",
+      "sha256": "60d77c0c2b756854a996cf6c29b981a2050c6d96f8d4a96272586326e2f03359",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "renamed",
+      "sha256": "93a3beaeb27a899d820c53430ccf5362f68f16fcf2d6ffadab37a7e84b177ffc",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "empty",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: run_motors_speed, stop"
+        },
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "0.00s, 0.0° deviation"
+        },
+        {
+          "type": "final-position",
+          "passed": false,
+          "reason": "Robot did not stop inside the finish target",
+          "actual": "85.1cm error",
+          "expected": "10.0cm maximum"
+        },
+        {
+          "type": "motor-command-range",
+          "passed": false,
+          "reason": "Motor commands are missing or outside the allowed range"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "output-only",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: run_motors_speed, stop"
+        },
+        {
+          "type": "wheel-drive",
+          "passed": false,
+          "reason": "Wheel direction, duration, or heading deviation does not match the assignment",
+          "actual": "0.00s, 0.0° deviation"
+        },
+        {
+          "type": "final-position",
+          "passed": false,
+          "reason": "Robot did not stop inside the finish target",
+          "actual": "85.1cm error",
+          "expected": "10.0cm maximum"
+        },
+        {
+          "type": "motor-command-range",
+          "passed": false,
+          "reason": "Motor commands are missing or outside the allowed range"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "old-target",
+      "sha256": "5eeadb3d5cd3d7da9b921f2b19e9735d64bbed3f2b4e72c4ae79568b90f5b1e5",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "final-position",
+          "passed": false,
+          "reason": "Robot did not stop inside the finish target",
+          "actual": "74.9cm error",
+          "expected": "10.0cm maximum"
+        }
+      ]
+    },
+    {
+      "taskId": "electric_motors",
+      "variant": "no-stop",
+      "sha256": "cf4eb945bae00da0ef11319ff8fb3a348c263aca9379fed7d5091d26536a26fe",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "missing methods: stop"
+        },
+        {
+          "type": "robot-stopped",
+          "passed": false,
+          "reason": "Program must call robot.stop()"
+        }
+      ]
+    },
+    {
+      "taskId": "sequential_navigation",
+      "variant": "reference",
+      "sha256": "49b5810af4c33dbb360e1213314a604cc75c62aa5cfa5b549b40900cd32de626",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "sequential_navigation",
+      "variant": "renamed",
+      "sha256": "523c7b7b18825ec6d26eda53dda716702528b37913f518d065d44c7dee9afe40",
+      "expected": true,
+      "passed": true,
+      "failures": []
+    },
+    {
+      "taskId": "sequential_navigation",
+      "variant": "empty",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "need at least 3 comments"
+        },
+        {
+          "type": "navigation-sequence",
+          "passed": false,
+          "reason": "Movement and turn commands do not match the required route",
+          "actual": "",
+          "expected": "move 20cm, turn 90°, move 15cm, turn -90°, move 20cm, turn -90°, move 15cm"
+        }
+      ]
+    },
+    {
+      "taskId": "sequential_navigation",
+      "variant": "output-only",
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "source-code",
+          "passed": false,
+          "reason": "need at least 3 comments"
+        },
+        {
+          "type": "navigation-sequence",
+          "passed": false,
+          "reason": "Movement and turn commands do not match the required route",
+          "actual": "",
+          "expected": "move 20cm, turn 90°, move 15cm, turn -90°, move 20cm, turn -90°, move 15cm"
+        }
+      ]
+    },
+    {
+      "taskId": "sequential_navigation",
+      "variant": "short-route",
+      "sha256": "3a875ea1041e232983294e4b7995eb74abf807ed5316b5edc751d51e80bae556",
+      "expected": false,
+      "passed": false,
+      "failures": [
+        {
+          "type": "navigation-sequence",
+          "passed": false,
+          "reason": "Movement and turn commands do not match the required route",
+          "actual": "move 20.0cm, turn 90°, move 5.0cm, turn -90°, move 20.0cm, turn -90°, move 15.0cm",
+          "expected": "move 20cm, turn 90°, move 15cm, turn -90°, move 20cm, turn -90°, move 15cm"
+        }
+      ]
+    }
+  ]
+}
